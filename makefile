@@ -6,3 +6,6 @@ pip-compile:
 sync-all-deps:
 	pip-sync requirements.txt --pip-args --no-deps
 	pip install --no-deps -e .
+
+migrate: 
+	python3 django_react_oauth migrate

@@ -9,3 +9,15 @@ This repo should contain a starting point for any django app serving static reac
 ```
     make sync-all-deps
 ```
+
+2. Run migrations
+
+```
+    make migrate
+```
+
+3. Create superuser
+
+```
+    python manage.py createsuperuser
+```
