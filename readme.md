@@ -2,6 +2,9 @@
 
 This repo should contain a starting point for any django app serving static react frontend with google oauth
 
+- **server** folder contains the whole backend service written with django.
+- **app** contains react app based on [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate)
+
 ## How to run it
 
 1. Install requirements
