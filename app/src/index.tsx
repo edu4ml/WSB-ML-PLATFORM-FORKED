@@ -8,7 +8,11 @@ import configureAppStore, { getPreloadedState } from './store/configureStore';
 
 import AppContextProvider from './contexts/AppContextProvider';
 
-import { DemoPage, HomePage } from './pages';
+import { LoginPage } from './pages';
+
+const logInUser = (username: string, password: string) => {
+    console.log(username, password);
+}
 
 (async () => {
     const preloadedState = getPreloadedState();
@@ -19,7 +23,7 @@ import { DemoPage, HomePage } from './pages';
         <React.StrictMode>
             <ReduxProvider store={configureAppStore(preloadedState)}>
                 <AppContextProvider>
-                    <DemoPage />
+                    <LoginPage onLogin={logInUser}/>
                 </AppContextProvider>
             </ReduxProvider>
         </React.StrictMode>
