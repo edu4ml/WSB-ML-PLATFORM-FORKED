@@ -21,3 +21,7 @@ This repo should contain a starting point for any django app serving static reac
 ```
     python manage.py createsuperuser
 ```
+
+## How to setup Google OAuth
+
+For step by step tutorail you can go [here](https://pylessons.com/django-google-oauth)

@@ -2,6 +2,8 @@ __pycache__
 
 db.sqlite3
 
+.env
+
 
 # Copied and pasted from: 
 # https://github.com/facebook/react/blob/main/.gitignore
