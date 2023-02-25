@@ -25,3 +25,13 @@ This repo should contain a starting point for any django app serving static reac
 ## How to setup Google OAuth
 
 For step by step tutorail you can go [here](https://pylessons.com/django-google-oauth)
+
+## Login to django
+
+1. Go to `http://127.0.0.1:8000/accounts/google/login/`
+2. You should see a menu like: _Sign In Via Google. You are about to sign in using a third party account from Google_ . Click: `continue`
+3. Login with google prompt.
+4. You should be redirected to url specified under `LOGIN_REDIRECT_URL`.
+
+- check that profile was created under: SocialAccounts.SocialAccounts
+- check that user model instance was created

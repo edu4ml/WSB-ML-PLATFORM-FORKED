@@ -159,6 +159,10 @@ SOCIALACCOUNT_PROVIDERS = {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
         'APP': {
             'client_id': os.getenv("OAUTH_CLIENT_ID"),
             'secret': os.getenv("OAUTH_CLIENT_SECRET"),
@@ -167,15 +171,4 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'SCOPE': [
-#             'profile',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
-#         },
-#         'OAUTH_PKCE_ENABLED': True,
-#     }
-# }
+LOGIN_REDIRECT_URL = "/admin"
