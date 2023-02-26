@@ -19,10 +19,6 @@ setup(
         "gunicorn==20.1.0",
         "python-dotenv==1.0.0",
     ],
-    extras_require={
-        "DEV":[
-            "black==23.1.0"
-        ]
-    },
+    extras_require={"DEV": ["flake8", "isort", "black"]},
     scripts=[],
 )

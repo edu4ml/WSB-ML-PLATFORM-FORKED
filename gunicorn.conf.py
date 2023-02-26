@@ -1,5 +1,3 @@
-import multiprocessing
-
 # gunicorn.conf.py
 # Non logging stuff
 bind = "0.0.0.0:8080"
