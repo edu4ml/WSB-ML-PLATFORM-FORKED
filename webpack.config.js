@@ -1,8 +1,10 @@
 const path = require('path');
 const BundleTracker = require('webpack-bundle-tracker');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+    mode: 'development',
     entry: {
         frontend: '/frontend/src/index.js',
     },
@@ -26,9 +28,23 @@ module.exports = {
                 use: ['babel-loader'],
             },
             {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.(ts|tsx)?$/,
+                loader: 'babel-loader',
+                // use: 'ts-loader',
+                // exclude: /node_modules/,
+            },
+            {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader'],
             },
         ],
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     },
 };
