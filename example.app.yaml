@@ -1,0 +1,24 @@
+runtime: python310
+
+entrypoint: gunicorn -c gunicorn.conf.py server.wsgi:application
+
+env_variables:
+  DEBUG: 0
+  DATABASE_PASSWORD: password
+  DATABASE_NAME: django-react-oauth
+  DATABASE_HOST: /cloudsql/{project_name}:{region}:{instance_name}
+  DATABASE_USER: postgres
+
+instance_class: F2
+
+handlers:
+  - url: /static
+    static_dir: staticfiles-cdn/
+
+  - url: /.*
+    script: auto
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 5
+  target_cpu_utilization: 0.5

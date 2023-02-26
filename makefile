@@ -2,6 +2,7 @@ SHORT_SHA := $(shell git rev-parse --short HEAD)
 
 
 sync-all-deps:
+	pip-compile
 	pip-sync requirements.txt --pip-args --no-deps
 	pip install -e .[dev]
 
@@ -26,5 +27,5 @@ lint-fix:
 	black .
 
 
-connect:
+connect-sql:
 	./cloud_sql_proxy -instances="jakub-swajka-personal:europe-west1:jakub-szwajka-sandbox"=tcp:5432

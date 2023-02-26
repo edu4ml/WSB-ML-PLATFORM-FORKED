@@ -1,52 +1,82 @@
 # Boilerplate - django-react-oauth
 
-This repo should contain a starting point for any django app serving static react frontend with google oauth
+This is a boilerplate for a Django app that serves a static React build. It is built to work with Google Cloud SQL, App Engine and Google OAuth.
 
--   **server** folder contains the whole backend service written with django.
--   **app** contains react app based on [react-redux-boilerplate](https://github.com/JakubSzwajka/boilerplate-react-redux)
+## Requirements
 
-## How to run it
+To use this boilerplate, you will need:
 
-1. Install requirements
+-   Python 3.10 or later
+-   Google Cloud SQL instance
+-   Google Cloud App Engine
+-   Google OAuth
+-   Google service account key with sql permissions
+
+## Getting started
+
+I've used a google cloud environment but you can skip it and build it locally or with other cloud provider if you want.
+
+### GCP steps
+
+-   Prepare [cloud sql](https://cloud.google.com/python/django/run#setup-sql) instance. Optionally you can use [cloud sql proxy](https://cloud.google.com/python/django/run#connect_sql_locally) for local development with sql instance running in google cloud.
+-   Prepare service account key with sql permissions and put it into `keys/cloud-sql-proxy.json`.
+-   Setup OAuth. You can follow [this tutorial](https://pylessons.com/django-google-oauth).
+
+### Locally (.env DEBUG=1 )
+
+1. Copy `.env.example` file and set all env variables. (Note that you will be missing `GAR_URL` till you make first deploy).
 
 ```
-    make sync-all-deps
-```
-
-2. Run migrations
+cp .env.example .env
 
 ```
-    make migrate
-```
 
-3. Create superuser
+2. Prepare virtualenv for local development and install all requirements.
 
 ```
-    python manage.py createsuperuser
+mkvirtualenv django-react-oauth
+make sync-all-deps
+npm install
 ```
 
-## How to setup Google OAuth
+3. Migrate.
 
-For step by step tutorail you can go [here](https://pylessons.com/django-google-oauth)
+```
+python3 manage.py migrate
+```
 
-## Login to django
+4. Make a build and run locally to test it. This contains a few steps to run in different processes:
 
-1. Go to `http://127.0.0.1:8000/accounts/google/login/`
-2. You should see a menu like: _Sign In Via Google. You are about to sign in using a third party account from Google_ . Click: `continue`
-3. Login with google prompt.
-4. You should be redirected to url specified under `LOGIN_REDIRECT_URL`.
+-   run sql proxy with: `make connect-sql`. (you might need to set up `GOOGLE_APPLICATION_CREDENTIALS` properly)
+-   run webpack in development mode or create a bundle
 
--   check that profile was created under: SocialAccounts.SocialAccounts
--   check that user model instance was created
+```
+npm start
+or
+npm run build
+```
 
-## Assumptions how this should look like
+-   run server with `python3 manage.py runserver`
 
--   how to setup OAuth
--   how to use it while develop
--   how to use it in prod
--   how to deploy it to Docker
--   how to deploy it to Google App Engine
+    At this moment you should be able to see login screen and access `/admin` page.
 
-## Download sql-proxy
+5. Create a superuser and follow all the steps from OAuth tutorial setting socialaccounts and etc.
 
-[link to doc](https://cloud.google.com/python/django/run#connect_sql_locally)
+    If you have sociall app set you can login to `/admin` using google authentication.
+
+-   visit `http://127.0.0.1:8000/accounts/google/login/`
+-   You should see a menu like: _Sign In Via Google. You are about to sign in using a third party account from Google_ . Click: `continue`
+-   Login with google prompt.
+-   You should be redirected to url specified under `LOGIN_REDIRECT_URL`.
+
+    Now check that user matching your google profile was created. Note that he has not `is_staff=True` so he cannot access admin panel.
+
+## Deployment
+
+1. Adjust `.env` settings in file to match production.
+2. Run `make deploy`. This will run all necessary steps to prepare and deploy the app with app engine.
+
+## Usefull resources
+
+-   [Google cloud sql proxy](https://cloud.google.com/python/django/run#connect_sql_locally)
+-   [How to setup Google Cloud OAuth with django](https://pylessons.com/django-google-oauth)
