@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { Button, Col, Row, Checkbox, Form, Input, Layout } from 'antd';
+import { login } from '../../slices/auth';
+import { useAppDispatch } from '../../store';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Content } = Layout;
 
 interface LoginProps {
     onLogin: (username: string, password: string) => void;
@@ -30,33 +32,16 @@ const footerStyle: React.CSSProperties = {
     backgroundColor: '#7dbcea',
 };
 
-const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+const LoginForm = () => {
+    const dispatch = useAppDispatch();
 
-    const handleUsernameChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setUsername(event.target.value);
-    };
-
-    const handlePasswordChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setPassword(event.target.value);
-    };
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        onLogin(username, password);
-    };
-
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
-    };
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+    const onFinish = (values) => {
+        const credentials = {
+            login: values.username,
+            password: values.password,
+            remember: values.remember,
+        };
+        dispatch(login(credentials));
     };
 
     return (
@@ -70,12 +55,12 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
                             name="basic"
                             initialValues={{ remember: true }}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
+                            // onFinishFailed={onFinishFailed}
                             autoComplete="off"
                             layout="vertical"
                         >
                             <Form.Item
-                                // label="Username"
+                                label="Username"
                                 name="username"
                                 rules={[
                                     {
@@ -88,7 +73,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
                             </Form.Item>
 
                             <Form.Item
-                                // label="Password"
+                                label="Password"
                                 style={{ width: '100%' }}
                                 name="password"
                                 rules={[
