@@ -12,6 +12,8 @@ runwebpack:
 	npm run dev
 
 deploy:
+	npm run build
+	python3 manage.py collectstatic
 	pip-compile
 	gcloud app deploy app.yaml --version=${SHORT_SHA} --no-cache
 
