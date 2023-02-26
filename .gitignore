@@ -10,8 +10,11 @@ staticfiles-cdn
 
 webpack-stats.json
 package-lock.json
-
+cloud_sql_proxy
 frontend/static/frontend/frontend-*
+
+keys/*
+!keys/.gitkeep
 
 # Copied and pasted from: 
 # https://github.com/facebook/react/blob/main/.gitignore

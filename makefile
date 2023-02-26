@@ -13,7 +13,7 @@ runwebpack:
 
 deploy:
 	npm run build
-	python3 manage.py collectstatic
+	python3 manage.py collectstatic --no-input
 	pip-compile
 	gcloud app deploy app.yaml --version=${SHORT_SHA} --no-cache
 
@@ -24,3 +24,7 @@ lint:
 lint-fix:
 	isort . 
 	black .
+
+
+connect:
+	./cloud_sql_proxy -instances="jakub-swajka-personal:europe-west1:jakub-szwajka-sandbox"=tcp:5432

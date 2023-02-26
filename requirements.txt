@@ -30,6 +30,8 @@ idna==3.4
     # via requests
 oauthlib==3.2.2
     # via requests-oauthlib
+psycopg2==2.9.5
+    # via django-react-oauth (setup.py)
 pycparser==2.21
     # via cffi
 pyjwt[crypto]==2.6.0

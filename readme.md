@@ -46,3 +46,7 @@ For step by step tutorail you can go [here](https://pylessons.com/django-google-
 -   how to use it in prod
 -   how to deploy it to Docker
 -   how to deploy it to Google App Engine
+
+## Download sql-proxy
+
+[link to doc](https://cloud.google.com/python/django/run#connect_sql_locally)

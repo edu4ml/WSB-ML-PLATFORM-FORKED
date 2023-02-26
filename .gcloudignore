@@ -43,3 +43,5 @@ extension/
 tests/
 ._.sh
 ._.md
+
+.env.example

@@ -77,8 +77,6 @@ ROOT_URLCONF = "server.urls"
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles-cdn"
 
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, "assets"),)
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -104,10 +102,14 @@ WSGI_APPLICATION = "server.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dict(
+        ENGINE="django.db.backends.postgresql",
+        NAME=os.getenv("DATABASE_NAME"),
+        HOST=os.getenv("DATABASE_HOST"),
+        USER=os.getenv("DATABASE_USER"),
+        PASSWORD=os.getenv("DATABASE_PASSWORD"),
+        PORT=os.getenv("DATABASE_PORT", 5432),
+    )
 }
 
 
@@ -176,3 +178,26 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = "/admin"
+
+CSRF_TRUSTED_ORIGINS = [os.getenv("GAR_URL")]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "root": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+        },
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}

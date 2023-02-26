@@ -18,6 +18,7 @@ setup(
         "django-webpack-loader==1.8.1",
         "gunicorn==20.1.0",
         "python-dotenv==1.0.0",
+        "psycopg2==2.9.5",
     ],
     extras_require={"DEV": ["flake8", "isort", "black"]},
     scripts=[],
