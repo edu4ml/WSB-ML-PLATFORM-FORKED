@@ -1,3 +1,4 @@
+run_gunicorn := gunicorn -c gunicorn.conf.py --threads 4 server.wsgi:application
 
 
 pip-compile:
@@ -9,3 +10,7 @@ sync-all-deps:
 
 migrate: 
 	python3 django_react_oauth migrate
+
+
+run-gunicorn:
+	${run_gunicorn}

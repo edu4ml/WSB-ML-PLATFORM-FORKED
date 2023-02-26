@@ -6,6 +6,12 @@ db.sqlite3
 *.egg
 *.egg-info/
 
+staticfiles-cdn
+
+webpack-stats.json
+package-lock.json
+
+frontend/static/frontend/frontend-*
 
 # Copied and pasted from: 
 # https://github.com/facebook/react/blob/main/.gitignore
