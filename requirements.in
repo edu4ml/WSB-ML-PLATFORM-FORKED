@@ -1,8 +1,0 @@
-django
-django-allauth
-django-webpack-loader
-
-gunicorn
-
-python-dotenv
-black

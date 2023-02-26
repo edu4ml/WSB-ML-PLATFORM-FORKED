@@ -1,16 +1,20 @@
-run_gunicorn := gunicorn -c gunicorn.conf.py --threads 4 server.wsgi:application
+SHORT_SHA := $(shell git rev-parse --short HEAD)
 
-
-pip-compile:
-	pip-compile --generate-hashes --no-emit-index-url
+compile:
+	pip-compile
 
 sync-all-deps:
 	pip-sync requirements.txt --pip-args --no-deps
-	pip install --no-deps -e .
+	pip install -e .[dev]
 
 migrate: 
 	python3 django_react_oauth migrate
 
 
 run-gunicorn:
-	${run_gunicorn}
+	gunicorn -c gunicorn.conf.py --log-file=- server.wsgi:application
+
+
+deploy:
+	pip-compile
+	gcloud app deploy app.yaml --version=${SHORT_SHA} --no-cache

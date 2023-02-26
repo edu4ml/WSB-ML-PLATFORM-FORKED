@@ -1,7 +1,9 @@
+import multiprocessing
+
 # gunicorn.conf.py
 # Non logging stuff
 bind = "0.0.0.0:8080"
-workers = 2  # scaling is on the google app engine side
+workers = 2
 # Access log - records incoming HTTP requests
 # accesslog = "./log/gunicorn.access.log"
 # Error log - records Gunicorn server goings-on
