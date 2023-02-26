@@ -1,1 +1,2 @@
-export { default as LoginPage } from './Login/LoginPage';
+export { default as LoginForm } from './Login/LoginForm';
+export { default as ProfileCard } from './Login/ProfileCard';

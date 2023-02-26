@@ -1,8 +1,13 @@
 import React from 'react';
-import { LoginPage } from './pages';
+import { LoginForm, ProfileCard } from './pages';
 
 const App = () => {
-    return <LoginPage />;
+    return (
+        <>
+            <LoginForm />;
+            <ProfileCard />;
+        </>
+    );
 };
 
 export default App;

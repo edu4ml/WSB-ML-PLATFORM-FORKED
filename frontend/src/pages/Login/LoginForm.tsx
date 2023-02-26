@@ -1,13 +1,9 @@
 import * as React from 'react';
 import { Button, Col, Row, Checkbox, Form, Input, Layout } from 'antd';
 import { login } from '../../slices/auth';
-import { useAppDispatch } from '../../store';
+import { useAppDispatch } from '../../hooks';
 
 const { Header, Footer, Content } = Layout;
-
-interface LoginProps {
-    onLogin: (username: string, password: string) => void;
-}
 
 const headerStyle: React.CSSProperties = {
     textAlign: 'center',

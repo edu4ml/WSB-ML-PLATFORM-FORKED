@@ -17,12 +17,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from allauth.account.views import LoginView
+from allauth.urls import urlpatterns as allauth_urlpatterns
 from frontend.urls import urlpatterns
+from server.views import is_authenticated, profile
 
+custom_allauth_urlpatterns = [
+    path("authenticated/", is_authenticated, name="is_authenticated"),
+    path("profile/", profile, name="profile"),
+]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("allauth.urls")),
+    path(
+        "auth/",
+        include(([*allauth_urlpatterns, *custom_allauth_urlpatterns], "allauth")),
+    ),
     path("", include((urlpatterns, "frontend"))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -14,7 +14,7 @@ class AuthService {
             headers: { 'content-type': 'multipart/form-data' },
         };
 
-        return axios.post('/accounts/login/', formData, config);
+        return axios.post('/auth/login/', formData, config);
     }
 }
 
