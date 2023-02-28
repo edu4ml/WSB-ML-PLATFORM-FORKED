@@ -20,9 +20,12 @@ django==4.1.7
     # via
     #   django-allauth
     #   django-react-oauth (setup.py)
+    #   djangorestframework
 django-allauth==0.52.0
     # via django-react-oauth (setup.py)
 django-webpack-loader==1.8.1
+    # via django-react-oauth (setup.py)
+djangorestframework==3.14.0
     # via django-react-oauth (setup.py)
 gunicorn==20.1.0
     # via django-react-oauth (setup.py)
@@ -40,6 +43,8 @@ python-dotenv==1.0.0
     # via django-react-oauth (setup.py)
 python3-openid==3.2.0
     # via django-allauth
+pytz==2022.7.1
+    # via djangorestframework
 requests==2.28.2
     # via
     #   django-allauth

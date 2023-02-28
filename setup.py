@@ -16,6 +16,7 @@ setup(
         "Django==4.1.7",
         "django-allauth==0.52.0",
         "django-webpack-loader==1.8.1",
+        "djangorestframework==3.14.0",
         "gunicorn==20.1.0",
         "python-dotenv==1.0.0",
         "psycopg2==2.9.5",
