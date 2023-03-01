@@ -1,6 +1,9 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from django.contrib.auth import authenticate, login, views
 
 
 def is_authenticated(request):
@@ -9,6 +12,10 @@ def is_authenticated(request):
 
 @login_required
 def profile(request):
-    user_data: dict = serializers.serialize("python", [request.user])[0]["fields"]
+    return JsonResponse(_serialize_user(request.user))
+
+
+def _serialize_user(user) -> dict:
+    user_data: dict = serializers.serialize("python", [user])[0]["fields"]
     user_data.pop("password")
-    return JsonResponse(user_data)
+    return user_data

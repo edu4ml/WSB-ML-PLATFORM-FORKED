@@ -42,11 +42,9 @@ INSTALLED_APPS = [
     "frontend.apps.FrontendConfig",
     # Other django apps
     "webpack_loader",
-    # OAuth
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
 ]
 
 WEBPACK_LOADER = {
@@ -88,8 +86,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # `allauth` needs this from django
-                "django.template.context_processors.request",
             ],
         },
     },
@@ -151,13 +147,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SITE_ID = 1
 
-AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
-    "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
-]
-
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
@@ -200,4 +189,13 @@ LOGGING = {
             "propagate": False,
         },
     },
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+}
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "wsb-platform-auth",
+    "JWT_AUTH_REFRESH_COOKIE": "wsb-platform-refresh-token",
 }

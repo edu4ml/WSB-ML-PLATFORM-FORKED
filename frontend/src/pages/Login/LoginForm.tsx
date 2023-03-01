@@ -1,103 +1,59 @@
-import * as React from 'react';
-import { Button, Col, Row, Checkbox, Form, Input, Layout } from 'antd';
-import { login } from '../../slices/auth';
-import { useAppDispatch } from '../../hooks';
-
-const { Header, Footer, Content } = Layout;
-
-const headerStyle: React.CSSProperties = {
-    textAlign: 'center',
-    color: '#fff',
-    height: 64,
-    paddingInline: 50,
-    lineHeight: '64px',
-    backgroundColor: '#7dbcea',
-};
-
-const contentStyle: React.CSSProperties = {
-    textAlign: 'center',
-    minHeight: 120,
-    lineHeight: '120px',
-    color: '#fff',
-    backgroundColor: '#108ee9',
-};
-
-const footerStyle: React.CSSProperties = {
-    textAlign: 'center',
-    color: '#fff',
-    backgroundColor: '#7dbcea',
-};
+import React, { useEffect } from 'react';
+import { Button, Form, Input } from 'antd';
+import { useLoginMutation } from '../../features/auth/authApi';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 
 const LoginForm = () => {
-    const dispatch = useAppDispatch();
+    const { isAuthenticated } = useAppSelector((state) => state.auth);
+    const [login, data] = useLoginMutation();
+    const navigate = useNavigate();
 
-    const onFinish = (values) => {
-        const credentials = {
-            login: values.username,
-            password: values.password,
-            remember: values.remember,
-        };
-        dispatch(login(credentials));
-    };
+    useEffect(() => {
+        if (isAuthenticated) navigate('/profile');
+    }, [isAuthenticated]);
 
     return (
-        <Layout>
-            <Header style={headerStyle}>Header</Header>
-            <Content style={contentStyle}>
-                <Row>
-                    <Col span={8} />
-                    <Col span={8}>
-                        <Form
-                            name="basic"
-                            initialValues={{ remember: true }}
-                            onFinish={onFinish}
-                            // onFinishFailed={onFinishFailed}
-                            autoComplete="off"
-                            layout="vertical"
-                        >
-                            <Form.Item
-                                label="Username"
-                                name="username"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your username!',
-                                    },
-                                ]}
-                            >
-                                <Input />
-                            </Form.Item>
+        <Form
+            name="basic"
+            initialValues={{ remember: true }}
+            onFinish={login}
+            autoComplete="off"
+            layout="vertical"
+        >
+            <Form.Item
+                label="Username"
+                name="username"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your username!',
+                    },
+                ]}
+            >
+                <Input />
+            </Form.Item>
 
-                            <Form.Item
-                                label="Password"
-                                style={{ width: '100%' }}
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your password!',
-                                    },
-                                ]}
-                            >
-                                <Input.Password />
-                            </Form.Item>
+            <Form.Item
+                label="Password"
+                style={{ width: '100%' }}
+                name="password"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password!',
+                    },
+                ]}
+            >
+                <Input.Password />
+            </Form.Item>
 
-                            <Form.Item name="remember" valuePropName="checked">
-                                <Checkbox>Remember me</Checkbox>
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Submit
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Col>
-                    <Col span={8} />
-                </Row>
-            </Content>
-            <Footer style={footerStyle}>Footer</Footer>
-        </Layout>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Submit
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 

@@ -1,17 +1,34 @@
 import * as React from 'react';
-import { Typography } from 'antd';
-import { useAppSelector } from '../../hooks';
+import { Skeleton, Space, Typography } from 'antd';
+import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import LogoutButton from './LogoutButton';
 
-const { Title, Paragraph, Text, Link } = Typography;
+const { Title, Paragraph } = Typography;
 
 const ProfileForm = () => {
-    const { isAuthenticated } = useAppSelector((state) => state.auth);
+    const { data, isFetching, isSuccess } =
+        useGetUserProfileQuery('userDetails');
 
-    return (
-        <Title>
-            User is authenticated: {isAuthenticated ? 'True' : 'False'}
-        </Title>
-    );
+    if (data && isSuccess) {
+        return (
+            <>
+                <Title>👋 Hello!</Title>
+                <Paragraph>
+                    <pre>{JSON.stringify(data, null, 4)}</pre>
+                </Paragraph>
+                <Space />
+                <LogoutButton />
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Skeleton active />
+                <Space />
+                <LogoutButton />
+            </>
+        );
+    }
 };
 
 export default ProfileForm;
