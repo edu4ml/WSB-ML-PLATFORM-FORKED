@@ -2,6 +2,7 @@ SHORT_SHA := $(shell git rev-parse --short HEAD)
 
 
 sync-all-deps:
+	pip install pip-tools
 	pip-compile
 	pip-sync requirements.txt --pip-args --no-deps
 	pip install -e .[dev]
