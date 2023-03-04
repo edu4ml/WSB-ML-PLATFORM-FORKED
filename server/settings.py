@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 import os
 from pathlib import Path
 
@@ -198,4 +199,9 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "wsb-platform-auth",
     "JWT_AUTH_REFRESH_COOKIE": "wsb-platform-refresh-token",
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
