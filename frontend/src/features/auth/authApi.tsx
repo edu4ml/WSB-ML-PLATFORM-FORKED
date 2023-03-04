@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from 'js-cookie';
-import { setCredentials, logout } from './authSlice';
+import { setCredentials, logout, setIsAuthenticated } from './authSlice';
 
 interface loginUserResponse {
     user: object;
@@ -39,6 +39,17 @@ export const authApi = createApi({
         }),
         getUserProfile: builder.query({
             query: () => '/user/',
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                await queryFulfilled
+                    .then((data) => {
+                        dispatch(setCredentials(data.data));
+                    })
+                    .catch((err) => {
+                        if (err.error.status == 401) {
+                            dispatch(setIsAuthenticated(false));
+                        }
+                    });
+            },
         }),
         isAuthenticated: builder.query({
             query: () => '/is_authenticated/',

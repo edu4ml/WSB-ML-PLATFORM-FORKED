@@ -21,6 +21,7 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
         },
         setIsAuthenticated: (state, { payload }) => {
+            console.log('setting state to: ', payload);
             state.isAuthenticated = payload;
         },
     },

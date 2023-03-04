@@ -1,34 +1,21 @@
 import * as React from 'react';
 import { Skeleton, Space, Typography } from 'antd';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
-import LogoutButton from './LogoutButton';
+import { useAppSelector } from '../../hooks';
 
 const { Title, Paragraph } = Typography;
 
 const ProfileForm = () => {
-    const { data, isFetching, isSuccess } =
-        useGetUserProfileQuery('userDetails');
+    const { data } = useGetUserProfileQuery('userDetails');
 
-    if (data && isSuccess) {
-        return (
-            <>
-                <Title>👋 Hello!</Title>
-                <Paragraph>
-                    <pre>{JSON.stringify(data, null, 4)}</pre>
-                </Paragraph>
-                <Space />
-                <LogoutButton />
-            </>
-        );
-    } else {
-        return (
-            <>
-                <Skeleton active />
-                <Space />
-                <LogoutButton />
-            </>
-        );
-    }
+    return (
+        <>
+            <Title>👋 Hello!</Title>
+            <Paragraph>
+                <pre>{JSON.stringify(data, null, 4)}</pre>
+            </Paragraph>
+        </>
+    );
 };
 
 export default ProfileForm;
