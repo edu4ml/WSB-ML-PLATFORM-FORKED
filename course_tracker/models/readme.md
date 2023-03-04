@@ -24,3 +24,18 @@ An answer represents a user's response to a question within a quiz. The model tr
 
 ## Enrolment
 An enrolment represents a user's participation in a course. The model tracks information such as the user who enrolled in the course, the course they enrolled in, and the timestamp of enrolment.
+
+
+1. User starts a new course and enrolls in it
+2. Enrolment model is created and Progress model is created for that user and course
+3. Course contains Exercises which need to be completed in order to finish the course
+4. For each Exercise, Exercise model is created
+5. When user starts an Exercise, ExerciseAttempt model is created
+6. If Exercise requires evaluation, ExerciseCompletion model is created after successful attempt
+7. Progress is updated for each successful ExerciseCompletion
+8. Course may also contain Quizzes which contain Questions
+9. For each Quiz, Quiz model is created, which contains Questions
+10. For each Question, Question model is created, which contains Answers
+11. When user starts a Quiz, QuizAttempt model is created
+12. When user submits QuizAttempt, QuizCompletion model is created
+13. Progress is updated for each successful QuizCompletion

@@ -16,3 +16,11 @@
 #         total_exercises = self.course.exercises.count()
 #         completed_exercises = self.exercises_completed.count()
 #         return int((completed_exercises / total_exercises) * 100)
+
+# class Progress(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+#     exercises_completed = models.PositiveIntegerField(default=0)
+#     exercises_total = models.PositiveIntegerField(default=0)
+#     quizzes_completed = models.PositiveIntegerField(default=0)
+#     quizzes_total = models.PositiveIntegerField(default=0)

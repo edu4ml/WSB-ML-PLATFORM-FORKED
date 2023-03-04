@@ -6,3 +6,8 @@
 #     is_test_passed = models.BooleanField(default=False)
 #     is_reviewed = models.BooleanField(default=False)
 #     is_self_evaluated = models.BooleanField(default=False)
+
+
+# class ExerciseCompletion(models.Model):
+#     exercise_attempt = models.ForeignKey(ExerciseAttempt, on_delete=models.CASCADE)
+#     completed_at = models.DateTimeField(auto_now_add=True)
