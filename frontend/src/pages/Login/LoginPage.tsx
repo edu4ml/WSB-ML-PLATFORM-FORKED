@@ -11,19 +11,14 @@ const LoginFormContainerStyle: React.CSSProperties = {
 };
 
 const LoginPage = () => {
-    const { isAuthenticated } = useAppSelector((state) => state.auth);
     const [login, data] = useLoginMutation();
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (isAuthenticated) navigate('/profile');
-    // }, [isAuthenticated]);
 
     const handleLogin = (values) => {
         login(values)
             .unwrap()
             .then((response) => {
-                navigate('/profile');
+                navigate('/courses');
             })
             .catch((err) => {
                 console.error('Error while login: ', err);

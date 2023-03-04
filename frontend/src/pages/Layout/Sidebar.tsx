@@ -16,7 +16,7 @@ const SideBarMenu = (props) => {
                     key: 1,
                     label: 'Kursy',
                     onClick: () => {
-                        navigate('/app');
+                        navigate('/courses');
                     },
                 },
                 {
@@ -30,7 +30,7 @@ const SideBarMenu = (props) => {
                     key: 3,
                     label: 'Wyloguj',
                     onClick: () => {
-                        logout();
+                        logout('logoutUser');
                         navigate('/');
                     },
                 },

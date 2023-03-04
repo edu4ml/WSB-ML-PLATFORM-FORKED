@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './components/router/PrivateRoute';
 import LoginLayout from './pages/Layout/LoginLayout';
 import MainLayout from './pages/Layout/MainLayout';
+import CoursesPage from './pages/Courses/CoursesPage';
 
 const App = () => {
     return (
@@ -24,6 +25,16 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <ProfileCard />
+                                </MainLayout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/courses"
+                        element={
+                            <PrivateRoute>
+                                <MainLayout>
+                                    <CoursesPage />
                                 </MainLayout>
                             </PrivateRoute>
                         }
