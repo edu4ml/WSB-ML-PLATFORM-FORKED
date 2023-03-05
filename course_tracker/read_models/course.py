@@ -5,6 +5,7 @@ from course_tracker.read_models.exercise import ExerciseReadModel
 
 
 class CourseReadModel(BaseModel):
+    id: int
     title: str
     description: str
     is_enrolled: bool
@@ -13,6 +14,7 @@ class CourseReadModel(BaseModel):
     exercises: list[ExerciseReadModel]
 
     def __init__(self, course: Course, user: User, **kwargs) -> None:
+        kwargs['id'] = course.id
         kwargs["title"] = course.title
         kwargs["description"] = course.description
         kwargs["is_enrolled"] = user.courseenrollment_set.filter(course=course).exists()
@@ -29,7 +31,6 @@ class CourseReadModel(BaseModel):
         completed_exercises = len(
             list(filter(lambda exercise: exercise.is_completed, exercises))
         )
-        print(total_exercises, completed_exercises)
         if total_exercises == 0:
             return 0
         return int((completed_exercises / total_exercises) * 100)
