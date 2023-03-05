@@ -13,7 +13,15 @@ export const courseApi = createApi({
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
             query: () => '/course-catalog/',
-            providesTags: ['course-catalog'],
+            providesTags: (result, error, id) => [
+                { type: 'course-catalog', id: 'LIST' },
+            ],
+        }),
+        getCourse: builder.query({
+            query: (id) => `/course-catalog/${id}`,
+            providesTags: (result, error, id) => [
+                { type: 'course-catalog', id },
+            ],
         }),
         enrollForCourse: builder.mutation({
             query: (body) => ({
@@ -21,7 +29,9 @@ export const courseApi = createApi({
                 method: 'POST',
                 body: body,
             }),
-            invalidatesTags: ['course-catalog'],
+            invalidatesTags: (result, error, { id }) => [
+                { type: 'course-catalog', id: 'LIST' },
+            ],
         }),
     }),
 });
