@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 export const courseApi = createApi({
     reducerPath: 'courseApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'api/',
+        baseUrl: '/api/',
         prepareHeaders(headers) {
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
@@ -36,6 +36,9 @@ export const courseApi = createApi({
     }),
 });
 
-export const { useGetCourseCatalogQuery, useEnrollForCourseMutation } =
-    courseApi;
+export const {
+    useGetCourseCatalogQuery,
+    useEnrollForCourseMutation,
+    useGetCourseQuery,
+} = courseApi;
 export default courseApi;

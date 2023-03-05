@@ -5,7 +5,6 @@ import LogoutButton from '../../pages/Login/LogoutButton';
 
 const PrivateRoute = ({ children }) => {
     const { data } = useGetUserProfileQuery('userDetails');
-
     if (data && Object.keys(data).length !== 0) {
         return children;
     }

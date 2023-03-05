@@ -5,6 +5,8 @@ import PrivateRoute from './components/router/PrivateRoute';
 import LoginLayout from './pages/Layout/LoginLayout';
 import MainLayout from './pages/Layout/MainLayout';
 import CoursesPage from './pages/Courses/CoursesPage';
+import CourseDetailPage from './pages/Courses/CourseDetailPage';
+import { Button, Result } from 'antd';
 
 const App = () => {
     return (
@@ -37,6 +39,27 @@ const App = () => {
                                     <CoursesPage />
                                 </MainLayout>
                             </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/courses/:courseId"
+                        element={
+                            <PrivateRoute>
+                                <MainLayout>
+                                    <CourseDetailPage />
+                                </MainLayout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="*"
+                        element={
+                            <Result
+                                status="404"
+                                title="404"
+                                subTitle="Przepraszam, ta strona nie istnieje!"
+                                extra={<Button type="primary">Wracam</Button>}
+                            />
                         }
                     />
                 </Routes>
