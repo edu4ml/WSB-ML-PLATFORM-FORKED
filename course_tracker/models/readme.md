@@ -39,3 +39,18 @@ An enrolment represents a user's participation in a course. The model tracks inf
 11. When user starts a Quiz, QuizAttempt model is created
 12. When user submits QuizAttempt, QuizCompletion model is created
 13. Progress is updated for each successful QuizCompletion
+
+
+
+All the models can be visible in the REST API, but you may want to control which fields and related models are exposed through the API to protect sensitive information and reduce clutter. Here's a suggestion for which models and fields to expose in the REST API:
+
+Course: expose all fields except created_at and updated_at
+Exercise: expose all fields except created_at and updated_at
+ExerciseAttempt: expose all fields except created_at and updated_at, and exclude solution_file if it contains sensitive information
+ExerciseCompletion: expose all fields except created_at and updated_at
+Progress: expose exercise, status, and completed_at fields
+Quiz: expose all fields except created_at and updated_at
+Question: expose all fields except created_at and updated_at
+Answer: expose all fields except created_at and updated_at
+Enrollment: expose all fields except created_at and updated_at
+Remember to also properly set up authentication and permissions to ensure that only authorized users can access the API and perform appropriate actions.

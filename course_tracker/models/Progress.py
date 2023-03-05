@@ -5,7 +5,7 @@
 
 #     def __str__(self):
 #         return f'{self.student} - {self.course}'
-    
+
 # progress = Progress.objects.get(course=course, student=student)
 # progress.exercises_completed.add(exercise)
 

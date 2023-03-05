@@ -1,9 +1,9 @@
-from django.http import JsonResponse
+from django.contrib.auth import authenticate, login, views
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
-from django.contrib.auth import authenticate, login, views
 
 
 def is_authenticated(request):

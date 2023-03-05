@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from datetime import timedelta
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # apps
     "frontend.apps.FrontendConfig",
+    "course_tracker.apps.CourseTrackerConfig",
     # Other django apps
     "webpack_loader",
     "rest_framework",
@@ -193,8 +194,14 @@ LOGGING = {
 }
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
+
 REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "wsb-platform-auth",

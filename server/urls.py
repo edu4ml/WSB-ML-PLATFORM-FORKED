@@ -13,18 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from dj_rest_auth.urls import urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+
+from course_tracker.services_application.urls import (
+    urlpatterns as course_tracker_urlpatterns,
+)
 from frontend.urls import urlpatterns as frontend_urlpatterns
-from dj_rest_auth.urls import urlpatterns
 from server.views import is_authenticated
+
 
 custom_auth_patterns = [path("is_authenticated/", is_authenticated)]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include(([*urlpatterns, *custom_auth_patterns], "auth"))),
+    path("api/", include(course_tracker_urlpatterns)),
     path("", include((frontend_urlpatterns, "frontend"))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

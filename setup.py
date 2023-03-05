@@ -21,6 +21,7 @@ setup(
         "gunicorn==20.1.0",
         "python-dotenv==1.0.0",
         "psycopg2==2.9.5",
+        "pydantic==1.10.5",
     ],
     extras_require={"DEV": ["flake8", "isort", "black"]},
     scripts=[],

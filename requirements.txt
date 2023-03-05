@@ -27,6 +27,8 @@ gunicorn==20.1.0
     # via django-react-oauth (setup.py)
 psycopg2==2.9.5
     # via django-react-oauth (setup.py)
+pydantic==1.10.5
+    # via django-react-oauth (setup.py)
 pyjwt==2.6.0
     # via djangorestframework-simplejwt
 python-dotenv==1.0.0
@@ -35,6 +37,8 @@ pytz==2022.7.1
     # via djangorestframework
 sqlparse==0.4.3
     # via django
+typing-extensions==4.5.0
+    # via pydantic
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
