@@ -1,12 +1,11 @@
 import React from 'react';
-import { List, Typography, Space } from 'antd';
-import CourseListItem from './CourseListItem';
+import { List, Space } from 'antd';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 
 interface CourseItem {
     title: string;
     logo: string;
-    content: string;
+    description: string;
 }
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
@@ -43,7 +42,10 @@ const CourseList = ({ courses }) => (
                     />,
                 ]}
             >
-                <List.Item.Meta title={item.title} description={item.content} />
+                <List.Item.Meta
+                    title={item.title}
+                    description={item.description}
+                />
                 {/* <CourseListItem course={item} /> */}
             </List.Item>
         )}
