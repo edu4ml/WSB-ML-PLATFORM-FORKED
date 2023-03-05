@@ -12,14 +12,14 @@ class ExerciseReadModel(BaseModel):
     is_completed: bool
     order: int
 
-    def __init__(self, exercise: Exercise, user: User, order: int,  **kwargs) -> None:
+    def __init__(self, exercise: Exercise, user: User, order: int, **kwargs) -> None:
         kwargs["title"] = exercise.title
         kwargs["description"] = exercise.description
         kwargs["resources"] = self._get_resources(exercise=exercise)
         kwargs["is_completed"] = ExerciseCompletion.objects.filter(
             exercise=exercise, user=user
         ).exists()
-        kwargs['order'] = order
+        kwargs["order"] = order
         super().__init__(**kwargs)
 
     def _get_resources(self, exercise: Exercise):

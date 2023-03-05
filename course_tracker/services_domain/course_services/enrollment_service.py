@@ -12,6 +12,7 @@ from course_tracker.models import (
 
 class CourseEnrollmentService:
     def enroll_user(self, course_id, user_id):
+        print("HeY! enrolling user: ", course_id, user_id)
         pass
         # try:
         #     course = Course.objects.get(id=course_id)
