@@ -12,7 +12,7 @@ module.exports = {
     output: {
         path: path.resolve('./frontend/static/frontend/'),
         filename: '[name]-[hash].js',
-        publicPath: 'static/frontend/',
+        publicPath: '/static/frontend/',
     },
     plugins: [
         new CleanWebpackPlugin(),
