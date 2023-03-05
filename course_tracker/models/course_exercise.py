@@ -9,7 +9,7 @@ class CourseExercise(TimestampedModel):
     order = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = ("course", "exercise")
+        unique_together = (("course", "exercise"), ("course", "order"))
         ordering = ["order"]
 
     def __str__(self) -> str:
