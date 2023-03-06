@@ -20,5 +20,5 @@ class CourseDetailView(APIView):
         service = CourseCatalogService()
         course = service.retrieve(user=request.user, course_id=course_id)
         if course:
-            return Response(course.dict(),status.HTTP_200_OK)
+            return Response(course.dict(), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)

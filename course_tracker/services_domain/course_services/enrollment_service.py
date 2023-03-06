@@ -1,8 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
-from course_tracker.models import (
-    Course,
-    CourseEnrollment,
-)
+
+from course_tracker.models import Course, CourseEnrollment
 
 
 class CourseEnrollmentService:
@@ -12,11 +10,7 @@ class CourseEnrollmentService:
         except ObjectDoesNotExist:
             raise ValueError(f"Course with id {course_id} does not exist")
 
-        CourseEnrollment.objects.create(
-            user=user,
-            course=course
-        )
-
+        CourseEnrollment.objects.create(user=user, course=course)
 
     # def mark_exercise_complete(self, exercise_attempt_id):
     #     try:

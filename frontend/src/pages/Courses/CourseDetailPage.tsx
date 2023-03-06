@@ -8,7 +8,7 @@ const CourseDetailPage = () => {
     const { data, isLoading } = useGetCourseQuery(courseId);
 
     if (!isLoading) {
-        return <ExerciseList exercises={data.exercises} />;
+        return <ExerciseList title={data.title} exercises={data.exercises} />;
     }
     return <div>sada</div>;
 };

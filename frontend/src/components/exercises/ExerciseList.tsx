@@ -1,62 +1,75 @@
 import React from 'react';
-import { Divider, Dropdown, List, Space, Table, Tag } from 'antd';
+import { Card, Col, List, Row, Table, Tag, Typography } from 'antd';
 import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
+import ExerciseSelfEvaluateButton from './ExerciseSelfEvaluate';
+
+const { Text } = Typography;
 
 interface ExerciseItem {
     id: number;
     title: string;
     description: string;
     is_completed: boolean;
+    is_blocked: boolean;
+    exercises;
 }
-const items = [
-    { key: '1', label: 'Action 1' },
-    { key: '2', label: 'Action 2' },
-];
 
 const getStatusTag = (row: ExerciseItem) => {
-    console.log(row);
-    if (row.is_completed) {
+    const tagStyle: React.CSSProperties = {
+        float: 'right',
+    };
+
+    if (row.is_completed && !row.is_blocked) {
         return (
             <span>
-                <Tag color="green">{'Ukończono'}</Tag>
+                <Tag style={tagStyle} color="green">
+                    {'Ukończono'}
+                </Tag>
+            </span>
+        );
+    } else if (!row.is_completed && !row.is_blocked) {
+        return (
+            <span>
+                <Tag style={tagStyle} color="geekblue">
+                    {'W trakcie'}
+                </Tag>
             </span>
         );
     } else {
         return (
             <span>
-                <Tag color="geekblue">{'W trakcie'}</Tag>
+                <Tag style={tagStyle} color="volcano">
+                    {'Zablokowany'}
+                </Tag>
             </span>
         );
     }
 };
 
+const titleAndDescriptionCell = (row: ExerciseItem) => {
+    const titleType = row.is_blocked ? 'secondary' : undefined;
+    return (
+        <List.Item.Meta
+            title={
+                <Row>
+                    <Col span={16}>
+                        <Text type={titleType}>{row.title}</Text>
+                    </Col>
+                    <Col span={8}>{getStatusTag(row)}</Col>
+                </Row>
+            }
+            description={
+                <Text disabled={row.is_blocked}>{row.description}</Text>
+            }
+        />
+    );
+};
+
 const columns = [
-    { title: 'Nazwa ćwiczenia', dataIndex: 'title', key: 'title' },
-    { title: 'Opis', dataIndex: 'description', key: 'description' },
-    {
-        title: 'Status',
-        key: 'is_completed',
-        render: getStatusTag,
-    },
-    // {
-    //     title: 'Action',
-    //     dataIndex: 'operation',
-    //     key: 'operation',
-    //     render: () => (
-    //         <Space size="middle">
-    //             <a>Pause</a>
-    //             <a>Stop</a>
-    //             <Dropdown menu={{ items }}>
-    //                 <a>
-    //                     More <DownOutlined />
-    //                 </a>
-    //             </Dropdown>
-    //         </Space>
-    //     ),
-    // },
+    { title: 'Ćwiczenie', key: 'title', render: titleAndDescriptionCell },
 ];
 
-const expandedRowRender = ({ resources, requirements }) => {
+const expandedRowRender = ({ id, resources, is_self_evaluated }) => {
     const resourcesColumns = [
         { title: 'Resource', dataIndex: 'description', key: 'resource' },
         { title: 'Url', dataIndex: 'url', key: 'url' },
@@ -79,48 +92,35 @@ const expandedRowRender = ({ resources, requirements }) => {
     ];
 
     return (
-        <>
-            <Table
-                rowKey="url"
-                columns={resourcesColumns}
-                dataSource={resources}
-                pagination={false}
-            />
-            <Divider />
-            <Table
-                rowKey="url"
-                columns={requirementsColumns}
-                dataSource={requirements}
-                pagination={false}
-            />
-        </>
+        <Table
+            rowKey="url"
+            columns={resourcesColumns}
+            dataSource={resources}
+            pagination={false}
+            footer={() => {
+                if (is_self_evaluated) {
+                    return <ExerciseSelfEvaluateButton exercise_id={id} />;
+                }
+            }}
+        />
     );
 };
 
-const ExerciseList = ({ exercises }) => {
+const rowExpandable = (record) => {
+    return !record.is_blocked;
+};
+
+const ExerciseList = ({ title, exercises }) => {
     return (
-        <Table
-            rowKey="id"
-            columns={columns}
-            expandable={{ expandedRowRender }}
-            dataSource={exercises}
-        />
-        // <List
-        //     itemLayout="horizontal"
-        //     size="large"
-        //     pagination={{ pageSize: 5 }}
-        //     dataSource={exercises}
-        //     renderItem={(item: ExerciseItem) => {
-        //         return (
-        //             <List.Item key={item.title}>
-        //                 <List.Item.Meta
-        //                     title={item.title}
-        //                     description={item.description}
-        //                 />
-        //             </List.Item>
-        //         );
-        //     }}
-        // ></List>
+        <Card title={title} bordered={false}>
+            <Table
+                showHeader={false}
+                rowKey="id"
+                columns={columns}
+                expandable={{ expandedRowRender, rowExpandable }}
+                dataSource={exercises}
+            />
+        </Card>
     );
 };
 

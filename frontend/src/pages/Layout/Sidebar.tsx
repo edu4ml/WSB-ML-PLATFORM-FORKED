@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import { useLogoutMutation } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
+import { FolderTwoTone, SmileTwoTone } from '@ant-design/icons';
 
 const SideBarMenu = (props) => {
     const [logout, {}] = useLogoutMutation();
@@ -11,10 +12,12 @@ const SideBarMenu = (props) => {
         <Menu
             mode="inline"
             defaultSelectedKeys={['1']}
+            style={{ backgroundColor: 'rgb(0,0,0,0)' }}
             items={[
                 {
                     key: 1,
                     label: 'Kursy',
+                    icon: <FolderTwoTone />,
                     onClick: () => {
                         navigate('/courses');
                     },
@@ -22,6 +25,7 @@ const SideBarMenu = (props) => {
                 {
                     key: 2,
                     label: 'Profil',
+                    icon: <SmileTwoTone />,
                     onClick: () => {
                         navigate('/profile');
                     },

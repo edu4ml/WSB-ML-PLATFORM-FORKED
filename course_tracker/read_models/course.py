@@ -14,7 +14,7 @@ class CourseReadModel(BaseModel):
     exercises: list[ExerciseReadModel]
 
     def __init__(self, course: Course, user: User, **kwargs) -> None:
-        kwargs['id'] = course.id
+        kwargs["id"] = course.id
         kwargs["title"] = course.title
         kwargs["description"] = course.description
         kwargs["is_enrolled"] = user.courseenrollment_set.filter(course=course).exists()
@@ -38,7 +38,12 @@ class CourseReadModel(BaseModel):
     def _get_exercises(self, course: Course, user: User):
         course_exercises = list(
             [
-                ExerciseReadModel(course_exercise.exercise, user, course_exercise.order)
+                ExerciseReadModel(
+                    exercise=course_exercise.exercise,
+                    user=user,
+                    order=course_exercise.order,
+                    course=course,
+                )
                 for course_exercise in CourseExercise.objects.filter(course=course)
             ]
         )

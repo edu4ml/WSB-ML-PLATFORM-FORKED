@@ -63,7 +63,9 @@ const CourseList = ({ courses }) => {
             renderItem={(item: CourseItem) => {
                 const titleWithProgress = (item: CourseItem) => (
                     <Row>
-                        <Col span={16}>{item.title}</Col>
+                        <Col span={16}>
+                            <a href={`/courses/${item.id}`}>{item.title}</a>
+                        </Col>
                         <Col span={8}>
                             {item.is_enrolled && (
                                 <Progress percent={item.progress} />

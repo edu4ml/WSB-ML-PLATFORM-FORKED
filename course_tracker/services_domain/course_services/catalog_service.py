@@ -1,6 +1,7 @@
 from course_tracker.models import Course
 from course_tracker.read_models import CourseReadModel
 
+
 class CourseCatalogService:
     def list(self, user):
         courses = Course.objects.all()

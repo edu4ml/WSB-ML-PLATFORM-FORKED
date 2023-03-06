@@ -7,6 +7,7 @@ import MainLayout from './pages/Layout/MainLayout';
 import CoursesPage from './pages/Courses/CoursesPage';
 import CourseDetailPage from './pages/Courses/CourseDetailPage';
 import { Button, Result } from 'antd';
+import './App.css';
 
 const App = () => {
     return (

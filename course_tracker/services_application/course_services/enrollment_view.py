@@ -37,9 +37,9 @@ from course_tracker.services_domain.course_services.enrollment_service import (
 
 class CourseEnrollmentView(APIView):
     def post(self, request):
-        course_id = request.data['courseId']
+        course_id = request.data["courseId"]
         user = request.user
-        
+
         service = CourseEnrollmentService()
         service.enroll_user(course_id=course_id, user=user)
         return Response(dict(message="user enrolled"), status=status.HTTP_201_CREATED)

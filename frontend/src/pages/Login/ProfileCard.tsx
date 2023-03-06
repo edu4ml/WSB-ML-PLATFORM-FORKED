@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Skeleton, Space, Typography } from 'antd';
+import { Card, Skeleton, Space, Typography } from 'antd';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import { useAppSelector } from '../../hooks';
 
@@ -9,12 +9,12 @@ const ProfileForm = () => {
     const { data } = useGetUserProfileQuery('userDetails');
 
     return (
-        <>
-            <Title>👋 Hello!</Title>
+        <Card title={'👋 Hello!'} bordered={false}>
+            <Title></Title>
             <Paragraph>
                 <pre>{JSON.stringify(data, null, 4)}</pre>
             </Paragraph>
-        </>
+        </Card>
     );
 };
 
