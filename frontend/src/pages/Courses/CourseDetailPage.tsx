@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import ExerciseList from '../../components/exercises/ExerciseList';
+import CourseItemsList from '../../components/courses/CourseItemsList';
 import { useGetCourseQuery } from '../../features/courses/coursesApi';
 
 const CourseDetailPage = () => {
@@ -8,7 +8,7 @@ const CourseDetailPage = () => {
     const { data, isLoading } = useGetCourseQuery(courseId);
 
     if (!isLoading) {
-        return <ExerciseList title={data.title} exercises={data.exercises} />;
+        return <CourseItemsList data={data} />;
     }
     return <div>sada</div>;
 };

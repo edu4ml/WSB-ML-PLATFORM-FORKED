@@ -2,7 +2,7 @@ from enum import Enum
 
 from pydantic import BaseModel
 
-from course_tracker.models import Exercise, ExerciseCompletion, User
+from course_tracker.models import CourseComponent, CourseComponentCompletion, User
 
 
 class ExerciseRequiredEvaluationType(Enum):
@@ -19,7 +19,7 @@ class ExerciseRequiredEvaluation(BaseModel):
         self,
         type: ExerciseRequiredEvaluationType,
         user: User,
-        exercise: Exercise,
+        exercise: CourseComponent,
         **kwargs
     ):
         kwargs["type"] = type.name
@@ -30,9 +30,12 @@ class ExerciseRequiredEvaluation(BaseModel):
         super().__init__(**kwargs)
 
     def _calculate_is_passed(
-        self, type: ExerciseRequiredEvaluationType, user: User, exercise: Exercise
+        self,
+        type: ExerciseRequiredEvaluationType,
+        user: User,
+        exercise: CourseComponent,
     ) -> bool:
-        exercise_completion, _ = ExerciseCompletion.objects.get_or_create(
+        exercise_completion, _ = CourseComponentCompletion.objects.get_or_create(
             user=user, exercise=exercise
         )
 

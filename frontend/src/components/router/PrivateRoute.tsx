@@ -4,10 +4,12 @@ import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import LogoutButton from '../../pages/Login/LogoutButton';
 
 const PrivateRoute = ({ children }) => {
-    const { data, isSuccess } = useGetUserProfileQuery('userDetails');
+    const { data, isSuccess, isFetching } =
+        useGetUserProfileQuery('userDetails');
+
     if (data && Object.keys(data).length !== 0 && isSuccess) {
         return children;
-    } else if (isSuccess) {
+    } else if (!isSuccess && !isFetching) {
         return (
             <Result
                 status="403"
@@ -16,7 +18,7 @@ const PrivateRoute = ({ children }) => {
                 extra={<LogoutButton />}
             />
         );
-    } else if (!isSuccess) {
+    } else if (isFetching) {
         return (
             <div
                 style={{

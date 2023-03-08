@@ -1,7 +1,7 @@
 from django.db import models
 
 from course_tracker.models import (
-    Exercise,
+    CourseComponent,
     QuizSolution,
     TimestampedModel,
     User,
@@ -10,7 +10,7 @@ from course_tracker.models import (
 
 class ExerciseAttempt(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(CourseComponent, on_delete=models.CASCADE)
 
     file_solution = models.FileField(blank=True, null=True)
     quiz_solution = models.ForeignKey(

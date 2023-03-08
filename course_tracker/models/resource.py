@@ -4,8 +4,8 @@ from course_tracker.models.mixin import TimestampedModel
 
 
 class Resource(TimestampedModel):
+    title = models.CharField(max_length=255)
     url = models.URLField()
-    description = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return self.description
+        return self.title

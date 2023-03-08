@@ -5,9 +5,9 @@ from course_tracker.models import Resource
 
 class ResourceReadModel(BaseModel):
     url: str
-    description: str
+    title: str
 
     def __init__(self, resource: Resource, **kwargs):
         kwargs["url"] = resource.url
-        kwargs["description"] = resource.description
+        kwargs["title"] = resource.title
         super().__init__(**kwargs)

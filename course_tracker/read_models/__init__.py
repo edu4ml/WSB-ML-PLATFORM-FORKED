@@ -1,3 +1,3 @@
 from .resource import ResourceReadModel
-from .exercise import ExerciseReadModel
+from .course_step import CourseStepReadModel
 from .course import CourseReadModel
