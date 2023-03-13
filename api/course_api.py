@@ -12,7 +12,7 @@ from infra.command_bus import CommandBus
 
 class CourseApi(APIView):
     def get(self, request, format=None):
-        courses = CourseRepository().list()
+        courses = CourseRepository(request.user).list()
         serialized = [asdict(course) for course in courses]
         return Response(serialized, status.HTTP_200_OK)
 
@@ -27,9 +27,13 @@ class CourseDetailApi(APIView):
 
 class CourseCommandApi(APIView):
     def _prepare_command(self, request, course_id):
-        match request.data["command_type"]:
+        match request.data.get("type"):
             case CreateCourse.Meta.name:
-                return CreateCourse(parent_id=course_id, **request.data)
+                return CreateCourse(
+                    parent_id=course_id,
+                    title=request.data.get("title"),
+                    description=request.data.get("description"),
+                )
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")
 

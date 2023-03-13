@@ -13,7 +13,7 @@ def app():
     return config
 
 
-def test_course_create_flow(app: Configuration):
+def test_course_create_command(app: Configuration):
     course_title = "test course title"
     course_description = "test description"
 

@@ -3,9 +3,15 @@ from dataclasses import dataclass
 
 @dataclass
 class Course:
+    """
+    Main Aggregate in coursing domain
+    """
+
     title: str
     description: str
-    is_draft: str
+    is_draft: bool
+
+    is_enrolled: bool = False
 
     # def __init__(self, title: str, description: str, is_draft: bool) -> None:
     #     self.title = title

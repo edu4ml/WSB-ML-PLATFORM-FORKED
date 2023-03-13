@@ -1,37 +1,39 @@
-from django.test import Client
 import pytest
 from rest_framework import status
 from django.urls import reverse
 
-from elearning.auth.user import User
-
-
-@pytest.fixture
-@pytest.mark.django_db
-def user():
-    return User.objects.create_user(
-        username="testuser", email="testuser@example.com", password="adminadmin"
-    )
-
-
-@pytest.fixture
-@pytest.mark.django_db
-def client(user):
-    """
-    Authenticated client fixture
-    """
-    client = Client(enforce_csrf_checks=False)
-    response = client.post(
-        reverse("auth:rest_login"), dict(username=user.username, password="adminadmin")
-    )
-    assert response.status_code == 200
-    return client
+from elearning.courses.commands.create_course import CreateCourse
 
 
 @pytest.mark.django_db
-def test_list_courses(client):
+def test_list_courses(client, courses):
     response = client.get(reverse("course"))
-    print(response)
-    print(response.json())
-
     assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()) == 10
+
+
+@pytest.mark.django_db
+def test_retrieve_courses(client, courses):
+    course = courses[0]
+    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+
+    assert data["title"] == course.title
+    assert data["description"] == course.description
+    assert data["is_draft"] == course.is_draft
+
+
+@pytest.mark.django_db
+def test_issue_create_course_command(client, courses):
+    course = courses[0]
+    command_data = dict(
+        type=CreateCourse.Meta.name, title="TEST TITLE", description="TEST_DESCRIPTION"
+    )
+
+    response = client.put(
+        reverse("course-command", kwargs=dict(course_id=course.id)),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_202_ACCEPTED

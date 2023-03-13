@@ -24,7 +24,14 @@ setup(
         "pydantic==1.10.5",
     ],
     extras_require={
-        "DEV": ["flake8", "isort", "black", "pytest-django==4.5.2", "mock==5.0.1"]
+        "DEV": [
+            "flake8",
+            "isort",
+            "black",
+            "pytest-django==4.5.2",
+            "mock==5.0.1",
+            "model_bakery==1.10.1",
+        ]
     },
     scripts=[],
 )

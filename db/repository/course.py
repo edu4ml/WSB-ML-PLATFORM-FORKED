@@ -7,6 +7,10 @@ from elearning.courses.course import Course
 
 @logger
 class CourseRepository(Repository):
+    """
+    Abstraction layer to retrieve the domain entity of course object
+    """
+
     def persist(self, aggregate: Course):
         CourseDbModel.objects.create(
             title=aggregate.title,
@@ -16,20 +20,24 @@ class CourseRepository(Repository):
 
     def list(self) -> List[Course]:
         course_modles = CourseDbModel.objects.all()
-
-        return [
-            Course(title=c.title, description=c.description, is_draft=c.is_draft)
-            for c in course_modles
-        ]
+        return [self._prepare_domain_entity(c) for c in course_modles]
 
     def retrieve(self, id):
         try:
-            course_model = CourseDbModel.objects.get(id=id)
-            return Course(
-                title=course_model.title,
-                description=course_model.description,
-                is_draft=course_model.is_draft,
-            )
+            return self._prepare_domain_entity(CourseDbModel.objects.get(id=id))
         except CourseDbModel.DoesNotExist as e:
             self.logger.error(e)
         return None
+
+    def _prepare_domain_entity(self, db_model) -> Course:
+        return Course(
+            title=db_model.title,
+            description=db_model.description,
+            is_draft=db_model.is_draft,
+            is_enrolled=self._is_enrolled(),
+        )
+
+    def _is_enrolled(self):
+        if not self.user:
+            return False
+        return True

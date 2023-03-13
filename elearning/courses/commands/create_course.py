@@ -4,6 +4,7 @@ from infra.command import Command
 
 @dataclass(kw_only=True)
 class CreateCourse(Command):
+    parent_id: int = None
     title: str
     description: str
 

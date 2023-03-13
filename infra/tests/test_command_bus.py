@@ -13,7 +13,7 @@ class TestCommand(Command):
 
 def test_can_register_service_to_command():
     command_bus = CommandBus()
-    dummy_service = Service()
+    dummy_service = Service(event_bus=Mock(), repository=Mock())
 
     command_bus.register(service=dummy_service, to=TestCommand)
 
@@ -25,7 +25,7 @@ def test_can_issue_command_and_service_is_called():
     dummy_service = Mock()
 
     command_bus.register(service=dummy_service, to=TestCommand)
-    command = TestCommand(foo="foo_value", bar="bar_value")
+    command = TestCommand(foo="foo_value", bar="bar_value", parent_id=1)
 
     command_bus.issue(command)
 
