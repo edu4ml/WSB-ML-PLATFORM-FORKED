@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Col, Form, Input, List, Progress, Row, Space } from 'antd';
-import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { useEnrollForCourseMutation } from '../../features/courses/coursesApi';
+import { Button, Col, List, Progress, Row } from 'antd';
+import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
+import { useGetUserProfileQuery } from '../../features/auth/authApi';
 
 interface CourseItem {
     id: number;
@@ -12,47 +12,14 @@ interface CourseItem {
     is_enrolled: boolean;
 }
 
-const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
-    <Space>
-        {React.createElement(icon)}
-        {text}
-    </Space>
-);
-
-const CourseActions = (courseItem: CourseItem, enrollFunc) => {
-    if (courseItem.is_enrolled) {
-        return [
-            <IconText icon={StarOutlined} text="Przejdź do kursu" key="" />,
-            <IconText
-                icon={LikeOutlined}
-                text="Przeglądnij repozytorium"
-                key=""
-            />,
-            <IconText icon={MessageOutlined} text="Zobacz wynik" key="" />,
-        ];
-    } else {
-        return [
-            <Form name="enrollCourse" onFinish={enrollFunc}>
-                <Form.Item
-                    label="courseId"
-                    name="courseId"
-                    initialValue={courseItem.id}
-                    hidden
-                >
-                    <Input value={courseItem.id} />
-                </Form.Item>
-                <Form.Item>
-                    <Button htmlType="submit" style={{ width: '100%' }}>
-                        Dołącz do kursu
-                    </Button>
-                </Form.Item>
-            </Form>,
-        ];
-    }
-};
-
 const CourseList = ({ courses }) => {
-    const [enrollUser, data] = useEnrollForCourseMutation();
+    const [issueCourseCommand, {}] = useIssueCourseCommandMutation();
+    const { data: userData } = useGetUserProfileQuery('userDetails');
+
+    const enrollUserCommand = {
+        type: 'ENROLL_FOR_COURSE',
+        user_id: userData.pk,
+    };
 
     return (
         <List
@@ -61,24 +28,47 @@ const CourseList = ({ courses }) => {
             pagination={{ pageSize: 10 }}
             dataSource={courses}
             renderItem={(item: CourseItem) => {
-                const titleWithProgress = (item: CourseItem) => (
-                    <Row>
-                        <Col span={16}>
-                            <a href={`/courses/${item.id}`}>{item.title}</a>
-                        </Col>
-                        <Col span={8}>
-                            {item.is_enrolled && (
-                                <Progress percent={item.progress} />
-                            )}
-                        </Col>
-                    </Row>
-                );
+                const titleWithProgress = (item: CourseItem) => {
+                    if (item.is_enrolled) {
+                        return (
+                            <Row>
+                                <Col span={16}>
+                                    <a href={`/courses/${item.id}`}>
+                                        {item.title}
+                                    </a>
+                                </Col>
+                                <Col span={8}>
+                                    <Progress percent={item.progress} />
+                                </Col>
+                            </Row>
+                        );
+                    } else {
+                        return <span>{item.title}</span>;
+                    }
+                };
+
+                const enrollButton = (item: CourseItem) => {
+                    if (item.is_enrolled) {
+                        return [];
+                    } else {
+                        return [
+                            <Button
+                                onClick={() => {
+                                    issueCourseCommand({
+                                        id: item.id,
+                                        command: enrollUserCommand,
+                                    });
+                                }}
+                                style={{ width: '100%' }}
+                            >
+                                Dołącz do kursu
+                            </Button>,
+                        ];
+                    }
+                };
 
                 return (
-                    <List.Item
-                        key={item.title}
-                        actions={CourseActions(item, enrollUser)}
-                    >
+                    <List.Item key={item.title} actions={enrollButton(item)}>
                         <List.Item.Meta
                             title={titleWithProgress(item)}
                             description={item.description}

@@ -40,7 +40,7 @@ export const courseApi = createApi({
                 body: command,
             }),
             invalidatesTags: (result, error, { id }) => [
-                { type: 'course-catalog', id },
+                { type: 'course-catalog', id: 'LIST' },
             ],
         }),
     }),

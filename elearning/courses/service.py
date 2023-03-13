@@ -1,9 +1,9 @@
-from datetime import datetime
 from db.repository.configuration import RepositoryRoot
 from elearning.courses.commands import CreateCourse, EnrollForCourse, CompleteCourseStep
 from infra.event import Event
 from infra.service import Service
 from elearning.courses.course import Course
+from django.utils import timezone
 
 
 class OnCreateCourse(Service):
@@ -34,4 +34,4 @@ class OnCompleteCourseStep(Service):
             command.progress_tracking_id
         ) as user_course_component_progress:
             user_course_component_progress.is_completed = True
-            user_course_component_progress.completed_at = datetime.now()
+            user_course_component_progress.completed_at = timezone.now()

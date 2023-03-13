@@ -23,14 +23,11 @@ from api.urls import (
     urlpatterns as course_tracker_urlpatterns,
 )
 from frontend.urls import urlpatterns as frontend_urlpatterns
-from server.views import is_authenticated
 
-
-custom_auth_patterns = [path("is_authenticated/", is_authenticated)]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("auth/", include(([*urlpatterns, *custom_auth_patterns], "auth"))),
+    path("auth/", include((urlpatterns, "auth"))),
     path("api/", include(course_tracker_urlpatterns)),
     path("", include((frontend_urlpatterns, "frontend"))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
