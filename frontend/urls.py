@@ -4,5 +4,5 @@ from frontend.views import index
 
 
 urlpatterns = [
-    re_path(r"^", index),
+    re_path(r"^(?!api)", index),
 ]

@@ -1,18 +1,21 @@
 import { Button } from 'antd';
 import React from 'react';
+import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
 
-const CourseStepSelfEvaluateButton = ({ step_id, course_id }) => {
+const CourseStepSelfEvaluateButton = ({ progress_tracking_id, course_id }) => {
+    const [issueCommand, {}] = useIssueCourseCommandMutation();
+
+    const command = {
+        type: 'COMPLETE_COURSE_STEP',
+        progress_tracking_id,
+    };
+
     return (
         <Button
             block
             type="primary"
             onClick={() => {
-                console.log(
-                    'Finishing step id: ',
-                    step_id,
-                    ' for course id: ',
-                    course_id
-                );
+                issueCommand({ id: course_id, command });
             }}
         >
             Zakończ

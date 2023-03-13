@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
+from elearning.courses.entities import CourseStep
 
 
 @dataclass
@@ -7,17 +9,29 @@ class Course:
     Main Aggregate in coursing domain
     """
 
+    id: int | None
     title: str
     description: str
     is_draft: bool
 
     is_enrolled: bool = False
+    current_active: int = None
 
-    # def __init__(self, title: str, description: str, is_draft: bool) -> None:
-    #     self.title = title
-    #     self.description = description
-    #     self.is_draft = is_draft
+    steps: List[CourseStep] = field(default_factory=lambda: list())
 
-    def add_exercise(self):
-        print("Exercise added!")
-        # create new event ExerciseAddedToCourse
+    def __post_init__(self):
+        self._calculate_blocked_steps()
+
+    def _calculate_blocked_steps(self):
+        previous_step = None
+
+        for step in self.steps:
+            if step.order == 1:
+                step.user_progress.is_blocked = False
+                self.current_active = step.order
+            elif previous_step.user_progress.is_completed:
+                step.user_progress.is_blocked = False
+                self.current_active = step.order
+            else:
+                step.user_progress.is_blocked = True
+            previous_step = step

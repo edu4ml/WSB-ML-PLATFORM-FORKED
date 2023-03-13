@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from elearning.courses.commands.create_course import CreateCourse
 from elearning.courses.commands.enroll_for_course import EnrollForCourse
+from elearning.courses.commands.complete_course_step import CompleteCourseStep
 
 
 @pytest.mark.django_db
@@ -58,3 +59,27 @@ def test_issue_enroll_for_course(client, user, courses):
 
     response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
     assert response.json().get("is_enrolled") == True
+
+
+@pytest.mark.django_db
+def test_issue_complete_course_step(client, user, course_with_steps):
+    course, steps = course_with_steps
+
+    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    assert response.json()["steps"][0]["user_progress"]["is_completed"] == False
+    progress_tracking_id = response.json()["steps"][0]["user_progress"]["tracking_id"]
+
+    command_data = dict(
+        type=CompleteCourseStep.Meta.name,
+        progress_tracking_id=progress_tracking_id,
+    )
+
+    response = client.put(
+        reverse("course-command", kwargs=dict(course_id=course.id)),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_202_ACCEPTED
+
+    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    assert response.json()["steps"][0]["user_progress"]["is_completed"] == True

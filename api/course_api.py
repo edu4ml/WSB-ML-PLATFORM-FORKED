@@ -6,7 +6,7 @@ from django.apps import apps
 
 from db.repository.course import CourseRepository
 from elearning.apps import APP_NAME
-from elearning.courses.commands import CreateCourse, EnrollForCourse
+from elearning.courses.commands import CreateCourse, EnrollForCourse, CompleteCourseStep
 from infra.command_bus import CommandBus
 
 
@@ -37,6 +37,11 @@ class CourseCommandApi(APIView):
             case EnrollForCourse.Meta.name:
                 return EnrollForCourse(
                     parent_id=course_id, user_id=request.data.get("user_id")
+                )
+            case CompleteCourseStep.Meta.name:
+                return CompleteCourseStep(
+                    parent_id=course_id,
+                    progress_tracking_id=request.data.get("progress_tracking_id"),
                 )
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")

@@ -6,17 +6,17 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 const { Text } = Typography;
 
-enum ItemType {}
-
 interface CourseStepItem {
     id: number;
     title: string;
     description: string;
-    is_completed: boolean;
-    is_blocked: boolean;
     is_self_evaluated: boolean;
-    steps;
-    current_active: number;
+    is_draft: boolean;
+    user_progress: {
+        tracking_id: number;
+        is_completed: boolean;
+        is_blocked: boolean;
+    };
 }
 
 interface ResourceItem {
@@ -29,7 +29,7 @@ const getStatusTag = (row: CourseStepItem) => {
         float: 'right',
     };
 
-    if (row.is_completed && !row.is_blocked) {
+    if (row.user_progress.is_completed && !row.user_progress.is_blocked) {
         return (
             <span>
                 <Tag style={tagStyle} color="green">
@@ -37,7 +37,10 @@ const getStatusTag = (row: CourseStepItem) => {
                 </Tag>
             </span>
         );
-    } else if (!row.is_completed && !row.is_blocked) {
+    } else if (
+        !row.user_progress.is_completed &&
+        !row.user_progress.is_blocked
+    ) {
         return (
             <span>
                 <Tag style={tagStyle} color="geekblue">
@@ -79,27 +82,38 @@ const CourseItemsList = ({ data }) => {
             <Collapse defaultActiveKey={data.current_active}>
                 {data.steps.map((item) => (
                     <Collapse.Panel
-                        collapsible={item.is_blocked ? 'disabled' : undefined}
+                        collapsible={
+                            item.user_progress.is_blocked
+                                ? 'disabled'
+                                : undefined
+                        }
                         extra={getStatusTag(item)}
                         header={
                             <Text
                                 strong
-                                type={item.is_blocked ? 'secondary' : undefined}
+                                type={
+                                    item.user_progress.is_blocked
+                                        ? 'secondary'
+                                        : undefined
+                                }
                             >
                                 {item.title}
                             </Text>
                         }
-                        key={item.id}
+                        key={item.order}
                     >
                         {item.description}
                         {getResourcesList(item.resources)}
                         <Space />
-                        {item.is_self_evaluated && (
-                            <CourseStepSelfEvaluateButton
-                                step_id={item.id}
-                                course_id={data.id}
-                            />
-                        )}
+                        {item.is_self_evaluated &&
+                            !item.user_progress.is_completed && (
+                                <CourseStepSelfEvaluateButton
+                                    progress_tracking_id={
+                                        item.user_progress.tracking_id
+                                    }
+                                    course_id={data.id}
+                                />
+                            )}
                     </Collapse.Panel>
                 ))}
             </Collapse>

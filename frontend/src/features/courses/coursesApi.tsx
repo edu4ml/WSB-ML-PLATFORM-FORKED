@@ -12,25 +12,35 @@ export const courseApi = createApi({
     tagTypes: ['course-catalog'],
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
-            query: () => '/course-catalog/',
+            query: () => '/course/',
             providesTags: (result, error, id) => [
                 { type: 'course-catalog', id: 'LIST' },
             ],
         }),
         getCourse: builder.query({
-            query: (id) => `/course-catalog/${id}`,
+            query: (id) => `/course/${id}`,
             providesTags: (result, error, id) => [
                 { type: 'course-catalog', id },
             ],
         }),
         enrollForCourse: builder.mutation({
             query: (body) => ({
-                url: '/enroll-course/',
+                url: '/course/',
                 method: 'POST',
                 body: body,
             }),
             invalidatesTags: (result, error, { id }) => [
                 { type: 'course-catalog', id: 'LIST' },
+            ],
+        }),
+        issueCourseCommand: builder.mutation({
+            query: ({ id, command }) => ({
+                url: `/course/${id}/command`,
+                method: 'PUT',
+                body: command,
+            }),
+            invalidatesTags: (result, error, { id }) => [
+                { type: 'course-catalog', id },
             ],
         }),
     }),
@@ -40,5 +50,6 @@ export const {
     useGetCourseCatalogQuery,
     useEnrollForCourseMutation,
     useGetCourseQuery,
+    useIssueCourseCommandMutation,
 } = courseApi;
 export default courseApi;

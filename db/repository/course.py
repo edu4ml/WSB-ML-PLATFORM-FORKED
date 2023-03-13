@@ -1,9 +1,12 @@
 from typing import List
+from elearning.courses.entities import CourseStep, CourseComponentCompletion
 from infra.logging import logger
 from infra.repository import Repository
 from db.models import (
     Course as CourseDbModel,
     CourseEnrollment as CourseEnrollmentDbModel,
+    CourseStep as CourseStepDbModel,
+    CourseComponentCompletion as CourseComponentCompletionDbModel,
 )
 from elearning.courses.course import Course
 from django.contrib.auth import get_user_model
@@ -45,10 +48,12 @@ class CourseRepository(Repository):
 
     def _prepare_domain_entity(self, course) -> Course:
         return Course(
+            id=course.id,
             title=course.title,
             description=course.description,
             is_draft=course.is_draft,
             is_enrolled=self._is_enrolled(course),
+            steps=self._course_steps(course),
         )
 
     def _is_enrolled(self, course):
@@ -57,3 +62,36 @@ class CourseRepository(Repository):
         return CourseEnrollmentDbModel.objects.filter(
             user=self.user, course=course
         ).exists()
+
+    def _course_steps(self, course):
+        return [
+            CourseStep(
+                title=step.component.title,
+                description=step.component.description,
+                order=step.order,
+                resources=self._get_resources(step.component),
+                is_self_evaluated=step.is_self_evaluated,
+                requires_manual_review=step.requires_manual_review,
+                user_progress=self._get_user_progress_on_component(
+                    component=step.component
+                ),
+            )
+            for step in CourseStepDbModel.objects.filter(course=course)
+        ]
+
+    def _get_resources(self, component):
+        return [
+            dict(title=resource.title, url=resource.url)
+            for resource in component.resources.all()
+        ]
+
+    def _get_user_progress_on_component(self, component):
+        component, _ = CourseComponentCompletionDbModel.objects.get_or_create(
+            user=self.user, component=component
+        )
+
+        return CourseComponentCompletion(
+            tracking_id=component.id,
+            completed_at=component.completed_at,
+            is_completed=component.is_completed,
+        )

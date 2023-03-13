@@ -2,7 +2,9 @@ from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
 
 from db.repository import RepositoryRoot
-from elearning.courses.configuration import CourseConfiguration
+from elearning.courses.configuration import (
+    CourseConfiguration,
+)
 
 
 class Configuration:
@@ -13,7 +15,7 @@ class Configuration:
 
     def configure(self):
         self.course_config = CourseConfiguration(
-            self.command_bus, self.event_bus, self.repository.course
+            self.command_bus, self.event_bus, self.repository
         )
 
     def __repr__(self):

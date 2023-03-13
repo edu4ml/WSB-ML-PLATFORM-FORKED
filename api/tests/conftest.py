@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from elearning.auth.user import User
 from model_bakery import baker
-from db.models.course import Course as CourseDbModel
+from db.models.course import Course as CourseDbModel, CourseComponent, CourseStep
 
 
 @pytest.fixture
@@ -32,3 +32,21 @@ def client(user):
 @pytest.fixture
 def courses():
     return baker.make(CourseDbModel, 10)
+
+
+@pytest.fixture
+def course_components():
+    return baker.make(CourseComponent, 4)
+
+
+@pytest.fixture
+def course_with_steps(course_components):
+    course = baker.make(CourseDbModel)
+    steps = []
+    order = 1
+    for component in course_components:
+        steps.append(
+            baker.make(CourseStep, course=course, component=component, order=order)
+        )
+        order += 1
+    return course, steps

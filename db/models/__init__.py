@@ -1,1 +1,8 @@
-from .course import Course, CourseEnrollment
+from .course import (
+    Course,
+    CourseEnrollment,
+    CourseComponent,
+    CourseStep,
+    CourseComponentResource,
+    CourseComponentCompletion,
+)

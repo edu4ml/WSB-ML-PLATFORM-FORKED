@@ -7,14 +7,23 @@ class Service:
     event_bus = None
     emitting_event = None
     repository = None
+    parent_resource = None
+    parent_resource_type = None
 
     def __init__(self, event_bus: EventBus, repository: Repository) -> None:
         self.event_bus = event_bus
         self.repository = repository
 
     def handle(self, command: Command):
+        self._validate(command)
         self._handle_command(command)
         self._emit_event()
+
+    def _retrieve_parent(self, command: Command):
+        pass
+
+    def _validate(self, command: Command):
+        pass
 
     def _handle_command(self, command: Command):
         raise NotImplementedError
