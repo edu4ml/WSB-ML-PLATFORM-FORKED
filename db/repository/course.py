@@ -6,6 +6,9 @@ from db.models import (
     CourseEnrollment as CourseEnrollmentDbModel,
 )
 from elearning.courses.course import Course
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 @logger
@@ -13,6 +16,8 @@ class CourseRepository(Repository):
     """
     Abstraction layer to retrieve the domain entity of course object
     """
+
+    root_model = CourseDbModel
 
     def persist(self, aggregate: Course):
         CourseDbModel.objects.create(
@@ -31,6 +36,12 @@ class CourseRepository(Repository):
         except CourseDbModel.DoesNotExist as e:
             self.logger.error(e)
         return None
+
+    def create_enrollment(self, course_id, user_id):
+        CourseEnrollmentDbModel.objects.create(
+            course=CourseDbModel.objects.get(id=course_id),
+            user=User.objects.get(id=user_id),
+        )
 
     def _prepare_domain_entity(self, course) -> Course:
         return Course(

@@ -1,7 +1,10 @@
 from infra.logging import logger
 from infra.service import Service
 from infra.command import Command
-from .exceptions import CommandAlreadyExistException
+from .exceptions import (
+    CommandAlreadyExistException,
+    CommandHandlerDoesNotExistException,
+)
 
 
 @logger
@@ -22,7 +25,13 @@ class CommandBus:
 
     def issue(self, cmd: Command):
         self.logger.info(f"{cmd} issued into command bus")
-        self.services[cmd.__class__].handle(cmd)
+
+        if cmd.__class__ in self.services.keys():
+            self.services[cmd.__class__].handle(cmd)
+        else:
+            raise CommandHandlerDoesNotExistException(
+                f"Command handler for {cmd.__class__} does not exists or it is not registered"
+            )
 
     def __str__(self):
         repr = "Command Bus\n"

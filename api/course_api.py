@@ -6,7 +6,7 @@ from django.apps import apps
 
 from db.repository.course import CourseRepository
 from elearning.apps import APP_NAME
-from elearning.courses.commands import CreateCourse
+from elearning.courses.commands import CreateCourse, EnrollForCourse
 from infra.command_bus import CommandBus
 
 
@@ -19,7 +19,7 @@ class CourseApi(APIView):
 
 class CourseDetailApi(APIView):
     def get(self, request, course_id, **kwargs):
-        course = CourseRepository().retrieve(id=course_id)
+        course = CourseRepository(request.user).retrieve(id=course_id)
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
@@ -33,6 +33,10 @@ class CourseCommandApi(APIView):
                     parent_id=course_id,
                     title=request.data.get("title"),
                     description=request.data.get("description"),
+                )
+            case EnrollForCourse.Meta.name:
+                return EnrollForCourse(
+                    parent_id=course_id, user_id=request.data.get("user_id")
                 )
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")

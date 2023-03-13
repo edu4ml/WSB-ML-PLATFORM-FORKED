@@ -3,6 +3,7 @@ from rest_framework import status
 from django.urls import reverse
 
 from elearning.courses.commands.create_course import CreateCourse
+from elearning.courses.commands.enroll_for_course import EnrollForCourse
 
 
 @pytest.mark.django_db
@@ -37,3 +38,23 @@ def test_issue_create_course_command(client, courses):
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
+
+
+@pytest.mark.django_db
+def test_issue_enroll_for_course(client, user, courses):
+    course = courses[0]
+
+    command_data = dict(type=EnrollForCourse.Meta.name, user_id=user.id)
+
+    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    assert response.json().get("is_enrolled") == False
+
+    response = client.put(
+        reverse("course-command", kwargs=dict(course_id=course.id)),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_202_ACCEPTED
+
+    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    assert response.json().get("is_enrolled") == True

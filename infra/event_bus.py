@@ -23,6 +23,7 @@ class EventBus:
         self.event_handlers[process].extend(to)
 
     def publish(self, event: Event) -> None:
-        self.logger.info(f"Event Bus: Publishing event: {event}")
-        for e in self.event_handlers[event]:
-            e.handle(event)
+        if event:
+            self.logger.info(f"Event Bus: Publishing event: {event}")
+            for e in self.event_handlers[event]:
+                e.handle(event)
