@@ -1,2 +1,2 @@
-from .configuration import RepositoryRoot, RepositoryRootMock
+from .configuration import RepositoryRoot
 from .course import CourseRepository

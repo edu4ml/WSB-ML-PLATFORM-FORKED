@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # apps
     "db.apps.DbConfig",
     "frontend.apps.FrontendConfig",
+    "elearning.apps.ElearningConfig",
     # "course_tracker.apps.CourseTrackerConfig",
     # Other django apps
     "webpack_loader",
