@@ -23,6 +23,8 @@ setup(
         "psycopg2==2.9.5",
         "pydantic==1.10.5",
     ],
-    extras_require={"DEV": ["flake8", "isort", "black"]},
+    extras_require={
+        "DEV": ["flake8", "isort", "black", "pytest-django==4.5.2", "mock==5.0.1"]
+    },
     scripts=[],
 )

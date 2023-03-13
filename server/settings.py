@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # apps
+    "db.apps.DbConfig",
     "frontend.apps.FrontendConfig",
-    "course_tracker.apps.CourseTrackerConfig",
+    # "course_tracker.apps.CourseTrackerConfig",
     # Other django apps
     "webpack_loader",
     "rest_framework",

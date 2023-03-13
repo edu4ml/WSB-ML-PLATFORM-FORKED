@@ -30,3 +30,7 @@ lint-fix:
 
 connect-sql:
 	./cloud_sql_proxy -instances="jakub-swajka-personal:europe-west1:jakub-szwajka-sandbox"=tcp:5432
+
+
+squash-migrations:
+	echo 'TO DO: squash migrations to single file representing current db schema'
