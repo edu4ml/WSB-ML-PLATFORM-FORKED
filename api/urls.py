@@ -1,12 +1,16 @@
 from django.urls import path
-from .course_api import CoursesCatalogApi
+from .course_api import CourseDetailApi, CourseApi, CourseCommandApi
 
 urlpatterns = [
-    path("course/", CoursesCatalogApi.as_view(), name="course"),
-    # path(
-    #     "course-catalog/<int:course_id>",
-    #     CourseDetailView.as_view(),
-    #     name="course-detail",
-    # ),
-    # path("enroll-course/", CourseEnrollmentView.as_view(), name="enroll-course"),
+    path("course/", CourseApi.as_view(), name="course"),
+    path(
+        "course/<int:course_id>",
+        CourseDetailApi.as_view(),
+        name="course-detail",
+    ),
+    path(
+        "course/<int:course_id>/command",
+        CourseCommandApi.as_view(),
+        name="course-command",
+    ),
 ]

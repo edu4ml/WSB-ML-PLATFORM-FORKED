@@ -23,3 +23,7 @@ class ElearningConfig(AppConfig):
 
         self.logger.info("App: elearning ready and loaded")
         return super().ready()
+
+    @property
+    def command_bus(self):
+        return self.config.command_bus

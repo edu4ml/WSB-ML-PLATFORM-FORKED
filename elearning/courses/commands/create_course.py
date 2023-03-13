@@ -6,3 +6,6 @@ from infra.command import Command
 class CreateCourse(Command):
     title: str
     description: str
+
+    class Meta:
+        name = "CREATE_COURSE"
