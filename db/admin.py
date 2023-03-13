@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html
+from django.template.loader import render_to_string
 from .models import (
     Course,
     CourseEnrollment,
@@ -54,13 +56,36 @@ class CourseStepAdmin(admin.ModelAdmin):
         "requires_test",
         "requires_manual_review",
     )
+    list_editable = (
+        "order",
+        "is_self_evaluated",
+        "requires_file",
+        "requires_test",
+        "requires_manual_review",
+    )
+    list_editable_groups = [("order",)]
 
 
 admin.site.register(CourseStep, CourseStepAdmin)
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("title", "description", "is_draft")
+    list_display = ("title", "is_draft", "course_step_list")
+    list_filter = ("is_draft",)
+    search_fields = ("title", "description")
+
+    fieldsets = (
+        (None, {"fields": ("title", "description")}),
+        ("Advanced options", {"classes": ("collapse",), "fields": ("is_draft",)}),
+    )
+
+    def course_step_list(self, obj):
+        return format_html(
+            '<div class="nowrap" style="white-space: nowrap;">{}</div>',
+            render_to_string("admin/course_row.html", {"object": obj}),
+        )
+
+    course_step_list.short_description = "Course Steps"
 
 
 admin.site.register(Course, CourseAdmin)

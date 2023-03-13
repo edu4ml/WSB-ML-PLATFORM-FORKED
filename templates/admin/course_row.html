@@ -1,0 +1,14 @@
+{% extends "admin/includes/fieldset.html" %} {% block fieldset %}
+<div class="field">
+    <h2>Course Steps:</h2>
+    {% if object.coursestep_set.count %}
+    <ul>
+        {% for step in object.coursestep_set.all %}
+        <li>{{ step.title }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No steps in course.</p>
+    {% endif %}
+</div>
+{{ block.super }} {% endblock %}
