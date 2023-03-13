@@ -1,7 +1,10 @@
 from typing import List
 from infra.logging import logger
 from infra.repository import Repository
-from db.models import Course as CourseDbModel
+from db.models import (
+    Course as CourseDbModel,
+    CourseEnrollment as CourseEnrollmentDbModel,
+)
 from elearning.courses.course import Course
 
 
@@ -29,15 +32,17 @@ class CourseRepository(Repository):
             self.logger.error(e)
         return None
 
-    def _prepare_domain_entity(self, db_model) -> Course:
+    def _prepare_domain_entity(self, course) -> Course:
         return Course(
-            title=db_model.title,
-            description=db_model.description,
-            is_draft=db_model.is_draft,
-            is_enrolled=self._is_enrolled(),
+            title=course.title,
+            description=course.description,
+            is_draft=course.is_draft,
+            is_enrolled=self._is_enrolled(course),
         )
 
-    def _is_enrolled(self):
+    def _is_enrolled(self, course):
         if not self.user:
             return False
-        return True
+        return CourseEnrollmentDbModel.objects.filter(
+            user=self.user, course=course
+        ).exists()
