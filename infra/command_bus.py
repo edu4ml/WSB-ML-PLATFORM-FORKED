@@ -1,5 +1,5 @@
 from infra.logging import logger
-from infra.service import Service
+from infra.command_handler import CommandHandler
 from infra.command import Command
 from .exceptions import (
     CommandAlreadyExistException,
@@ -16,9 +16,9 @@ class CommandBus:
     """
 
     def __init__(self):
-        self.services: dict[Command, Service] = dict()
+        self.services: dict[Command, CommandHandler] = dict()
 
-    def register(self, service: Service, to: Command) -> None:
+    def register(self, service: CommandHandler, to: Command) -> None:
         if to in self.services.keys():
             raise CommandAlreadyExistException
         self.services[to] = service

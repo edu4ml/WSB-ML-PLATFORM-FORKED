@@ -1,12 +1,12 @@
 from db.repository.configuration import RepositoryRoot
 from elearning.courses.commands import CreateCourse, EnrollForCourse, CompleteCourseStep
 from infra.event import Event
-from infra.service import Service
+from infra.command_handler import CommandHandler
 from elearning.courses.course import Course
 from django.utils import timezone
 
 
-class OnCreateCourse(Service):
+class OnCreateCourse(CommandHandler):
     emitting_event: Event | None = None
     repository: RepositoryRoot = None
 
@@ -17,7 +17,7 @@ class OnCreateCourse(Service):
         self.repository.course.persist(entity)
 
 
-class OnEnrollForCourse(Service):
+class OnEnrollForCourse(CommandHandler):
     emitting_event: Event | None = None
     repository: RepositoryRoot = None
 
@@ -25,7 +25,7 @@ class OnEnrollForCourse(Service):
         self.repository.course.create_enrollment(command.parent_id, command.user_id)
 
 
-class OnCompleteCourseStep(Service):
+class OnCompleteCourseStep(CommandHandler):
     emitting_event: Event | None = None
     repository: RepositoryRoot = None
 

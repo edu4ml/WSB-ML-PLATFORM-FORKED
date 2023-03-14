@@ -16,7 +16,7 @@ const CourseList = ({ courses }) => {
     const [issueCourseCommand, {}] = useIssueCourseCommandMutation();
     const { data: userData } = useGetUserProfileQuery('userDetails');
 
-    const enrollUserCommand = {
+    const command = {
         type: 'ENROLL_FOR_COURSE',
         user_id: userData.pk,
     };
@@ -56,7 +56,7 @@ const CourseList = ({ courses }) => {
                                 onClick={() => {
                                     issueCourseCommand({
                                         id: item.id,
-                                        command: enrollUserCommand,
+                                        command: command,
                                     });
                                 }}
                                 style={{ width: '100%' }}

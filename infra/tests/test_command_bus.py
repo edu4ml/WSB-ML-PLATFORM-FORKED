@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from mock import Mock
 from infra.command import Command
 from infra.command_bus import CommandBus
-from infra.service import Service
+from infra.command_handler import CommandHandler
 
 
 @dataclass
@@ -13,7 +13,7 @@ class TestCommand(Command):
 
 def test_can_register_service_to_command():
     command_bus = CommandBus()
-    dummy_service = Service(event_bus=Mock(), repository=Mock())
+    dummy_service = CommandHandler(event_bus=Mock(), repository=Mock())
 
     command_bus.register(service=dummy_service, to=TestCommand)
 

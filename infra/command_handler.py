@@ -3,7 +3,7 @@ from infra.event_bus import EventBus
 from infra.repository import Repository
 
 
-class Service:
+class CommandHandler:
     event_bus = None
     emitting_event = None
     repository = None
