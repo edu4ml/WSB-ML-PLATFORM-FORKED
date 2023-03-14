@@ -9,17 +9,23 @@ export const exerciseApi = createApi({
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
     }),
-    tagTypes: ['exercises-catalog'],
+    tagTypes: ['exercise-catalog'],
     endpoints: (builder) => ({
         getExercisesCatalog: builder.query({
             query: () => '/exercise/',
             providesTags: (result, error, id) => [
-                { type: 'exercises-catalog', id: 'LIST' },
+                { type: 'exercise-catalog', id: 'LIST' },
+            ],
+        }),
+        getExercise: builder.query({
+            query: (id) => `/exercise/${id}`,
+            providesTags: (result, error, id) => [
+                { type: 'exercise-catalog', id },
             ],
         }),
     }),
 });
 
-export const { useGetExercisesCatalogQuery } = exerciseApi;
+export const { useGetExercisesCatalogQuery, useGetExerciseQuery } = exerciseApi;
 
 export default exerciseApi;

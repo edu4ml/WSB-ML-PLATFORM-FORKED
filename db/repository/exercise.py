@@ -20,4 +20,6 @@ class ExerciseRepository(Repository):
         return None
 
     def _prepare_domain_entity(self, db_model: ExerciseDbModel):
-        return Exercise(title=db_model.title, description=db_model.description)
+        return Exercise(
+            id=db_model.id, title=db_model.title, description=db_model.description
+        )

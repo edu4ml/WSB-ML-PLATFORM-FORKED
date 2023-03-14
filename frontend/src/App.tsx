@@ -9,6 +9,7 @@ import CourseDetailPage from './pages/Courses/CourseDetailPage';
 import { Button, Result } from 'antd';
 import './App.css';
 import ExercisesPage from './pages/Exercises/ExercisesPage';
+import ExerciseDetailPage from './pages/Exercises/ExerciseDetailPage';
 
 const App = () => {
     return (
@@ -59,6 +60,16 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <ExercisesPage />
+                                </MainLayout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/exercises/:exerciseId"
+                        element={
+                            <PrivateRoute>
+                                <MainLayout>
+                                    <ExerciseDetailPage />
                                 </MainLayout>
                             </PrivateRoute>
                         }
