@@ -1,4 +1,4 @@
-from db.models.course import CourseStep
+from db.models.courses import CourseStep
 from infra.repository import Repository
 
 

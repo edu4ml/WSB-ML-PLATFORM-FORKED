@@ -1,4 +1,4 @@
-from .course import (
+from .courses import (
     Course,
     CourseEnrollment,
     CourseComponent,
@@ -6,3 +6,4 @@ from .course import (
     CourseComponentResource,
     CourseComponentCompletion,
 )
+from .exercises import Exercise

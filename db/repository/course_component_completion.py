@@ -1,4 +1,4 @@
-from db.models.course import CourseComponentCompletion
+from db.models.courses import CourseComponentCompletion
 from infra.repository import Repository
 
 

@@ -8,6 +8,7 @@ from .models import (
     CourseStep,
     CourseComponentResource,
     CourseComponentCompletion,
+    Exercise,
 )
 
 admin.site.register(CourseComponentResource)
@@ -89,3 +90,10 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Course, CourseAdmin)
+
+
+class ExerciseAdmin(admin.ModelAdmin):
+    list_display = ("title", "description")
+
+
+admin.site.register(Exercise, ExerciseAdmin)
