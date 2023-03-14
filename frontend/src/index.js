@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { store } from './store';
 import { Provider } from 'react-redux';
-import { ConfigProvider, theme } from 'antd';
+import { ConfigProvider } from 'antd';
 
 const root = createRoot(document.getElementById('root'));
 root.render(
@@ -11,7 +11,6 @@ root.render(
         <Provider store={store}>
             <ConfigProvider
                 theme={{
-                    // algorithm: theme.darkAlgorithm,
                     token: {
                         borderRadius: 18,
                     },

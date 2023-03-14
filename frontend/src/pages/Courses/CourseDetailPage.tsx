@@ -10,7 +10,7 @@ const CourseDetailPage = () => {
     if (!isLoading) {
         return <CourseItemsList data={data} />;
     }
-    return <div>sada</div>;
+    return <div></div>;
 };
 
 export default CourseDetailPage;

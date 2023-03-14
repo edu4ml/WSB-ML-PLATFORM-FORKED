@@ -24,6 +24,14 @@ const SideBarMenu = (props) => {
                 },
                 {
                     key: 2,
+                    label: 'Ćwiczenia',
+                    icon: <FolderTwoTone />,
+                    onClick: () => {
+                        navigate('/exercises');
+                    },
+                },
+                {
+                    key: 10,
                     label: 'Profil',
                     icon: <SmileTwoTone />,
                     onClick: () => {
@@ -31,7 +39,7 @@ const SideBarMenu = (props) => {
                     },
                 },
                 {
-                    key: 3,
+                    key: 11,
                     label: 'Wyloguj',
                     onClick: () => {
                         logout('logoutUser');
