@@ -1,5 +1,5 @@
 from typing import List
-from elearning.courses.entities import CourseStep, CourseComponentCompletion
+from elearning.coursing.entities import CourseStep, CourseComponentCompletion
 from infra.logging import logger
 from infra.repository import Repository
 from db.models import (
@@ -8,7 +8,7 @@ from db.models import (
     CourseStep as CourseStepDbModel,
     CourseComponentCompletion as CourseComponentCompletionDbModel,
 )
-from elearning.courses.course import Course
+from elearning.coursing.course import Course
 from django.contrib.auth import get_user_model
 
 User = get_user_model()

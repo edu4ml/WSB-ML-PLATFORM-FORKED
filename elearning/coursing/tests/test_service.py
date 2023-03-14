@@ -1,8 +1,8 @@
 import pytest
 from mock import Mock
 from elearning.configuration import Configuration
-from elearning.courses.commands import CreateCourse
-from elearning.courses.course import Course
+from elearning.coursing.commands import CreateCourse
+from elearning.coursing.course import Course
 
 
 @pytest.fixture

@@ -6,7 +6,11 @@ from django.apps import apps
 
 from db.repository.exercise import ExerciseRepository
 from elearning.apps import APP_NAME
-from elearning.courses.commands import CreateCourse, EnrollForCourse, CompleteCourseStep
+from elearning.coursing.commands import (
+    CreateCourse,
+    EnrollForCourse,
+    CompleteCourseStep,
+)
 from infra.command_bus import CommandBus
 
 

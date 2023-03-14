@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from elearning.courses.entities import CourseComponentCompletion
+from elearning.coursing.entities import CourseComponentCompletion
 
 
 @dataclass

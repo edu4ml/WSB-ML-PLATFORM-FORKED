@@ -2,7 +2,7 @@ from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
 
 from db.repository import RepositoryRoot
-from elearning.courses.configuration import (
+from elearning.coursing.configuration import (
     CourseConfiguration,
 )
 
