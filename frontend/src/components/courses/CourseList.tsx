@@ -3,6 +3,7 @@ import { Button, Col, List, Progress, Row } from 'antd';
 import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface CourseItem {
     id: number;
@@ -16,6 +17,7 @@ interface CourseItem {
 const CourseList = ({ courses }) => {
     const [issueCourseCommand, {}] = useIssueCourseCommandMutation();
     const { data: userData } = useGetUserProfileQuery('userDetails');
+    const navigate = useNavigate();
 
     const command = {
         type: 'ENROLL_FOR_COURSE',
@@ -63,6 +65,14 @@ const CourseList = ({ courses }) => {
                                 style={{ width: '100%' }}
                             >
                                 Dołącz do kursu
+                            </Button>,
+                            <Button
+                                onClick={() => {
+                                    navigate(`/courses/${item.id}/edit`);
+                                }}
+                                style={{ width: '100%' }}
+                            >
+                                Edytuj
                             </Button>,
                         ];
                     }

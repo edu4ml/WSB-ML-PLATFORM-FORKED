@@ -25,7 +25,7 @@ class CourseApi(APIView):
             case CreateCourse.Meta.name:
                 return CreateCourse(
                     title=request.data.get("title"),
-                    description=request.data.get("description"),
+                    description=request.data.get("description", ""),
                 )
             case _:
                 raise NotImplementedError(

@@ -23,11 +23,11 @@ export const courseApi = createApi({
                 { type: 'course-catalog', id },
             ],
         }),
-        enrollForCourse: builder.mutation({
-            query: (body) => ({
+        createCourse: builder.mutation({
+            query: (command) => ({
                 url: '/course/',
-                method: 'POST',
-                body: body,
+                method: 'PUT',
+                body: command,
             }),
             invalidatesTags: (result, error, { id }) => [
                 { type: 'course-catalog', id: 'LIST' },
@@ -48,8 +48,8 @@ export const courseApi = createApi({
 
 export const {
     useGetCourseCatalogQuery,
-    useEnrollForCourseMutation,
     useGetCourseQuery,
+    useCreateCourseMutation,
     useIssueCourseCommandMutation,
 } = courseApi;
 export default courseApi;
