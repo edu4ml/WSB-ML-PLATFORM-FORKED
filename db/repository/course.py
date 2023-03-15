@@ -6,12 +6,22 @@ from db.models import (
     Course as CourseDbModel,
     CourseEnrollment as CourseEnrollmentDbModel,
     CourseStep as CourseStepDbModel,
-    CourseComponentCompletion as CourseComponentCompletionDbModel,
+    CourseStepUserCompletion as CourseStepUserCompletionDbModel,
 )
 from elearning.coursing.course import Course
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+
+@logger
+class CourseStepRepository(Repository):
+    root_model = CourseStepDbModel
+
+
+@logger
+class CourseStepUserCompletionRepository(Repository):
+    root_model = CourseStepUserCompletionDbModel
 
 
 @logger
@@ -21,6 +31,13 @@ class CourseRepository(Repository):
     """
 
     root_model = CourseDbModel
+    course_step: CourseStepRepository
+    course_step_user_completion: CourseStepUserCompletionRepository
+
+    def __init__(self, user=None) -> None:
+        super().__init__(user)
+        self.course_step = CourseStepRepository(user=user)
+        self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
 
     def persist(self, aggregate: Course):
         CourseDbModel.objects.create(
@@ -46,6 +63,14 @@ class CourseRepository(Repository):
             user=User.objects.get(id=user_id),
         )
 
+    def complete_step_for_user(self, course_step_user_completion_id):
+        with self.course_step_user_completion.with_obj(
+            course_step_user_completion_id
+        ) as obj:
+            obj.is_completed = True
+
+    # -----------------------------------------------------
+
     def _prepare_domain_entity(self, course) -> Course:
         return Course(
             id=course.id,
@@ -66,33 +91,38 @@ class CourseRepository(Repository):
     def _course_steps(self, course):
         return [
             CourseStep(
-                title=step.component.title,
-                description=step.component.description,
+                title=step.step_object.title,
+                description=step.step_object.description,
                 order=step.order,
-                resources=self._get_resources(step.component),
+                resources=self._get_resources(step.step_object),
                 is_self_evaluated=step.is_self_evaluated,
                 requires_manual_review=step.requires_manual_review,
                 user_progress=self._get_user_progress_on_component(
-                    component=step.component
+                    course=course, course_step=step.step_object
                 ),
             )
             for step in CourseStepDbModel.objects.filter(course=course)
         ]
 
-    def _get_resources(self, component):
-        return []  # FIXME
-        return [
-            dict(title=resource.title, url=resource.url)
-            for resource in component.resources.all()
-        ]
+    def _get_resources(self, step_in_course):
+        if resources := getattr(step_in_course, "resources", None):
+            return [
+                dict(title=resource.title, url=resource.url)
+                for resource in resources.all()
+            ]
+        return []
 
-    def _get_user_progress_on_component(self, component):
-        component, _ = CourseComponentCompletionDbModel.objects.get_or_create(
-            user=self.user, component=component
+    def _get_user_progress_on_component(self, course, course_step):
+        # whole key is passed here so it is safe to do get_or_create here
+        step_completion, _ = CourseStepUserCompletionDbModel.objects.get_or_create(
+            user=self.user,
+            course=course,
+            object_id=course_step.id,
+            content_type=course_step.content_type,
         )
 
         return CourseComponentCompletion(
-            tracking_id=component.id,
-            completed_at=component.completed_at,
-            is_completed=component.is_completed,
+            tracking_id=step_completion.id,
+            completed_at=step_completion.completed_at,
+            is_completed=step_completion.is_completed,
         )

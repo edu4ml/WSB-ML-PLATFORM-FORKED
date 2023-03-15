@@ -4,32 +4,14 @@ from django.template.loader import render_to_string
 from .models import (
     Course,
     CourseEnrollment,
-    CourseComponent,
     CourseStep,
     LinkResource,
-    CourseComponentCompletion,
     Exercise,
+    CourseStepUserCompletion,
 )
+from .forms import CourseStepForm
 
 admin.site.register(LinkResource)
-
-
-class CourseComponentCompletionAdmin(admin.ModelAdmin):
-    list_display = (
-        "user",
-        "component",
-        "component_type",
-        "is_completed",
-        "completed_at",
-    )
-
-    def component_type(self, obj):
-        return obj.component.type
-
-    component_type.short_description = "Course Component Type"
-
-
-admin.site.register(CourseComponentCompletion, CourseComponentCompletionAdmin)
 
 
 class CourseEnrollmentAdmin(admin.ModelAdmin):
@@ -39,18 +21,12 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
 admin.site.register(CourseEnrollment, CourseEnrollmentAdmin)
 
 
-class CourseComponentAdmin(admin.ModelAdmin):
-    list_display = ("title", "type", "description")
-
-
-admin.site.register(CourseComponent, CourseComponentAdmin)
-
-
 class CourseStepAdmin(admin.ModelAdmin):
     list_display = (
         "course",
         "order",
-        "component",
+        "step_object",
+        # "component",
         "is_self_evaluated",
         "requires_file",
         "requires_test",
@@ -64,6 +40,8 @@ class CourseStepAdmin(admin.ModelAdmin):
         "requires_manual_review",
     )
     list_editable_groups = [("order",)]
+
+    form = CourseStepForm
 
 
 admin.site.register(CourseStep, CourseStepAdmin)
@@ -97,3 +75,21 @@ class ExerciseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Exercise, ExerciseAdmin)
+
+
+class CourseStepUserCompletionAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "course",
+        "object",
+        "is_completed",
+        "completed_at",
+    )
+
+    def component_type(self, obj):
+        return obj.component.type
+
+    component_type.short_description = "Course Component Type"
+
+
+admin.site.register(CourseStepUserCompletion, CourseStepUserCompletionAdmin)

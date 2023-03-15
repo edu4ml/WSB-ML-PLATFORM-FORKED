@@ -1,8 +1,7 @@
 from .courses import (
     Course,
     CourseEnrollment,
-    CourseComponent,
     CourseStep,
-    CourseComponentCompletion,
+    CourseStepUserCompletion,
 )
 from .exercises import Exercise, LinkResource

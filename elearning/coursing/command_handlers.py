@@ -7,7 +7,6 @@ from elearning.coursing.commands import (
 from infra.event import Event
 from infra.command_handler import CommandHandler
 from elearning.coursing.course import Course
-from django.utils import timezone
 
 
 class OnCreateCourse(CommandHandler):
@@ -34,8 +33,4 @@ class OnCompleteCourseStep(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: CompleteCourseStep):
-        with self.repository.course_component_completion.with_obj(
-            command.progress_tracking_id
-        ) as user_course_component_progress:
-            user_course_component_progress.is_completed = True
-            user_course_component_progress.completed_at = timezone.now()
+        self.repository.course.complete_step_for_user(command.progress_tracking_id)

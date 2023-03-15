@@ -1,4 +1,4 @@
-from .mixin import TimestampedModel
+from .mixin import CourseStepBaseModel, TimestampedModel
 from django.db import models
 
 
@@ -10,9 +10,7 @@ class LinkResource(TimestampedModel):
         return self.title
 
 
-class Exercise(TimestampedModel):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
+class Exercise(CourseStepBaseModel):
     resources = models.ManyToManyField(LinkResource, blank=True)
 
     def __str__(self) -> str:
