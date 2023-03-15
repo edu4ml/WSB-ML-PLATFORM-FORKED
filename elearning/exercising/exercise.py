@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
+from .entities import LinkResource
 
 
 @dataclass
@@ -10,3 +12,4 @@ class Exercise:
     id: int
     title: str
     description: str
+    resources: List[LinkResource] = field(default_factory=lambda: list())

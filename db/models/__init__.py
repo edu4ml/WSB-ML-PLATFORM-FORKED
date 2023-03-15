@@ -3,7 +3,6 @@ from .courses import (
     CourseEnrollment,
     CourseComponent,
     CourseStep,
-    CourseComponentResource,
     CourseComponentCompletion,
 )
-from .exercises import Exercise
+from .exercises import Exercise, LinkResource

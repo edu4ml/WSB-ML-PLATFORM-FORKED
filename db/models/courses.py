@@ -22,14 +22,6 @@ class CourseEnrollment(TimestampedModel):
         return f"{self.course.title} - {self.user.get_username()}"
 
 
-class CourseComponentResource(TimestampedModel):
-    title = models.CharField(max_length=255)
-    url = models.URLField()
-
-    def __str__(self) -> str:
-        return self.title
-
-
 class CourseComponent(TimestampedModel):
     STEP_TYPES = (
         ("TEST", "Test"),
@@ -39,7 +31,6 @@ class CourseComponent(TimestampedModel):
 
     title = models.CharField(max_length=100)
     description = models.TextField()
-    resources = models.ManyToManyField(CourseComponentResource, blank=True)
 
     type = models.CharField(max_length=20, choices=STEP_TYPES, default="UNKNOWN")
 

@@ -6,12 +6,12 @@ from .models import (
     CourseEnrollment,
     CourseComponent,
     CourseStep,
-    CourseComponentResource,
+    LinkResource,
     CourseComponentCompletion,
     Exercise,
 )
 
-admin.site.register(CourseComponentResource)
+admin.site.register(LinkResource)
 
 
 class CourseComponentCompletionAdmin(admin.ModelAdmin):
@@ -41,7 +41,6 @@ admin.site.register(CourseEnrollment, CourseEnrollmentAdmin)
 
 class CourseComponentAdmin(admin.ModelAdmin):
     list_display = ("title", "type", "description")
-    filter_horizontal = ("resources",)
 
 
 admin.site.register(CourseComponent, CourseComponentAdmin)
@@ -94,6 +93,7 @@ admin.site.register(Course, CourseAdmin)
 
 class ExerciseAdmin(admin.ModelAdmin):
     list_display = ("title", "description")
+    filter_horizontal = ("resources",)
 
 
 admin.site.register(Exercise, ExerciseAdmin)

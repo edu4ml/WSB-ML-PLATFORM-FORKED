@@ -80,6 +80,7 @@ class CourseRepository(Repository):
         ]
 
     def _get_resources(self, component):
+        return []  # FIXME
         return [
             dict(title=resource.title, url=resource.url)
             for resource in component.resources.all()

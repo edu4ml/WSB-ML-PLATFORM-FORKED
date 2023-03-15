@@ -2,6 +2,7 @@ from infra.logging import logger
 from infra.repository import Repository
 from db.models import Exercise as ExerciseDbModel
 from elearning.exercising.exercise import Exercise
+from elearning.exercising.entities import LinkResource
 
 
 @logger
@@ -21,5 +22,10 @@ class ExerciseRepository(Repository):
 
     def _prepare_domain_entity(self, db_model: ExerciseDbModel):
         return Exercise(
-            id=db_model.id, title=db_model.title, description=db_model.description
+            id=db_model.id,
+            title=db_model.title,
+            description=db_model.description,
+            resources=[
+                LinkResource(title=r.title, url=r.url) for r in db_model.resources.all()
+            ],
         )
