@@ -27,7 +27,7 @@ class CommandBus:
         self.logger.info(f"{cmd} issued into command bus")
 
         if cmd.__class__ in self.services.keys():
-            self.services[cmd.__class__].handle(cmd)
+            return self.services[cmd.__class__].handle(cmd)
         else:
             raise CommandHandlerDoesNotExistException(
                 f"Command handler for {cmd.__class__} does not exists or it is not registered"

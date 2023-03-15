@@ -27,21 +27,6 @@ def test_retrieve_courses(client, courses):
 
 
 @pytest.mark.django_db
-def test_issue_create_course_command(client, courses):
-    course = courses[0]
-    command_data = dict(
-        type=CreateCourse.Meta.name, title="TEST TITLE", description="TEST_DESCRIPTION"
-    )
-
-    response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
-        command_data,
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_202_ACCEPTED
-
-
-@pytest.mark.django_db
 def test_issue_enroll_for_course(client, user, courses):
     course = courses[0]
 
@@ -83,3 +68,25 @@ def test_issue_complete_course_step(client, user, course_with_steps):
 
     response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
     assert response.json()["steps"][0]["user_progress"]["is_completed"] == True
+
+
+@pytest.mark.django_db
+def test_issue_create_course_command(client):
+    command_data = dict(
+        type=CreateCourse.Meta.name,
+        title="TEST-COURSE-TITLE",
+        description="TEST-COURSE-DESCRIPTION",
+    )
+
+    response = client.put(
+        reverse("course"),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_201_CREATED
+
+    data = response.json()
+
+    assert data["title"] == "TEST-COURSE-TITLE"
+    assert data["description"] == "TEST-COURSE-DESCRIPTION"
+    assert data["is_draft"] == True

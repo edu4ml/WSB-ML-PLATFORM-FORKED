@@ -40,11 +40,12 @@ class CourseRepository(Repository):
         self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
 
     def persist(self, aggregate: Course):
-        CourseDbModel.objects.create(
+        obj = CourseDbModel.objects.create(
             title=aggregate.title,
             description=aggregate.description,
             is_draft=aggregate.is_draft,
         )
+        return self._prepare_domain_entity(obj)
 
     def list(self) -> List[Course]:
         course_modles = CourseDbModel.objects.all()

@@ -16,8 +16,9 @@ class CommandHandler:
 
     def handle(self, command: Command):
         self._validate(command)
-        self._handle_command(command)
+        response = self._handle_command(command)
         self._emit_event()
+        return response
 
     def _retrieve_parent(self, command: Command):
         pass

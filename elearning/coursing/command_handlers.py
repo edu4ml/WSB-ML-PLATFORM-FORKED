@@ -17,7 +17,7 @@ class OnCreateCourse(CommandHandler):
         entity = Course(
             title=command.title, description=command.description, is_draft=True, id=None
         )
-        self.repository.course.persist(entity)
+        return self.repository.course.persist(entity)
 
 
 class OnEnrollForCourse(CommandHandler):

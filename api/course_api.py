@@ -20,6 +20,24 @@ class CourseApi(APIView):
         serialized = [asdict(course) for course in courses]
         return Response(serialized, status.HTTP_200_OK)
 
+    def _prepare_command(self, request, format=None):
+        match request.data.get("type"):
+            case CreateCourse.Meta.name:
+                return CreateCourse(
+                    title=request.data.get("title"),
+                    description=request.data.get("description"),
+                )
+            case _:
+                raise NotImplementedError(
+                    f"I dont know this command: {request.data}."
+                    " Only initial commands allowed at this endpoint"
+                )
+
+    def put(self, request, **kwargs):
+        command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
+        course = command_bus.issue(self._prepare_command(request))
+        return Response(asdict(course), status.HTTP_201_CREATED)
+
 
 class CourseDetailApi(APIView):
     def get(self, request, course_id, **kwargs):
@@ -32,12 +50,6 @@ class CourseDetailApi(APIView):
 class CourseCommandApi(APIView):
     def _prepare_command(self, request, course_id):
         match request.data.get("type"):
-            case CreateCourse.Meta.name:
-                return CreateCourse(
-                    parent_id=course_id,
-                    title=request.data.get("title"),
-                    description=request.data.get("description"),
-                )
             case EnrollForCourse.Meta.name:
                 return EnrollForCourse(
                     parent_id=course_id, user_id=request.data.get("user_id")
