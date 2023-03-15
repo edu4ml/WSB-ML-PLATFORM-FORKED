@@ -1,10 +1,9 @@
 import React from 'react';
 import { Card, Collapse, List, Space, Tag, Typography } from 'antd';
 import CourseStepSelfEvaluateButton from './CourseStepSelfEvaluateButton';
-import LinkIcon from '@mui/icons-material/Link';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import LinkResourceListItem from '../common/LinkResourceListItem';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
 interface CourseStepItem {
     id: number;
@@ -65,20 +64,17 @@ const getResourcesList = (resources) => {
             size="large"
             dataSource={resources}
             renderItem={(item: ResourceItem) => (
-                <List.Item>
-                    <a href={item.url} target="_blank">
-                        <LinkIcon style={{ verticalAlign: 'middle' }} />{' '}
-                        {item.title}
-                    </a>
-                </List.Item>
+                <LinkResourceListItem item={item} />
             )}
         />
     );
 };
 
-const CourseItemsList = ({ data }) => {
+const CourseDetails = ({ data }) => {
     return (
         <Card title={data.title} bordered={false}>
+            <Paragraph>{data.description}</Paragraph>
+
             <Collapse defaultActiveKey={data.current_active}>
                 {data.steps.map((item) => (
                     <Collapse.Panel
@@ -121,4 +117,4 @@ const CourseItemsList = ({ data }) => {
     );
 };
 
-export default CourseItemsList;
+export default CourseDetails;

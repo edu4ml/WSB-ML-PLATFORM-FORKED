@@ -1,5 +1,6 @@
-import { List } from 'antd';
+import { Col, List, Row } from 'antd';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface ExerciseItem {
     id: number;
@@ -19,9 +20,11 @@ const ExerciseList = ({ exercises }) => {
                     <List.Item key={item.title}>
                         <List.Item.Meta
                             title={
-                                <a href={`/exercises/${item.id}`}>
-                                    {item.title}
-                                </a>
+                                <Row>
+                                    <Link to={`/exercises/${item.id}`}>
+                                        {item.title}
+                                    </Link>
+                                </Row>
                             }
                             description={item.description}
                         />

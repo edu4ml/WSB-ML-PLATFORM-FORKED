@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import CourseItemsList from '../../components/courses/CourseItemsList';
+import CourseDetails from '../../components/courses/CourseDetails';
 import { useGetCourseQuery } from '../../features/courses/coursesApi';
 
 const CourseDetailPage = () => {
@@ -8,7 +8,7 @@ const CourseDetailPage = () => {
     const { data, isLoading } = useGetCourseQuery(courseId);
 
     if (!isLoading) {
-        return <CourseItemsList data={data} />;
+        return <CourseDetails data={data} />;
     }
     return <div></div>;
 };

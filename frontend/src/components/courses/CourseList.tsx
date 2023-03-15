@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Col, List, Progress, Row } from 'antd';
 import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import { Link } from 'react-router-dom';
 
 interface CourseItem {
     id: number;
@@ -33,9 +34,9 @@ const CourseList = ({ courses }) => {
                         return (
                             <Row>
                                 <Col span={16}>
-                                    <a href={`/courses/${item.id}`}>
+                                    <Link to={`/courses/${item.id}`}>
                                         {item.title}
-                                    </a>
+                                    </Link>
                                 </Col>
                                 <Col span={8}>
                                     <Progress percent={item.progress} />
