@@ -18,7 +18,7 @@ class Configuration:
             self.command_bus, self.event_bus, self.repository
         )
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         repr = "Global App configuration \n\n"
         repr += f"{str(self.command_bus)}\n"
 

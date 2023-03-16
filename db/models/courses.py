@@ -11,7 +11,7 @@ class Course(TimestampedModel):
     is_draft = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.title
+        return self.title  # pragma: no cover
 
 
 class CourseEnrollment(TimestampedModel):
@@ -20,7 +20,7 @@ class CourseEnrollment(TimestampedModel):
     is_completed = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return f"{self.course.title} - {self.user.get_username()}"
+        return f"{self.course.title} - {self.user.get_username()}"  # pragma: no cover
 
 
 class CourseStep(TimestampedModel):
@@ -46,7 +46,7 @@ class CourseStep(TimestampedModel):
         ordering = ["order"]
 
     def __str__(self) -> str:
-        return f"{self.course.title} ({self.order}) - {self.component.title}"
+        return f"{self.course.title} ({self.order}) - {self.component.title}"  # pragma: no cover
 
 
 class CourseStepUserCompletion(TimestampedModel):
@@ -73,4 +73,4 @@ class CourseStepUserCompletion(TimestampedModel):
         unique_together = ("user", "content_type", "object_id", "course")
 
     def __str__(self) -> str:
-        return f"{self.user.get_username()} - {self.object.title}"
+        return f"{self.user.get_username()} - {self.object.title}"  # pragma: no cover

@@ -21,3 +21,10 @@ def test_retrieve_exercise(client, exercises):
 
     assert data["title"] == exercise.title
     assert data["description"] == exercise.description
+
+
+@pytest.mark.django_db
+def test_retrieve_exercise_not_found(client):
+    response = client.get(reverse("exercise-detail", kwargs=dict(exercise_id=1)))
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == dict()

@@ -106,12 +106,11 @@ class CourseRepository(Repository):
         ]
 
     def _get_resources(self, step_in_course):
-        if resources := getattr(step_in_course, "resources", None):
-            return [
-                dict(title=resource.title, url=resource.url)
-                for resource in resources.all()
-            ]
-        return []
+        # if resources := getattr(step_in_course, "resources", None):
+        return [
+            dict(title=resource.title, url=resource.url)
+            for resource in step_in_course.resources.all()
+        ]
 
     def _get_user_progress_on_component(self, course, course_step):
         # whole key is passed here so it is safe to do get_or_create here

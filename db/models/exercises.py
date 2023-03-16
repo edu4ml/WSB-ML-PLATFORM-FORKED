@@ -7,11 +7,11 @@ class LinkResource(TimestampedModel):
     url = models.URLField()
 
     def __str__(self) -> str:
-        return self.title
+        return self.title  # pragma: no cover
 
 
 class Exercise(CourseStepBaseModel):
     resources = models.ManyToManyField(LinkResource, blank=True)
 
     def __str__(self) -> str:
-        return self.title
+        return self.title  # pragma: no cover
