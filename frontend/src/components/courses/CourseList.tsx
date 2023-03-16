@@ -12,6 +12,7 @@ interface CourseItem {
     description: string;
     progress: number;
     is_enrolled: boolean;
+    is_draft: boolean;
 }
 
 const CourseList = ({ courses }) => {
@@ -32,7 +33,7 @@ const CourseList = ({ courses }) => {
             dataSource={courses}
             renderItem={(item: CourseItem) => {
                 const titleWithProgress = (item: CourseItem) => {
-                    if (item.is_enrolled) {
+                    if (item.is_enrolled && !item.is_draft) {
                         return (
                             <Row>
                                 <Col span={16}>
@@ -46,7 +47,12 @@ const CourseList = ({ courses }) => {
                             </Row>
                         );
                     } else {
-                        return <span>{item.title}</span>;
+                        return (
+                            <span>
+                                {item.title}{' '}
+                                {item.is_draft && '(Wersja robocza)'}
+                            </span>
+                        );
                     }
                 };
 

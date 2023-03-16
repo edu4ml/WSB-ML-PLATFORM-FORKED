@@ -43,5 +43,5 @@ class OnUpdateCourse(CommandHandler):
 
     def _handle_command(self, command: UpdateCourse):
         with self.repository.course.with_obj(command.parent_id) as course:
-            course.title = command.title
+            # course.title = command.title
             course.description = command.description

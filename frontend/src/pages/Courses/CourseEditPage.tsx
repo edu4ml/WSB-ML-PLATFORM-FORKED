@@ -1,20 +1,34 @@
 import { Card, Typography } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import CardHeader, {
     CardHeaderActionsType,
 } from '../../components/common/CardHeader';
-import { useGetCourseQuery } from '../../features/courses/coursesApi';
+
+import {
+    useIssueCourseCommandMutation,
+    useGetCourseQuery,
+} from '../../features/courses/coursesApi';
+import { Enums } from '../../shared';
+import CourseEditStepsList from '../../components/courses/CourseEditStepsList';
 
 const { Paragraph } = Typography;
 
 const CourseEditPage = () => {
     const { courseId } = useParams();
     const { data, isLoading, isSuccess } = useGetCourseQuery(courseId);
+    const [issueCommand, {}] = useIssueCourseCommandMutation();
+    const [dataSource, setDataSource] = useState([]);
+    const [editedButNotSaved, setEditedButNotSaved] = useState(false);
 
-    const [editableDescription, setEditableDescription] = useState(
-        data?.description
-    );
+    const [editableDescription, setEditableDescription] = useState('');
+
+    useEffect(() => {
+        if (data) {
+            setEditableDescription(data.description);
+            setDataSource(data.steps);
+        }
+    }, [data]);
 
     const actions: CardHeaderActionsType = [
         {
@@ -22,17 +36,33 @@ const CourseEditPage = () => {
             onClick: () => {
                 console.log('Publikuje!');
             },
+            type: 'default',
         },
         {
             text: 'Edytuj',
             onClick: () => {
                 console.log('Edytuje!');
             },
+            type: 'default',
         },
         {
             text: 'Zapisz',
+            type: editedButNotSaved ? 'primary' : 'default',
             onClick: () => {
-                console.log('Zapisuje!');
+                const command = {
+                    type: Enums.COMMAND_TYPES__UPDATE_COURSE,
+                    description: editableDescription,
+                };
+                console.log('Datasource', dataSource);
+
+                issueCommand({ id: courseId, command })
+                    .unwrap()
+                    .then((res) => {
+                        console.log('Success!: ', res);
+                    })
+                    .catch((err) => {
+                        console.log('Err: ', err);
+                    });
             },
         },
     ];
@@ -40,7 +70,16 @@ const CourseEditPage = () => {
     if (!isLoading && isSuccess) {
         return (
             <Card
-                title={<CardHeader title={data.title} actions={actions} />}
+                title={
+                    <CardHeader
+                        title={
+                            data.is_draft
+                                ? `${data.title} (Wersja robocza)`
+                                : data.title
+                        }
+                        actions={actions}
+                    />
+                }
                 bordered={false}
             >
                 <Paragraph
@@ -50,6 +89,11 @@ const CourseEditPage = () => {
                 >
                     {editableDescription}
                 </Paragraph>
+                <CourseEditStepsList
+                    dataSource={dataSource}
+                    setDataSource={setDataSource}
+                    setEditedButNotSaved={setEditedButNotSaved}
+                />
             </Card>
         );
     }

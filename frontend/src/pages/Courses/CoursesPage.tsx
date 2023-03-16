@@ -32,6 +32,7 @@ const CoursesPage = () => {
         {
             text: 'Nowy kurs',
             onClick: showModal,
+            type: 'default',
         },
     ];
 
