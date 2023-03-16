@@ -34,9 +34,20 @@ class CourseApi(APIView):
                 )
 
     def put(self, request, **kwargs):
-        command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-        course = command_bus.issue(self._prepare_command(request))
-        return Response(asdict(course), status.HTTP_201_CREATED)
+        try:
+            command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
+            course = command_bus.issue(self._prepare_command(request))
+            return Response(asdict(course), status.HTTP_201_CREATED)
+        except NotImplementedError as e:
+            return Response(
+                dict(
+                    error=True,
+                    success=False,
+                    payload=request.data,
+                    message="NotImplemented",
+                ),
+                status.HTTP_501_NOT_IMPLEMENTED,
+            )
 
 
 class CourseDetailApi(APIView):
@@ -63,6 +74,17 @@ class CourseCommandApi(APIView):
                 raise NotImplementedError(f"I dont know this command: {request.data}")
 
     def put(self, request, course_id, **kwargs):
-        command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-        command_bus.issue(self._prepare_command(request, course_id))
-        return Response(dict(), status.HTTP_202_ACCEPTED)
+        try:
+            command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
+            command_bus.issue(self._prepare_command(request, course_id))
+            return Response(dict(), status.HTTP_202_ACCEPTED)
+        except NotImplementedError as e:
+            return Response(
+                dict(
+                    error=True,
+                    success=False,
+                    payload=request.data,
+                    message="NotImplemented",
+                ),
+                status.HTTP_501_NOT_IMPLEMENTED,
+            )

@@ -1,7 +1,6 @@
 import pytest
 from rest_framework import status
 from django.urls import reverse
-
 from elearning.coursing.commands.create_course import CreateCourse
 from elearning.coursing.commands.enroll_for_course import EnrollForCourse
 from elearning.coursing.commands.complete_course_step import CompleteCourseStep
@@ -24,6 +23,13 @@ def test_retrieve_courses(client, courses):
     assert data["title"] == course.title
     assert data["description"] == course.description
     assert data["is_draft"] == course.is_draft
+
+
+@pytest.mark.django_db
+def test_retrieve_courses_not_found(client):
+    response = client.get(reverse("course-detail", kwargs=dict(course_id=1)))
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == dict()
 
 
 @pytest.mark.django_db
@@ -90,3 +96,29 @@ def test_issue_create_course_command(client):
     assert data["title"] == "TEST-COURSE-TITLE"
     assert data["description"] == "TEST-COURSE-DESCRIPTION"
     assert data["is_draft"] == True
+
+
+@pytest.mark.django_db
+def test_raise_exception_when_course_command_unknown(client, courses):
+    course = courses[0]
+    command_data = dict(type="DUMMY-UNKNOWN-COMMAND", foo="bar")
+
+    response = client.put(
+        reverse("course"),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_501_NOT_IMPLEMENTED
+    assert response.json() == dict(
+        message="NotImplemented", error=True, success=False, payload=command_data
+    )
+
+    response = client.put(
+        reverse("course-command", kwargs=dict(course_id=course.id)),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_501_NOT_IMPLEMENTED
+    assert response.json() == dict(
+        message="NotImplemented", error=True, success=False, payload=command_data
+    )
