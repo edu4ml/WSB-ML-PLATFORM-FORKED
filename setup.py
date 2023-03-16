@@ -29,6 +29,7 @@ setup(
             "isort",
             "black",
             "pytest-cov",
+            "cosmic-ray",
             "pytest-django==4.5.2",
             "mock==5.0.1",
             "model_bakery==1.10.1",

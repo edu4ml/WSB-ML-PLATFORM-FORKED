@@ -34,3 +34,16 @@ connect-sql:
 
 squash-migrations:
 	echo 'TO DO: squash migrations to single file representing current db schema'
+
+
+test-mutant:
+	echo 'Initializing session...'
+	cosmic-ray init cosmic-ray.conf cosmic-ray-session.sqlite
+	echo 'Strating killing mutants 👾'
+	cosmic-ray exec cosmic-ray.conf cosmic-ray-session.sqlite
+
+test-mutant-status:
+	cr-report cosmic-ray-session.sqlite --show-pending
+
+test-mutant-report:
+	cr-html cosmic-ray-session.sqlite > report.html
