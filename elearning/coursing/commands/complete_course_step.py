@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from shared.enums import CommandTypes
 from infra.command import Command
 
 
@@ -8,4 +8,4 @@ class CompleteCourseStep(Command):
     progress_tracking_id: int
 
     class Meta:
-        name = "COMPLETE_COURSE_STEP"
+        name = CommandTypes.COMPLETE_COURSE_STEP

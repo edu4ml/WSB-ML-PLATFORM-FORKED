@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from shared.enums import CommandTypes
 from infra.command import Command
 
 
@@ -8,4 +8,4 @@ class EnrollForCourse(Command):
     user_id: int
 
     class Meta:
-        name = "ENROLL_FOR_COURSE"
+        name = CommandTypes.ENROLL_FOR_COURSE

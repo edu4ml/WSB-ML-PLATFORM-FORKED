@@ -12,7 +12,7 @@ class RetrieveSingleContext:
             try:
                 self.obj = self.root_model.objects.get(id=self.obj_id)
             except ObjectDoesNotExist:
-                raise ValueError(
+                raise self.root_model.DoesNotExist(
                     f"{self.root_model.__name__} with ID {self.obj_id} does not exist"
                 )
         return self.obj

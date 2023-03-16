@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from infra.command import Command
+from shared.enums import CommandTypes
 
 
 @dataclass(kw_only=True)
@@ -10,5 +11,5 @@ class CreateCourse(Command):
     description: str
 
     class Meta:
-        name = "CREATE_COURSE"
+        name = CommandTypes.CREATE_COURSE
         is_initial = True
