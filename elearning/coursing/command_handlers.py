@@ -3,6 +3,7 @@ from elearning.coursing.commands import (
     CreateCourse,
     EnrollForCourse,
     CompleteCourseStep,
+    UpdateCourse,
 )
 from infra.event import Event
 from infra.command_handler import CommandHandler
@@ -34,3 +35,13 @@ class OnCompleteCourseStep(CommandHandler):
 
     def _handle_command(self, command: CompleteCourseStep):
         self.repository.course.complete_step_for_user(command.progress_tracking_id)
+
+
+class OnUpdateCourse(CommandHandler):
+    emitting_event: Event | None = None
+    repository: RepositoryRoot = None
+
+    def _handle_command(self, command: UpdateCourse):
+        with self.repository.course.with_obj(command.parent_id) as course:
+            course.title = command.title
+            course.description = command.description

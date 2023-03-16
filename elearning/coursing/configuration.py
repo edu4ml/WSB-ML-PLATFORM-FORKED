@@ -5,11 +5,13 @@ from elearning.coursing.commands import (
     CreateCourse,
     EnrollForCourse,
     CompleteCourseStep,
+    UpdateCourse,
 )
 from elearning.coursing.command_handlers import (
     OnCreateCourse,
     OnEnrollForCourse,
     OnCompleteCourseStep,
+    OnUpdateCourse,
 )
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
@@ -30,4 +32,8 @@ class CourseConfiguration:
         command_bus.register(
             service=OnCompleteCourseStep(event_bus=event_bus, repository=repository),
             to=CompleteCourseStep,
+        )
+        command_bus.register(
+            service=OnUpdateCourse(event_bus=event_bus, repository=repository),
+            to=UpdateCourse,
         )

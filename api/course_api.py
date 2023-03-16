@@ -10,8 +10,10 @@ from elearning.coursing.commands import (
     CreateCourse,
     EnrollForCourse,
     CompleteCourseStep,
+    UpdateCourse,
 )
 from infra.command_bus import CommandBus
+from shared.enums import CommandTypes
 
 
 class CourseApi(APIView):
@@ -61,14 +63,20 @@ class CourseDetailApi(APIView):
 class CourseCommandApi(APIView):
     def _prepare_command(self, request, course_id):
         match request.data.get("type"):
-            case EnrollForCourse.Meta.name:
+            case CommandTypes.ENROLL_FOR_COURSE:
                 return EnrollForCourse(
                     parent_id=course_id, user_id=request.data.get("user_id")
                 )
-            case CompleteCourseStep.Meta.name:
+            case CommandTypes.COMPLETE_COURSE_STEP:
                 return CompleteCourseStep(
                     parent_id=course_id,
                     progress_tracking_id=request.data.get("progress_tracking_id"),
+                )
+            case CommandTypes.UPDATE_COURSE:
+                return UpdateCourse(
+                    parent_id=course_id,
+                    title=request.data.get("title"),
+                    description=request.data.get("description"),
                 )
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")
