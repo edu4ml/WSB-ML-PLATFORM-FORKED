@@ -47,3 +47,8 @@ test-mutant-status:
 
 test-mutant-report:
 	cr-html cosmic-ray-session.sqlite > report.html
+
+
+seed-db:
+	python manage.py flush --no-input
+	python manage.py loaddata db/seed/example_data.json
