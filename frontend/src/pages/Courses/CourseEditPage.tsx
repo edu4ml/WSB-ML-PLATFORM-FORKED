@@ -30,6 +30,13 @@ const CourseEditPage = () => {
         }
     }, [data]);
 
+    const mapToCourseSteps = (data) => {
+        return data.map((item) => ({
+            type: Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE,
+            id: item.key,
+        }));
+    };
+
     const actions: CardHeaderActionsType = [
         {
             text: 'Opublikuj',
@@ -50,7 +57,7 @@ const CourseEditPage = () => {
             type: editedButNotSaved ? 'primary' : 'default',
             onClick: () => {
                 const command = {
-                    type: Enums.COMMAND_TYPES__UPDATE_COURSE,
+                    type: Enums.COMMAND_TYPES.UPDATE_COURSE,
                     description: editableDescription,
                 };
                 console.log('Datasource', dataSource);
