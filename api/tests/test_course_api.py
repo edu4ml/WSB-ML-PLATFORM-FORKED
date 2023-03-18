@@ -27,7 +27,12 @@ def test_retrieve_courses(client, courses):
 
 @pytest.mark.django_db
 def test_retrieve_courses_not_found(client):
-    response = client.get(reverse("course-detail", kwargs=dict(course_id=1)))
+    response = client.get(
+        reverse(
+            "course-detail",
+            kwargs=dict(course_id="29439ec0-0ed9-4268-9860-047103ffad65"),
+        )
+    )
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == dict()
 

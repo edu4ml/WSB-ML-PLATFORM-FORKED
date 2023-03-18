@@ -25,6 +25,11 @@ def test_retrieve_exercise(client, exercises):
 
 @pytest.mark.django_db
 def test_retrieve_exercise_not_found(client):
-    response = client.get(reverse("exercise-detail", kwargs=dict(exercise_id=1)))
+    response = client.get(
+        reverse(
+            "exercise-detail",
+            kwargs=dict(exercise_id="29439ec0-0ed9-4268-9860-047103ffad65"),
+        )
+    )
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == dict()
