@@ -9,6 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
+      DJANGO_SETTINGS_MODULE: 'server.test_settings'
       DEBUG: 1
       DATABASE_PASSWORD: password
       DATABASE_NAME: elearning
