@@ -14,6 +14,7 @@ from elearning.coursing.commands import (
 )
 from infra.command_bus import CommandBus
 from shared.enums import CommandTypes
+from uuid import UUID
 
 
 class CourseApi(APIView):
@@ -53,7 +54,7 @@ class CourseApi(APIView):
 
 
 class CourseDetailApi(APIView):
-    def get(self, request, course_id, **kwargs):
+    def get(self, request, course_id: UUID, **kwargs):
         course = CourseRepository(request.user).retrieve(id=course_id)
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
@@ -82,7 +83,7 @@ class CourseCommandApi(APIView):
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")
 
-    def put(self, request, course_id, **kwargs):
+    def put(self, request, course_id: UUID, **kwargs):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
             command_bus.issue(self._prepare_command(request, course_id))

@@ -31,9 +31,10 @@ const CourseEditPage = () => {
     }, [data]);
 
     const mapToCourseSteps = (data) => {
-        return data.map((item) => ({
-            type: Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE,
-            id: item.key,
+        return data.map((item, index) => ({
+            content_type: Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE,
+            id: item.id,
+            order: index + 1,
         }));
     };
 
@@ -59,13 +60,14 @@ const CourseEditPage = () => {
                 const command = {
                     type: Enums.COMMAND_TYPES.UPDATE_COURSE,
                     description: editableDescription,
+                    steps: mapToCourseSteps(dataSource),
                 };
-                console.log('Datasource', dataSource);
 
                 issueCommand({ id: courseId, command })
                     .unwrap()
                     .then((res) => {
                         console.log('Success!: ', res);
+                        setEditedButNotSaved(false);
                     })
                     .catch((err) => {
                         console.log('Err: ', err);

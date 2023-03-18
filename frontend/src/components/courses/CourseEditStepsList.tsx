@@ -9,28 +9,15 @@ import {
 } from '@dnd-kit/sortable';
 import type { ColumnsType } from 'antd/es/table';
 import CourseEditStepRow from '../../components/courses/CourseEditStepRow';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, DeleteTwoTone } from '@ant-design/icons';
 import { useGetExercisesCatalogQuery } from '../../features/exercises/exerciseApi';
+import { Co2Sharp } from '@mui/icons-material';
 
 interface DataType {
-    key: string | number;
+    id: string | number;
     title: string;
     description: string;
 }
-
-const columns: ColumnsType<DataType> = [
-    {
-        key: 'sort',
-    },
-    {
-        title: 'Tytuł',
-        dataIndex: 'title',
-    },
-    {
-        title: 'Opis',
-        dataIndex: 'description',
-    },
-];
 
 const CourseEditStepsList = ({
     dataSource,
@@ -45,9 +32,9 @@ const CourseEditStepsList = ({
         if (active.id !== over?.id) {
             setDataSource((previous) => {
                 const activeIndex = previous.findIndex(
-                    (i) => i.key === active.id
+                    (i) => i.id === active.id
                 );
-                const overIndex = previous.findIndex((i) => i.key === over?.id);
+                const overIndex = previous.findIndex((i) => i.id === over?.id);
                 return arrayMove(previous, activeIndex, overIndex);
             });
         }
@@ -60,7 +47,7 @@ const CourseEditStepsList = ({
         );
 
         const newData: DataType = {
-            key: chosenElement.id,
+            id: chosenElement.id,
             title: chosenElement.title,
             description: chosenElement.description,
         };
@@ -70,23 +57,49 @@ const CourseEditStepsList = ({
         setEditedButNotSaved(true);
     };
 
-    const isAvailable = (item) => {
-        return dataSource.find((element) => element.key === item.id);
+    const handleRemove = (key) => {
+        const newData = dataSource.filter((item) => item.id !== key);
+        setDataSource(newData);
+        setEditedButNotSaved(true);
     };
 
-    const mapToDropdown = (exercises) => {
-        return exercises?.map((item) => ({
+    const isAvailable = (item) => {
+        return dataSource.find((element) => element.id === item.id);
+    };
+
+    const mapToDropdown = (items) => {
+        return items?.map((item) => ({
             label: item.title,
             key: item.id,
             disabled: isAvailable(item),
         }));
     };
 
+    const columns: ColumnsType<DataType> = [
+        {
+            key: 'sort',
+        },
+        {
+            title: 'Tytuł',
+            dataIndex: 'title',
+        },
+        {
+            title: 'Opis',
+            dataIndex: 'description',
+        },
+        {
+            dataIndex: 'operation',
+            render: (_, item) => (
+                <DeleteTwoTone onClick={() => handleRemove(item.id)} />
+            ),
+        },
+    ];
+
     return (
         <>
             <DndContext onDragEnd={onDragEnd}>
                 <SortableContext
-                    items={dataSource.map((i) => i.key)}
+                    items={dataSource.map((i) => i.id)}
                     strategy={verticalListSortingStrategy}
                 >
                     <Table
@@ -95,7 +108,7 @@ const CourseEditStepsList = ({
                                 row: CourseEditStepRow,
                             },
                         }}
-                        rowKey="key"
+                        rowKey="id"
                         columns={columns}
                         dataSource={dataSource}
                     />

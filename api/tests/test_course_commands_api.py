@@ -197,7 +197,6 @@ def test_issue_update_command_remove_reorder_and_add_steps(
         ),
         content_type="application/json",
     )
-    print(response.json())
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     response = client.get(

@@ -35,7 +35,7 @@ class CourseStep(TimestampedModel):
     step_content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, default=None, blank=True
     )
-    step_object_id = models.PositiveIntegerField(null=True, default=None, blank=True)
+    step_object_id = models.UUIDField(null=True, default=None, blank=True)
     step_object = GenericForeignKey("step_content_type", "step_object_id")
 
     class Meta:
@@ -58,7 +58,7 @@ class CourseStepUserCompletion(TimestampedModel):
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, default=None
     )
-    object_id = models.PositiveIntegerField(null=True, default=None)
+    object_id = models.UUIDField(null=True, default=None)
     object = GenericForeignKey("content_type", "object_id")
 
     # is_file_passed = models.BooleanField(default=False)
