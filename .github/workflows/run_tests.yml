@@ -43,7 +43,7 @@ jobs:
     if: ${{ always() }}
     steps:
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.1
+        uses: rtCamp/action-slack-notify@v2
         with:
           status: ${{ job.status }}
           text: ${{ job.status }} | ${{ github.repository }} - ${{ github.workflow }} - ${{ github.sha }} - ${{ github.ref }}
