@@ -46,7 +46,7 @@ class CourseStep(TimestampedModel):
         ordering = ["order"]
 
     def __str__(self) -> str:
-        return f"{self.course.title} ({self.order}) - {self.component.title}"  # pragma: no cover
+        return f"{self.course.title} ({self.order}) - {self.step_object.title}"  # pragma: no cover
 
 
 class CourseStepUserCompletion(TimestampedModel):

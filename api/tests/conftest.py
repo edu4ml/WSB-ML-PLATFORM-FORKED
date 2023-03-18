@@ -11,7 +11,7 @@ from db.models import Exercise, Course as CourseDbModel, CourseStep
 @pytest.mark.django_db
 def user():
     return User.objects.create_user(
-        username="testuser", email="testuser@example.com", password="adminadmin"
+        id=1, username="testuser", email="testuser@example.com", password="adminadmin"
     )
 
 
@@ -35,6 +35,11 @@ def courses():
 
 
 @pytest.fixture
+def course():
+    return baker.make(CourseDbModel)
+
+
+@pytest.fixture
 def exercises():
     return baker.make(Exercise, 10)
 
@@ -46,7 +51,13 @@ def course_with_steps(exercises):
     order = 1
     for exercise in exercises:
         steps.append(
-            baker.make(CourseStep, course=course, step_object=exercise, order=order)
+            baker.make(
+                CourseStep,
+                course=course,
+                step_object=exercise,
+                order=order,
+                make_m2m=True,
+            )
         )
         order += 1
     return course, steps

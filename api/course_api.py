@@ -76,7 +76,8 @@ class CourseCommandApi(APIView):
                 return UpdateCourse(
                     parent_id=course_id,
                     title=request.data.get("title"),
-                    description=request.data.get("description"),
+                    description=request.data.get("description", ""),
+                    steps=request.data.get("steps", []),
                 )
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")

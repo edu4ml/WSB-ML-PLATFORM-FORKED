@@ -25,6 +25,8 @@ class Course:
         self._calculate_blocked_steps()
         self._calculate_progress()
 
+    # ---------------------------------------------------------------------------
+
     def _calculate_progress(self) -> int:
         steps_total = len(self.steps)
         steps_completed = len(

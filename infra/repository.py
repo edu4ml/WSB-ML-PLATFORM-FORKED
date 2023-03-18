@@ -1,25 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
-
-
-class RetrieveSingleContext:
-    def __init__(self, root_model, obj_id, obj=None):
-        self.root_model = root_model
-        self.obj_id = obj_id
-        self.obj = obj
-
-    def __enter__(self):
-        if self.obj is None:
-            try:
-                self.obj = self.root_model.objects.get(id=self.obj_id)
-            except ObjectDoesNotExist:
-                raise self.root_model.DoesNotExist(
-                    f"{self.root_model.__name__} with ID {self.obj_id} does not exist"
-                )
-        return self.obj
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.obj.save()
+from django.db import transaction
+from contextlib import contextmanager
 
 
 class Repository:
@@ -37,5 +18,31 @@ class Repository:
     def retrieve(self, id):
         raise NotImplementedError
 
+    def update(self, entity):
+        raise NotImplementedError
+
+    def delete(self, entity):
+        raise NotImplemented
+
+    @contextmanager
     def with_obj(self, obj_id, obj=None):
-        return RetrieveSingleContext(self.root_model, obj_id, obj)
+        if obj is None:
+            try:
+                obj = self.root_model.objects.get(id=obj_id)
+            except ObjectDoesNotExist:
+                raise self.root_model.DoesNotExist(
+                    f"{self.root_model.__name__} with ID {obj_id} does not exist"
+                )
+        yield obj
+        obj.save()
+
+    @contextmanager
+    def with_entity(self, parent_id: int):
+        """
+        This is ment to retrieve entity model, do operations,
+        and perform update automatically in db
+        """
+        with transaction.atomic():
+            self.resource = self.retrieve(parent_id)
+            yield self.resource
+            self.update(self.resource)

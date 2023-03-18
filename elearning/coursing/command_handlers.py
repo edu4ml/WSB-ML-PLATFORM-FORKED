@@ -8,6 +8,7 @@ from elearning.coursing.commands import (
 from infra.event import Event
 from infra.command_handler import CommandHandler
 from elearning.coursing.course import Course
+from elearning.coursing.entities import CourseStep
 
 
 class OnCreateCourse(CommandHandler):
@@ -42,6 +43,10 @@ class OnUpdateCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: UpdateCourse):
-        with self.repository.course.with_obj(command.parent_id) as course:
-            # course.title = command.title
+        with self.repository.course.with_entity(parent_id=command.parent_id) as course:
+            course.title = command.title
             course.description = command.description
+            course.steps = [
+                CourseStep(order=s["order"], content_type=s["content_type"], id=s["id"])
+                for s in command.steps
+            ]

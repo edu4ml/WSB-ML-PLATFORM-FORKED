@@ -10,6 +10,8 @@ from db.models import (
 )
 from elearning.coursing.course import Course
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+
 
 User = get_user_model()
 
@@ -27,7 +29,8 @@ class CourseStepUserCompletionRepository(Repository):
 @logger
 class CourseRepository(Repository):
     """
-    Abstraction layer to retrieve the domain entity of course object
+    Abstraction layer to retrieve, persist and update
+    the domain entity of course object and related models
     """
 
     root_model = CourseDbModel
@@ -46,6 +49,22 @@ class CourseRepository(Repository):
             is_draft=aggregate.is_draft,
         )
         return self._prepare_domain_entity(obj)
+
+    def update(self, entity: Course):
+        course = CourseDbModel.objects.get(id=entity.id)
+
+        if entity.description is not None:
+            course.description = entity.description
+
+        if entity.title is not None:
+            course.title = entity.title
+
+        if entity.is_draft is not None:
+            course.is_draft = entity.is_draft
+
+        self._update_course_steps(course, entity.steps)
+
+        course.save()
 
     def list(self) -> List[Course]:
         course_modles = CourseDbModel.objects.all()
@@ -72,6 +91,17 @@ class CourseRepository(Repository):
 
     # -----------------------------------------------------
 
+    def _update_course_steps(self, course, new_steps):
+        course.coursestep_set.all().delete()
+
+        for new_step in new_steps:
+            CourseStepDbModel.objects.create(
+                order=new_step.order,
+                course=course,
+                step_object_id=new_step.id,
+                step_content_type=ContentType.objects.get(model=new_step.content_type),
+            )
+
     def _prepare_domain_entity(self, course) -> Course:
         return Course(
             id=course.id,
@@ -79,7 +109,7 @@ class CourseRepository(Repository):
             description=course.description,
             is_draft=course.is_draft,
             is_enrolled=self._is_enrolled(course),
-            steps=self._course_steps(course),
+            steps=self._get_course_steps(course),
         )
 
     def _is_enrolled(self, course):
@@ -89,9 +119,11 @@ class CourseRepository(Repository):
             user=self.user, course=course
         ).exists()
 
-    def _course_steps(self, course):
+    def _get_course_steps(self, course):
         return [
             CourseStep(
+                id=step.step_object_id,
+                content_type=step.step_content_type.model,
                 title=step.step_object.title,
                 description=step.step_object.description,
                 order=step.order,
@@ -114,6 +146,13 @@ class CourseRepository(Repository):
 
     def _get_user_progress_on_component(self, course, course_step):
         # whole key is passed here so it is safe to do get_or_create here
+        if not self.user:
+            return CourseComponentCompletion(
+                tracking_id=None,
+                completed_at=None,
+                is_completed=None,
+            )
+
         step_completion, _ = CourseStepUserCompletionDbModel.objects.get_or_create(
             user=self.user,
             course=course,
