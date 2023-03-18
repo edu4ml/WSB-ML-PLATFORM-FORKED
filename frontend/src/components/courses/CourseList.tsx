@@ -78,7 +78,7 @@ const CourseList = ({ courses }) => {
                                 }}
                                 style={{ width: '100%' }}
                             >
-                                Edytuj
+                                {item.is_draft ? 'Edytuj' : 'Szczegóły'}
                             </Button>,
                         ];
                     }

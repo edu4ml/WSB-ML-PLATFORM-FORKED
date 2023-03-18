@@ -21,14 +21,21 @@ const CourseEditPage = () => {
     const [dataSource, setDataSource] = useState([]);
     const [editedButNotSaved, setEditedButNotSaved] = useState(false);
 
+    const [isDraft, setIsDraft] = useState(true);
     const [editableDescription, setEditableDescription] = useState('');
 
     useEffect(() => {
         if (data) {
             setEditableDescription(data.description);
             setDataSource(data.steps);
+            setIsDraft(data.is_draft);
         }
     }, [data]);
+
+    const handleDescriptionChange = (description) => {
+        setEditedButNotSaved(true);
+        setEditableDescription(description);
+    };
 
     const mapToCourseSteps = (data) => {
         return data.map((item, index) => ({
@@ -38,43 +45,54 @@ const CourseEditPage = () => {
         }));
     };
 
-    const actions: CardHeaderActionsType = [
+    let actions: CardHeaderActionsType = [
         {
-            text: 'Opublikuj',
-            onClick: () => {
-                console.log('Publikuje!');
-            },
-            type: 'default',
-        },
-        {
-            text: 'Edytuj',
-            onClick: () => {
-                console.log('Edytuje!');
-            },
-            type: 'default',
-        },
-        {
-            text: 'Zapisz',
-            type: editedButNotSaved ? 'primary' : 'default',
+            text: isDraft ? 'Opublikuj' : 'Zamień w szkic',
             onClick: () => {
                 const command = {
                     type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-                    description: editableDescription,
-                    steps: mapToCourseSteps(dataSource),
+                    is_draft: !data.is_draft,
                 };
 
                 issueCommand({ id: courseId, command })
                     .unwrap()
                     .then((res) => {
-                        console.log('Success!: ', res);
-                        setEditedButNotSaved(false);
+                        console.log('Success!', res);
+                        setIsDraft(!isDraft);
                     })
                     .catch((err) => {
-                        console.log('Err: ', err);
+                        console.error('Err: ', err);
                     });
             },
+            type: 'default',
         },
     ];
+
+    if (isDraft) {
+        actions = actions.concat([
+            {
+                text: 'Zapisz',
+                type: editedButNotSaved ? 'primary' : 'default',
+                onClick: () => {
+                    const command = {
+                        type: Enums.COMMAND_TYPES.UPDATE_COURSE,
+                        description: editableDescription,
+                        steps: mapToCourseSteps(dataSource),
+                    };
+
+                    issueCommand({ id: courseId, command })
+                        .unwrap()
+                        .then((res) => {
+                            console.log('Success!: ', res);
+                            setEditedButNotSaved(false);
+                        })
+                        .catch((err) => {
+                            console.log('Err: ', err);
+                        });
+                },
+            },
+        ]);
+    }
 
     if (!isLoading && isSuccess) {
         return (
@@ -82,7 +100,7 @@ const CourseEditPage = () => {
                 title={
                     <CardHeader
                         title={
-                            data.is_draft
+                            isDraft
                                 ? `${data.title} (Wersja robocza)`
                                 : data.title
                         }
@@ -93,12 +111,13 @@ const CourseEditPage = () => {
             >
                 <Paragraph
                     editable={{
-                        onChange: setEditableDescription,
+                        onChange: handleDescriptionChange,
                     }}
                 >
                     {editableDescription}
                 </Paragraph>
                 <CourseEditStepsList
+                    editable={isDraft}
                     dataSource={dataSource}
                     setDataSource={setDataSource}
                     setEditedButNotSaved={setEditedButNotSaved}

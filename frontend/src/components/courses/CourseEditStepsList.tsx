@@ -23,6 +23,7 @@ const CourseEditStepsList = ({
     dataSource,
     setDataSource,
     setEditedButNotSaved,
+    editable,
 }) => {
     const { data: availableSteps } =
         useGetExercisesCatalogQuery('exercise-catalog');
@@ -74,10 +75,9 @@ const CourseEditStepsList = ({
             disabled: isAvailable(item),
         }));
     };
-
     const columns: ColumnsType<DataType> = [
         {
-            key: 'sort',
+            key: editable ? 'sort' : 'id',
         },
         {
             title: 'Tytuł',
@@ -89,9 +89,13 @@ const CourseEditStepsList = ({
         },
         {
             dataIndex: 'operation',
-            render: (_, item) => (
-                <DeleteTwoTone onClick={() => handleRemove(item.id)} />
-            ),
+            render: (_, item) => {
+                return (
+                    editable && (
+                        <DeleteTwoTone onClick={() => handleRemove(item.id)} />
+                    )
+                );
+            },
         },
     ];
 
@@ -114,20 +118,24 @@ const CourseEditStepsList = ({
                     />
                 </SortableContext>
             </DndContext>
-            <Space />
-            <Dropdown
-                menu={{
-                    items: mapToDropdown(availableSteps),
-                    onClick: handleAdd,
-                }}
-            >
-                <Button block type="primary">
-                    <Space>
-                        Dodaj
-                        <DownOutlined />
-                    </Space>
-                </Button>
-            </Dropdown>
+            {editable && (
+                <>
+                    <Space />
+                    <Dropdown
+                        menu={{
+                            items: mapToDropdown(availableSteps),
+                            onClick: handleAdd,
+                        }}
+                    >
+                        <Button block type="primary">
+                            <Space>
+                                Dodaj
+                                <DownOutlined />
+                            </Space>
+                        </Button>
+                    </Dropdown>
+                </>
+            )}
         </>
     );
 };
