@@ -44,8 +44,15 @@ jobs:
     steps:
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
-        with:
-          status: ${{ job.status }}
-          text: ${{ job.status }} | ${{ github.repository }} - ${{ github.workflow }} - ${{ github.sha }} - ${{ github.ref }}
         env:
+          MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_TITLE: 'Hello hello! We have CI results for ${{ github.repository }} :tada:'
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_LINK_NAMES: true
+          SLACK_MESSAGE: |
+            
+            *STATUS*: ${{ job.status }}
+
+            *commit*: ${{ github.sha }}
+            *branch*: ${{ github.ref }}
