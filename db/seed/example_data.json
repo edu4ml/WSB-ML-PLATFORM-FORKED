@@ -1,55 +1,158 @@
 [
-    {
-      "model": "db.linkresource",
-      "pk": 1,
-      "fields": {
-        "created_at": "2023-03-17T00:00:00Z",
-        "updated_at": "2023-03-17T00:00:00Z",
-        "title": "Resource 1",
-        "url": "https://www.example.com/resource1"
-      }
-    },
-    {
-      "model": "db.linkresource",
-      "pk": 2,
-      "fields": {
-        "created_at": "2023-03-17T00:00:00Z",
-        "updated_at": "2023-03-17T00:00:00Z",
-        "title": "Resource 2",
-        "url": "https://www.example.com/resource2"
-      }
-    },
-    {
-      "model": "db.course",
-      "pk": 1,
-      "fields": {
-        "created_at": "2023-03-17T00:00:00Z",
-        "updated_at": "2023-03-17T00:00:00Z",
-        "title": "Course 1",
-        "description": "This is a description for Course 1"
-      }
-    },
-    {
-      "model": "db.exercise",
-      "pk": 1,
-      "fields": {
-        "created_at": "2023-03-17T00:00:00Z",
-        "updated_at": "2023-03-17T00:00:00Z",
-        "title": "Exercise 1",
-        "description": "This is a description for Exercise 1",
-        "resources": [1, 2]
-      }
-    },
-    {
-      "model": "db.exercise",
-      "pk": 2,
-      "fields": {
-        "created_at": "2023-03-17T00:00:00Z",
-        "updated_at": "2023-03-17T00:00:00Z",
-        "title": "Exercise 2",
-        "description": "This is a description for Exercise 2",
-        "resources": [1]
-      }
+  {
+    "model": "db.linkresource",
+    "pk": "550e8400-e29b-41d4-a716-446655440000",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Introduction to Machine Learning",
+      "url": "https://www.example.com/intro_to_ml"
     }
-  ]
-  
+  },
+  {
+    "model": "db.linkresource",
+    "pk": "550e8400-e29b-41d4-a716-446655440001",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Deep Learning Basics",
+      "url": "https://www.example.com/deep_learning_basics"
+    }
+  },
+  {
+    "model": "db.linkresource",
+    "pk": "550e8400-e29b-41d4-a716-446655440005",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Reinforcement Learning Overview",
+      "url": "https://www.example.com/reinforcement_learning_overview"
+    }
+  },
+  {
+    "model": "db.linkresource",
+    "pk": "550e8400-e29b-41d4-a716-446655440006",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Natural Language Processing Techniques",
+      "url": "https://www.example.com/nlp_techniques"
+    }
+  },
+  {
+    "model": "db.course",
+    "pk": "550e8400-e29b-41d4-a716-446655440002",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Machine Learning Fundamentals",
+      "description": "Learn the fundamentals of machine learning, including supervised and unsupervised learning, and build a strong foundation for advanced topics."
+    }
+  },
+  {
+    "model": "db.course",
+    "pk": "550e8400-e29b-41d4-a716-446655440007",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Deep Learning Concepts",
+      "description": "Gain a deeper understanding of neural networks, convolutional neural networks, and recurrent neural networks in this deep learning course."
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440003",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Linear Regression Exercise",
+      "description": "Practice implementing linear regression from scratch and using popular machine learning libraries.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440000",
+        "550e8400-e29b-41d4-a716-446655440001"
+      ]
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440004",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "K-Means Clustering Exercise",
+      "description": "Explore the K-Means clustering algorithm and practice implementing it on various datasets.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440000"
+      ]
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440008",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Convolutional Neural Networks Exercise",
+      "description": "Learn about convolutional neural networks and practice implementing them for image recognition tasks.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440006"
+      ]
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440009",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Reinforcement Learning Exercise",
+      "description": "Implement and experiment with reinforcement learning algorithms, such as Q-learning and Deep Q-Networks, in various environments.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440000",
+        "550e8400-e29b-41d4-a716-446655440005"
+      ]
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440010",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Natural Language Processing Exercise",
+      "description": "Practice implementing various natural language processing techniques, such as sentiment analysis, named entity recognition, and text classification.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440000",
+        "550e8400-e29b-41d4-a716-446655440006"
+      ]
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440011",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Generative Adversarial Networks Exercise",
+      "description": "Implement generative adversarial networks (GANs) and experiment with generating realistic images, text, or other data types.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440001"
+      ]
+    }
+  },
+  {
+    "model": "db.exercise",
+    "pk": "550e8400-e29b-41d4-a716-446655440012",
+    "fields": {
+      "created_at": "2023-03-17T00:00:00Z",
+      "updated_at": "2023-03-17T00:00:00Z",
+      "title": "Transfer Learning Exercise",
+      "description": "Learn about transfer learning and fine-tune pre-trained models to perform tasks, such as image classification and object detection.",
+      "resources": [
+        "550e8400-e29b-41d4-a716-446655440000",
+        "550e8400-e29b-41d4-a716-446655440001"
+      ]
+    }
+  }
+]
