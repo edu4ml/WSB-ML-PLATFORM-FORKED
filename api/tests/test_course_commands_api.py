@@ -56,6 +56,17 @@ class CommandTestCase(NamedTuple):
                 title="new-test-title",
             ),
         ),
+        # publish couse only
+        CommandTestCase(
+            setup_func=[
+                lambda: Course.objects.create(
+                    title="test-title", description="testtest"
+                )
+            ],
+            initial_data=dict(is_draft=True),
+            command_data=dict(type=CommandTypes.UPDATE_COURSE, is_draft=False),
+            expected_result=dict(is_draft=False),
+        ),
     ],
 )
 def test_issue_command(
