@@ -31,7 +31,7 @@ def client(user):
 
 @pytest.fixture
 def courses():
-    return baker.make(CourseDbModel, 10)
+    return baker.make(CourseDbModel, 4)
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def course():
 
 @pytest.fixture
 def exercises():
-    return baker.make(Exercise, 10)
+    return baker.make(Exercise, 3)
 
 
 @pytest.fixture

@@ -62,7 +62,8 @@ class CourseRepository(Repository):
         if entity.is_draft is not None:
             course.is_draft = entity.is_draft
 
-        self._update_course_steps(course, entity.steps)
+        if entity.steps is not None:
+            self._update_course_steps(course, entity.steps)
 
         course.save()
 

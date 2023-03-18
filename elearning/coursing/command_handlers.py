@@ -46,7 +46,14 @@ class OnUpdateCourse(CommandHandler):
         with self.repository.course.with_entity(parent_id=command.parent_id) as course:
             course.title = command.title
             course.description = command.description
-            course.steps = [
-                CourseStep(order=s["order"], content_type=s["content_type"], id=s["id"])
-                for s in command.steps
-            ]
+            course.is_draft = command.is_draft
+
+            if command.steps is not None:
+                course.steps = [
+                    CourseStep(
+                        order=s["order"], content_type=s["content_type"], id=s["id"]
+                    )
+                    for s in command.steps
+                ]
+            else:
+                course.steps = None

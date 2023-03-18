@@ -10,7 +10,7 @@ from elearning.coursing.commands.complete_course_step import CompleteCourseStep
 def test_list_courses(client, courses):
     response = client.get(reverse("course"))
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == 10
+    assert len(response.json()) == len(courses)
 
 
 @pytest.mark.django_db

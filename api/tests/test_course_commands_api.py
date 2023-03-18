@@ -42,14 +42,18 @@ class CommandTestCase(NamedTuple):
             initial_data=dict(
                 title="test-title",
                 description="test-description",
+                is_draft=True,
             ),
             command_data=dict(
                 type=CommandTypes.UPDATE_COURSE,
                 title="new-test-title",
                 description="new-test-description",
+                is_draft=False,
             ),
             expected_result=dict(
-                description="new-test-description", title="new-test-title"
+                is_draft=False,
+                description="new-test-description",
+                title="new-test-title",
             ),
         ),
     ],
@@ -169,8 +173,8 @@ def test_issue_update_command_remove_reorder_and_add_steps(
         reverse("course-detail", kwargs=dict(course_id=course.id))
     ).json()
 
-    len(CourseStep.objects.all()) == 10
-    assert len(response["steps"]) == 10
+    assert len(CourseStep.objects.all()) == len(exercises)
+    assert len(response["steps"]) == len(exercises)
     assert response["steps"][0]["title"] == steps[0].step_object.title
 
     response = client.put(
