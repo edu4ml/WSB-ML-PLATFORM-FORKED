@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from elearning.coursing.entities import CourseStep
 
 

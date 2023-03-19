@@ -19,9 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from api.urls import (
-    urlpatterns as course_tracker_urlpatterns,
-)
+from api.urls import urlpatterns as course_tracker_urlpatterns
 from frontend.urls import urlpatterns as frontend_urlpatterns
 
 

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from elearning.coursing.entities import CourseComponentCompletion
 from shared.enums import CourseStepContentTypes
 

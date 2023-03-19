@@ -1,22 +1,23 @@
 from dataclasses import asdict
+from uuid import UUID
+
+from django.apps import apps
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.apps import apps
 
-from db.repository.exercise import ExerciseRepository
-from db.repository.evaluation import EvaluationRepository
 from db.repository.course import CourseRepository
+from db.repository.evaluation import EvaluationRepository
+from db.repository.exercise import ExerciseRepository
 from elearning.apps import APP_NAME
 from elearning.coursing.commands import (
+    CompleteCourseStep,
     CreateCourse,
     EnrollForCourse,
-    CompleteCourseStep,
     UpdateCourse,
 )
 from infra.command_bus import CommandBus
 from shared.enums import CommandTypes
-from uuid import UUID
 
 
 class CourseApi(APIView):

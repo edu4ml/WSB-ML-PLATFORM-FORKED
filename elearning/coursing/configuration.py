@@ -1,17 +1,17 @@
 # some relation between command issues and the service
 # command invoke service method which orchestrate entities
 from db.repository.configuration import RepositoryRoot
-from elearning.coursing.commands import (
-    CreateCourse,
-    EnrollForCourse,
-    CompleteCourseStep,
-    UpdateCourse,
-)
 from elearning.coursing.command_handlers import (
+    OnCompleteCourseStep,
     OnCreateCourse,
     OnEnrollForCourse,
-    OnCompleteCourseStep,
     OnUpdateCourse,
+)
+from elearning.coursing.commands import (
+    CompleteCourseStep,
+    CreateCourse,
+    EnrollForCourse,
+    UpdateCourse,
 )
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus

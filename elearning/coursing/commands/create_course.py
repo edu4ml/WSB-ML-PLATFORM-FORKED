@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from infra.command import Command
 from shared.enums import CommandTypes
 

@@ -1,8 +1,8 @@
+from db.models import Exercise as ExerciseDbModel
+from elearning.exercising.entities import LinkResource
+from elearning.exercising.exercise import Exercise
 from infra.logging import logger
 from infra.repository import Repository
-from db.models import Exercise as ExerciseDbModel
-from elearning.exercising.exercise import Exercise
-from elearning.exercising.entities import LinkResource
 
 
 @logger

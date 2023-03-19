@@ -1,6 +1,8 @@
-from django.contrib.auth import get_user_model
 import pytest
+from django.contrib.auth import get_user_model
+
 from infra.repository import Repository
+
 
 UserModel = get_user_model()
 

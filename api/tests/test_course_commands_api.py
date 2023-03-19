@@ -1,13 +1,14 @@
-from typing import List, NamedTuple
+from typing import Callable, List, NamedTuple
+
 import pytest
-from rest_framework import status
-from django.urls import reverse
-from typing import Callable
-from db.models.courses import Course, CourseStep
-from db.models.exercises import Exercise
-from db.models.evaluations import FileEvaluationType
-from shared.enums import CommandTypes
 from django.contrib.contenttypes.models import ContentType
+from django.urls import reverse
+from rest_framework import status
+
+from db.models.courses import Course, CourseStep
+from db.models.evaluations import FileEvaluationType
+from db.models.exercises import Exercise
+from shared.enums import CommandTypes
 
 
 class CommandTestCase(NamedTuple):

@@ -1,9 +1,10 @@
 import pytest
-from rest_framework import status
 from django.urls import reverse
+from rest_framework import status
+
+from elearning.coursing.commands.complete_course_step import CompleteCourseStep
 from elearning.coursing.commands.create_course import CreateCourse
 from elearning.coursing.commands.enroll_for_course import EnrollForCourse
-from elearning.coursing.commands.complete_course_step import CompleteCourseStep
 
 
 @pytest.mark.django_db

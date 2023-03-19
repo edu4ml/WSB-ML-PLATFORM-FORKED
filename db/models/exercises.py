@@ -1,6 +1,7 @@
+from django.db import models
+
 from .mixin import CourseStepBaseModel, TimestampedModel
 from .resources import LinkResource
-from django.db import models
 
 
 class Exercise(CourseStepBaseModel):

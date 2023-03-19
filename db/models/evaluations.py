@@ -1,7 +1,8 @@
+from django.conf import settings
+from django.db import models
+
 from .mixin import CourseStepBaseModel, TimestampedModel
 from .resources import FileResource
-from django.db import models
-from django.conf import settings
 
 
 class FileEvaluationType(CourseStepBaseModel):

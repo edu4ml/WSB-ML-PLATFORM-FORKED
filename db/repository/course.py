@@ -1,7 +1,8 @@
 from typing import List
-from elearning.coursing.entities import CourseStep, CourseComponentCompletion
-from infra.logging import logger
-from infra.repository import Repository
+
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+
 from db.models import (
     Course as CourseDbModel,
     CourseEnrollment as CourseEnrollmentDbModel,
@@ -9,9 +10,11 @@ from db.models import (
     CourseStepUserCompletion as CourseStepUserCompletionDbModel,
 )
 from elearning.coursing.course import Course
-from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.models import ContentType
+from elearning.coursing.entities import CourseComponentCompletion, CourseStep
+from infra.logging import logger
+from infra.repository import Repository
 from shared.enums import CourseStepContentTypes
+
 
 User = get_user_model()
 

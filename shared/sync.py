@@ -1,4 +1,5 @@
 import json
+
 from shared.enums import CommandTypes, CourseStepContentTypes
 
 

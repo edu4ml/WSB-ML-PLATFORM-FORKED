@@ -1,6 +1,8 @@
 from collections import defaultdict
-from django.contrib.contenttypes.models import ContentType
+
 from django import forms
+from django.contrib.contenttypes.models import ContentType
+
 from db.models import CourseStep
 
 

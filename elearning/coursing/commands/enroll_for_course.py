@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from shared.enums import CommandTypes
+
 from infra.command import Command
+from shared.enums import CommandTypes
 
 
 @dataclass(kw_only=True)

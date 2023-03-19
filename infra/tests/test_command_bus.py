@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+
 from mock import Mock
+
 from infra.command import Command
 from infra.command_bus import CommandBus
 from infra.command_handler import CommandHandler

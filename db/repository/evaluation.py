@@ -1,7 +1,7 @@
-from infra.logging import logger
-from infra.repository import Repository
 from db.models import FileEvaluationType as FileEvaluationTypeDbModel
 from elearning.coursing.entities import Evaluation
+from infra.logging import logger
+from infra.repository import Repository
 
 
 @logger

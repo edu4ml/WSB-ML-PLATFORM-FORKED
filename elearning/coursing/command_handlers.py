@@ -1,14 +1,14 @@
 from db.repository.configuration import RepositoryRoot
 from elearning.coursing.commands import (
+    CompleteCourseStep,
     CreateCourse,
     EnrollForCourse,
-    CompleteCourseStep,
     UpdateCourse,
 )
-from infra.event import Event
-from infra.command_handler import CommandHandler
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseStep
+from infra.command_handler import CommandHandler
+from infra.event import Event
 
 
 class OnCreateCourse(CommandHandler):

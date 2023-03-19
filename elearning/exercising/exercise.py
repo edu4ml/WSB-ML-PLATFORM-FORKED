@@ -1,8 +1,10 @@
 from dataclasses import dataclass, field
 from typing import List
 from uuid import UUID
-from .entities import LinkResource
+
 from shared.enums import CourseStepContentTypes
+
+from .entities import LinkResource
 
 
 @dataclass

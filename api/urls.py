@@ -1,7 +1,13 @@
 from django.urls import path
 
+from .course_api import (
+    CourseApi,
+    CourseCommandApi,
+    CourseDetailApi,
+    CourseStepApi,
+)
 from .exercise_api import ExerciseApi, ExerciseDetailApi
-from .course_api import CourseDetailApi, CourseApi, CourseCommandApi, CourseStepApi
+
 
 urlpatterns = [
     path("course/", CourseApi.as_view(), name="course"),

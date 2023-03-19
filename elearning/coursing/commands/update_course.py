@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 from uuid import UUID
+
 from infra.command import Command
 from shared.enums import CommandTypes, CourseStepContentTypes
 

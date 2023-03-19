@@ -1,5 +1,6 @@
-from .mixin import TimestampedModel
 from django.db import models
+
+from .mixin import TimestampedModel
 
 
 class LinkResource(TimestampedModel):

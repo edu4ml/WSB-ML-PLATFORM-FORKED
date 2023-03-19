@@ -1,10 +1,15 @@
-from django.test import Client
 import pytest
+from django.test import Client
 from django.urls import reverse
-
-from elearning.auth.user import User
 from model_bakery import baker
-from db.models import Exercise, Course as CourseDbModel, CourseStep, FileEvaluationType
+
+from db.models import (
+    Course as CourseDbModel,
+    CourseStep,
+    Exercise,
+    FileEvaluationType,
+)
+from elearning.auth.user import User
 
 
 @pytest.fixture

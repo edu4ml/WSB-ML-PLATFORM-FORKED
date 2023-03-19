@@ -1,6 +1,7 @@
+from contextlib import contextmanager
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from contextlib import contextmanager
 
 
 class Repository:

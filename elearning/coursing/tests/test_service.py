@@ -1,5 +1,6 @@
 import pytest
 from mock import Mock
+
 from elearning.configuration import Configuration
 from elearning.coursing.commands import CreateCourse
 from elearning.coursing.course import Course

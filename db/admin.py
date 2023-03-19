@@ -1,18 +1,19 @@
 from django.contrib import admin
-from django.utils.html import format_html
 from django.template.loader import render_to_string
+from django.utils.html import format_html
+
+from .forms import CourseStepForm
 from .models import (
     Course,
     CourseEnrollment,
     CourseStep,
-    LinkResource,
-    Exercise,
     CourseStepUserCompletion,
+    EvaluationAttempt,
+    Exercise,
     FileEvaluationType,
     FileResource,
-    EvaluationAttempt,
+    LinkResource,
 )
-from .forms import CourseStepForm
 
 
 class LinkResourceAdmin(admin.ModelAdmin):

@@ -2,6 +2,7 @@ from django.apps import AppConfig
 
 from infra.logging import logger
 
+
 APP_NAME = "elearning"
 
 

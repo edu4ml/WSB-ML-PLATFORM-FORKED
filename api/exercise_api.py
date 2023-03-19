@@ -1,7 +1,9 @@
 from dataclasses import asdict
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from db.repository.exercise import ExerciseRepository
 
 
