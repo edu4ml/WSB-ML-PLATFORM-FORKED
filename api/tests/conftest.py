@@ -15,33 +15,70 @@ from elearning.auth.user import User
 
 
 @pytest.fixture
-def admin_role():
-    return Role.objects.create(name=UserRoles.ADMIN)
-
-
-@pytest.fixture
-@pytest.mark.django_db
-def user(admin_role):
+def admin():
     user = User.objects.create_user(
         uuid=uuid4(),
         username="testuser",
         email="testuser@example.com",
         password="adminadmin",
     )
-
-    user.roles.add(admin_role)
+    user.roles.add(Role.objects.create(name=UserRoles.ADMIN))
     return user
 
 
 @pytest.fixture
-@pytest.mark.django_db
-def client(user):
-    """
-    Authenticated client fixture
-    """
-    client = Client(enforce_csrf_checks=False, HTTP_ACCEPT="application/json")
+def student():
+    student = User.objects.create_user(
+        uuid=uuid4(),
+        username="teststudent",
+        email="teststudent@example.com",
+        password="adminadmin",
+    )
+    student.roles.add(Role.objects.create(name=UserRoles.STUDENT))
+    return student
+
+
+@pytest.fixture
+def teacher():
+    teacher = User.objects.create_user(
+        uuid=uuid4(),
+        username="testteacher",
+        email="testteacher@example.com",
+        password="adminadmin",
+    )
+    teacher.roles.add(Role.objects.create(name=UserRoles.TEACHER))
+    return teacher
+
+
+@pytest.fixture
+def client():
+    return Client(enforce_csrf_checks=False, HTTP_ACCEPT="application/json")
+
+
+@pytest.fixture
+def admin_client(admin, client):
     response = client.post(
-        reverse("auth:rest_login"), dict(username=user.username, password="adminadmin")
+        reverse("auth:rest_login"), dict(username=admin.username, password="adminadmin")
+    )
+    assert response.status_code == 200
+    return client
+
+
+@pytest.fixture
+def student_client(student, client):
+    response = client.post(
+        reverse("auth:rest_login"),
+        dict(username=student.username, password="adminadmin"),
+    )
+    assert response.status_code == 200
+    return client
+
+
+@pytest.fixture
+def teacher_client(teacher, client):
+    response = client.post(
+        reverse("auth:rest_login"),
+        dict(username=teacher.username, password="adminadmin"),
     )
     assert response.status_code == 200
     return client
@@ -60,6 +97,11 @@ def course():
 @pytest.fixture
 def exercises():
     return baker.make(Exercise, 3)
+
+
+@pytest.fixture
+def exercise():
+    return baker.make(Exercise)
 
 
 @pytest.fixture

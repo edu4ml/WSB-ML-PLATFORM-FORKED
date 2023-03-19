@@ -72,7 +72,7 @@ class CommandTestCase(NamedTuple):
     ],
 )
 def test_issue_command(
-    setup_func, initial_data, command_data, expected_result, client, user
+    setup_func, initial_data, command_data, expected_result, admin_client, admin
 ):
     # this might be a bit hacky. Assuming that first callable returns course resource
     # The rest of callables are for other resources
@@ -81,23 +81,23 @@ def test_issue_command(
         resources.append(callable())
     course_obj = resources[0]
 
-    command_data["user_uuid"] = user.uuid
+    command_data["user_uuid"] = admin.uuid
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course_obj.uuid))
     ).json()
 
     for key, value in initial_data.items():
         assert response[key] == value
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course_obj.uuid)),
         command_data,
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course_obj.uuid))
     ).json()
 
@@ -106,17 +106,17 @@ def test_issue_command(
 
 
 @pytest.mark.django_db
-def test_issue_update_command_remove_steps(client, course_with_steps):
+def test_issue_update_command_remove_steps(admin_client, course_with_steps):
     course, steps = course_with_steps
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(response["steps"]) > 1
     assert response["steps"][0]["title"] == steps[0].object.title
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         dict(
             type=CommandTypes.UPDATE_COURSE,
@@ -127,7 +127,7 @@ def test_issue_update_command_remove_steps(client, course_with_steps):
     print(response.json())
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
@@ -136,15 +136,15 @@ def test_issue_update_command_remove_steps(client, course_with_steps):
 
 @pytest.mark.django_db
 def test_issue_update_command_add_steps(
-    client, course, exercises, file_evaluation_type
+    admin_client, course, exercises, file_evaluation_type
 ):
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(response["steps"]) == 0
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         dict(
             type=CommandTypes.UPDATE_COURSE,
@@ -177,7 +177,7 @@ def test_issue_update_command_add_steps(
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
@@ -187,11 +187,11 @@ def test_issue_update_command_add_steps(
 
 @pytest.mark.django_db
 def test_issue_update_command_remove_reorder_and_add_steps(
-    client, course_with_steps, exercises
+    admin_client, course_with_steps, exercises
 ):
     course, steps = course_with_steps
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
@@ -199,7 +199,7 @@ def test_issue_update_command_remove_reorder_and_add_steps(
     assert len(response["steps"]) == len(exercises)
     assert response["steps"][0]["title"] == steps[0].object.title
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         dict(
             type=CommandTypes.UPDATE_COURSE,
@@ -225,7 +225,7 @@ def test_issue_update_command_remove_reorder_and_add_steps(
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 

@@ -1,7 +1,7 @@
 from infra.command import Command
 from infra.command_handler import CommandHandler
 from infra.logging import logger
-
+from shared.enums import CommandTypes
 from .exceptions import (
     CommandAlreadyExistException,
     CommandHandlerDoesNotExistException,
@@ -33,6 +33,9 @@ class CommandBus:
             raise CommandHandlerDoesNotExistException(
                 f"Command handler for {cmd.__class__} does not exists or it is not registered"
             )
+
+    def _build_command(type: CommandTypes, request, **kwargs):
+        pass
 
     def __str__(self):
         repr = "Command Bus\n"

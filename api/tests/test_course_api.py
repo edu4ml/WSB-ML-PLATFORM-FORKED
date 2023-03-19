@@ -5,21 +5,20 @@ from rest_framework import status
 
 from elearning.coursing.commands.complete_course_step import CompleteCourseStep
 from elearning.coursing.commands.create_course import CreateCourse
-from elearning.coursing.commands.enroll_for_course import EnrollForCourse
 from shared.enums import CommandTypes
 
 
 @pytest.mark.django_db
-def test_list_courses(client, courses):
-    response = client.get(reverse("course"))
+def test_list_courses(admin_client, courses):
+    response = admin_client.get(reverse("course"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == len(courses)
 
 
 @pytest.mark.django_db
-def test_retrieve_courses(client, courses):
+def test_retrieve_courses(admin_client, courses):
     course = courses[0]
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     )
     assert response.status_code == status.HTTP_200_OK
@@ -31,8 +30,8 @@ def test_retrieve_courses(client, courses):
 
 
 @pytest.mark.django_db
-def test_retrieve_courses_not_found(client):
-    response = client.get(
+def test_retrieve_courses_not_found(admin_client):
+    response = admin_client.get(
         reverse(
             "course-detail",
             kwargs=dict(course_uuid=uuid4()),
@@ -43,34 +42,34 @@ def test_retrieve_courses_not_found(client):
 
 
 @pytest.mark.django_db
-def test_issue_enroll_for_course(client, user, courses):
+def test_issue_enroll_for_course(admin_client, admin, courses):
     course = courses[0]
 
-    command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=user.uuid)
+    command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=admin.uuid)
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     )
     assert response.json().get("is_enrolled") == False
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     )
     assert response.json().get("is_enrolled") == True
 
 
 @pytest.mark.django_db
-def test_issue_complete_course_step(client, user, course_with_steps):
+def test_issue_complete_course_step(admin_client, admin, course_with_steps):
     course, steps = course_with_steps
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     )
     assert response.json()["steps"][0]["user_progress"]["is_completed"] == False
@@ -83,28 +82,28 @@ def test_issue_complete_course_step(client, user, course_with_steps):
         progress_tracking_uuid=progress_tracking_uuid,
     )
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(
+    response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     )
     assert response.json()["steps"][0]["user_progress"]["is_completed"] == True
 
 
 @pytest.mark.django_db
-def test_issue_create_course_command(client):
+def test_issue_create_course_command(admin_client):
     command_data = dict(
         type=CreateCourse.Meta.name,
         title="TEST-COURSE-TITLE",
         description="TEST-COURSE-DESCRIPTION",
     )
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course"),
         command_data,
         content_type="application/json",
@@ -119,11 +118,11 @@ def test_issue_create_course_command(client):
 
 
 @pytest.mark.django_db
-def test_raise_exception_when_course_command_unknown(client, courses):
+def test_raise_exception_when_course_command_unknown(admin_client, courses):
     course = courses[0]
     command_data = dict(type="DUMMY-UNKNOWN-COMMAND", foo="bar")
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course"),
         command_data,
         content_type="application/json",
@@ -133,7 +132,7 @@ def test_raise_exception_when_course_command_unknown(client, courses):
         message="NotImplemented", error=True, success=False, payload=command_data
     )
 
-    response = client.put(
+    response = admin_client.put(
         reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
@@ -145,7 +144,7 @@ def test_raise_exception_when_course_command_unknown(client, courses):
 
 
 @pytest.mark.django_db
-def test_list_course_components(client, exercises, file_evaluation_types):
-    response = client.get(reverse("course-components"))
+def test_list_course_components(admin_client, exercises, file_evaluation_types):
+    response = admin_client.get(reverse("course-components"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == len(exercises) + len(file_evaluation_types)

@@ -10,3 +10,7 @@ class Command:
 
     parent_uuid: int
     created_at: datetime = datetime.now()
+
+    @classmethod
+    def build_from_request(cls, reques, **kwargs):
+        raise NotImplementedError
