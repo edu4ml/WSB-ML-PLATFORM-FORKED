@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from uuid import UUID
 
 from elearning.coursing.entities import CourseComponentCompletion
 from shared.enums import CourseStepContentTypes
@@ -8,7 +9,7 @@ from shared.enums import CourseStepContentTypes
 class CourseStep:
     order: int
 
-    id: int
+    uuid: UUID
     content_type: CourseStepContentTypes
 
     # Read only values

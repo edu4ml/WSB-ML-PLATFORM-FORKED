@@ -14,5 +14,5 @@ class EvaluationRepository(Repository):
 
     def _prepare_domain_entity(self, db_model: FileEvaluationTypeDbModel):
         return Evaluation(
-            id=db_model.id, title=db_model.title, description=db_model.description
+            uuid=db_model.uuid, title=db_model.title, description=db_model.description
         )

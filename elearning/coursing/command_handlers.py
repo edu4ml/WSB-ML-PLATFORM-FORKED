@@ -17,7 +17,10 @@ class OnCreateCourse(CommandHandler):
 
     def _handle_command(self, command: CreateCourse):
         entity = Course(
-            title=command.title, description=command.description, is_draft=True, id=None
+            title=command.title,
+            description=command.description,
+            is_draft=True,
+            uuid=None,
         )
         return self.repository.course.persist(entity)
 
@@ -27,7 +30,7 @@ class OnEnrollForCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: EnrollForCourse):
-        self.repository.course.create_enrollment(command.parent_id, command.user_id)
+        self.repository.course.create_enrollment(command.parent_uuid, command.user_uuid)
 
 
 class OnCompleteCourseStep(CommandHandler):
@@ -35,7 +38,7 @@ class OnCompleteCourseStep(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: CompleteCourseStep):
-        self.repository.course.complete_step_for_user(command.progress_tracking_id)
+        self.repository.course.complete_step_for_user(command.progress_tracking_uuid)
 
 
 class OnUpdateCourse(CommandHandler):
@@ -43,7 +46,9 @@ class OnUpdateCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: UpdateCourse):
-        with self.repository.course.with_entity(parent_id=command.parent_id) as course:
+        with self.repository.course.with_entity(
+            parent_uuid=command.parent_uuid
+        ) as course:
             course.title = command.title
             course.description = command.description
             course.is_draft = command.is_draft
@@ -51,7 +56,7 @@ class OnUpdateCourse(CommandHandler):
             if command.steps is not None:
                 course.steps = [
                     CourseStep(
-                        order=s["order"], content_type=s["content_type"], id=s["id"]
+                        order=s["order"], content_type=s["content_type"], uuid=s["uuid"]
                     )
                     for s in command.steps
                 ]

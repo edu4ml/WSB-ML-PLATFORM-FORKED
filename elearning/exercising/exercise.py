@@ -13,7 +13,7 @@ class Exercise:
     Main Aggregate in esercising domin
     """
 
-    id: UUID
+    uuid: UUID
     title: str
     description: str
     resources: List[LinkResource] = field(default_factory=lambda: list())

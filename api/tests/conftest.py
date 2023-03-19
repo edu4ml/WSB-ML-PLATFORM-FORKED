@@ -1,3 +1,4 @@
+from uuid import uuid4
 import pytest
 from django.test import Client
 from django.urls import reverse
@@ -16,7 +17,10 @@ from elearning.auth.user import User
 @pytest.mark.django_db
 def user():
     return User.objects.create_user(
-        id=1, username="testuser", email="testuser@example.com", password="adminadmin"
+        uuid=uuid4(),
+        username="testuser",
+        email="testuser@example.com",
+        password="adminadmin",
     )
 
 
@@ -59,7 +63,7 @@ def course_with_steps(exercises):
             baker.make(
                 CourseStep,
                 course=course,
-                step_object=exercise,
+                object=exercise,
                 order=order,
                 make_m2m=True,
             )

@@ -33,21 +33,21 @@ class CourseStep(TimestampedModel):
     requires_manual_review = models.BooleanField(default=True)
     is_self_evaluated = models.BooleanField(default=False)
 
-    step_content_type = models.ForeignKey(
+    content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, default=None, blank=True
     )
-    step_object_id = models.UUIDField(null=True, default=None, blank=True)
-    step_object = GenericForeignKey("step_content_type", "step_object_id")
+    object_uuid = models.UUIDField(null=True, default=None, blank=True)
+    object = GenericForeignKey("content_type", "object_uuid")
 
     class Meta:
         unique_together = (
-            ("course", "step_content_type", "step_object_id"),
+            ("course", "content_type", "object_uuid"),
             ("course", "order"),
         )
         ordering = ["order"]
 
-    # def __str__(self) -> str:
-    #     return f"{self.course.title} ({self.order}) - {self.step_object.title}"  # pragma: no cover
+    def __str__(self) -> str:
+        return f"{self.course.title} ({self.order}) - {self.object.title}"  # pragma: no cover
 
 
 class CourseStepUserCompletion(TimestampedModel):
@@ -59,8 +59,8 @@ class CourseStepUserCompletion(TimestampedModel):
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, default=None
     )
-    object_id = models.UUIDField(null=True, default=None)
-    object = GenericForeignKey("content_type", "object_id")
+    object_uuid = models.UUIDField(null=True, default=None)
+    object = GenericForeignKey("content_type", "object_uuid")
 
     # is_file_passed = models.BooleanField(default=False)
     # is_test_passed = models.BooleanField(default=False)
@@ -71,7 +71,7 @@ class CourseStepUserCompletion(TimestampedModel):
     is_completed = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ("user", "content_type", "object_id", "course")
+        unique_together = ("user", "content_type", "object_uuid", "course")
 
     def __str__(self) -> str:
         return f"{self.user.get_username()} - {self.object.title}"  # pragma: no cover

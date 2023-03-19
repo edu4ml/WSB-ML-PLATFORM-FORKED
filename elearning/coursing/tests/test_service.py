@@ -24,6 +24,6 @@ def test_course_create_command(app: Configuration):
 
     app.repository.course.persist.assert_called_with(
         Course(
-            title=course_title, description=course_description, is_draft=True, id=None
+            title=course_title, description=course_description, is_draft=True, uuid=None
         )
     )

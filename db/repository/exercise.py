@@ -1,3 +1,4 @@
+from uuid import UUID
 from db.models import Exercise as ExerciseDbModel
 from elearning.exercising.entities import LinkResource
 from elearning.exercising.exercise import Exercise
@@ -13,16 +14,16 @@ class ExerciseRepository(Repository):
         exercises = self.root_model.objects.all()
         return [self._prepare_domain_entity(e) for e in exercises]
 
-    def retrieve(self, id):
+    def retrieve(self, uuid: UUID):
         try:
-            return self._prepare_domain_entity(self.root_model.objects.get(id=id))
+            return self._prepare_domain_entity(self.root_model.objects.get(uuid=uuid))
         except self.root_model.DoesNotExist as e:
             self.logger.error(e)
         return None
 
     def _prepare_domain_entity(self, db_model: ExerciseDbModel):
         return Exercise(
-            id=db_model.id,
+            uuid=db_model.uuid,
             title=db_model.title,
             description=db_model.description,
             resources=[

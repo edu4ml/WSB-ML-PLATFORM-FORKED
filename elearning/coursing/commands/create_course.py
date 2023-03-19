@@ -6,7 +6,7 @@ from shared.enums import CommandTypes
 
 @dataclass(kw_only=True)
 class CreateCourse(Command):
-    parent_id: int = None  # indicates initial command (no parent yet!)
+    parent_uuid: int = None  # indicates initial command (no parent yet!)
 
     title: str
     description: str

@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from uuid import UUID
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -16,7 +17,7 @@ class Repository:
     def list(self):
         raise NotImplementedError
 
-    def retrieve(self, id):
+    def retrieve(self, uuid: UUID):
         raise NotImplementedError
 
     def update(self, entity):
@@ -26,24 +27,24 @@ class Repository:
         raise NotImplemented
 
     @contextmanager
-    def with_obj(self, obj_id, obj=None):
+    def with_obj(self, obj_uuid, obj=None):
         if obj is None:
             try:
-                obj = self.root_model.objects.get(id=obj_id)
+                obj = self.root_model.objects.get(uuid=obj_uuid)
             except ObjectDoesNotExist:
                 raise self.root_model.DoesNotExist(
-                    f"{self.root_model.__name__} with ID {obj_id} does not exist"
+                    f"{self.root_model.__name__} with ID {obj_uuid} does not exist"
                 )
         yield obj
         obj.save()
 
     @contextmanager
-    def with_entity(self, parent_id: int):
+    def with_entity(self, parent_uuid: UUID):
         """
         This is ment to retrieve entity model, do operations,
         and perform update automatically in db
         """
         with transaction.atomic():
-            self.resource = self.retrieve(parent_id)
+            self.resource = self.retrieve(parent_uuid)
             yield self.resource
             self.update(self.resource)

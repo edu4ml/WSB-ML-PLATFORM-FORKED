@@ -31,7 +31,7 @@ class CourseStepForm(forms.ModelForm):
         choices = [("", "----------")]
         for key, queryset in choices_dict.items():
             for item in queryset:
-                choices.append(((key.model, item.id), f"{key} | {str(item)}"))
+                choices.append(((key.model, item.uuid), f"{key} | {str(item)}"))
 
         self.fields["course_component"] = forms.ChoiceField(
             choices=choices,
@@ -41,16 +41,14 @@ class CourseStepForm(forms.ModelForm):
     def save(self, commit=True):
         choice = self.cleaned_data.get("course_component", None)
         if choice:
-            model, component_id = eval(choice)
+            model, component_uuid = eval(choice)
         else:
-            model, component_id = None, None
+            model, component_uuid = None, None
 
-        # Set the step_object_id field based on the content type
+        # Set the object_uuid field based on the content type
         instance = super().save(commit=False)
-        instance.step_object_id = component_id
-        instance.step_content_type = (
-            ContentType.objects.get(model=model) if model else None
-        )
+        instance.object_uuid = component_uuid
+        instance.content_type = ContentType.objects.get(model=model) if model else None
 
         if commit:
             instance.save()

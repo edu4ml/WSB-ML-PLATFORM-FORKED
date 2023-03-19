@@ -57,28 +57,28 @@ class CourseApi(APIView):
 
 
 class CourseDetailApi(APIView):
-    def get(self, request, course_id: UUID, **kwargs):
-        course = CourseRepository(request.user).retrieve(id=course_id)
+    def get(self, request, course_uuid: UUID, **kwargs):
+        course = CourseRepository(request.user).retrieve(uuid=course_uuid)
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
 
 
 class CourseCommandApi(APIView):
-    def _prepare_command(self, request, course_id):
+    def _prepare_command(self, request, course_uuid):
         match request.data.get("type"):
             case CommandTypes.ENROLL_FOR_COURSE:
                 return EnrollForCourse(
-                    parent_id=course_id, user_id=request.data.get("user_id")
+                    parent_uuid=course_uuid, user_uuid=request.data.get("user_uuid")
                 )
             case CommandTypes.COMPLETE_COURSE_STEP:
                 return CompleteCourseStep(
-                    parent_id=course_id,
-                    progress_tracking_id=request.data.get("progress_tracking_id"),
+                    parent_uuid=course_uuid,
+                    progress_tracking_uuid=request.data.get("progress_tracking_uuid"),
                 )
             case CommandTypes.UPDATE_COURSE:
                 return UpdateCourse(
-                    parent_id=course_id,
+                    parent_uuid=course_uuid,
                     title=request.data.get("title"),
                     description=request.data.get("description"),
                     is_draft=request.data.get("is_draft"),
@@ -87,10 +87,10 @@ class CourseCommandApi(APIView):
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")
 
-    def put(self, request, course_id: UUID, **kwargs):
+    def put(self, request, course_uuid: UUID, **kwargs):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-            command_bus.issue(self._prepare_command(request, course_id))
+            command_bus.issue(self._prepare_command(request, course_uuid))
             return Response(dict(), status.HTTP_202_ACCEPTED)
         except NotImplementedError as e:
             return Response(

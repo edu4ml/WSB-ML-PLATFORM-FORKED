@@ -1,0 +1,46 @@
+[
+    {
+        "model": "db.linkresource",
+        "pk": 1,
+        "fields": {
+            "uuid": "550e8400-e29b-41d4-a716-446655440000",
+            "created_at": "2023-03-17T00:00:00Z",
+            "updated_at": "2023-03-17T00:00:00Z",
+            "title": "Introduction to Machine Learning",
+            "url": "https://www.example.com/intro_to_ml"
+        }
+    },
+    {
+        "model": "db.linkresource",
+        "pk": 2,
+        "fields": {
+            "uuid": "550e8400-e29b-41d4-a716-446655440001",
+            "created_at": "2023-03-17T00:00:00Z",
+            "updated_at": "2023-03-17T00:00:00Z",
+            "title": "Deep Learning Basics",
+            "url": "https://www.example.com/deep_learning_basics"
+        }
+    },
+    {
+        "model": "db.linkresource",
+        "pk": 3,
+        "fields": {
+            "uuid": "550e8400-e29b-41d4-a716-446655440005",
+            "created_at": "2023-03-17T00:00:00Z",
+            "updated_at": "2023-03-17T00:00:00Z",
+            "title": "Reinforcement Learning Overview",
+            "url": "https://www.example.com/reinforcement_learning_overview"
+        }
+    },
+    {
+        "model": "db.linkresource",
+        "pk": 4,
+        "fields": {
+            "uuid": "550e8400-e29b-41d4-a716-446655440006",
+            "created_at": "2023-03-17T00:00:00Z",
+            "updated_at": "2023-03-17T00:00:00Z",
+            "title": "Natural Language Processing Techniques",
+            "url": "https://www.example.com/nlp_techniques"
+        }
+    }
+]

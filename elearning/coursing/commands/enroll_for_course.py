@@ -6,7 +6,7 @@ from shared.enums import CommandTypes
 
 @dataclass(kw_only=True)
 class EnrollForCourse(Command):
-    user_id: int
+    user_uuid: int
 
     class Meta:
         name = CommandTypes.ENROLL_FOR_COURSE

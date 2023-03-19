@@ -81,24 +81,24 @@ def test_issue_command(
         resources.append(callable())
     course_obj = resources[0]
 
-    command_data["user_id"] = user.id
+    command_data["user_uuid"] = user.uuid
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course_obj.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course_obj.uuid))
     ).json()
 
     for key, value in initial_data.items():
         assert response[key] == value
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course_obj.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course_obj.uuid)),
         command_data,
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course_obj.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course_obj.uuid))
     ).json()
 
     for key, value in expected_result.items():
@@ -110,14 +110,14 @@ def test_issue_update_command_remove_steps(client, course_with_steps):
     course, steps = course_with_steps
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(response["steps"]) > 1
-    assert response["steps"][0]["title"] == steps[0].step_object.title
+    assert response["steps"][0]["title"] == steps[0].object.title
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         dict(
             type=CommandTypes.UPDATE_COURSE,
             steps=[],
@@ -128,7 +128,7 @@ def test_issue_update_command_remove_steps(client, course_with_steps):
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert response["steps"] == []
@@ -139,34 +139,34 @@ def test_issue_update_command_add_steps(
     client, course, exercises, file_evaluation_type
 ):
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(response["steps"]) == 0
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         dict(
             type=CommandTypes.UPDATE_COURSE,
             steps=[
                 dict(
                     order=1,
-                    id=exercises[0].id,
+                    uuid=exercises[0].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
                 dict(
                     order=2,
-                    id=exercises[1].id,
+                    uuid=exercises[1].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
                 dict(
                     order=3,
-                    id=exercises[2].id,
+                    uuid=exercises[2].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
                 dict(
                     order=4,
-                    id=file_evaluation_type.id,
+                    uuid=file_evaluation_type.uuid,
                     content_type=ContentType.objects.get_for_model(
                         FileEvaluationType
                     ).model,
@@ -178,7 +178,7 @@ def test_issue_update_command_add_steps(
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(response["steps"]) == 4
@@ -192,31 +192,31 @@ def test_issue_update_command_remove_reorder_and_add_steps(
     course, steps = course_with_steps
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(CourseStep.objects.all()) == len(exercises)
     assert len(response["steps"]) == len(exercises)
-    assert response["steps"][0]["title"] == steps[0].step_object.title
+    assert response["steps"][0]["title"] == steps[0].object.title
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         dict(
             type=CommandTypes.UPDATE_COURSE,
             steps=[
                 dict(
                     order=1,
-                    id=exercises[0].id,
+                    uuid=exercises[0].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
                 dict(
                     order=2,
-                    id=exercises[1].id,
+                    uuid=exercises[1].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
                 dict(
                     order=3,
-                    id=exercises[2].id,
+                    uuid=exercises[2].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
             ],
@@ -226,7 +226,7 @@ def test_issue_update_command_remove_reorder_and_add_steps(
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     response = client.get(
-        reverse("course-detail", kwargs=dict(course_id=course.id))
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
     ).json()
 
     assert len(response["steps"]) == 3

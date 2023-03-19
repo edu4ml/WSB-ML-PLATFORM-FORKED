@@ -7,3 +7,4 @@ from .courses import (
 )
 from .exercises import Exercise
 from .evaluations import FileEvaluationType, EvaluationAttempt
+from .auth import Role, CustomUser

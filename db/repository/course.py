@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -54,7 +55,7 @@ class CourseRepository(Repository):
         return self._prepare_domain_entity(obj)
 
     def update(self, entity: Course):
-        course = CourseDbModel.objects.get(id=entity.id)
+        course = CourseDbModel.objects.get(uuid=entity.uuid)
 
         if entity.description is not None:
             course.description = entity.description
@@ -74,22 +75,22 @@ class CourseRepository(Repository):
         course_modles = CourseDbModel.objects.all()
         return [self._prepare_domain_entity(c) for c in course_modles]
 
-    def retrieve(self, id):
+    def retrieve(self, uuid: UUID):
         try:
-            return self._prepare_domain_entity(CourseDbModel.objects.get(id=id))
+            return self._prepare_domain_entity(CourseDbModel.objects.get(uuid=uuid))
         except CourseDbModel.DoesNotExist as e:
             self.logger.error(e)
         return None
 
-    def create_enrollment(self, course_id, user_id):
+    def create_enrollment(self, course_uuid, user_uuid):
         CourseEnrollmentDbModel.objects.create(
-            course=CourseDbModel.objects.get(id=course_id),
-            user=User.objects.get(id=user_id),
+            course=CourseDbModel.objects.get(uuid=course_uuid),
+            user=User.objects.get(uuid=user_uuid),
         )
 
-    def complete_step_for_user(self, course_step_user_completion_id):
+    def complete_step_for_user(self, course_step_user_completion_uuid):
         with self.course_step_user_completion.with_obj(
-            course_step_user_completion_id
+            course_step_user_completion_uuid
         ) as obj:
             obj.is_completed = True
 
@@ -102,13 +103,13 @@ class CourseRepository(Repository):
             CourseStepDbModel.objects.create(
                 order=new_step.order,
                 course=course,
-                step_object_id=new_step.id,
-                step_content_type=ContentType.objects.get(model=new_step.content_type),
+                object_uuid=new_step.uuid,
+                content_type=ContentType.objects.get(model=new_step.content_type),
             )
 
     def _prepare_domain_entity(self, course) -> Course:
         return Course(
-            id=course.id,
+            uuid=course.uuid,
             title=course.title,
             description=course.description,
             is_draft=course.is_draft,
@@ -126,16 +127,16 @@ class CourseRepository(Repository):
     def _get_course_steps(self, course):
         return [
             CourseStep(
-                id=step.step_object_id,
-                content_type=step.step_content_type.model,
-                title=step.step_object.title,
-                description=step.step_object.description,
+                uuid=step.object_uuid,
+                content_type=step.content_type.model,
+                title=step.object.title,
+                description=step.object.description,
                 order=step.order,
-                resources=self._get_resources(step.step_object),
+                resources=self._get_resources(step.object),
                 is_self_evaluated=step.is_self_evaluated,
                 requires_manual_review=step.requires_manual_review,
                 user_progress=self._get_user_progress_on_component(
-                    course=course, course_step=step.step_object
+                    course=course, course_step=step.object
                 ),
             )
             for step in CourseStepDbModel.objects.filter(course=course)
@@ -154,7 +155,7 @@ class CourseRepository(Repository):
         # whole key is passed here so it is safe to do get_or_create here
         if not self.user:
             return CourseComponentCompletion(
-                tracking_id=None,
+                tracking_uuid=None,
                 completed_at=None,
                 is_completed=None,
             )
@@ -162,12 +163,12 @@ class CourseRepository(Repository):
         step_completion, _ = CourseStepUserCompletionDbModel.objects.get_or_create(
             user=self.user,
             course=course,
-            object_id=course_step.id,
+            object_uuid=course_step.uuid,
             content_type=course_step.content_type,
         )
 
         return CourseComponentCompletion(
-            tracking_id=step_completion.id,
+            tracking_uuid=step_completion.uuid,
             completed_at=step_completion.completed_at,
             is_completed=step_completion.is_completed,
         )

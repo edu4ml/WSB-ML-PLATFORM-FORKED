@@ -1,3 +1,4 @@
+from uuid import uuid4
 import pytest
 from django.urls import reverse
 from rest_framework import status
@@ -14,7 +15,7 @@ def test_list_exercises(client, exercises):
 def test_retrieve_exercise(client, exercises):
     exercise = exercises[0]
     response = client.get(
-        reverse("exercise-detail", kwargs=dict(exercise_id=exercise.id))
+        reverse("exercise-detail", kwargs=dict(exercise_uuid=exercise.uuid))
     )
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
@@ -28,7 +29,7 @@ def test_retrieve_exercise_not_found(client):
     response = client.get(
         reverse(
             "exercise-detail",
-            kwargs=dict(exercise_id="29439ec0-0ed9-4268-9860-047103ffad65"),
+            kwargs=dict(exercise_uuid=uuid4()),
         )
     )
     assert response.status_code == status.HTTP_404_NOT_FOUND

@@ -13,6 +13,8 @@ from .models import (
     FileEvaluationType,
     FileResource,
     LinkResource,
+    Role,
+    CustomUser,
 )
 
 
@@ -34,7 +36,7 @@ class CourseStepAdmin(admin.ModelAdmin):
     list_display = (
         "course",
         "order",
-        "step_object",
+        "object",
         # "component",
         "is_self_evaluated",
         "requires_file",
@@ -123,3 +125,17 @@ class EvaluationAttemptAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EvaluationAttempt, EvaluationAttemptAdmin)
+
+
+class RoleAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Role, RoleAdmin)
+
+
+class UserAdmin(admin.ModelAdmin):
+    filter_horizontal = ("roles",)
+
+
+admin.site.register(CustomUser, UserAdmin)

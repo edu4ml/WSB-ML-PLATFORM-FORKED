@@ -15,8 +15,8 @@ class ExerciseApi(APIView):
 
 
 class ExerciseDetailApi(APIView):
-    def get(self, request, exercise_id, **kwargs):
-        course = ExerciseRepository(request.user).retrieve(id=exercise_id)
+    def get(self, request, exercise_uuid, **kwargs):
+        course = ExerciseRepository(request.user).retrieve(uuid=exercise_uuid)
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)

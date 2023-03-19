@@ -1,6 +1,6 @@
 from django.db import models
 
-from .mixin import CourseStepBaseModel, TimestampedModel
+from .mixin import CourseStepBaseModel
 from .resources import LinkResource
 
 

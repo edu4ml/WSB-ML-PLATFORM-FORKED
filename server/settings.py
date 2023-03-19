@@ -28,6 +28,8 @@ DEBUG = bool(int(os.environ.get("DEBUG", "0")))
 
 ALLOWED_HOSTS = ["*"]
 
+AUTH_USER_MODEL = "db.CustomUser"
+
 
 # Application definition
 
@@ -213,6 +215,7 @@ REST_AUTH = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "USER_ID_FIELD": "uuid",
 }
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

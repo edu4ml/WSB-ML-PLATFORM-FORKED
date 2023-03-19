@@ -8,5 +8,5 @@ class Command:
     Baseclass for commands to interact with domain
     """
 
-    parent_id: int
+    parent_uuid: int
     created_at: datetime = datetime.now()

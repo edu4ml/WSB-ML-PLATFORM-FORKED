@@ -1,3 +1,4 @@
+from uuid import uuid4
 import pytest
 from django.urls import reverse
 from rest_framework import status
@@ -5,6 +6,7 @@ from rest_framework import status
 from elearning.coursing.commands.complete_course_step import CompleteCourseStep
 from elearning.coursing.commands.create_course import CreateCourse
 from elearning.coursing.commands.enroll_for_course import EnrollForCourse
+from shared.enums import CommandTypes
 
 
 @pytest.mark.django_db
@@ -17,7 +19,9 @@ def test_list_courses(client, courses):
 @pytest.mark.django_db
 def test_retrieve_courses(client, courses):
     course = courses[0]
-    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    response = client.get(
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
+    )
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
 
@@ -31,7 +35,7 @@ def test_retrieve_courses_not_found(client):
     response = client.get(
         reverse(
             "course-detail",
-            kwargs=dict(course_id="29439ec0-0ed9-4268-9860-047103ffad65"),
+            kwargs=dict(course_uuid=uuid4()),
         )
     )
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -42,19 +46,23 @@ def test_retrieve_courses_not_found(client):
 def test_issue_enroll_for_course(client, user, courses):
     course = courses[0]
 
-    command_data = dict(type=EnrollForCourse.Meta.name, user_id=user.id)
+    command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=user.uuid)
 
-    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    response = client.get(
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
+    )
     assert response.json().get("is_enrolled") == False
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    response = client.get(
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
+    )
     assert response.json().get("is_enrolled") == True
 
 
@@ -62,23 +70,29 @@ def test_issue_enroll_for_course(client, user, courses):
 def test_issue_complete_course_step(client, user, course_with_steps):
     course, steps = course_with_steps
 
-    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    response = client.get(
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
+    )
     assert response.json()["steps"][0]["user_progress"]["is_completed"] == False
-    progress_tracking_id = response.json()["steps"][0]["user_progress"]["tracking_id"]
+    progress_tracking_uuid = response.json()["steps"][0]["user_progress"][
+        "tracking_uuid"
+    ]
 
     command_data = dict(
         type=CompleteCourseStep.Meta.name,
-        progress_tracking_id=progress_tracking_id,
+        progress_tracking_uuid=progress_tracking_uuid,
     )
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_202_ACCEPTED
 
-    response = client.get(reverse("course-detail", kwargs=dict(course_id=course.id)))
+    response = client.get(
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
+    )
     assert response.json()["steps"][0]["user_progress"]["is_completed"] == True
 
 
@@ -120,7 +134,7 @@ def test_raise_exception_when_course_command_unknown(client, courses):
     )
 
     response = client.put(
-        reverse("course-command", kwargs=dict(course_id=course.id)),
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )

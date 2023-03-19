@@ -18,10 +18,10 @@ def test_repository_retrieve_single_context_manager_success():
     )
     assert user.username == "test-user"
 
-    with DummyUserRepo().with_obj(user.id) as user:
+    with DummyUserRepo().with_obj(user.uuid) as user:
         user.username = "test-user-new-name"
 
-    assert UserModel.objects.get(id=user.id).username == "test-user-new-name"
+    assert UserModel.objects.get(uuid=user.uuid).username == "test-user-new-name"
 
 
 @pytest.mark.django_db

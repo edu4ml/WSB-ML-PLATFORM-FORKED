@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+from uuid import UUID
 
 from elearning.coursing.entities import CourseStep
 
@@ -10,7 +11,7 @@ class Course:
     Main Aggregate in coursing domain
     """
 
-    id: int | None
+    uuid: UUID | None
     title: str
     description: str
     is_draft: bool

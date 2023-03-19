@@ -6,7 +6,7 @@ from shared.enums import CourseStepContentTypes
 
 @dataclass
 class Evaluation:
-    id: UUID
+    uuid: UUID
     title: str
     description: str
 
