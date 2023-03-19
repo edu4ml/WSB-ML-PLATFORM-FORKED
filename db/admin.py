@@ -48,7 +48,7 @@ class CourseStepAdmin(admin.ModelAdmin):
         "requires_manual_review",
     )
     list_editable_groups = [("order",)]
-
+    list_filter = ("course",)
     form = CourseStepForm
 
 
