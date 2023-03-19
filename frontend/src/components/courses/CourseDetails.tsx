@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Collapse, List, Space, Tag, Typography } from 'antd';
 import CourseStepSelfEvaluateButton from './CourseStepSelfEvaluateButton';
 import LinkResourceListItem from '../common/LinkResourceListItem';
+import { Enums } from '../../shared';
 
 const { Text, Paragraph } = Typography;
 
