@@ -9,7 +9,7 @@ export const courseApi = createApi({
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
     }),
-    tagTypes: ['course-catalog'],
+    tagTypes: ['course-catalog', 'course-component-catalog'],
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
             query: () => '/course/',
@@ -21,6 +21,12 @@ export const courseApi = createApi({
             query: (id) => `/course/${id}`,
             providesTags: (result, error, id) => [
                 { type: 'course-catalog', id },
+            ],
+        }),
+        getCourseComponents: builder.query({
+            query: () => '/course-components/',
+            providesTags: (result, error, id) => [
+                { type: 'course-component-catalog', id: 'LIST' },
             ],
         }),
         createCourse: builder.mutation({
@@ -49,6 +55,7 @@ export const courseApi = createApi({
 export const {
     useGetCourseCatalogQuery,
     useGetCourseQuery,
+    useGetCourseComponentsQuery,
     useCreateCourseMutation,
     useIssueCourseCommandMutation,
 } = courseApi;

@@ -6,6 +6,7 @@
     "UPDATE_COURSE": "UPDATE_COURSE"
   },
   "COURSE_STEP_CONTENT_TYPES": {
-    "EXERCISE": "exercise"
+    "EXERCISE": "exercise",
+    "FILE_EVALUATION_TYPE": "file_evaluation_type"
   }
 }
