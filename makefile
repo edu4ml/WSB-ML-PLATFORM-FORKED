@@ -55,3 +55,4 @@ seed-db:
 	python manage.py loaddata db/seed/resources.json
 	python manage.py loaddata db/seed/exercises.json
 	python manage.py loaddata db/seed/courses.json
+	python manage.py loaddata db/seed/evaluation.json

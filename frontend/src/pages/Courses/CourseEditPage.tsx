@@ -11,6 +11,10 @@ import {
 } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import CourseEditStepsList from '../../components/courses/CourseEditStepsList';
+import {
+    CourseListItemType,
+    CourseComponentItemType,
+} from '../../types/course';
 
 const { Paragraph } = Typography;
 
@@ -23,6 +27,7 @@ const CourseEditPage = () => {
 
     const [isDraft, setIsDraft] = useState(true);
     const [editableDescription, setEditableDescription] = useState('');
+
     useEffect(() => {
         if (data) {
             setEditableDescription(data.description);
@@ -31,15 +36,15 @@ const CourseEditPage = () => {
         }
     }, [data]);
 
-    const handleDescriptionChange = (description) => {
+    const handleDescriptionChange = (description: string) => {
         setEditedButNotSaved(true);
         setEditableDescription(description);
     };
 
     const mapToCourseSteps = (data) => {
-        return data.map((item, index) => ({
+        return data.map((item: CourseComponentItemType, index: number) => ({
             content_type: item.content_type,
-            id: item.id,
+            uuid: item.uuid,
             order: index + 1,
         }));
     };

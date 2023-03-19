@@ -8,7 +8,7 @@ const CourseDetailPage = () => {
     const { data, isLoading } = useGetCourseQuery(courseId);
 
     if (!isLoading) {
-        return <CourseDetails data={data} />;
+        return <CourseDetails course={data} />;
     }
     return <div></div>;
 };

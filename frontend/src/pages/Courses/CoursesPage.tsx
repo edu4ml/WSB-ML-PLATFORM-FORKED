@@ -9,6 +9,7 @@ import {
     useGetCourseCatalogQuery,
 } from '../../features/courses/coursesApi';
 import { useNavigate } from 'react-router-dom';
+import { Enums } from '../../shared';
 
 const CoursesPage = () => {
     const [createCourseCommand, {}] = useCreateCourseMutation();
@@ -37,12 +38,15 @@ const CoursesPage = () => {
     ];
 
     const handleCourseCreate = (values) => {
-        createCourseCommand({ type: 'CREATE_COURSE', ...values })
+        createCourseCommand({
+            type: Enums.COMMAND_TYPES.CREATE_COURSE,
+            ...values,
+        })
             .unwrap()
             .then((response) => {
                 console.log('Response: ', response);
                 setIsModalOpen(false);
-                navigate(`/courses/${response.id}/edit`);
+                navigate(`/courses/${response.uuid}/edit`);
             })
             .catch((err) => {
                 console.error('Error: ', err);

@@ -1,15 +1,11 @@
 import React from 'react';
 import { Card, List, Typography } from 'antd';
 import LinkResourceListItem from '../common/LinkResourceListItem';
+import { ExerciseItemType, ResourceItemType } from '../../types/course';
 
 const { Paragraph } = Typography;
 
-interface ResourceItem {
-    title: string;
-    url: string;
-}
-
-const ExerciseDetails = ({ exercise }) => {
+const ExerciseDetails = ({ exercise }: { exercise: ExerciseItemType }) => {
     return (
         <Card title={exercise.title} bordered={true}>
             <Paragraph>{exercise.description}</Paragraph>
@@ -18,7 +14,7 @@ const ExerciseDetails = ({ exercise }) => {
                 itemLayout="vertical"
                 size="large"
                 dataSource={exercise.resources}
-                renderItem={(item: ResourceItem) => (
+                renderItem={(item: ResourceItemType) => (
                     <LinkResourceListItem item={item} />
                 )}
             ></List>

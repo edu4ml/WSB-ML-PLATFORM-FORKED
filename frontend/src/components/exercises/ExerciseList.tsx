@@ -1,32 +1,31 @@
 import { Col, List, Row } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ExerciseItemType } from '../../types/course';
 
-interface ExerciseItem {
-    id: number;
-    title: string;
-    description: string;
-}
-
-const ExerciseList = ({ exercises }) => {
+const ExerciseList = ({
+    exercises,
+}: {
+    exercises: Array<ExerciseItemType>;
+}) => {
     return (
         <List
             itemLayout="vertical"
             size={'large'}
             pagination={{ pageSize: 10 }}
             dataSource={exercises}
-            renderItem={(item: ExerciseItem) => {
+            renderItem={(exercise: ExerciseItemType) => {
                 return (
-                    <List.Item key={item.title}>
+                    <List.Item key={exercise.title}>
                         <List.Item.Meta
                             title={
                                 <Row>
-                                    <Link to={`/exercises/${item.id}`}>
-                                        {item.title}
+                                    <Link to={`/exercises/${exercise.uuid}`}>
+                                        {exercise.title}
                                     </Link>
                                 </Row>
                             }
-                            description={item.description}
+                            description={exercise.description}
                         />
                     </List.Item>
                 );

@@ -2,29 +2,15 @@ import React from 'react';
 import { Card, Collapse, List, Space, Tag, Typography } from 'antd';
 import CourseStepSelfEvaluateButton from './CourseStepSelfEvaluateButton';
 import LinkResourceListItem from '../common/LinkResourceListItem';
-import { Enums } from '../../shared';
+import {
+    CourseItemDetailsType,
+    CourseStepItemType,
+    ResourceItemType,
+} from '../../types/course';
 
 const { Text, Paragraph } = Typography;
 
-interface CourseStepItem {
-    id: number;
-    title: string;
-    description: string;
-    is_self_evaluated: boolean;
-    is_draft: boolean;
-    user_progress: {
-        tracking_id: number;
-        is_completed: boolean;
-        is_blocked: boolean;
-    };
-}
-
-interface ResourceItem {
-    title: string;
-    url: string;
-}
-
-const getStatusTag = (row: CourseStepItem) => {
+const getStatusTag = (row: CourseStepItemType) => {
     const tagStyle: React.CSSProperties = {
         float: 'right',
     };
@@ -64,20 +50,20 @@ const getResourcesList = (resources) => {
         <List
             size="large"
             dataSource={resources}
-            renderItem={(item: ResourceItem) => (
+            renderItem={(item: ResourceItemType) => (
                 <LinkResourceListItem item={item} />
             )}
         />
     );
 };
 
-const CourseDetails = ({ data }) => {
+const CourseDetails = ({ course }: { course: CourseItemDetailsType }) => {
     return (
-        <Card title={data.title} bordered={false}>
-            <Paragraph>{data.description}</Paragraph>
+        <Card title={course.title} bordered={false}>
+            <Paragraph>{course.description}</Paragraph>
 
-            <Collapse defaultActiveKey={data.current_active}>
-                {data.steps.map((item) => (
+            <Collapse defaultActiveKey={course.current_active}>
+                {course.steps.map((item) => (
                     <Collapse.Panel
                         collapsible={
                             item.user_progress.is_blocked
@@ -105,10 +91,10 @@ const CourseDetails = ({ data }) => {
                         {item.is_self_evaluated &&
                             !item.user_progress.is_completed && (
                                 <CourseStepSelfEvaluateButton
-                                    progress_tracking_id={
-                                        item.user_progress.tracking_id
+                                    progress_tracking_uuid={
+                                        item.user_progress.tracking_uuid
                                     }
-                                    course_id={data.id}
+                                    course_uuid={course.uuid}
                                 />
                             )}
                     </Collapse.Panel>

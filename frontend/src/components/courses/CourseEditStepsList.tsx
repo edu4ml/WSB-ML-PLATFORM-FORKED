@@ -18,13 +18,7 @@ import {
 import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
-
-interface CourseComponentType {
-    id: string;
-    title: string;
-    description: string;
-    content_type: string;
-}
+import { CourseComponentItemType } from '../../types/course';
 
 const contentTypeToIconMap = {
     [Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE]: <ReadOutlined />,
@@ -51,11 +45,13 @@ const CourseEditStepsList = ({
 
     const onDragEnd = ({ active, over }: DragEndEvent) => {
         if (active.id !== over?.id) {
-            setDataSource((previous) => {
+            setDataSource((previous: Array<CourseComponentItemType>) => {
                 const activeIndex = previous.findIndex(
-                    (i) => i.id === active.id
+                    (i: CourseComponentItemType) => i.uuid === active.id
                 );
-                const overIndex = previous.findIndex((i) => i.id === over?.id);
+                const overIndex = previous.findIndex(
+                    (i: CourseComponentItemType) => i.uuid === over?.id
+                );
                 return arrayMove(previous, activeIndex, overIndex);
             });
         }
@@ -64,11 +60,11 @@ const CourseEditStepsList = ({
 
     const handleAdd = (clickEvent) => {
         const chosenElement = availableSteps.find(
-            (availableSteps) => availableSteps.id == clickEvent.key
+            (availableSteps) => availableSteps.uuid == clickEvent.key
         );
 
-        const newData: CourseComponentType = {
-            id: chosenElement.id,
+        const newData: CourseComponentItemType = {
+            uuid: chosenElement.uuid,
             title: chosenElement.title,
             description: chosenElement.description,
             content_type: chosenElement.content_type,
@@ -81,19 +77,19 @@ const CourseEditStepsList = ({
 
     const handleRemove = (key: string) => {
         const newData = dataSource.filter(
-            (item: CourseComponentType) => item.id !== key
+            (item: CourseComponentItemType) => item.uuid !== key
         );
         setDataSource(newData);
         setEditedButNotSaved(true);
     };
 
-    const isAvailable = (item: CourseComponentType) => {
+    const isAvailable = (item: CourseComponentItemType) => {
         return dataSource.find(
-            (element: CourseComponentType) => element.id === item.id
+            (element: CourseComponentItemType) => element.uuid === item.uuid
         );
     };
 
-    const mapToDropdown = (items: Array<CourseComponentType>) => {
+    const mapToDropdown = (items: Array<CourseComponentItemType>) => {
         if (items) {
             const groupedItems = items?.reduce((acc, item) => {
                 if (!acc[item.content_type]) {
@@ -106,7 +102,7 @@ const CourseEditStepsList = ({
                 acc[item.content_type].children.push({
                     label: item.title,
                     icon: contentTypeToIconMap[item.content_type],
-                    key: item.id,
+                    key: item.uuid,
                     disabled: isAvailable(item),
                 });
                 return acc;
@@ -118,9 +114,9 @@ const CourseEditStepsList = ({
         }
         return [];
     };
-    const columns: ColumnsType<CourseComponentType> = [
+    const columns: ColumnsType<CourseComponentItemType> = [
         {
-            key: editable ? 'sort' : 'id',
+            key: editable ? 'sort' : 'uuid',
             render: (_, item) =>
                 item.content_type ===
                     Enums.COURSE_STEP_CONTENT_TYPES.FILE_EVALUATION_TYPE && (
@@ -140,18 +136,24 @@ const CourseEditStepsList = ({
             render: (_, item) => {
                 return (
                     editable && (
-                        <DeleteTwoTone onClick={() => handleRemove(item.id)} />
+                        <DeleteTwoTone
+                            onClick={() => handleRemove(item.uuid)}
+                        />
                     )
                 );
             },
         },
     ];
 
+    console.log(dataSource);
+
     return (
         <>
             <DndContext onDragEnd={onDragEnd}>
                 <SortableContext
-                    items={dataSource.map((i) => i.id)}
+                    items={dataSource.map(
+                        (i: CourseComponentItemType) => i.uuid
+                    )}
                     strategy={verticalListSortingStrategy}
                 >
                     <Table
@@ -160,7 +162,7 @@ const CourseEditStepsList = ({
                                 row: CourseEditStepRow,
                             },
                         }}
-                        rowKey="id"
+                        rowKey="uuid"
                         columns={columns}
                         dataSource={dataSource}
                         rowClassName={(row, index) => {
