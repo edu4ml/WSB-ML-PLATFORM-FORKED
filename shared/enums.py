@@ -12,3 +12,11 @@ class CourseStepContentTypes:
 
     EXERCISE = "exercise"
     FILE_EVALUATION_TYPE = "fileevaluationtype"
+
+
+class UserRoles:
+    _PREFIX = "USER_ROLES"
+
+    ADMIN = "admin"  # this is superuser like role
+    TEACHER = "teacher"
+    STUDENT = "student"

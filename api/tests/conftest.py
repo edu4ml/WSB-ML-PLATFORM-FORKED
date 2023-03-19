@@ -3,25 +3,34 @@ import pytest
 from django.test import Client
 from django.urls import reverse
 from model_bakery import baker
-
+from shared.enums import UserRoles
 from db.models import (
     Course as CourseDbModel,
     CourseStep,
     Exercise,
     FileEvaluationType,
+    Role,
 )
 from elearning.auth.user import User
 
 
 @pytest.fixture
+def admin_role():
+    return Role.objects.create(name=UserRoles.ADMIN)
+
+
+@pytest.fixture
 @pytest.mark.django_db
-def user():
-    return User.objects.create_user(
+def user(admin_role):
+    user = User.objects.create_user(
         uuid=uuid4(),
         username="testuser",
         email="testuser@example.com",
         password="adminadmin",
     )
+
+    user.roles.add(admin_role)
+    return user
 
 
 @pytest.fixture
@@ -75,3 +84,8 @@ def course_with_steps(exercises):
 @pytest.fixture
 def file_evaluation_type():
     return baker.make(FileEvaluationType)
+
+
+@pytest.fixture
+def file_evaluation_types():
+    return baker.make(FileEvaluationType, 5)

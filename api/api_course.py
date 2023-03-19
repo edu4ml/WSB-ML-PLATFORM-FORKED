@@ -4,7 +4,7 @@ from uuid import UUID
 from django.apps import apps
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from api.api_mixin import AuthMixin
 
 from db.repository.course import CourseRepository
 from db.repository.evaluation import EvaluationRepository
@@ -17,10 +17,12 @@ from elearning.coursing.commands import (
     UpdateCourse,
 )
 from infra.command_bus import CommandBus
-from shared.enums import CommandTypes
+from infra.permissions import api_has_one_of_the_roles
+from shared.enums import CommandTypes, UserRoles
 
 
-class CourseApi(APIView):
+class CourseApi(AuthMixin):
+    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, format=None):
         courses = CourseRepository(request.user).list()
         serialized = [asdict(course) for course in courses]
@@ -39,6 +41,7 @@ class CourseApi(APIView):
                     " Only initial commands allowed at this endpoint"
                 )
 
+    @api_has_one_of_the_roles([UserRoles.TEACHER])
     def put(self, request, **kwargs):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
@@ -56,7 +59,8 @@ class CourseApi(APIView):
             )
 
 
-class CourseDetailApi(APIView):
+class CourseDetailApi(AuthMixin):
+    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, course_uuid: UUID, **kwargs):
         course = CourseRepository(request.user).retrieve(uuid=course_uuid)
         if course:
@@ -64,7 +68,7 @@ class CourseDetailApi(APIView):
         return Response(dict(), status.HTTP_404_NOT_FOUND)
 
 
-class CourseCommandApi(APIView):
+class CourseCommandApi(AuthMixin):
     def _prepare_command(self, request, course_uuid):
         match request.data.get("type"):
             case CommandTypes.ENROLL_FOR_COURSE:
@@ -87,6 +91,7 @@ class CourseCommandApi(APIView):
             case _:
                 raise NotImplementedError(f"I dont know this command: {request.data}")
 
+    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def put(self, request, course_uuid: UUID, **kwargs):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
@@ -104,7 +109,8 @@ class CourseCommandApi(APIView):
             )
 
 
-class CourseStepApi(APIView):
+class CourseStepApi(AuthMixin):
+    @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, **kwargs):
         exercises = ExerciseRepository(request.user).list()
         evaluations = EvaluationRepository(request.user).list()

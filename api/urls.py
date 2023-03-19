@@ -1,12 +1,12 @@
 from django.urls import path
 
-from .course_api import (
+from .api_course import (
     CourseApi,
     CourseCommandApi,
     CourseDetailApi,
     CourseStepApi,
 )
-from .exercise_api import ExerciseApi, ExerciseDetailApi
+from .api_exercise import ExerciseApi, ExerciseDetailApi
 
 
 urlpatterns = [

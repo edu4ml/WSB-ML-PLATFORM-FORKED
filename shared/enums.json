@@ -8,5 +8,9 @@
   "COURSE_STEP_CONTENT_TYPES": {
     "EXERCISE": "exercise",
     "FILE_EVALUATION_TYPE": "fileevaluationtype"
+  },
+  "USER_ROLES": {
+    "TEACHER": "teacher",
+    "STUDENT": "student"
   }
 }

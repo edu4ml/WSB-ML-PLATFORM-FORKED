@@ -142,3 +142,10 @@ def test_raise_exception_when_course_command_unknown(client, courses):
     assert response.json() == dict(
         message="NotImplemented", error=True, success=False, payload=command_data
     )
+
+
+@pytest.mark.django_db
+def test_list_course_components(client, exercises, file_evaluation_types):
+    response = client.get(reverse("course-components"))
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()) == len(exercises) + len(file_evaluation_types)
