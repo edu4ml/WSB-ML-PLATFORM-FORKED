@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.apps import apps
 
+from db.repository.exercise import ExerciseRepository
+from db.repository.evaluation import EvaluationRepository
 from db.repository.course import CourseRepository
 from elearning.apps import APP_NAME
 from elearning.coursing.commands import (
@@ -99,3 +101,12 @@ class CourseCommandApi(APIView):
                 ),
                 status.HTTP_501_NOT_IMPLEMENTED,
             )
+
+
+class CourseStepApi(APIView):
+    def get(self, request, **kwargs):
+        exercises = ExerciseRepository(request.user).list()
+        evaluations = EvaluationRepository(request.user).list()
+
+        serialized = [asdict(i) for i in [*exercises, *evaluations]]
+        return Response(serialized, status=status.HTTP_200_OK)

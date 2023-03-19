@@ -11,3 +11,4 @@ class CourseStepContentTypes:
     _PREFIX = "COURSE_STEP_CONTENT_TYPES"
 
     EXERCISE = "exercise"
+    FILE_EVALUATION_TYPE = "file_evaluation_type"

@@ -8,10 +8,18 @@ from .models import (
     LinkResource,
     Exercise,
     CourseStepUserCompletion,
+    FileEvaluationType,
+    FileResource,
+    EvaluationAttempt,
 )
 from .forms import CourseStepForm
 
-admin.site.register(LinkResource)
+
+class LinkResourceAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(LinkResource, LinkResourceAdmin)
 
 
 class CourseEnrollmentAdmin(admin.ModelAdmin):
@@ -93,3 +101,24 @@ class CourseStepUserCompletionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CourseStepUserCompletion, CourseStepUserCompletionAdmin)
+
+
+class FileEvaluationAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(FileEvaluationType, FileEvaluationAdmin)
+
+
+class FileResourceAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(FileResource, FileResourceAdmin)
+
+
+class EvaluationAttemptAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(EvaluationAttempt, EvaluationAttemptAdmin)

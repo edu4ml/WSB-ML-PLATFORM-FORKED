@@ -1,10 +1,11 @@
 from django.urls import path
 
 from .exercise_api import ExerciseApi, ExerciseDetailApi
-from .course_api import CourseDetailApi, CourseApi, CourseCommandApi
+from .course_api import CourseDetailApi, CourseApi, CourseCommandApi, CourseStepApi
 
 urlpatterns = [
     path("course/", CourseApi.as_view(), name="course"),
+    path("course-components/", CourseStepApi.as_view(), name="course-components"),
     path(
         "course/<uuid:course_id>",
         CourseDetailApi.as_view(),
