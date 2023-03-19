@@ -12,29 +12,27 @@ import {
 import { Enums } from '../../shared';
 import CourseEditStepsList from '../../components/courses/CourseEditStepsList';
 import {
-    CourseListItemType,
     CourseComponentItemType,
+    CourseItemDetailsType,
 } from '../../types/course';
 
 const { Paragraph } = Typography;
 
 const CourseEditPage = () => {
     const { courseId } = useParams();
-    const { data, isLoading, isSuccess } = useGetCourseQuery(courseId);
+    const { data: course, isLoading, isSuccess } = useGetCourseQuery(courseId);
     const [issueCommand, {}] = useIssueCourseCommandMutation();
     const [dataSource, setDataSource] = useState([]);
     const [editedButNotSaved, setEditedButNotSaved] = useState(false);
 
-    const [isDraft, setIsDraft] = useState(true);
     const [editableDescription, setEditableDescription] = useState('');
 
     useEffect(() => {
-        if (data) {
-            setEditableDescription(data.description);
-            setDataSource(data.steps);
-            setIsDraft(data.is_draft);
+        if (course) {
+            setEditableDescription(course.description);
+            setDataSource(course.steps);
         }
-    }, [data]);
+    }, [course]);
 
     const handleDescriptionChange = (description: string) => {
         setEditedButNotSaved(true);
@@ -51,11 +49,11 @@ const CourseEditPage = () => {
 
     let actions: CardHeaderActionsType = [
         {
-            text: isDraft ? 'Opublikuj' : 'Zamień w szkic',
+            text: 'Opublikuj',
             onClick: () => {
                 const command = {
                     type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-                    is_draft: !data.is_draft,
+                    is_draft: false,
                     description: editableDescription,
                     steps: mapToCourseSteps(dataSource),
                 };
@@ -64,7 +62,6 @@ const CourseEditPage = () => {
                     .unwrap()
                     .then((res) => {
                         console.log('Success!', res);
-                        setIsDraft(!isDraft);
                     })
                     .catch((err) => {
                         console.error('Err: ', err);
@@ -72,33 +69,28 @@ const CourseEditPage = () => {
             },
             type: 'default',
         },
-    ];
+        {
+            text: 'Zapisz',
+            type: editedButNotSaved ? 'primary' : 'default',
+            onClick: () => {
+                const command = {
+                    type: Enums.COMMAND_TYPES.UPDATE_COURSE,
+                    description: editableDescription,
+                    steps: mapToCourseSteps(dataSource),
+                };
 
-    if (isDraft) {
-        actions = actions.concat([
-            {
-                text: 'Zapisz',
-                type: editedButNotSaved ? 'primary' : 'default',
-                onClick: () => {
-                    const command = {
-                        type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-                        description: editableDescription,
-                        steps: mapToCourseSteps(dataSource),
-                    };
-
-                    issueCommand({ id: courseId, command })
-                        .unwrap()
-                        .then((res) => {
-                            console.log('Success!: ', res);
-                            setEditedButNotSaved(false);
-                        })
-                        .catch((err) => {
-                            console.log('Err: ', err);
-                        });
-                },
+                issueCommand({ id: courseId, command })
+                    .unwrap()
+                    .then((res) => {
+                        console.log('Success!: ', res);
+                        setEditedButNotSaved(false);
+                    })
+                    .catch((err) => {
+                        console.log('Err: ', err);
+                    });
             },
-        ]);
-    }
+        },
+    ];
 
     if (!isLoading && isSuccess) {
         return (
@@ -106,11 +98,11 @@ const CourseEditPage = () => {
                 title={
                     <CardHeader
                         title={
-                            isDraft
-                                ? `${data.title} (Wersja robocza)`
-                                : data.title
+                            course.is_draft
+                                ? `${course.title} (Wersja robocza)`
+                                : `${course.title} (Ten kurs jest opublikowany)`
                         }
-                        actions={actions}
+                        actions={course.is_draft ? actions : []}
                     />
                 }
                 bordered={false}
@@ -123,7 +115,7 @@ const CourseEditPage = () => {
                     {editableDescription}
                 </Paragraph>
                 <CourseEditStepsList
-                    editable={isDraft}
+                    editable={course.is_draft}
                     dataSource={dataSource}
                     setDataSource={setDataSource}
                     setEditedButNotSaved={setEditedButNotSaved}
