@@ -19,12 +19,6 @@ import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
 
-interface CourseStepCommandType {
-    id: string;
-    title: string;
-    description: string;
-}
-
 interface CourseComponentType {
     id: string;
     title: string;
@@ -73,10 +67,11 @@ const CourseEditStepsList = ({
             (availableSteps) => availableSteps.id == clickEvent.key
         );
 
-        const newData: CourseStepCommandType = {
+        const newData: CourseComponentType = {
             id: chosenElement.id,
             title: chosenElement.title,
             description: chosenElement.description,
+            content_type: chosenElement.content_type,
         };
 
         setDataSource([...dataSource, newData]);
@@ -126,6 +121,11 @@ const CourseEditStepsList = ({
     const columns: ColumnsType<CourseComponentType> = [
         {
             key: editable ? 'sort' : 'id',
+            render: (_, item) =>
+                item.content_type ===
+                    Enums.COURSE_STEP_CONTENT_TYPES.FILE_EVALUATION_TYPE && (
+                    <FileDoneOutlined />
+                ),
         },
         {
             title: 'Tytuł',
@@ -163,6 +163,13 @@ const CourseEditStepsList = ({
                         rowKey="id"
                         columns={columns}
                         dataSource={dataSource}
+                        rowClassName={(row, index) => {
+                            return row.content_type ===
+                                Enums.COURSE_STEP_CONTENT_TYPES
+                                    .FILE_EVALUATION_TYPE
+                                ? 'blue-table-row'
+                                : '';
+                        }}
                     />
                 </SortableContext>
             </DndContext>

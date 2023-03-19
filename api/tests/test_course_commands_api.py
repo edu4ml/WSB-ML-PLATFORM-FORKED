@@ -5,6 +5,7 @@ from django.urls import reverse
 from typing import Callable
 from db.models.courses import Course, CourseStep
 from db.models.exercises import Exercise
+from db.models.evaluations import FileEvaluationType
 from shared.enums import CommandTypes
 from django.contrib.contenttypes.models import ContentType
 
@@ -133,7 +134,9 @@ def test_issue_update_command_remove_steps(client, course_with_steps):
 
 
 @pytest.mark.django_db
-def test_issue_update_command_add_steps(client, course, exercises):
+def test_issue_update_command_add_steps(
+    client, course, exercises, file_evaluation_type
+):
     response = client.get(
         reverse("course-detail", kwargs=dict(course_id=course.id))
     ).json()
@@ -160,18 +163,25 @@ def test_issue_update_command_add_steps(client, course, exercises):
                     id=exercises[2].id,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
                 ),
+                dict(
+                    order=4,
+                    id=file_evaluation_type.id,
+                    content_type=ContentType.objects.get_for_model(
+                        FileEvaluationType
+                    ).model,
+                ),
             ],
         ),
         content_type="application/json",
     )
-    print(response.json())
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     response = client.get(
         reverse("course-detail", kwargs=dict(course_id=course.id))
     ).json()
 
-    assert len(response["steps"]) == 3
+    assert len(response["steps"]) == 4
+    assert response["steps"][3]["title"] == file_evaluation_type.title
 
 
 @pytest.mark.django_db

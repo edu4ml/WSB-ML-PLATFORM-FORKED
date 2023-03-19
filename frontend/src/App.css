@@ -5,3 +5,10 @@ section {
     background-color: #fff;
 
 }
+
+
+.blue-table-row {
+    background-color: #e9f7fe;
+    /* border: px solid #3a91fa; */
+    /* border-color: #3a91fa; */
+}

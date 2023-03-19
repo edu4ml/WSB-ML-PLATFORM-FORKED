@@ -23,7 +23,6 @@ const CourseEditPage = () => {
 
     const [isDraft, setIsDraft] = useState(true);
     const [editableDescription, setEditableDescription] = useState('');
-
     useEffect(() => {
         if (data) {
             setEditableDescription(data.description);
@@ -39,7 +38,7 @@ const CourseEditPage = () => {
 
     const mapToCourseSteps = (data) => {
         return data.map((item, index) => ({
-            content_type: Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE,
+            content_type: item.content_type,
             id: item.id,
             order: index + 1,
         }));
@@ -52,6 +51,8 @@ const CourseEditPage = () => {
                 const command = {
                     type: Enums.COMMAND_TYPES.UPDATE_COURSE,
                     is_draft: !data.is_draft,
+                    description: editableDescription,
+                    steps: mapToCourseSteps(dataSource),
                 };
 
                 issueCommand({ id: courseId, command })

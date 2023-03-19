@@ -11,7 +11,7 @@ from db.models import (
 from elearning.coursing.course import Course
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-
+from shared.enums import CourseStepContentTypes
 
 User = get_user_model()
 
@@ -140,10 +140,12 @@ class CourseRepository(Repository):
 
     def _get_resources(self, step_in_course):
         # if resources := getattr(step_in_course, "resources", None):
-        return [
-            dict(title=resource.title, url=resource.url)
-            for resource in step_in_course.resources.all()
-        ]
+        if hasattr(step_in_course, "resources"):
+            return [
+                dict(title=resource.title, url=resource.url)
+                for resource in step_in_course.resources.all()
+            ]
+        return []
 
     def _get_user_progress_on_component(self, course, course_step):
         # whole key is passed here so it is safe to do get_or_create here
