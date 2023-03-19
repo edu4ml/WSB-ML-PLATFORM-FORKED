@@ -78,7 +78,7 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
     ]
 
     command_data = dict(
-        type=CompleteCourseStep.Meta.name,
+        type=CommandTypes.COMPLETE_COURSE_STEP,
         progress_tracking_uuid=progress_tracking_uuid,
     )
 
@@ -98,7 +98,7 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
 @pytest.mark.django_db
 def test_issue_create_course_command(admin_client):
     command_data = dict(
-        type=CreateCourse.Meta.name,
+        type=CommandTypes.CREATE_COURSE,
         title="TEST-COURSE-TITLE",
         description="TEST-COURSE-DESCRIPTION",
     )

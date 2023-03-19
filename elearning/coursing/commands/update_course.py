@@ -3,7 +3,7 @@ from typing import List
 from uuid import UUID
 
 from infra.command import Command
-from shared.enums import CommandTypes, CourseStepContentTypes
+from shared.enums import CommandTypes, CourseStepContentTypes, UserRoles
 
 
 @dataclass
@@ -23,3 +23,14 @@ class UpdateCourse(Command):
 
     class Meta:
         name = CommandTypes.UPDATE_COURSE
+        roles = [UserRoles.TEACHER, UserRoles.ADMIN]
+
+    @classmethod
+    def build_from_request(cls, request, **kwargs):
+        return UpdateCourse(
+            parent_uuid=kwargs["course_uuid"],
+            title=request.data.get("title"),
+            description=request.data.get("description"),
+            is_draft=request.data.get("is_draft"),
+            steps=request.data.get("steps"),
+        )

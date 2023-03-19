@@ -1,11 +1,11 @@
 from infra.command import Command
 from infra.command_handler import CommandHandler
 from infra.logging import logger
-from shared.enums import CommandTypes
 from .exceptions import (
     CommandAlreadyExistException,
     CommandHandlerDoesNotExistException,
 )
+from django.core.exceptions import PermissionDenied
 
 
 @logger
@@ -24,7 +24,12 @@ class CommandBus:
             raise CommandAlreadyExistException
         self.services[to] = service
 
-    def issue(self, cmd: Command):
+    def issue(self, request, **kwargs):
+        cmd = self._build_command(request, **kwargs)
+
+        if not self._is_allowed_to_create_command(request, cmd):
+            raise PermissionDenied
+
         self.logger.info(f"{cmd} issued into command bus")
 
         if cmd.__class__ in self.services.keys():
@@ -34,8 +39,15 @@ class CommandBus:
                 f"Command handler for {cmd.__class__} does not exists or it is not registered"
             )
 
-    def _build_command(type: CommandTypes, request, **kwargs):
-        pass
+    def _is_allowed_to_create_command(self, request, command: Command):
+        return request.user.roles.filter(name__in=command.Meta.roles).exists()
+
+    def _build_command(self, request, **kwargs):
+        cmd_type = request.data.get("type")
+        for command in self.services.keys():
+            if command.Meta.name == cmd_type:
+                return command.build_from_request(request, **kwargs)
+        raise NotImplementedError(f"I dont know this command: {request.data}.")
 
     def __str__(self):
         repr = "Command Bus\n"

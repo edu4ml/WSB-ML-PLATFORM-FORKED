@@ -10,15 +10,9 @@ from db.repository.course import CourseRepository
 from db.repository.evaluation import EvaluationRepository
 from db.repository.exercise import ExerciseRepository
 from elearning.apps import APP_NAME
-from elearning.coursing.commands import (
-    CompleteCourseStep,
-    CreateCourse,
-    EnrollForCourse,
-    UpdateCourse,
-)
 from infra.command_bus import CommandBus
 from infra.permissions import api_has_one_of_the_roles
-from shared.enums import CommandTypes, UserRoles
+from shared.enums import UserRoles
 
 
 class CourseApi(AuthMixin):
@@ -28,24 +22,11 @@ class CourseApi(AuthMixin):
         serialized = [asdict(course) for course in courses]
         return Response(serialized, status.HTTP_200_OK)
 
-    def _prepare_command(self, request, format=None):
-        match request.data.get("type"):
-            case CreateCourse.Meta.name:
-                return CreateCourse(
-                    title=request.data.get("title"),
-                    description=request.data.get("description", ""),
-                )
-            case _:
-                raise NotImplementedError(
-                    f"I dont know this command: {request.data}."
-                    " Only initial commands allowed at this endpoint"
-                )
-
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def put(self, request, **kwargs):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-            course = command_bus.issue(self._prepare_command(request))
+            course = command_bus.issue(request)
             return Response(asdict(course), status.HTTP_201_CREATED)
         except NotImplementedError as e:
             return Response(
@@ -69,33 +50,11 @@ class CourseDetailApi(AuthMixin):
 
 
 class CourseCommandApi(AuthMixin):
-    def _prepare_command(self, request, course_uuid):
-        match request.data.get("type"):
-            case CommandTypes.ENROLL_FOR_COURSE:
-                return EnrollForCourse(
-                    parent_uuid=course_uuid, user_uuid=request.data.get("user_uuid")
-                )
-            case CommandTypes.COMPLETE_COURSE_STEP:
-                return CompleteCourseStep(
-                    parent_uuid=course_uuid,
-                    progress_tracking_uuid=request.data.get("progress_tracking_uuid"),
-                )
-            case CommandTypes.UPDATE_COURSE:
-                return UpdateCourse(
-                    parent_uuid=course_uuid,
-                    title=request.data.get("title"),
-                    description=request.data.get("description"),
-                    is_draft=request.data.get("is_draft"),
-                    steps=request.data.get("steps"),
-                )
-            case _:
-                raise NotImplementedError(f"I dont know this command: {request.data}")
-
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def put(self, request, course_uuid: UUID, **kwargs):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-            command_bus.issue(self._prepare_command(request, course_uuid))
+            command_bus.issue(request, course_uuid=course_uuid)
             return Response(dict(), status.HTTP_202_ACCEPTED)
         except NotImplementedError as e:
             return Response(

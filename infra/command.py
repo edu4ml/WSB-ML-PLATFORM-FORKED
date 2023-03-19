@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import List
+
+from shared.enums import UserRoles
 
 
 @dataclass(kw_only=True)
@@ -12,5 +15,10 @@ class Command:
     created_at: datetime = datetime.now()
 
     @classmethod
-    def build_from_request(cls, reques, **kwargs):
+    def build_from_request(cls, request, **kwargs):
         raise NotImplementedError
+
+    class Meta:
+        name: str
+        is_initial: bool
+        roles: List[UserRoles] = []

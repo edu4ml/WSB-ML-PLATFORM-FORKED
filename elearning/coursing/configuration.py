@@ -15,6 +15,7 @@ from elearning.coursing.commands import (
 )
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
+from shared.enums import CommandTypes
 
 
 class CourseConfiguration:
