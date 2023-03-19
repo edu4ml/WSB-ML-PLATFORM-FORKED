@@ -2,7 +2,10 @@ from infra.command import Command
 from infra.command_handler import CommandHandler
 from infra.logging import logger
 
-from .exceptions import CommandAlreadyExistException, CommandHandlerDoesNotExistException
+from .exceptions import (
+    CommandAlreadyExistException,
+    CommandHandlerDoesNotExistException,
+)
 
 
 @logger
