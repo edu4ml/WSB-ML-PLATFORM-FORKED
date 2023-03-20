@@ -56,3 +56,11 @@ seed-db:
 	python manage.py loaddata db/seed/exercises.json
 	python manage.py loaddata db/seed/courses.json
 	python manage.py loaddata db/seed/evaluation.json
+
+
+run-for-cypress:
+	DJANGO_SETTINGS_MODULE=server.test_settings python manage.py migrate
+	DJANGO_SETTINGS_MODULE=server.test_settings make seed-db
+	echo '----- prepared for cypress run ----'
+	echo '----- starting server -------------'
+	DJANGO_SETTINGS_MODULE=server.test_settings python manage.py runserver

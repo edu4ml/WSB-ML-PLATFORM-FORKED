@@ -2,6 +2,7 @@ __pycache__
 
 db.sqlite3
 *.sqlite
+*.sqlite3
 .env
 *.egg
 *.egg-info/
