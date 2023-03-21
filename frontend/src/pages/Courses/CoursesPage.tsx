@@ -42,10 +42,6 @@ const CoursesPage = () => {
         setIsModalOpen(false);
     };
 
-    const onTabChange = (key: string) => {
-        setActiveTabKey(key);
-    };
-
     const actions: Array<CardHeaderRightButtonActionType> = [
         {
             text: 'Nowy kurs',
@@ -87,7 +83,7 @@ const CoursesPage = () => {
                 bordered={false}
                 tabList={tabList}
                 activeTabKey={activeTabKey}
-                onTabChange={onTabChange}
+                onTabChange={setActiveTabKey}
             >
                 {cardContentList[activeTabKey]}
             </Card>
