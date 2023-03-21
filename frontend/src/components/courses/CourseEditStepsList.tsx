@@ -36,7 +36,7 @@ const evaluationTypeKeyToNameMap: { [key: string]: string } = {
     [Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED]: 'automatyczne',
     [Enums.COURSE_STEP_EVALUATION_TYPES.FILE_EVALUATED]: 'przesłanie pliku',
     [Enums.COURSE_STEP_EVALUATION_TYPES.TEACHER_EVALUATED]: 'ręcznie',
-    [Enums.COURSE_STEP_EVALUATION_TYPES.TEST_EVALUATED]: 'quiz',
+    // [Enums.COURSE_STEP_EVALUATION_TYPES.TEST_EVALUATED]: 'quiz',
 };
 
 const CourseEditStepsList = ({
@@ -169,8 +169,8 @@ const CourseEditStepsList = ({
                 };
 
                 return (
-                    <Dropdown menu={{ items, onClick }} trigger={['click']}>
-                        <Button>
+                    <Dropdown menu={{ items, onClick }}>
+                        <Button block>
                             {
                                 evaluationTypeKeyToNameMap[
                                     item.evaluation_type || ''
