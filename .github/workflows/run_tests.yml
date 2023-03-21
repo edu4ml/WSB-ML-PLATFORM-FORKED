@@ -5,17 +5,31 @@ on:
     branches:
       - main
 
+env:
+  DJANGO_SETTINGS_MODULE: 'server.settings'
+  DEBUG: 1
+  DATABASE_PASSWORD: password
+  DATABASE_NAME: elearning
+  DATABASE_HOST: 0.0.0.0
+  DATABASE_USER: postgres
+  GAR_URL: http://0.0.0.0:8000
+
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
-    env:
-      DJANGO_SETTINGS_MODULE: 'server.test_settings'
-      DEBUG: 1
-      DATABASE_PASSWORD: password
-      DATABASE_NAME: elearning
-      DATABASE_HOST: 127.0.0.1
-      DATABASE_USER: postgres
-      GAR_URL: http://0.0.0.0:8000
+    strategy:
+      matrix:
+        type: ['unit-test', 'e2e-test']
+    services:
+      postgres: 
+        image: postgres:latest
+        env:
+          POSTGRES_DB: elearning
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Check out code
@@ -25,6 +39,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.11
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
@@ -35,58 +57,45 @@ jobs:
           python manage.py migrate
 
       - name: Run tests
+        if: matrix.type == 'test'
         run: pytest .
 
-  e2e-test:
-    runs-on: ubuntu-latest
-    env:
-      DJANGO_SETTINGS_MODULE: 'server.test_settings'
-      DEBUG: 1
-      DATABASE_PASSWORD: password
-      DATABASE_NAME: elearning
-      DATABASE_HOST: 127.0.0.1
-      DATABASE_USER: postgres
-      GAR_URL: http://0.0.0.0:8000
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
-
-      - name: Install dependencies
-        run: |
-          make sync-all-deps
-
-      - name: Start application
-        run: |
-          make run-for-cypress & sleep 10     
-      # Give the server some time to start up
-
       - name: Set up Node.js
+        if: matrix.type == 'e2e-test'
         uses: actions/setup-node@v2
         with:
           node-version: 14
 
-      - name: Install Node.js dependencies
-        run: npm install 
+      - name: Cache Node.js dependencies
+        if: matrix.type == 'e2e-test'
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install Node.js dependencies
-        run: npm ci
+        if: matrix.type == 'e2e-test'
+        run: npm install
 
-      - name: Cypress run 
+      - name: Start application
+        if: matrix.type == 'e2e-test'
+        run: |
+          make run-for-cypress & sleep 10
+      # Give the server some time to start up
+
+      - name: Cypress run
+        if: matrix.type == 'e2e-test'
         uses: cypress-io/github-action@v5.5.1
-        with: 
+        with:
           browser: chrome
           start: make cypress-run
           wait-on: http://0.0.0.0:8000
           wait-on-timeout: 120
 
   notify:
-    needs: [test, e2e-test]
+    needs: [tests]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
@@ -96,12 +105,12 @@ jobs:
           MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_TITLE: 'Hello hello! We have CI results for ${{ github.repository }} :tada:'
-          SLACK_COLOR: ${{ job.status }}
+          SLACK_COLOR: ${{ needs.tests.result }}
           SLACK_LINK_NAMES: true
           SLACK_MESSAGE: |
-            
-            *Test Status*: ${{ needs.test.result }}
-            *e2e Status*: ${{ needs.e2e-test.result }}
+            *Tests results:*
+            - unit-tests : ${{ needs.tests.result }}
+            - e2e-tests*: ${{ needs.tests.result }}
 
             *commit*: ${{ github.sha }}
             *branch*: ${{ github.ref }}
