@@ -37,8 +37,50 @@ jobs:
       - name: Run tests
         run: pytest .
 
-  notify:
+  e2e-test:
+    runs-on: ubuntu-latest
     needs: test
+    env:
+      DJANGO_SETTINGS_MODULE: 'server.test_settings'
+      DEBUG: 1
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: elearning
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_USER: postgres
+      GAR_URL: http://0.0.0.0:8000
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          make sync-all-deps
+
+      - name: Start application
+        run: |
+          make run-for-cypress &
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install Cypress dependencies
+        run: |
+          cd e2e-tests && npm ci
+
+      - name: Run Cypress tests
+        run: |
+          cd e2e-tests && make cypress-run
+
+  notify:
+    needs: [test, e2e-test]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:

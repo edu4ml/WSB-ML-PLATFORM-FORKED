@@ -72,8 +72,18 @@ describe('Courses page', () => {
         );
 
         cy.get('[data-cy="course-details-edit-description"]').click();
-        cy.get('[data-cy="course-details-edit-description"]').type(
-            `Course test description - ${Date.now()}`
-        );
+        cy.get('[data-cy="course-details-edit-description"]')
+            .find('.anticon-edit')
+            .type(`Course test description - ${Date.now()}`);
+
+        // Click on the button with data-cy attribute 'course-details-edit-save'
+        cy.get("[data-cy='course-details-edit-publish']").click();
+
+        // Check if you are redirected to the '/courses' page
+        cy.url().should('include', '/courses');
+
+        // Verify that the new course is in the list
+        // Replace 'New Course Title' with the actual title of the new course you want to check
+        cy.contains(courseTitle).should('be.visible');
     });
 });

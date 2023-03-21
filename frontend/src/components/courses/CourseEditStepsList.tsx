@@ -145,8 +145,6 @@ const CourseEditStepsList = ({
         },
     ];
 
-    console.log(dataSource);
-
     return (
         <>
             <DndContext onDragEnd={onDragEnd}>

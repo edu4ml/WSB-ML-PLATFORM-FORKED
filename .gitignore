@@ -7,6 +7,9 @@ db.sqlite3
 *.egg
 *.egg-info/
 
+
+cypress/videos
+
 # report for mutation testing 
 report.html
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import CardHeader from '../../components/common/CardHeader';
 
+import { useNavigate } from 'react-router-dom';
 import {
     useIssueCourseCommandMutation,
     useGetCourseQuery,
@@ -24,6 +25,8 @@ const CourseEditPage = () => {
     const [editedButNotSaved, setEditedButNotSaved] = useState(false);
 
     const [editableDescription, setEditableDescription] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (course) {
@@ -60,6 +63,7 @@ const CourseEditPage = () => {
                     .unwrap()
                     .then((res) => {
                         console.log('Success!', res);
+                        navigate('/courses/');
                     })
                     .catch((err) => {
                         console.error('Err: ', err);
