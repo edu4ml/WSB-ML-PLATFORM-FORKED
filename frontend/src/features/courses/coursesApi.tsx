@@ -9,25 +9,19 @@ export const courseApi = createApi({
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
     }),
-    tagTypes: ['course-catalog', 'course-component-catalog'],
+    tagTypes: ['course-list', 'course-component-list'],
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
             query: () => '/course/',
-            providesTags: (result, error, id) => [
-                { type: 'course-catalog', id: 'LIST' },
-            ],
+            providesTags: ['course-list'],
         }),
         getCourse: builder.query({
             query: (id) => `/course/${id}`,
-            providesTags: (result, error, id) => [
-                { type: 'course-catalog', id },
-            ],
+            providesTags: (result, error, id) => [{ type: 'course-list', id }],
         }),
         getCourseComponents: builder.query({
             query: () => '/course-components/',
-            providesTags: (result, error, id) => [
-                { type: 'course-component-catalog', id: 'LIST' },
-            ],
+            providesTags: ['course-component-list'],
         }),
         createCourse: builder.mutation({
             query: (command) => ({
@@ -35,9 +29,7 @@ export const courseApi = createApi({
                 method: 'PUT',
                 body: command,
             }),
-            invalidatesTags: (result, error, { id }) => [
-                { type: 'course-catalog', id: 'LIST' },
-            ],
+            invalidatesTags: ['course-list'],
         }),
         issueCourseCommand: builder.mutation({
             query: ({ id, command }) => ({
@@ -45,9 +37,7 @@ export const courseApi = createApi({
                 method: 'PUT',
                 body: command,
             }),
-            invalidatesTags: (result, error, { id }) => [
-                { type: 'course-catalog', id: 'LIST' },
-            ],
+            invalidatesTags: ['course-list'],
         }),
     }),
 });

@@ -10,7 +10,7 @@
         {% for step in object.coursestep_set.all %}
         <tr>
             <td>{{ step.order }}</td>
-            <td>{{ step.component.title }}</td>
+            <td>{{step.content_type.model}} | {{ step.object.title }}</td>
         </tr>
         {% endfor %}
     </tbody>
