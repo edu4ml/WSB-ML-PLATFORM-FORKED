@@ -73,11 +73,11 @@ jobs:
 
       - name: Install Cypress dependencies
         run: |
-          cd e2e-tests && npm ci
+          npm install --save-dev cypress
 
       - name: Run Cypress tests
         run: |
-          cd e2e-tests && make cypress-run
+          make cypress-run
 
   notify:
     needs: [test, e2e-test]
