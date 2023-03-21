@@ -5,6 +5,13 @@ import CourseListItem from './CourseListItem';
 import { CourseListItemType } from '../../types/course';
 
 function sortCourses(courses: Array<CourseListItemType>) {
+    // 1. If Course A is enrolled and Course B is not, Course A comes first.
+    // 2. If Course A is not enrolled and Course B is, Course B comes first.
+    // 3. If Course A is not a draft and Course B is a draft, Course A comes first.
+    // 4. If Course A is a draft and Course B is not, Course B comes first.
+    // 5. If both courses have the same enrollment and draft status, compare their `updated_at` dates:
+    //    - The course with the more recent `updated_at` date comes first.
+
     if (!Array.isArray(courses)) {
         return undefined;
     }
