@@ -1,6 +1,6 @@
 import type { ButtonType } from 'antd/es/button/buttonHelpers';
 
-interface CourseListItemType {
+interface CourseType {
     uuid: string;
     title: string;
     description: string;
@@ -11,28 +11,12 @@ interface CourseListItemType {
     created_at: string;
 }
 
-interface CourseItemDetailsType {
+interface CourseStepType {
     uuid: string;
     title: string;
     description: string;
-    current_active: number;
-    steps: Array<CourseStepItemType>;
-}
-
-interface CourseStepItemType {
-    uuid: number;
-    title: string;
-    description: string;
-    is_draft: boolean;
-    user_progress: {
-        tracking_uuid: number;
-        is_completed: boolean;
-        is_blocked: boolean;
-    };
-    order: number;
-    resources: Array<ResourceItemType>;
     content_type: string;
-    evaluation_type: string | null;
+    evaluation_type: string;
 }
 
 interface ResourceItemType {
@@ -55,10 +39,9 @@ interface CardHeaderRightButtonActionType {
 }
 
 export {
-    CourseListItemType,
-    CourseStepItemType,
+    CourseType,
+    CourseStepType,
     ResourceItemType,
-    CourseItemDetailsType,
     ExerciseItemType,
     CardHeaderRightButtonActionType,
 };

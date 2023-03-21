@@ -12,7 +12,7 @@ import { Enums } from '../../shared';
 import CourseEditStepsList from '../../components/courses/CourseEditStepsList';
 import {
     CardHeaderRightButtonActionType,
-    CourseComponentItemType,
+    CourseStepType,
 } from '../../types/course';
 
 const { Paragraph } = Typography;
@@ -41,7 +41,7 @@ const CourseEditPage = () => {
     };
 
     const mapToCourseSteps = (data) => {
-        return data.map((item: CourseComponentItemType, index: number) => ({
+        return data.map((item: CourseStepType, index: number) => ({
             content_type: item.content_type,
             uuid: item.uuid,
             order: index + 1,

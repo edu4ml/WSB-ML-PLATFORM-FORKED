@@ -1,4 +1,4 @@
-import { Table, Button, Dropdown, Space, Menu } from 'antd';
+import { Table, Button, Dropdown, Space } from 'antd';
 import React, { useState } from 'react';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
@@ -18,7 +18,7 @@ import {
 import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
-import { CourseComponentItemType } from '../../types/course';
+import { CourseStepType } from '../../types/course';
 
 const contentTypeToIconMap = {
     [Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE]: <ReadOutlined />,
@@ -52,12 +52,12 @@ const CourseEditStepsList = ({
 
     const onDragEnd = ({ active, over }: DragEndEvent) => {
         if (active.id !== over?.id) {
-            setDataSource((previous: Array<CourseComponentItemType>) => {
+            setDataSource((previous: Array<CourseStepType>) => {
                 const activeIndex = previous.findIndex(
-                    (i: CourseComponentItemType) => i.uuid === active.id
+                    (i: CourseStepType) => i.uuid === active.id
                 );
                 const overIndex = previous.findIndex(
-                    (i: CourseComponentItemType) => i.uuid === over?.id
+                    (i: CourseStepType) => i.uuid === over?.id
                 );
                 return arrayMove(previous, activeIndex, overIndex);
             });
@@ -70,12 +70,12 @@ const CourseEditStepsList = ({
             (availableSteps) => availableSteps.uuid == clickEvent.key
         );
 
-        const newData: CourseComponentItemType = {
+        const newData: CourseStepType = {
             uuid: chosenElement.uuid,
             title: chosenElement.title,
             description: chosenElement.description,
             content_type: chosenElement.content_type,
-            evaluation_type: null,
+            evaluation_type: Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED,
         };
 
         setDataSource([...dataSource, newData]);
@@ -85,19 +85,19 @@ const CourseEditStepsList = ({
 
     const handleRemove = (key: string) => {
         const newData = dataSource.filter(
-            (item: CourseComponentItemType) => item.uuid !== key
+            (item: CourseStepType) => item.uuid !== key
         );
         setDataSource(newData);
         setEditedButNotSaved(true);
     };
 
-    const isAvailable = (item: CourseComponentItemType) => {
+    const isAvailable = (item: CourseStepType) => {
         return dataSource.find(
-            (element: CourseComponentItemType) => element.uuid === item.uuid
+            (element: CourseStepType) => element.uuid === item.uuid
         );
     };
 
-    const mapToDropdown = (items: Array<CourseComponentItemType>) => {
+    const mapToDropdown = (items: Array<CourseStepType>) => {
         if (items) {
             const groupedItems = items?.reduce((acc, item) => {
                 if (!acc[item.content_type]) {
@@ -140,7 +140,7 @@ const CourseEditStepsList = ({
         setEditedButNotSaved(true);
     };
 
-    const columns: ColumnsType<CourseComponentItemType> = [
+    const columns: ColumnsType<CourseStepType> = [
         {
             key: editable ? 'sort' : 'uuid',
             render: (_, item) =>
@@ -201,9 +201,7 @@ const CourseEditStepsList = ({
         <>
             <DndContext onDragEnd={onDragEnd}>
                 <SortableContext
-                    items={dataSource.map(
-                        (i: CourseComponentItemType) => i.uuid
-                    )}
+                    items={dataSource.map((i: CourseStepType) => i.uuid)}
                     strategy={verticalListSortingStrategy}
                 >
                     <Table
