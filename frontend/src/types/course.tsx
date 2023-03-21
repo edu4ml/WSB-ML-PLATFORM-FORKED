@@ -19,10 +19,6 @@ interface CourseItemDetailsType {
     steps: Array<CourseStepItemType>;
 }
 
-interface UserType {
-    pk: string;
-}
-
 interface CourseComponentItemType {
     uuid: string;
     title: string;
@@ -66,7 +62,6 @@ interface CardHeaderRightButtonActionType {
 
 export {
     CourseListItemType,
-    UserType,
     CourseComponentItemType,
     CourseStepItemType,
     ResourceItemType,

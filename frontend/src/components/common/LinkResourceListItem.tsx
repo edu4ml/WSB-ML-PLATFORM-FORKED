@@ -2,11 +2,6 @@ import React from 'react';
 import { List } from 'antd';
 import LinkIcon from '@mui/icons-material/Link';
 
-interface LinkResourceItem {
-    title: string;
-    url: string;
-}
-
 const LinkResourceListItem = ({ item }) => {
     return (
         <List.Item>

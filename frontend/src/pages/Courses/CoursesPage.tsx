@@ -9,6 +9,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Enums } from '../../shared';
 import { CardHeaderRightButtonActionType } from '../../types/course';
+import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import { isTeacher } from '../../helpers/permissions';
 
 const tabList = [
     {
@@ -19,7 +21,9 @@ const tabList = [
 
 const CoursesPage = () => {
     const [createCourseCommand, {}] = useCreateCourseMutation();
-    const { data } = useGetCourseCatalogQuery('course-catalog');
+    const { data: courses } = useGetCourseCatalogQuery('course-catalog');
+    const { data: userData } = useGetUserProfileQuery('userDetails');
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [activeTabKey, setActiveTabKey] = useState<string>('coursesAll');
@@ -69,13 +73,18 @@ const CoursesPage = () => {
     };
 
     const cardContentList: Record<string, React.ReactNode> = {
-        coursesAll: <CourseList courses={data} />,
+        coursesAll: <CourseList courses={courses} />,
     };
 
     return (
         <>
             <Card
-                title={<CardHeader title={''} actions={actions} />}
+                title={
+                    <CardHeader
+                        title={''}
+                        actions={isTeacher(userData) ? actions : []}
+                    />
+                }
                 bordered={false}
                 tabList={tabList}
                 activeTabKey={activeTabKey}

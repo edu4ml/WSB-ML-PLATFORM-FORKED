@@ -86,7 +86,7 @@ def teacher_client(teacher, client):
 
 @pytest.fixture
 def courses():
-    return baker.make(CourseDbModel, 4)
+    return baker.make(CourseDbModel, 4, is_draft=False)
 
 
 @pytest.fixture

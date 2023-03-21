@@ -14,7 +14,7 @@ from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from infra.logging import logger
 from infra.repository import Repository
-
+from shared.enums import UserRoles
 
 User = get_user_model()
 
@@ -73,6 +73,15 @@ class CourseRepository(Repository):
     def list(self) -> List[Course]:
         course_modles = CourseDbModel.objects.all()
         return [self._prepare_domain_entity(c) for c in course_modles]
+
+    def list(self) -> List[Course]:
+        user_roles = self.user.roles.values_list("name", flat=True)
+
+        if UserRoles.ADMIN in user_roles or UserRoles.TEACHER in user_roles:
+            course_models = CourseDbModel.objects.all()
+        else:
+            course_models = CourseDbModel.objects.filter(is_draft=False)
+        return [self._prepare_domain_entity(c) for c in course_models]
 
     def retrieve(self, uuid: UUID):
         try:
