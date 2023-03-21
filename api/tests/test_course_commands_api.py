@@ -8,7 +8,7 @@ from rest_framework import status
 from db.models.courses import Course, CourseStep
 from db.models.evaluations import FileEvaluationType
 from db.models.exercises import Exercise
-from shared.enums import CommandTypes
+from shared.enums import CommandTypes, CourseStepEvaluationTypes
 
 
 class CommandTestCase(NamedTuple):
@@ -153,16 +153,19 @@ def test_issue_update_command_add_steps(
                     order=1,
                     uuid=exercises[0].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.FILE_EVALUATED,
                 ),
                 dict(
                     order=2,
                     uuid=exercises[1].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.SELF_EVALUATED,
                 ),
                 dict(
                     order=3,
                     uuid=exercises[2].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.TEST_EVALUATED,
                 ),
                 dict(
                     order=4,
@@ -170,6 +173,7 @@ def test_issue_update_command_add_steps(
                     content_type=ContentType.objects.get_for_model(
                         FileEvaluationType
                     ).model,
+                    evaluation_type=CourseStepEvaluationTypes.TEACHER_EVALUATED,
                 ),
             ],
         ),
@@ -183,6 +187,41 @@ def test_issue_update_command_add_steps(
 
     assert len(response["steps"]) == 4
     assert response["steps"][3]["title"] == file_evaluation_type.title
+
+
+@pytest.mark.django_db
+def test_post_step_with_evaluation_type(admin_client, course, exercises):
+    # Post a step with evaluation type
+    response = admin_client.put(
+        reverse("course-command", kwargs=dict(course_uuid=course.uuid)),
+        dict(
+            type=CommandTypes.UPDATE_COURSE,
+            steps=[
+                dict(
+                    order=1,
+                    uuid=exercises[0].uuid,
+                    content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.FILE_EVALUATED,
+                )
+            ],
+        ),
+        content_type="application/json",
+    )
+    assert (
+        response.status_code == status.HTTP_202_ACCEPTED
+    ), f"Response: {response.json()}"
+
+    # Get the course details
+    response = admin_client.get(
+        reverse("course-detail", kwargs=dict(course_uuid=course.uuid))
+    ).json()
+
+    # Assert that the posted step is present and has the correct evaluation type
+    assert len(response["steps"]) == 1
+    assert (
+        response["steps"][0]["evaluation_type"]
+        == CourseStepEvaluationTypes.FILE_EVALUATED
+    )
 
 
 @pytest.mark.django_db
@@ -208,16 +247,19 @@ def test_issue_update_command_remove_reorder_and_add_steps(
                     order=1,
                     uuid=exercises[0].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.TEST_EVALUATED,
                 ),
                 dict(
                     order=2,
                     uuid=exercises[1].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.TEST_EVALUATED,
                 ),
                 dict(
                     order=3,
                     uuid=exercises[2].uuid,
                     content_type=ContentType.objects.get_for_model(Exercise).model,
+                    evaluation_type=CourseStepEvaluationTypes.TEST_EVALUATED,
                 ),
             ],
         ),

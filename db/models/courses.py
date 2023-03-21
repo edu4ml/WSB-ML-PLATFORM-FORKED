@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from shared.enums import CourseStepEvaluationTypes
 from .mixin import TimestampedModel
 
 
@@ -32,6 +33,12 @@ class CourseStep(TimestampedModel):
     requires_test = models.BooleanField(default=False)
     requires_manual_review = models.BooleanField(default=True)
     is_self_evaluated = models.BooleanField(default=False)
+
+    evaluation_type = models.CharField(
+        max_length=40,
+        choices=CourseStepEvaluationTypes.choices(),
+        default=CourseStepEvaluationTypes.SELF_EVALUATED,
+    )
 
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, default=None, blank=True

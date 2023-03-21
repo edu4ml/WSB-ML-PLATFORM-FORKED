@@ -104,7 +104,7 @@ class CourseRepository(Repository):
 
     # -----------------------------------------------------
 
-    def _update_course_steps(self, course, new_steps):
+    def _update_course_steps(self, course: Course, new_steps: List[CourseStep]):
         course.coursestep_set.all().delete()
 
         for new_step in new_steps:
@@ -113,6 +113,7 @@ class CourseRepository(Repository):
                 course=course,
                 object_uuid=new_step.uuid,
                 content_type=ContentType.objects.get(model=new_step.content_type),
+                evaluation_type=new_step.evaluation_type,
             )
 
     def _prepare_domain_entity(self, course: CourseDbModel) -> Course:
@@ -148,6 +149,7 @@ class CourseRepository(Repository):
                 user_progress=self._get_user_progress_on_component(
                     course=course, course_step=step.object
                 ),
+                evaluation_type=step.evaluation_type,
             )
             for step in CourseStepDbModel.objects.filter(course=course)
         ]

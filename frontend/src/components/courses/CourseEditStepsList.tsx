@@ -1,4 +1,4 @@
-import { Table, Button, Dropdown, Space } from 'antd';
+import { Table, Button, Dropdown, Space, Menu } from 'antd';
 import React, { useState } from 'react';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
@@ -30,6 +30,13 @@ const contentTypeToIconMap = {
 const contentTypeToGroupTitleMap = {
     [Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE]: 'Ćwiczenia',
     [Enums.COURSE_STEP_CONTENT_TYPES.FILE_EVALUATION_TYPE]: 'Weryfikacja',
+};
+
+const evaluationTypeKeyToNameMap: { [key: string]: string } = {
+    [Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED]: 'automatyczne',
+    [Enums.COURSE_STEP_EVALUATION_TYPES.FILE_EVALUATED]: 'przesłanie pliku',
+    [Enums.COURSE_STEP_EVALUATION_TYPES.TEACHER_EVALUATED]: 'ręcznie',
+    [Enums.COURSE_STEP_EVALUATION_TYPES.TEST_EVALUATED]: 'quiz',
 };
 
 const CourseEditStepsList = ({
@@ -68,6 +75,7 @@ const CourseEditStepsList = ({
             title: chosenElement.title,
             description: chosenElement.description,
             content_type: chosenElement.content_type,
+            evaluation_type: null,
         };
 
         setDataSource([...dataSource, newData]);
@@ -114,6 +122,24 @@ const CourseEditStepsList = ({
         }
         return [];
     };
+
+    const updateEvaluationType = (itemUUID, evaluationType) => {
+        // Create a new array by mapping over the dataSource and updating the evaluationType for the specified itemUUID
+        const updatedDataSource = dataSource.map((item) => {
+            if (item.uuid === itemUUID) {
+                // Update the evaluationType for the item with the specified UUID
+                return {
+                    ...item,
+                    evaluation_type: evaluationType,
+                };
+            }
+            return item;
+        });
+
+        setDataSource(updatedDataSource);
+        setEditedButNotSaved(true);
+    };
+
     const columns: ColumnsType<CourseComponentItemType> = [
         {
             key: editable ? 'sort' : 'uuid',
@@ -131,6 +157,32 @@ const CourseEditStepsList = ({
             title: 'Opis',
             dataIndex: 'description',
         },
+        {
+            title: 'Zaliczenie',
+            render: (_, item) => {
+                const items: MenuProps['items'] = Object.entries(
+                    evaluationTypeKeyToNameMap
+                ).map(([key, value]) => ({ key, label: value }));
+
+                const onClick = (e) => {
+                    updateEvaluationType(item.uuid, e.key);
+                };
+
+                return (
+                    <Dropdown menu={{ items, onClick }} trigger={['click']}>
+                        <Button>
+                            {
+                                evaluationTypeKeyToNameMap[
+                                    item.evaluation_type || ''
+                                ]
+                            }
+                            <DownOutlined />
+                        </Button>
+                    </Dropdown>
+                );
+            },
+        },
+
         {
             dataIndex: 'operation',
             render: (_, item) => {

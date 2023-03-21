@@ -67,7 +67,7 @@ def test_issue_enroll_for_course(admin_client, admin, courses):
 
 @pytest.mark.django_db
 def test_issue_complete_course_step(admin_client, admin, course_with_steps):
-    course, steps = course_with_steps
+    course, _ = course_with_steps
 
     response = admin_client.get(
         reverse("course-detail", kwargs=dict(course_uuid=course.uuid))

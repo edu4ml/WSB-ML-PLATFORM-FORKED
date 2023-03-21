@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class CommandTypes:
     _PREFIX = "COMMAND_TYPES"
 
@@ -12,6 +15,19 @@ class CourseStepContentTypes:
 
     EXERCISE = "exercise"
     FILE_EVALUATION_TYPE = "fileevaluationtype"
+
+
+class CourseStepEvaluationTypes(str, Enum):
+    _PREFIX = "COURSE_STEP_EVALUATION_TYPES"
+
+    SELF_EVALUATED = "SELF_EVALUATED"
+    FILE_EVALUATED = "FILE_EVALUATED"
+    TEST_EVALUATED = "TEST_EVALUATED"
+    TEACHER_EVALUATED = "TEACHER_EVALUATED"
+
+    @classmethod
+    def choices(cls):
+        return [(item.value, item.name) for item in cls]
 
 
 class UserRoles:

@@ -1,6 +1,11 @@
 import json
 
-from shared.enums import CommandTypes, CourseStepContentTypes, UserRoles
+from shared.enums import (
+    CommandTypes,
+    CourseStepContentTypes,
+    CourseStepEvaluationTypes,
+    UserRoles,
+)
 
 
 def export_to_json(objs, file_name):
@@ -23,5 +28,6 @@ def export_to_json(objs, file_name):
 
 if __name__ == "__main__":
     export_to_json(
-        [CommandTypes, CourseStepContentTypes, UserRoles], "shared/enums.json"
+        [CommandTypes, CourseStepContentTypes, UserRoles, CourseStepEvaluationTypes],
+        "shared/enums.json",
     )

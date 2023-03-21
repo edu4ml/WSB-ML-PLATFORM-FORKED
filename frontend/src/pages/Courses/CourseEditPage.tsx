@@ -45,6 +45,7 @@ const CourseEditPage = () => {
             content_type: item.content_type,
             uuid: item.uuid,
             order: index + 1,
+            evaluation_type: item.evaluation_type,
         }));
     };
 

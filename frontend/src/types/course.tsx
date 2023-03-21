@@ -24,6 +24,7 @@ interface CourseComponentItemType {
     title: string;
     description: string;
     content_type: string;
+    evaluation_type: string | null;
 }
 
 interface CourseStepItemType {

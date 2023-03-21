@@ -22,7 +22,9 @@ class CourseStepForm(forms.ModelForm):
 
         # FIXME: we can exclude instances already assingned to this course here
         # it is not needed but nice to have for better user experience
-        content_types = ContentType.objects.filter(model__in=("exercise",))
+        content_types = ContentType.objects.filter(
+            model__in=("exercise", "fileevaluationtype")
+        )
 
         choices_dict = dict()
         for ct in content_types:
