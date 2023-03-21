@@ -9,6 +9,11 @@ section {
 
 .blue-table-row {
     background-color: #e6f4ff;
+    background-color: #fafafa;
     /* border: px solid #3a91fa; */
     /* border-color: #3a91fa; */
+}
+
+.course-list-item:hover { 
+    background-color: #fafafa;
 }

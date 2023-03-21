@@ -1,4 +1,4 @@
-import { Col, List, Progress, Row } from 'antd';
+import { List } from 'antd';
 import React from 'react';
 import { CourseListItemType, UserType } from '../../types/course';
 import CourseDetailsButton from '../common/CourseDetailsButton';
@@ -15,11 +15,10 @@ const CourseListItem = ({
     const actions = (course: CourseListItemType) => {
         if (course.is_enrolled) {
             return [];
-        } else {
-            return [
-                <CourseEnrollButton course={course} user={user} />,
-                <CourseDetailsButton course={course} />,
-            ];
+        } else if (course.is_draft) {
+            return [<CourseDetailsButton course={course} />];
+        } else if (!course.is_draft && !course.is_enrolled) {
+            return [<CourseEnrollButton course={course} user={user} />];
         }
     };
 
@@ -28,6 +27,7 @@ const CourseListItem = ({
             key={course.title}
             actions={actions(course)}
             data-cy={'course-catalog-list-item'}
+            className={'course-list-item'}
         >
             <List.Item.Meta
                 title={<CourseListItemHeader course={course} />}

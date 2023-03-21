@@ -1,8 +1,6 @@
 import { Button, Card, Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
-import CardHeader, {
-    CardHeaderRightButtonActionType,
-} from '../../components/common/CardHeader';
+import CardHeader from '../../components/common/CardHeader';
 import CourseList from '../../components/courses/CourseList';
 import {
     useCreateCourseMutation,
@@ -10,11 +8,22 @@ import {
 } from '../../features/courses/coursesApi';
 import { useNavigate } from 'react-router-dom';
 import { Enums } from '../../shared';
+import { CardHeaderRightButtonActionType } from '../../types/course';
+
+const tabList = [
+    {
+        key: 'coursesAll',
+        tab: 'Wszystkie Kursy',
+    },
+];
 
 const CoursesPage = () => {
     const [createCourseCommand, {}] = useCreateCourseMutation();
     const { data } = useGetCourseCatalogQuery('course-catalog');
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [activeTabKey, setActiveTabKey] = useState<string>('coursesAll');
+
     const navigate = useNavigate();
 
     const showModal = () => {
@@ -29,11 +38,15 @@ const CoursesPage = () => {
         setIsModalOpen(false);
     };
 
+    const onTabChange = (key: string) => {
+        setActiveTabKey(key);
+    };
+
     const actions: Array<CardHeaderRightButtonActionType> = [
         {
             text: 'Nowy kurs',
             onClick: showModal,
-            type: 'default',
+            type: 'primary',
             dataCy: 'course-catalog-create-new',
         },
     ];
@@ -55,13 +68,20 @@ const CoursesPage = () => {
             });
     };
 
+    const cardContentList: Record<string, React.ReactNode> = {
+        coursesAll: <CourseList courses={data} />,
+    };
+
     return (
         <>
             <Card
-                title={<CardHeader title={'Twoje kursy'} actions={actions} />}
+                title={<CardHeader title={''} actions={actions} />}
                 bordered={false}
+                tabList={tabList}
+                activeTabKey={activeTabKey}
+                onTabChange={onTabChange}
             >
-                <CourseList courses={data} />
+                {cardContentList[activeTabKey]}
             </Card>
             <Modal
                 title={'Podaj nazwę nowego kursu'}
