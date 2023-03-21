@@ -1,4 +1,4 @@
-import { Card, Typography } from 'antd';
+import { Card, notification, Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import CardHeader from '../../components/common/CardHeader';
@@ -64,9 +64,16 @@ const CourseEditPage = () => {
                     .unwrap()
                     .then((res) => {
                         console.log('Success!', res);
+                        notification.info({
+                            message: 'Kurs opublikowany!',
+                            duration: 2,
+                        });
                         navigate('/courses/');
                     })
                     .catch((err) => {
+                        notification.error({
+                            message: 'Ups! coś poszło nie tak!',
+                        });
                         console.error('Err: ', err);
                     });
             },
@@ -86,10 +93,16 @@ const CourseEditPage = () => {
                 issueCommand({ id: courseId, command })
                     .unwrap()
                     .then((res) => {
-                        console.log('Success!: ', res);
+                        notification.info({
+                            message: 'Kurs zapisany!',
+                            duration: 2,
+                        });
                         setEditedButNotSaved(false);
                     })
                     .catch((err) => {
+                        notification.error({
+                            message: 'Ups! coś poszło nie tak!',
+                        });
                         console.log('Err: ', err);
                     });
             },

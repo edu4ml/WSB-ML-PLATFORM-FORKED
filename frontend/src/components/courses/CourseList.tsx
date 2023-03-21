@@ -2,9 +2,9 @@ import React from 'react';
 import { List } from 'antd';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import CourseListItem from './CourseListItem';
-import { CourseListItemType } from '../../types/course';
+import { CourseType } from '../../types/course';
 
-function sortCourses(courses: Array<CourseListItemType>) {
+function sortCourses(courses: Array<CourseType>) {
     // 1. If Course A is enrolled and Course B is not, Course A comes first.
     // 2. If Course A is not enrolled and Course B is, Course B comes first.
     // 3. If Course A is not a draft and Course B is a draft, Course A comes first.
@@ -46,7 +46,7 @@ const CourseList = ({ courses }) => {
             size={'large'}
             pagination={{ pageSize: 10 }}
             dataSource={sortedCourses}
-            renderItem={(course: CourseListItemType) => (
+            renderItem={(course: CourseType) => (
                 <CourseListItem course={course} user={userData} />
             )}
         />

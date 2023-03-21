@@ -62,7 +62,6 @@ const CoursesPage = () => {
         })
             .unwrap()
             .then((response) => {
-                console.log('Response: ', response);
                 setIsModalOpen(false);
                 navigate(`/courses/${response.uuid}/edit`);
             })

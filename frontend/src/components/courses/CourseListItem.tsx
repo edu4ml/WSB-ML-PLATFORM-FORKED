@@ -1,6 +1,7 @@
 import { List } from 'antd';
 import React from 'react';
-import { CourseListItemType, UserType } from '../../types/course';
+import { CourseType } from '../../types/course';
+import { UserType } from '../../types/user';
 import CourseDetailsButton from '../common/CourseDetailsButton';
 import CourseEnrollButton from '../common/CourseEnrollButton';
 import CourseListItemHeader from '../common/CourseListItemHeader';
@@ -9,10 +10,10 @@ const CourseListItem = ({
     course,
     user,
 }: {
-    course: CourseListItemType;
+    course: CourseType;
     user: UserType;
 }) => {
-    const actions = (course: CourseListItemType) => {
+    const actions = (course: CourseType) => {
         if (course.is_enrolled) {
             return [];
         } else if (course.is_draft) {
