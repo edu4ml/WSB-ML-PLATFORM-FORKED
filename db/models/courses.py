@@ -29,11 +29,6 @@ class CourseStep(TimestampedModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
 
-    requires_file = models.BooleanField(default=False)
-    requires_test = models.BooleanField(default=False)
-    requires_manual_review = models.BooleanField(default=True)
-    is_self_evaluated = models.BooleanField(default=False)
-
     evaluation_type = models.CharField(
         max_length=40,
         choices=CourseStepEvaluationTypes.choices(),
@@ -68,12 +63,6 @@ class CourseStepUserCompletion(TimestampedModel):
     )
     object_uuid = models.UUIDField(null=True, default=None)
     object = GenericForeignKey("content_type", "object_uuid")
-
-    # is_file_passed = models.BooleanField(default=False)
-    # is_test_passed = models.BooleanField(default=False)
-    # is_reviewed = models.BooleanField(default=False)
-    # is_self_evaluated = models.BooleanField(default=False)
-    # attempts = models.ManyToManyField(ExerciseAttempt)
 
     is_completed = models.BooleanField(default=False)
 

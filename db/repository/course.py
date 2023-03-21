@@ -144,8 +144,6 @@ class CourseRepository(Repository):
                 description=step.object.description,
                 order=step.order,
                 resources=self._get_resources(step.object),
-                is_self_evaluated=step.is_self_evaluated,
-                requires_manual_review=step.requires_manual_review,
                 user_progress=self._get_user_progress_on_component(
                     course=course, course_step=step.object
                 ),

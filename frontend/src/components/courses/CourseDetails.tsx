@@ -7,6 +7,7 @@ import {
     CourseStepItemType,
     ResourceItemType,
 } from '../../types/course';
+import { Enums } from '../../shared';
 
 const { Text, Paragraph } = Typography;
 
@@ -88,7 +89,8 @@ const CourseDetails = ({ course }: { course: CourseItemDetailsType }) => {
                         {item.description}
                         {getResourcesList(item.resources)}
                         <Space />
-                        {item.is_self_evaluated &&
+                        {item.evaluation_type ===
+                            Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED &&
                             !item.user_progress.is_completed && (
                                 <CourseStepSelfEvaluateButton
                                     progress_tracking_uuid={

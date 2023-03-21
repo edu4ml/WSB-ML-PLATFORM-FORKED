@@ -37,19 +37,9 @@ class CourseStepAdmin(admin.ModelAdmin):
         "course",
         "order",
         "object",
-        # "component",
-        "is_self_evaluated",
-        "requires_file",
-        "requires_test",
-        "requires_manual_review",
+        "evaluation_type",
     )
-    list_editable = (
-        "order",
-        "is_self_evaluated",
-        "requires_file",
-        "requires_test",
-        "requires_manual_review",
-    )
+    list_editable = ("order", "evaluation_type")
     list_editable_groups = [("order",)]
     list_filter = ("course",)
     form = CourseStepForm

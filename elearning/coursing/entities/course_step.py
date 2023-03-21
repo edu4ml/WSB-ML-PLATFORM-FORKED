@@ -19,7 +19,4 @@ class CourseStep:
 
     user_progress: CourseComponentCompletion | None = None
 
-    is_self_evaluated: bool | None = None
-    requires_manual_review: bool | None = None
-
     resources: list[dict] = field(default_factory=lambda: list())

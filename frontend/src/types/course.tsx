@@ -19,19 +19,10 @@ interface CourseItemDetailsType {
     steps: Array<CourseStepItemType>;
 }
 
-interface CourseComponentItemType {
-    uuid: string;
-    title: string;
-    description: string;
-    content_type: string;
-    evaluation_type: string | null;
-}
-
 interface CourseStepItemType {
     uuid: number;
     title: string;
     description: string;
-    is_self_evaluated: boolean;
     is_draft: boolean;
     user_progress: {
         tracking_uuid: number;
@@ -40,6 +31,8 @@ interface CourseStepItemType {
     };
     order: number;
     resources: Array<ResourceItemType>;
+    content_type: string;
+    evaluation_type: string | null;
 }
 
 interface ResourceItemType {
@@ -63,7 +56,6 @@ interface CardHeaderRightButtonActionType {
 
 export {
     CourseListItemType,
-    CourseComponentItemType,
     CourseStepItemType,
     ResourceItemType,
     CourseItemDetailsType,
