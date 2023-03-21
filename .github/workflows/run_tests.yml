@@ -39,7 +39,6 @@ jobs:
 
   e2e-test:
     runs-on: ubuntu-latest
-    needs: test
     env:
       DJANGO_SETTINGS_MODULE: 'server.test_settings'
       DEBUG: 1
@@ -64,20 +63,29 @@ jobs:
 
       - name: Start application
         run: |
-          make run-for-cypress &
+          make run-for-cypress & sleep 10     
+      # Give the server some time to start up
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
+      # - name: Install Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 14
 
-      - name: Install Cypress dependencies
-        run: |
-          npm install --save-dev cypress
+      # - name: Install Cypress dependencies
+      #   run: |
+      #     npm install --save-dev cypress
 
-      - name: Run Cypress tests
-        run: |
-          make cypress-run
+      # - name: Run Cypress tests
+      #   run: |
+      #     make cypress-run
+
+      - name: Cypress run 
+        uses: cypress-io/github-action@v5.5.1
+        with: 
+          browser: chrome
+          start: make cypress-run
+          wait-on: http://0.0.0.0:8000
+          wait-on-timeout: 120
 
   notify:
     needs: [test, e2e-test]
