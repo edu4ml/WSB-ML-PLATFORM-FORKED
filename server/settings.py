@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = "db.CustomUser"
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -210,6 +209,7 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "wsb-platform-auth",
     "JWT_AUTH_REFRESH_COOKIE": "wsb-platform-refresh-token",
+    "USER_DETAILS_SERIALIZER": "api.serializers.auth.user.CustomUserDetailsSerializer",
 }
 
 SIMPLE_JWT = {
