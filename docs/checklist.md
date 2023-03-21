@@ -9,7 +9,7 @@
    - [ ] Make sure that the authentication mechanism is in place (e.g., token-based authentication, session authentication).
 
 3. **Course management**
-   - [ ] Teachers can create, update, and ?delete? courses.
+   - [ ] Teachers can create, update courses.
    - [ ] Admins can view, create, update, and delete all courses.
    - [ ] Students can view courses but cannot create, update, or delete them.
 

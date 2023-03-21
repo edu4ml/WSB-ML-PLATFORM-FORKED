@@ -64,3 +64,9 @@ run-for-cypress:
 	echo '----- prepared for cypress run ----'
 	echo '----- starting server -------------'
 	DJANGO_SETTINGS_MODULE=server.test_settings python manage.py runserver
+
+cypress-open:
+	npx cypress open
+
+cypress-run:
+	npx cypress run

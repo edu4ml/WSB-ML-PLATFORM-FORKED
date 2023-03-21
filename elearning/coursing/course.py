@@ -1,3 +1,4 @@
+from datetime import datetime
 from dataclasses import dataclass, field
 from typing import List
 from uuid import UUID
@@ -12,6 +13,9 @@ class Course:
     """
 
     uuid: UUID | None
+    updated_at: datetime | None
+    created_at: datetime | None
+
     title: str
     description: str
     is_draft: bool

@@ -44,7 +44,7 @@ const LoginPage = () => {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
@@ -58,12 +58,16 @@ const LoginPage = () => {
                         },
                     ]}
                 >
-                    <Input.Password/>
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Submit
+                    <Button
+                        data-cy={'login-button'}
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        Zaloguj
                     </Button>
                 </Form.Item>
             </Form>

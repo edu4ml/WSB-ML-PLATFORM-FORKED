@@ -24,7 +24,11 @@ const CourseListItem = ({
     };
 
     return (
-        <List.Item key={course.title} actions={actions(course)}>
+        <List.Item
+            key={course.title}
+            actions={actions(course)}
+            data-cy={'course-catalog-list-item'}
+        >
             <List.Item.Meta
                 title={<CourseListItemHeader course={course} />}
                 description={course.description}

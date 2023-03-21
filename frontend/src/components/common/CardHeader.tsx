@@ -1,15 +1,7 @@
 import { Button, Col, Row, Typography } from 'antd';
 import React from 'react';
-import type { ButtonType } from 'antd/es/button/buttonHelpers';
+import { CardHeaderRightButtonActionType } from '../../types/course';
 const { Text } = Typography;
-
-interface CardRightButtonActionType {
-    text: string;
-    onClick;
-    type: ButtonType;
-}
-
-type CardHeaderActionsType = Array<CardRightButtonActionType>;
 
 const CardHeader = ({ title, actions }) => {
     return (
@@ -18,9 +10,10 @@ const CardHeader = ({ title, actions }) => {
                 <Text>{title}</Text>
             </Col>
             <Col span={12}>
-                {actions.map((element: CardRightButtonActionType) => {
+                {actions.map((element: CardHeaderRightButtonActionType) => {
                     return (
                         <Button
+                            data-cy={element.dataCy}
                             key={element.text}
                             onClick={element.onClick}
                             style={{ float: 'right', marginLeft: '10px' }}
@@ -34,7 +27,5 @@ const CardHeader = ({ title, actions }) => {
         </Row>
     );
 };
-
-export { CardHeaderActionsType, CardRightButtonActionType };
 
 export default CardHeader;

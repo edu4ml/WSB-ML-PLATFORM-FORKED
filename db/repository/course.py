@@ -14,7 +14,6 @@ from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from infra.logging import logger
 from infra.repository import Repository
-from shared.enums import CourseStepContentTypes
 
 
 User = get_user_model()
@@ -107,9 +106,11 @@ class CourseRepository(Repository):
                 content_type=ContentType.objects.get(model=new_step.content_type),
             )
 
-    def _prepare_domain_entity(self, course) -> Course:
+    def _prepare_domain_entity(self, course: CourseDbModel) -> Course:
         return Course(
             uuid=course.uuid,
+            created_at=course.created_at,
+            updated_at=course.updated_at,
             title=course.title,
             description=course.description,
             is_draft=course.is_draft,

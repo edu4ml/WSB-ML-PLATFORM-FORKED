@@ -1,9 +1,7 @@
 import { Card, Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import CardHeader, {
-    CardHeaderActionsType,
-} from '../../components/common/CardHeader';
+import CardHeader from '../../components/common/CardHeader';
 
 import {
     useIssueCourseCommandMutation,
@@ -12,8 +10,8 @@ import {
 import { Enums } from '../../shared';
 import CourseEditStepsList from '../../components/courses/CourseEditStepsList';
 import {
+    CardHeaderRightButtonActionType,
     CourseComponentItemType,
-    CourseItemDetailsType,
 } from '../../types/course';
 
 const { Paragraph } = Typography;
@@ -47,7 +45,7 @@ const CourseEditPage = () => {
         }));
     };
 
-    let actions: CardHeaderActionsType = [
+    let actions: Array<CardHeaderRightButtonActionType> = [
         {
             text: 'Opublikuj',
             onClick: () => {
@@ -68,6 +66,7 @@ const CourseEditPage = () => {
                     });
             },
             type: 'default',
+            dataCy: 'course-details-edit-publish',
         },
         {
             text: 'Zapisz',
@@ -89,6 +88,7 @@ const CourseEditPage = () => {
                         console.log('Err: ', err);
                     });
             },
+            dataCy: 'course-details-edit-save',
         },
     ];
 
@@ -108,6 +108,7 @@ const CourseEditPage = () => {
                 bordered={false}
             >
                 <Paragraph
+                    data-cy={'course-details-edit-description'}
                     editable={{
                         onChange: handleDescriptionChange,
                     }}

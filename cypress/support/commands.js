@@ -23,3 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (username, password) => {
+    cy.visit('/');
+    cy.get('#basic_username').type(username);
+    cy.get('#basic_password').type(password);
+    cy.get('button[type="submit"]').click();
+});
+
+Cypress.Commands.add('create_course', (courseTitle) => {
+    cy.get('[data-cy="course-catalog-create-new"]').click();
+    cy.get('[data-cy="course-catalog-create-new-name"]').type(courseTitle);
+    cy.get('[data-cy="course-catalog-create-new-submit-button"]').click();
+});

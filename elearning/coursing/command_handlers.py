@@ -21,6 +21,8 @@ class OnCreateCourse(CommandHandler):
             description=command.description,
             is_draft=True,
             uuid=None,
+            created_at=None,
+            updated_at=None,
         )
         return self.repository.course.persist(entity)
 

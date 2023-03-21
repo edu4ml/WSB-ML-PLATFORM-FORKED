@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import CardHeader, {
-    CardHeaderActionsType,
+    CardHeaderRightButtonActionType,
 } from '../../components/common/CardHeader';
 import CourseList from '../../components/courses/CourseList';
 import {
@@ -29,11 +29,12 @@ const CoursesPage = () => {
         setIsModalOpen(false);
     };
 
-    const actions: CardHeaderActionsType = [
+    const actions: Array<CardHeaderRightButtonActionType> = [
         {
             text: 'Nowy kurs',
             onClick: showModal,
             type: 'default',
+            dataCy: 'course-catalog-create-new',
         },
     ];
 
@@ -86,10 +87,11 @@ const CoursesPage = () => {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input data-cy="course-catalog-create-new-name" />
                     </Form.Item>
                     <Form.Item>
                         <Button
+                            data-cy="course-catalog-create-new-submit-button"
                             type="primary"
                             htmlType="submit"
                             style={{ float: 'right' }}

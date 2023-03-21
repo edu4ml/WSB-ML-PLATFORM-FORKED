@@ -8,16 +8,24 @@ const CourseListItemHeader = ({ course }: { course: CourseListItemType }) => {
         return (
             <Row>
                 <Col span={16}>
-                    <Link to={`/courses/${course.uuid}`}>{course.title}</Link>
+                    <Link
+                        data-cy="course-catalog-list-item-link-title"
+                        to={`/courses/${course.uuid}`}
+                    >
+                        {course.title}
+                    </Link>
                 </Col>
                 <Col span={8}>
-                    <Progress percent={course.progress} />
+                    <Progress
+                        data-cy="course-catalog-list-item-progress"
+                        percent={course.progress}
+                    />
                 </Col>
             </Row>
         );
     } else {
         return (
-            <span>
+            <span data-cy="course-catalog-list-item-draft-title">
                 {course.title} {course.is_draft && '(Wersja robocza)'}
             </span>
         );

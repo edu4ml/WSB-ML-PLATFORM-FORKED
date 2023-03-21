@@ -1,3 +1,5 @@
+import type { ButtonType } from 'antd/es/button/buttonHelpers';
+
 interface CourseListItemType {
     uuid: string;
     title: string;
@@ -5,6 +7,8 @@ interface CourseListItemType {
     progress: number;
     is_enrolled: boolean;
     is_draft: boolean;
+    updated_at: string;
+    created_at: string;
 }
 
 interface CourseItemDetailsType {
@@ -53,6 +57,13 @@ interface ExerciseItemType {
     resources: Array<ResourceItemType>;
 }
 
+interface CardHeaderRightButtonActionType {
+    text: string;
+    onClick;
+    type: ButtonType;
+    dataCy: string;
+}
+
 export {
     CourseListItemType,
     UserType,
@@ -61,4 +72,5 @@ export {
     ResourceItemType,
     CourseItemDetailsType,
     ExerciseItemType,
+    CardHeaderRightButtonActionType,
 };
