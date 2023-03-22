@@ -147,30 +147,30 @@ jobs:
       run: python3 manage.py collectstatic --no-input
 
     - name: Deploy to App Engine
-      uses: google-github-actions/deploy-appengine@v0.2.0
+      uses: google-github-actions/deploy-appengine@v1.2.2
       id: deploy
       with:
         deliverables: app.yaml
         version: v1
         project_id: wsb-mlproject
         credentials: ${{ secrets.GCP_CREDENTIALS }}
+
         env_vars: |-
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PORT }}
+          DEBUG: ${{ env.DEBUG }}
+          
+          DJANGO_SETTINGS_MODULE: ${{ env.DJANGO_SETTINGS_MODULE }}
+          DJANGO_LOG_LEVEL: ${{ env.DJANGO_LOG_LEVEL }}
+          
+          DATABASE_HOST: ${{ env.DATABASE_HOST }}
+          DATABASE_NAME: ${{ env.DATABASE_NAME }}m
+          DATABASE_USER: ${{ env.DATABASE_USER }}
+          DATABASE_PORT: ${{ env.DATABASE_PORT }}
 
     - name: Test
       run: curl "${{ steps.deploy.outputs.url }}"
   
-        # DEBUG: ${{ env.DEBUG }}
-        
-        # DJANGO_SETTINGS_MODULE: ${{ env.DJANGO_SETTINGS_MODULE }}
-        # DJANGO_LOG_LEVEL: ${{ env.DJANGO_LOG_LEVEL }}
-        
-        # DATABASE_HOST: ${{ env.DATABASE_HOST }}
-        # DATABASE_NAME: ${{ env.DATABASE_NAME }}m
-        # DATABASE_USER: ${{ env.DATABASE_USER }}
-        # DATABASE_PORT: ${{ env.DATABASE_PORT }}
-
   # notify:
   #   needs: [tests]
   #   runs-on: ubuntu-latest
