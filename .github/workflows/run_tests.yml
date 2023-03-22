@@ -154,6 +154,8 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    
+    - run: ls && pwd
 
     - name: Deploy to App Engine
       uses: google-github-actions/deploy-appengine@v1.2.2
