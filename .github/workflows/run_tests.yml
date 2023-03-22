@@ -158,7 +158,7 @@ jobs:
     - run: ls && pwd
 
     - name: Deploy to App Engine
-      uses: google-github-actions/deploy-appengine@v1
+      uses: google-github-actions/deploy-appengine@v1.2.1
       id: deploy
       with:
         version: v1
