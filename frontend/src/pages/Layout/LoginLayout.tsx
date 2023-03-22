@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Row, Layout } from 'antd';
+import Logos from '../../components/headerLogos/Logos';
 
 const { Header, Footer, Content, Sider } = Layout;
 
@@ -10,8 +11,6 @@ const headerStyle: React.CSSProperties = {
 
 const contentStyle: React.CSSProperties = {
     color: '#fff',
-
-    backgroundColor: '#fff',
 };
 
 const footerStyle: React.CSSProperties = {
@@ -29,11 +28,13 @@ const layoutStyle: React.CSSProperties = {
     maxWidth: '1400px',
     marginLeft: 'auto',
     marginRight: 'auto',
+    backgroundColor: '#f4f7fc',
 };
 
 const LoginLayout = ({ children }) => {
     return (
         <Layout style={layoutStyle}>
+            <Logos />
             <Content style={contentStyle}>{children}</Content>
         </Layout>
     );

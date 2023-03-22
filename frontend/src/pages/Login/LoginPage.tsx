@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Row } from 'antd';
+import { Button, Checkbox, Form, Input, Row } from 'antd';
 import { useLoginMutation } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 const LoginFormContainerStyle: React.CSSProperties = {
     marginLeft: 'auto',
@@ -33,32 +34,43 @@ const LoginPage = () => {
                 onFinish={handleLogin}
                 autoComplete="off"
                 layout="vertical"
+                size="large"
             >
                 <Form.Item
-                    label="Username"
+                    label=""
                     name="username"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your username!',
+                            message: 'Podaj adres email!',
                         },
                     ]}
                 >
-                    <Input />
+                    <Input
+                        prefix={
+                            <UserOutlined className="site-form-item-icon" />
+                        }
+                        placeholder="Adres email"
+                    />
                 </Form.Item>
 
                 <Form.Item
-                    label="Password"
+                    label=""
                     style={{ width: '100%' }}
                     name="password"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your password!',
+                            message: 'Podaj hasło!',
                         },
                     ]}
                 >
-                    <Input.Password />
+                    <Input.Password
+                        prefix={
+                            <LockOutlined className="site-form-item-icon" />
+                        }
+                        placeholder={'Hasło'}
+                    />
                 </Form.Item>
 
                 <Form.Item>
@@ -66,11 +78,15 @@ const LoginPage = () => {
                         data-cy={'login-button'}
                         type="primary"
                         htmlType="submit"
+                        block
                     >
                         Zaloguj
                     </Button>
                 </Form.Item>
             </Form>
+            <a style={{ float: 'right' }} href="">
+                Zapomniałem hasła
+            </a>
         </div>
     );
 };
