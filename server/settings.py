@@ -173,7 +173,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 LOGIN_REDIRECT_URL = "/admin"
 
-CSRF_TRUSTED_ORIGINS = [os.getenv("GAR_URL"), "http://127.0.0.1:8000"]
+CSRF_TRUSTED_ORIGINS = [os.getenv("PLATFORM_URL"), "http://127.0.0.1:8000"]
 
 LOGGING = {
     "version": 1,
