@@ -1,20 +1,54 @@
 import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Skeleton, Typography } from 'antd';
-import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import { Avatar, Dropdown, MenuProps, Skeleton, Space, Typography } from 'antd';
+import {
+    useGetUserProfileQuery,
+    useLogoutMutation,
+} from '../../features/auth/authApi';
+import { useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const { Text } = Typography;
 
+const menuItems: MenuProps['items'] = [
+    {
+        label: 'Profil',
+        key: 'profile',
+        icon: <UserOutlined />,
+    },
+    {
+        label: 'Wyloguj',
+        key: 'logout',
+        icon: <LogoutIcon />,
+    },
+];
+
 const UserProfileAvatar = () => {
-    const { data, isFetching, isSuccess } =
-        useGetUserProfileQuery('userDetails');
+    const { data, isSuccess } = useGetUserProfileQuery('userDetails');
+    const [logout, {}] = useLogoutMutation();
+    const navigate = useNavigate();
+
+    const onMenuClick = (e) => {
+        if (e.key === 'logout') {
+            logout('logoutUser');
+            navigate('/');
+        } else if (e.key === 'profile') {
+            navigate('/profile');
+        }
+    };
 
     if (isSuccess) {
         return (
-            <div style={{ float: 'right' }}>
-                <Text>{data?.username} </Text>
-                <Avatar icon={<UserOutlined />} />
-            </div>
+            <Dropdown
+                menu={{ items: menuItems, onClick: onMenuClick }}
+                placement="bottomRight"
+                arrow
+            >
+                <div style={{ float: 'right', cursor: 'pointer' }}>
+                    <Text>{data?.username} </Text>
+                    <Avatar icon={<UserOutlined />} />
+                </div>
+            </Dropdown>
         );
     } else {
         return (

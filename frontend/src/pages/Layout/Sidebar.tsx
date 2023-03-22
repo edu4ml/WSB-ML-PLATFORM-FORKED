@@ -1,11 +1,9 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { useLogoutMutation } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
-import { FolderTwoTone, SmileTwoTone } from '@ant-design/icons';
+import { FolderTwoTone } from '@ant-design/icons';
 
 const SideBarMenu = (props) => {
-    const [logout, {}] = useLogoutMutation();
     const navigate = useNavigate();
 
     return (
@@ -28,22 +26,6 @@ const SideBarMenu = (props) => {
                     icon: <FolderTwoTone />,
                     onClick: () => {
                         navigate('/exercises');
-                    },
-                },
-                {
-                    key: 10,
-                    label: 'Profil',
-                    icon: <SmileTwoTone />,
-                    onClick: () => {
-                        navigate('/profile');
-                    },
-                },
-                {
-                    key: 11,
-                    label: 'Wyloguj',
-                    onClick: () => {
-                        logout('logoutUser');
-                        navigate('/');
                     },
                 },
             ]}
