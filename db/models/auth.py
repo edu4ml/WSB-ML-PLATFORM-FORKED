@@ -15,3 +15,6 @@ class Role(TimestampedModel):
 class CustomUser(AbstractUser):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     roles = models.ManyToManyField(Role, blank=True)
+
+    def __str__(self) -> str:
+        return self.get_username() + " | " + self.email

@@ -4,6 +4,7 @@ import { useLoginMutation } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { GoogleLogin } from '@react-oauth/google';
 
 const LoginFormContainerStyle: React.CSSProperties = {
     marginLeft: 'auto',
@@ -24,6 +25,10 @@ const LoginPage = () => {
             .catch((err) => {
                 console.error('Error while login: ', err);
             });
+    };
+
+    const responseGoogle = (response) => {
+        console.log('Google response: ', response);
     };
 
     return (
@@ -87,6 +92,15 @@ const LoginPage = () => {
             <a style={{ float: 'right' }} href="">
                 Zapomniałem hasła
             </a>
+            <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                    console.log(credentialResponse);
+                }}
+                onError={() => {
+                    console.log('Login Failed');
+                }}
+            />
+            ;
         </div>
     );
 };

@@ -17,7 +17,9 @@ from dj_rest_auth.urls import urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+
+# from drf_social_oauth2.urls
 
 from api.urls import urlpatterns as course_tracker_urlpatterns
 from frontend.urls import urlpatterns as frontend_urlpatterns
@@ -27,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include((urlpatterns, "auth"))),
     path("api/", include(course_tracker_urlpatterns)),
+    path("oauth/", include("drf_social_oauth2.urls", namespace="drf")),
     path("", include((frontend_urlpatterns, "frontend"))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
