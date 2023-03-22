@@ -12,7 +12,7 @@ const SideBarMenu = (props) => {
         <Menu
             mode="inline"
             defaultSelectedKeys={['1']}
-            style={{ backgroundColor: 'rgb(0,0,0,0)' }}
+            style={{ backgroundColor: 'rgb(0,0,0,0)', height: '100%' }}
             items={[
                 {
                     key: 1,

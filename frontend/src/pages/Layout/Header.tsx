@@ -12,7 +12,9 @@ const MyHeader = () => {
                 <Col span={21}></Col>
                 <Col span={3}>{isAuthenticated && <UserProfileAvatar />}</Col>
             </Row>
-            <Divider />
+            <Divider
+                style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
+            />
         </>
     );
 };
