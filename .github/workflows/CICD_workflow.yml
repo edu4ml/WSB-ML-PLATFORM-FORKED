@@ -15,7 +15,6 @@ jobs:
       DATABASE_NAME: elearning
       DATABASE_HOST: 0.0.0.0
       DATABASE_USER: postgres
-      PLATFORM_URL: ${{ vars.PLATFORM_URL }}
 
     runs-on: ubuntu-latest
     strategy:
@@ -161,7 +160,8 @@ jobs:
           DEBUG=${{ vars.DEBUG }}
           
           DJANGO_SETTINGS_MODULE=${{ vars.DJANGO_SETTINGS_MODULE }}
-          
+          PLATFORM_URL=${{ vars.PLATFORM_URL }}
+
           DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
           DATABASE_HOST=${{ vars.DATABASE_HOST }}
           DATABASE_NAME=${{ vars.DATABASE_NAME }}
