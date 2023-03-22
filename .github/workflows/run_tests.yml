@@ -5,23 +5,23 @@ on:
     branches:
       - main
 
-env:
-  DJANGO_SETTINGS_MODULE: 'server.settings'
-  DEBUG: 1
-  DATABASE_PASSWORD: password
-  DATABASE_NAME: elearning
-  DATABASE_HOST: 0.0.0.0
-  DATABASE_USER: postgres
+# env:
+#   DJANGO_SETTINGS_MODULE: 'server.settings'
+#   DEBUG: 1
+#   DATABASE_PASSWORD: password
+#   DATABASE_NAME: elearning
+#   DATABASE_HOST: 0.0.0.0
+#   DATABASE_USER: postgres
 
-  GAR_URL: https://wsb-mlproject.ew.r.appspot.com
+#   GAR_URL: https://wsb-mlproject.ew.r.appspot.com
 
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
-  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
-  GKE_ZONE: us-central1-c   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
-  REPOSITORY: samples # TODO: update to Artifact Registry docker repository
-  IMAGE: static-site
+#   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+#   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
+#   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
+#   GKE_ZONE: us-central1-c   # TODO: update to cluster zone
+#   DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
+#   REPOSITORY: samples # TODO: update to Artifact Registry docker repository
+#   IMAGE: static-site
 
 jobs:
   # tests:
@@ -169,11 +169,10 @@ jobs:
           DEBUG=${{ env.DEBUG }}
           
           DJANGO_SETTINGS_MODULE=${{ env.DJANGO_SETTINGS_MODULE }}
-          DJANGO_LOG_LEVEL=${{ env.DJANGO_LOG_LEVEL }}
           
           DATABASE_PASSWORD=${{ secrets.DATABASE_PORT }}
           DATABASE_HOST=${{ env.DATABASE_HOST }}
-          DATABASE_NAME=${{ env.DATABASE_NAME }}m
+          DATABASE_NAME=${{ env.DATABASE_NAME }}
           DATABASE_USER=${{ env.DATABASE_USER }}
           DATABASE_PORT=${{ env.DATABASE_PORT }}
 
