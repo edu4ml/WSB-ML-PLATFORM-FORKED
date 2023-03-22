@@ -165,17 +165,17 @@ jobs:
         project_id: wsb-mlproject
 
         env_vars: |-
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PORT }}
-          DEBUG: ${{ env.DEBUG }}
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          DEBUG=${{ env.DEBUG }}
           
-          DJANGO_SETTINGS_MODULE: ${{ env.DJANGO_SETTINGS_MODULE }}
-          DJANGO_LOG_LEVEL: ${{ env.DJANGO_LOG_LEVEL }}
+          DJANGO_SETTINGS_MODULE=${{ env.DJANGO_SETTINGS_MODULE }}
+          DJANGO_LOG_LEVEL=${{ env.DJANGO_LOG_LEVEL }}
           
-          DATABASE_HOST: ${{ env.DATABASE_HOST }}
-          DATABASE_NAME: ${{ env.DATABASE_NAME }}m
-          DATABASE_USER: ${{ env.DATABASE_USER }}
-          DATABASE_PORT: ${{ env.DATABASE_PORT }}
+          DATABASE_PASSWORD=${{ secrets.DATABASE_PORT }}
+          DATABASE_HOST=${{ env.DATABASE_HOST }}
+          DATABASE_NAME=${{ env.DATABASE_NAME }}m
+          DATABASE_USER=${{ env.DATABASE_USER }}
+          DATABASE_PORT=${{ env.DATABASE_PORT }}
 
     - name: Test
       run: curl "${{ steps.deploy.outputs.url }}"
