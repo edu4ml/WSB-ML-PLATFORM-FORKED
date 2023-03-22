@@ -88,14 +88,9 @@ jobs:
           start: make run-for-cypress
           wait-on: http://0.0.0.0:8000
           wait-on-timeout: 10
-  run-migrations:
-    name: Run migration to update database
-    needs: ['tests']
-    environment: production
-    runs-on: ubuntu-latest
 
   deploy:
-    needs: ['tests', 'run-migrations']
+    needs: ['tests']
     name: Build and Deploy to Google Cloud Engine
     environment: production
     runs-on: ubuntu-latest
