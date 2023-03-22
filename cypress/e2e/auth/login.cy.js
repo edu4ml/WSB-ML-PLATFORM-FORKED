@@ -1,12 +1,12 @@
 describe('Login and Logout', () => {
     beforeEach(() => {
         // visit the login page before each test
-        cy.visit('http://127.0.0.1:8000');
+        cy.visit('/');
     });
 
     it('Logs in and out successfully', () => {
         // type in username and password
-        cy.get('#basic_username').type('jakubszwajka');
+        cy.get('#basic_username').type('admin');
         cy.get('#basic_password').type('adminadmin');
 
         // click on login button
@@ -16,6 +16,7 @@ describe('Login and Logout', () => {
         cy.url().should('include', '/courses');
 
         // click on the logout button
+        cy.get('[data-cy="top-right-avatar"]').click();
         cy.contains('Wyloguj').click();
 
         // verify user is redirected to the login page

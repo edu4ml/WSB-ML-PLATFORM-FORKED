@@ -3,7 +3,7 @@ import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { FolderTwoTone } from '@ant-design/icons';
 
-const SideBarMenu = (props) => {
+const SideBarMenu = () => {
     const navigate = useNavigate();
 
     return (

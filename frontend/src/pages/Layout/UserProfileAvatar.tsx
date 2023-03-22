@@ -44,7 +44,10 @@ const UserProfileAvatar = () => {
                 placement="bottomRight"
                 arrow
             >
-                <div style={{ float: 'right', cursor: 'pointer' }}>
+                <div
+                    style={{ float: 'right', cursor: 'pointer' }}
+                    data-cy="top-right-avatar"
+                >
                     <Text>{data?.username} </Text>
                     <Avatar icon={<UserOutlined />} />
                 </div>
