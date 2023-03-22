@@ -102,10 +102,9 @@ jobs:
     name: Deploy to Google Cloud Engine
     environment: production
     runs-on: ubuntu-latest
-
-    # permissions:
-    #   contents: 'read'
-    #   id-token: 'write'
+    defaults:
+      run:
+        working-directory: ./server
 
     steps:
     - name: Checkout
@@ -161,7 +160,7 @@ jobs:
       id: deploy
       with:
         version: v1
-        deliverables: app.yaml
+        deliverables: server/app.yaml
         project_id: wsb-mlproject
 
         env_vars: |-
