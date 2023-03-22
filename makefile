@@ -68,3 +68,9 @@ cypress-open:
 
 cypress-run:
 	npx cypress run
+
+gcloud-manual-deploy:
+	gcloud app deploy app.yaml --version=${SHORT_SHA} --no-cache
+
+gcloud-stream-logs:
+	gcloud app logs tail -s default

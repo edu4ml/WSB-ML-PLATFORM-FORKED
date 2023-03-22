@@ -12,7 +12,8 @@ env:
   DATABASE_NAME: elearning
   DATABASE_HOST: 0.0.0.0
   DATABASE_USER: postgres
-  GAR_URL: http://0.0.0.0:8000
+
+  GAR_URL: https://wsb-mlproject.ew.r.appspot.com
 
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
@@ -99,6 +100,7 @@ jobs:
 
   deploy:
     name: Deploy to Google Cloud Engine
+    environment: production
     runs-on: ubuntu-latest
 
     steps:
@@ -149,6 +151,18 @@ jobs:
         version: v1
         project_id: wsb-mlproject
         credentials: ${{ secrets.GCP_CREDENTIALS }}
+        env_vars: |-
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ env.DEBUG }}
+          
+          DJANGO_SETTINGS_MODULE: ${{ env.DJANGO_SETTINGS_MODULE }}
+          DJANGO_LOG_LEVEL: ${{ env.DJANGO_LOG_LEVEL }}
+          
+          DATABASE_HOST: ${{ env.DATABASE_HOST }}
+          DATABASE_NAME: ${{ env.DATABASE_NAME }}m
+          DATABASE_USER: ${{ env.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PORT }}
+          DATABASE_PORT: ${{ env.DATABASE_PORT }}
 
     - name: Test
       run: curl "${{ steps.deploy.outputs.url }}"
