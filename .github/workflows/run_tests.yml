@@ -162,7 +162,6 @@ jobs:
       id: deploy
       with:
         version: v1
-        deliverables: app.yaml
         project_id: wsb-mlproject
 
         env_vars: |-
