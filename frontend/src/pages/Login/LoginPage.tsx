@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Checkbox, Form, Input, Row } from 'antd';
 import { useLoginMutation } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { GoogleLogin } from '@react-oauth/google';
 
 const LoginFormContainerStyle: React.CSSProperties = {
     marginLeft: 'auto',
@@ -92,15 +90,6 @@ const LoginPage = () => {
             <a style={{ float: 'right' }} href="">
                 Zapomniałem hasła
             </a>
-            <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                    console.log(credentialResponse);
-                }}
-                onError={() => {
-                    console.log('Login Failed');
-                }}
-            />
-            ;
         </div>
     );
 };

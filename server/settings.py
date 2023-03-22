@@ -50,9 +50,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
-    "oauth2_provider",
-    "social_django",
-    "drf_social_oauth2",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 WEBPACK_LOADER = {
@@ -94,8 +95,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "social_django.context_processors.backends",
-                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -177,6 +176,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = "/courses"
+LOGOUT_REDIRECT_URL = "/"
 
 CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000"]
 if platform_url := os.getenv("PLATFORM_URL", None):
@@ -206,8 +206,6 @@ LOGGING = {
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
-        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",  # django-oauth-toolkit >= 1.0.0
-        "drf_social_oauth2.authentication.SocialAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -230,19 +228,23 @@ SIMPLE_JWT = {
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-AUTHENTICATION_BACKENDS = [
-    "social_core.backends.google.GoogleOAuth2",
-    "drf_social_oauth2.backends.DjangoOAuth2",
-    "django.contrib.auth.backends.ModelBackend",
-]
-# DRFSO2_PROPRIETARY_BACKEND_NAME = ""
-ACTIVATE_JWT = True  # OAuth -> If set to True the access and refresh tokens will be JWTed. Default is False.
+
+# AUTHENTICATION_BACKENDS = [
+#     "social_core.backends.google.GoogleOAuth2",
+#     "drf_social_oauth2.backends.DjangoOAuth2",
+#     "django.contrib.auth.backends.ModelBackend",
+# ]
+# # DRFSO2_PROPRIETARY_BACKEND_NAME = ""
+# ACTIVATE_JWT = True  # OAuth -> If set to True the access and refresh tokens will be JWTed. Default is False.
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_OAUTH_CLIENT_KEY", None)
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", None)
 
 # Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/userinfo.profile",
-]
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+#     "https://www.googleapis.com/auth/userinfo.email",
+#     "https://www.googleapis.com/auth/userinfo.profile",
+# ]
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {"SCOPE": ["profile", "email"], "AUTH_PARAMS": {"access_type": "online"}}
+}
