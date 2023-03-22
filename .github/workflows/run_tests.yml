@@ -103,6 +103,10 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
 
+    # permissions:
+    #   contents: 'read'
+    #   id-token: 'write'
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -146,14 +150,19 @@ jobs:
     - name: Collect staticfiles
       run: python3 manage.py collectstatic --no-input
 
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
     - name: Deploy to App Engine
       uses: google-github-actions/deploy-appengine@v1.2.2
       id: deploy
       with:
-        deliverables: app.yaml
         version: v1
+        deliverables: app.yaml
         project_id: wsb-mlproject
-        credentials: ${{ secrets.GCP_CREDENTIALS }}
 
         env_vars: |-
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
