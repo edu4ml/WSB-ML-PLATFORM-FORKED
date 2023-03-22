@@ -79,11 +79,11 @@ jobs:
         if: matrix.type == 'e2e-test'
         run: npm install
 
-      - name: Start application
-        if: matrix.type == 'e2e-test'
-        run: |
-          make run-for-cypress & sleep 10
-      # Give the server some time to start up
+      # - name: Start application
+      #   if: matrix.type == 'e2e-test'
+      #   run: |
+      #     make run-for-cypress & sleep 10
+      # # Give the server some time to start up
 
       - name: Cypress run
         if: matrix.type == 'e2e-test'
@@ -91,7 +91,7 @@ jobs:
         with:
           browser: chrome
           build: npm run build
-          start: make cypress-run
+          start: make run-for-cypress
           wait-on: http://0.0.0.0:8000
           wait-on-timeout: 10
 

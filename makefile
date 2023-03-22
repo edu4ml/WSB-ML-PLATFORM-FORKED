@@ -63,7 +63,7 @@ run-for-cypress:
 	DJANGO_SETTINGS_MODULE=server.test_settings make seed-db
 	echo '----- prepared for cypress run ----'
 	echo '----- starting server -------------'
-	DJANGO_SETTINGS_MODULE=server.test_settings python manage.py runserver
+	DJANGO_SETTINGS_MODULE=server.test_settings python manage.py runserver 0.0.0.0:8000
 
 cypress-open:
 	npx cypress open
