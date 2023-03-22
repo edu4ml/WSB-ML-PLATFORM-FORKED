@@ -13,11 +13,9 @@ runserver:
 runwebpack:
 	npm run dev
 
-deploy:
+build:
 	npm run build
 	python3 manage.py collectstatic --no-input
-	pip-compile
-	gcloud app deploy app.yaml --version=${SHORT_SHA} --no-cache
 
 lint:
 	isort --check-only . 
