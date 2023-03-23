@@ -3,6 +3,8 @@ import { Button, Checkbox, Form, Input, Row } from 'antd';
 import { useLoginMutation } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import GoogleButton from 'react-google-button'
+
 
 const LoginFormContainerStyle: React.CSSProperties = {
     marginLeft: 'auto',
@@ -25,8 +27,30 @@ const LoginPage = () => {
             });
     };
 
-    const responseGoogle = (response) => {
-        console.log('Google response: ', response);
+    const responseGoogle = (e) => {
+        console.log('Google buttol clicked: ', e);
+        const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+        const redirectUri = 'api/v1/auth/login/google/';
+
+        const scope = [
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/userinfo.profile'
+        ].join(' ');
+
+        const params = {
+            response_type: 'code',
+            client_id: '797542642345-q6uivdpghknfu9bo29tke693em4hp23s.apps.googleusercontent.com',
+            redirect_uri: 'http://127.0.0.1:8000/api/auth/login/google',
+            // redirect_uri: `${REACT_APP_BASE_BACKEND_URL}/${redirectUri}`,
+            prompt: 'select_account',
+            access_type: 'offline',
+            scope
+        };
+
+        const urlParams = new URLSearchParams(params).toString();
+
+        window.location = `${googleAuthUrl}?${urlParams}`;
+
     };
 
     return (
@@ -90,6 +114,9 @@ const LoginPage = () => {
             <a style={{ float: 'right' }} href="">
                 Zapomniałem hasła
             </a>
+            <GoogleButton
+                onClick={responseGoogle}
+            />
         </div>
     );
 };

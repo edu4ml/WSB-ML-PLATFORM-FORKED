@@ -47,11 +47,15 @@ INSTALLED_APPS = [
     # "course_tracker.apps.CourseTrackerConfig",
     # Other django apps
     "webpack_loader",
+    
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
+    
     "allauth",
     "allauth.account",
+    "dj_rest_auth.registration",
+    
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
 ]
@@ -228,23 +232,9 @@ SIMPLE_JWT = {
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
+GOOGLE_OAUTH2_CLIENT_ID = os.getenv("GOOGLE_OAUTH2_CLIENT_ID", None)
+GOOGLE_OAUTH2_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH2_CLIENT_SECRET", None)
 
-# AUTHENTICATION_BACKENDS = [
-#     "social_core.backends.google.GoogleOAuth2",
-#     "drf_social_oauth2.backends.DjangoOAuth2",
-#     "django.contrib.auth.backends.ModelBackend",
-# ]
-# # DRFSO2_PROPRIETARY_BACKEND_NAME = ""
-# ACTIVATE_JWT = True  # OAuth -> If set to True the access and refresh tokens will be JWTed. Default is False.
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_OAUTH_CLIENT_KEY", None)
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", None)
-
-# Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-#     "https://www.googleapis.com/auth/userinfo.email",
-#     "https://www.googleapis.com/auth/userinfo.profile",
-# ]
 SOCIALACCOUNT_PROVIDERS = {
     "google": {"SCOPE": ["profile", "email"], "AUTH_PARAMS": {"access_type": "online"}}
 }

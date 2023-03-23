@@ -16,6 +16,7 @@ setup(
         "Django==4.1.7",
         "django-webpack-loader==1.8.1",
         "djangorestframework==3.14.0",
+        "djangorestframework_jwt",
         "djangorestframework_simplejwt==5.2.2",
         "dj_rest_auth==3.0.0",
         "django-allauth",
