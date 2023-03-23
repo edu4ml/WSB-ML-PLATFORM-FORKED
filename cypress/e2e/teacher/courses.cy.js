@@ -8,6 +8,7 @@ describe('Courses page', () => {
         cy.url().should('include', '/courses');
 
         // click on the logout button
+        cy.get('[data-cy="top-right-avatar"]').click();
         cy.contains('Wyloguj').click();
 
         // verify user is redirected to the login page
