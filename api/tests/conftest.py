@@ -1,9 +1,10 @@
 from uuid import uuid4
+
 import pytest
 from django.test import Client
 from django.urls import reverse
 from model_bakery import baker
-from shared.enums import UserRoles
+
 from db.models import (
     Course as CourseDbModel,
     CourseStep,
@@ -12,6 +13,7 @@ from db.models import (
     Role,
 )
 from elearning.auth.user import User
+from shared.enums import UserRoles
 
 
 @pytest.fixture

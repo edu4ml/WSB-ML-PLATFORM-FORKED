@@ -1,7 +1,6 @@
 from django.urls import path
 
-from api.api_auth import GoogleLoginApi
-
+from api.apis.v1.auth import GoogleLoginApi
 
 from .api_course import (
     CourseApi,
@@ -31,5 +30,5 @@ urlpatterns = [
         ExerciseDetailApi.as_view(),
         name="exercise-detail",
     ),
-    path("auth/login/google/", GoogleLoginApi.as_view(), name='login-with-google')
+    path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
 ]

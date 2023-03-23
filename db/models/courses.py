@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from shared.enums import CourseStepEvaluationTypes
+
 from .mixin import TimestampedModel
 
 

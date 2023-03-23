@@ -1,7 +1,6 @@
 from typing import List
 from uuid import UUID
 
-from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 
 from db.models import (
@@ -9,14 +8,13 @@ from db.models import (
     CourseEnrollment as CourseEnrollmentDbModel,
     CourseStep as CourseStepDbModel,
     CourseStepUserCompletion as CourseStepUserCompletionDbModel,
+    CustomUser as User,
 )
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from infra.logging import logger
 from infra.repository import Repository
 from shared.enums import UserRoles
-
-User = get_user_model()
 
 
 @logger
@@ -69,10 +67,6 @@ class CourseRepository(Repository):
             self._update_course_steps(course, entity.steps)
 
         course.save()
-
-    def list(self) -> List[Course]:
-        course_modles = CourseDbModel.objects.all()
-        return [self._prepare_domain_entity(c) for c in course_modles]
 
     def list(self) -> List[Course]:
         user_roles = self.user.roles.values_list("name", flat=True)

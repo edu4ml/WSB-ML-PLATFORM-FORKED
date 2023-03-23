@@ -2,8 +2,8 @@ from dataclasses import asdict
 
 from rest_framework import status
 from rest_framework.response import Response
-from api.api_mixin import AuthMixin
 
+from api.api_mixin import AuthMixin
 from db.repository.exercise import ExerciseRepository
 
 

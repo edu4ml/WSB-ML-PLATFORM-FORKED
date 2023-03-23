@@ -4,8 +4,8 @@ from uuid import UUID
 from django.apps import apps
 from rest_framework import status
 from rest_framework.response import Response
-from api.api_mixin import AuthMixin
 
+from api.api_mixin import AuthMixin
 from db.repository.course import CourseRepository
 from db.repository.evaluation import EvaluationRepository
 from db.repository.exercise import ExerciseRepository

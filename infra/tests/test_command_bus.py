@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from mock import Mock
+from rest_framework.request import Request
 
 from infra.command import Command
 from infra.command_bus import CommandBus
 from infra.command_handler import CommandHandler
-from rest_framework.request import Request
 
 
 @dataclass

@@ -1,4 +1,5 @@
 from uuid import UUID
+
 from db.models import Exercise as ExerciseDbModel
 from elearning.exercising.entities import LinkResource
 from elearning.exercising.exercise import Exercise

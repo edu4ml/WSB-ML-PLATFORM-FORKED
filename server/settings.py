@@ -44,20 +44,11 @@ INSTALLED_APPS = [
     "db.apps.DbConfig",
     "frontend.apps.FrontendConfig",
     "elearning.apps.ElearningConfig",
-    # "course_tracker.apps.CourseTrackerConfig",
     # Other django apps
     "webpack_loader",
-    
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
-    
-    "allauth",
-    "allauth.account",
-    "dj_rest_auth.registration",
-    
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
 ]
 
 WEBPACK_LOADER = {
@@ -182,9 +173,8 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_REDIRECT_URL = "/courses"
 LOGOUT_REDIRECT_URL = "/"
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000"]
-if platform_url := os.getenv("PLATFORM_URL", None):
-    CSRF_TRUSTED_ORIGINS += platform_url
+PLATFORM_URL = os.getenv("PLATFORM_URL", "http://127.0.0.1:8000")
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", PLATFORM_URL]
 
 LOGGING = {
     "version": 1,
@@ -234,7 +224,6 @@ MEDIA_URL = "/media/"
 
 GOOGLE_OAUTH2_CLIENT_ID = os.getenv("GOOGLE_OAUTH2_CLIENT_ID", None)
 GOOGLE_OAUTH2_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH2_CLIENT_SECRET", None)
-
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {"SCOPE": ["profile", "email"], "AUTH_PARAMS": {"access_type": "online"}}
-}
+GOOGLE_ID_TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v3/tokeninfo"
+GOOGLE_ACCESS_TOKEN_OBTAIN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"

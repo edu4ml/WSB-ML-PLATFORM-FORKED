@@ -8,13 +8,13 @@ from .models import (
     CourseEnrollment,
     CourseStep,
     CourseStepUserCompletion,
+    CustomUser,
     EvaluationAttempt,
     Exercise,
     FileEvaluationType,
     FileResource,
     LinkResource,
     Role,
-    CustomUser,
 )
 
 
