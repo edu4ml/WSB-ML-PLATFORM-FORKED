@@ -4,6 +4,7 @@ from typing import List
 from uuid import UUID
 
 from elearning.coursing.entities import CourseStep
+from elearning.coursing.entities.author import Author
 
 
 @dataclass
@@ -19,6 +20,8 @@ class Course:
     title: str
     description: str
     is_draft: bool
+
+    author: Author | None = None
 
     is_enrolled: bool = False
     current_active: int = None

@@ -11,6 +11,7 @@ from .mixin import TimestampedModel
 class Course(TimestampedModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, default=None, blank=True)
     is_draft = models.BooleanField(default=True)
 
     def __str__(self) -> str:
