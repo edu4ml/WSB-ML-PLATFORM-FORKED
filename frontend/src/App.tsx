@@ -11,6 +11,7 @@ import './App.css';
 import ExercisesPage from './pages/Exercises/ExercisesPage';
 import ExerciseDetailPage from './pages/Exercises/ExerciseDetailPage';
 import CourseEditPage from './pages/Courses/CourseEditPage';
+import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
 
 const App = () => {
     return (
@@ -81,6 +82,17 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <ExerciseDetailPage />
+                                </MainLayout>
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <PrivateRoute>
+                                <MainLayout>
+                                    <TeacherDashboardPage />
                                 </MainLayout>
                             </PrivateRoute>
                         }

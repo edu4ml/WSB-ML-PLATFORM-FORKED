@@ -4,8 +4,6 @@ from uuid import UUID
 from elearning.reporting.entities.course import Course
 
 
-@dataclass 
-class Teacher: 
-    uuid: UUID
-
+@dataclass
+class Teacher:
     courses: set[Course]

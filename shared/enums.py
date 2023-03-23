@@ -33,10 +33,11 @@ class CourseStepEvaluationTypes(str, Enum):
 class CourseStepEvaluationStatus:
     _PREFIX = "COURSE_STEP_EVALUATION_STATUS"
 
-    WAITING = 'WAITING'
-    SUBMITTED = 'SUBMITTED'
-    PASSED = 'PASSED'
-    SKIPPED = 'SKIPPED'
+    WAITING = "WAITING"
+    SUBMITTED = "SUBMITTED"
+    PASSED = "PASSED"
+    SKIPPED = "SKIPPED"
+    UNKNOWN = "UNKNOWN"
 
 
 class UserRoles:

@@ -28,6 +28,14 @@ const SideBarMenu = () => {
                         navigate('/exercises');
                     },
                 },
+                {
+                    key: 3,
+                    label: 'Panel',
+                    icon: <FolderTwoTone />,
+                    onClick: () => {
+                        navigate('/dashboard');
+                    },
+                },
             ]}
         />
     );
