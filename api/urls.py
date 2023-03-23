@@ -1,17 +1,16 @@
-from django.urls import path
+from django.urls import path, include
 
 from api.apis.v1.auth import GoogleLoginApi
-
-from .api_course import (
+from api.apis.v1.course import (
     CourseApi,
     CourseCommandApi,
     CourseDetailApi,
     CourseStepApi,
 )
-from .api_exercise import ExerciseApi, ExerciseDetailApi
+from api.apis.v1.exercise import ExerciseApi, ExerciseDetailApi 
 
 
-urlpatterns = [
+urlpatterns_v1 = [
     path("course/", CourseApi.as_view(), name="course"),
     path("course-components/", CourseStepApi.as_view(), name="course-components"),
     path(
@@ -31,4 +30,8 @@ urlpatterns = [
         name="exercise-detail",
     ),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
+]
+
+urlpatterns = [
+    path("v1/", include((urlpatterns_v1, "v1")))
 ]

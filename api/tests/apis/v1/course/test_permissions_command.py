@@ -12,7 +12,7 @@ from shared.enums import CommandTypes
 def test_update_course_command_student(student_client, course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
     response = student_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         data,
         content_type="application/json",
     )
@@ -23,7 +23,7 @@ def test_update_course_command_student(student_client, course):
 def test_update_course_command_teacher(teacher_client, course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
     response = teacher_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         data,
         content_type="application/json",
     )
@@ -34,7 +34,7 @@ def test_update_course_command_teacher(teacher_client, course):
 def test_update_course_command_admin(admin_client, course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
     response = admin_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         data,
         content_type="application/json",
     )
@@ -49,7 +49,7 @@ def test_enroll_for_course_command_student(student, student_client, course):
         "user_uuid": str(student.uuid),
     }
     response = student_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -63,7 +63,7 @@ def test_enroll_for_course_command_teacher(teacher, teacher_client, course):
         "user_uuid": str(teacher.uuid),
     }
     response = teacher_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -77,7 +77,7 @@ def test_enroll_for_course_command_admin(admin, admin_client, course):
         "user_uuid": str(admin.uuid),
     }
     response = admin_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -90,7 +90,7 @@ def test_complete_course_step_command_student(student_client, course_with_steps)
     course, _ = course_with_steps
 
     course_detail_response = student_client.get(
-        reverse("course-detail", kwargs={"course_uuid": course.uuid})
+        reverse("api:v1:course-detail", kwargs={"course_uuid": course.uuid})
     )
     assert course_detail_response.status_code == status.HTTP_200_OK
     course_data = course_detail_response.json()
@@ -102,7 +102,7 @@ def test_complete_course_step_command_student(student_client, course_with_steps)
         "progress_tracking_uuid": progress_tracking_uuid,
     }
     response = student_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -114,7 +114,7 @@ def test_complete_course_step_command_teacher(teacher_client, course_with_steps)
     course, _ = course_with_steps
 
     course_detail_response = teacher_client.get(
-        reverse("course-detail", kwargs={"course_uuid": course.uuid})
+        reverse("api:v1:course-detail", kwargs={"course_uuid": course.uuid})
     )
     assert course_detail_response.status_code == status.HTTP_200_OK
     course_data = course_detail_response.json()
@@ -126,7 +126,7 @@ def test_complete_course_step_command_teacher(teacher_client, course_with_steps)
         "progress_tracking_uuid": progress_tracking_uuid,
     }
     response = teacher_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -138,7 +138,7 @@ def test_complete_course_step_command_admin(admin_client, course_with_steps):
     course, _ = course_with_steps
 
     course_detail_response = admin_client.get(
-        reverse("course-detail", kwargs={"course_uuid": course.uuid})
+        reverse("api:v1:course-detail", kwargs={"course_uuid": course.uuid})
     )
     assert course_detail_response.status_code == status.HTTP_200_OK
     course_data = course_detail_response.json()
@@ -150,7 +150,7 @@ def test_complete_course_step_command_admin(admin_client, course_with_steps):
         "progress_tracking_uuid": progress_tracking_uuid,
     }
     response = admin_client.put(
-        reverse("course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -167,7 +167,7 @@ def test_create_course_command_student(student_client):
     }
 
     response = student_client.put(
-        reverse("course"), command_data, content_type="application/json"
+        reverse("api:v1:course"), command_data, content_type="application/json"
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -181,7 +181,7 @@ def test_create_course_command_teacher(teacher_client):
     }
 
     response = teacher_client.put(
-        reverse("course"), command_data, content_type="application/json"
+        reverse("api:v1:course"), command_data, content_type="application/json"
     )
     assert response.status_code == status.HTTP_201_CREATED
 
@@ -195,6 +195,6 @@ def test_create_course_command_admin(admin_client):
     }
 
     response = admin_client.put(
-        reverse("course"), command_data, content_type="application/json"
+        reverse("api:v1:course"), command_data, content_type="application/json"
     )
     assert response.status_code == status.HTTP_201_CREATED

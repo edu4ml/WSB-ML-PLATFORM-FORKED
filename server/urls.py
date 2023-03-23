@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
 
-from api.urls import urlpatterns as course_tracker_urlpatterns
+from api.urls import urlpatterns as api_urlpatterns
 from frontend.urls import urlpatterns as frontend_urlpatterns
 
 
@@ -31,7 +31,7 @@ def home(request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include((auth_urlpatterns, "auth"))),
-    path("api/", include(course_tracker_urlpatterns)),
+    path("api/", include((api_urlpatterns, "api"))),
     path("", include((frontend_urlpatterns, "frontend"))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

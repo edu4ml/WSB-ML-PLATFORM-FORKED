@@ -7,7 +7,7 @@ from rest_framework import status
 
 @pytest.mark.django_db
 def test_list_exercises(admin_client, exercises):
-    response = admin_client.get(reverse("exercise"))
+    response = admin_client.get(reverse("api:v1:exercise"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == len(exercises)
 
@@ -16,7 +16,7 @@ def test_list_exercises(admin_client, exercises):
 def test_retrieve_exercise(admin_client, exercises):
     exercise = exercises[0]
     response = admin_client.get(
-        reverse("exercise-detail", kwargs=dict(exercise_uuid=exercise.uuid))
+        reverse("api:v1:exercise-detail", kwargs=dict(exercise_uuid=exercise.uuid))
     )
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
@@ -29,7 +29,7 @@ def test_retrieve_exercise(admin_client, exercises):
 def test_retrieve_exercise_not_found(admin_client):
     response = admin_client.get(
         reverse(
-            "exercise-detail",
+            "api:v1:exercise-detail",
             kwargs=dict(exercise_uuid=uuid4()),
         )
     )
