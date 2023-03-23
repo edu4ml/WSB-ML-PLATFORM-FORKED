@@ -124,7 +124,7 @@ const LoginPage = () => {
                 <Divider>lub</Divider>
 
                 <GoogleButton
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', borderRadius: '2px' }}
                     onClick={responseGoogle}
                     label={'Zaloguj się za pomocą konta Google'}
                 />

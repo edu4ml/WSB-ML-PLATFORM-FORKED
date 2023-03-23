@@ -68,7 +68,7 @@ class GoogleLoginApi(LoginView):
             return redirect(f"{settings.PLATFORM_URL}?{params}")
 
         # api_uri = reverse('api:v1:auth:login-with-google')
-        api_uri = f"{settings.PLATFORM_URL}/api/auth/login/google"
+        api_uri = f"{settings.PLATFORM_URL}/api/v1/auth/login/google"
 
         access_token = google_get_access_token(code=code, redirect_uri=api_uri)
         user_data = google_get_user_info(access_token=access_token)
