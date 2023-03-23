@@ -7,7 +7,9 @@
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Machine Learning Fundamentals",
-            "description": "Learn the fundamentals of machine learning, including supervised and unsupervised learning, and build a strong foundation for advanced topics."
+            "is_draft": false,
+            "description": "Learn the fundamentals of machine learning, including supervised and unsupervised learning, and build a strong foundation for advanced topics.",
+            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
         }
     },
     {
@@ -18,7 +20,35 @@
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Deep Learning Concepts",
-            "description": "Gain a deeper understanding of neural networks, convolutional neural networks, and recurrent neural networks in this deep learning course."
+            "is_draft": false,
+            "description": "Gain a deeper understanding of neural networks, convolutional neural networks, and recurrent neural networks in this deep learning course.",
+            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+        }
+    },
+    {
+        "model": "db.course",
+        "pk": 3,
+        "fields": {
+            "uuid": "550e8400-e29b-41d4-a716-446655440012",
+            "created_at": "2023-03-17T00:00:00Z",
+            "updated_at": "2023-03-17T00:00:00Z",
+            "is_draft": true,
+            "title": "Data Science Essentials",
+            "description": "Learn the essentials of data science, including data analysis, visualization, and machine learning algorithms.",
+            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+        }
+    },
+    {
+        "model": "db.course",
+        "pk": 4,
+        "fields": {
+            "uuid": "550e8400-e29b-41d4-a716-446655440017",
+            "created_at": "2023-03-17T00:00:00Z",
+            "updated_at": "2023-03-17T00:00:00Z",
+            "is_draft": true,
+            "title": "Advanced Machine Learning",
+            "description": "Explore advanced machine learning topics, such as deep learning architectures, natural language processing, and reinforcement learning.",
+            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
         }
     }
 ]

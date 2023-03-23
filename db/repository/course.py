@@ -99,7 +99,7 @@ class CourseRepository(Repository):
     # -----------------------------------------------------
 
     def _update_course_steps(self, course: Course, new_steps: List[CourseStep]):
-        course.coursestep_set.all().delete()
+        course.steps.all().delete()
 
         for new_step in new_steps:
             CourseStepDbModel.objects.create(
