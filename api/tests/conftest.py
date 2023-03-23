@@ -60,7 +60,7 @@ def client():
 @pytest.fixture
 def admin_client(admin, client):
     response = client.post(
-        reverse("auth:rest_login"), dict(username=admin.username, password="adminadmin")
+        reverse("api:v1:auth:rest_login"), dict(username=admin.username, password="adminadmin")
     )
     assert response.status_code == 200
     return client
@@ -69,7 +69,7 @@ def admin_client(admin, client):
 @pytest.fixture
 def student_client(student, client):
     response = client.post(
-        reverse("auth:rest_login"),
+        reverse("api:v1:auth:rest_login"),
         dict(username=student.username, password="adminadmin"),
     )
     assert response.status_code == 200
@@ -79,7 +79,7 @@ def student_client(student, client):
 @pytest.fixture
 def teacher_client(teacher, client):
     response = client.post(
-        reverse("auth:rest_login"),
+        reverse("api:v1:auth:rest_login"),
         dict(username=teacher.username, password="adminadmin"),
     )
     assert response.status_code == 200

@@ -11,7 +11,7 @@ interface loginUserResponse {
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/auth/',
+        baseUrl: 'api/v1/auth/',
         prepareHeaders(headers) {
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },

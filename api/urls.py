@@ -8,6 +8,7 @@ from api.apis.v1.course import (
     CourseStepApi,
 )
 from api.apis.v1.exercise import ExerciseApi, ExerciseDetailApi 
+from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
 
 
 urlpatterns_v1 = [
@@ -30,6 +31,7 @@ urlpatterns_v1 = [
         name="exercise-detail",
     ),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
+    path("auth/", include((auth_urlpatterns, "auth"))),
 ]
 
 urlpatterns = [

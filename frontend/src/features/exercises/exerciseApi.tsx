@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 export const exerciseApi = createApi({
     reducerPath: 'exerciseApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api/',
+        baseUrl: '/api/v1/',
         prepareHeaders(headers) {
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
