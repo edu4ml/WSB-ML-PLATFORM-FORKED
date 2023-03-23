@@ -49,10 +49,10 @@ admin.site.register(CourseStep, CourseStepAdmin)
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("title", "is_draft", "course_step_list")
+    list_display = ("title","author", "is_draft", "course_step_list")
     list_filter = ("is_draft",)
     search_fields = ("title", "description")
-
+    list_editable = ("author","is_draft")
     fieldsets = (
         (None, {"fields": ("title", "description")}),
         ("Advanced options", {"classes": ("collapse",), "fields": ("is_draft",)}),

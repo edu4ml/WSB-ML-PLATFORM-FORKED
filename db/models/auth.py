@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from db.models.mixin import TimestampedModel
+from shared.enums import UserRoles
 
 
 class Role(TimestampedModel):
@@ -20,3 +21,11 @@ class CustomUser(AbstractUser):
 
     def __str__(self) -> str:
         return self.get_username() + " | " + self.email
+
+    def is_teacher(self):
+        return UserRoles.TEACHER in self.roles.all().values_list("name", flat=True)
+    
+    def is_student(self):
+        return UserRoles.STUDENT in self.roles.all().values_list("name", flat=True)
+    
+    

@@ -11,7 +11,15 @@ from .mixin import TimestampedModel
 class Course(TimestampedModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, default=None, blank=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        default=None,
+        blank=True,
+        related_name='created_courses'
+    
+    )
     is_draft = models.BooleanField(default=True)
 
     def __str__(self) -> str:
@@ -20,15 +28,24 @@ class Course(TimestampedModel):
 
 class CourseEnrollment(TimestampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course, 
+        on_delete=models.CASCADE,
+        related_name="enrolled_students"
+    )
     is_completed = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (
+            ("course", "user")
+        )
 
     def __str__(self) -> str:
         return f"{self.course.title} - {self.user.get_username()}"  # pragma: no cover
 
 
 class CourseStep(TimestampedModel):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="steps")
     order = models.PositiveIntegerField()
 
     evaluation_type = models.CharField(
@@ -56,9 +73,13 @@ class CourseStep(TimestampedModel):
 
 class CourseStepUserCompletion(TimestampedModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name="course_steps_completion"
+    )
 
-    completed_at = models.DateTimeField(blank=True, null=True)
+    completed_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, default=None

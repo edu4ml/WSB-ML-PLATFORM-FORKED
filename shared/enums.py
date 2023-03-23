@@ -30,6 +30,15 @@ class CourseStepEvaluationTypes(str, Enum):
         return [(item.value, item.name) for item in cls]
 
 
+class CourseStepEvaluationStatus:
+    _PREFIX = "COURSE_STEP_EVALUATION_STATUS"
+
+    WAITING = 'WAITING'
+    SUBMITTED = 'SUBMITTED'
+    PASSED = 'PASSED'
+    SKIPPED = 'SKIPPED'
+
+
 class UserRoles:
     _PREFIX = "USER_ROLES"
 
