@@ -9,7 +9,7 @@ from db.models import (
     Course as CourseDbModel,
     CourseStep,
     Exercise,
-    FileEvaluationType,
+    Evaluation,
     Role,
 )
 from elearning.auth.user import User
@@ -127,9 +127,9 @@ def course_with_steps(exercises):
 
 @pytest.fixture
 def file_evaluation_type():
-    return baker.make(FileEvaluationType)
+    return baker.make(Evaluation)
 
 
 @pytest.fixture
 def file_evaluation_types():
-    return baker.make(FileEvaluationType, 5)
+    return baker.make(Evaluation, 5)

@@ -29,8 +29,7 @@ class CourseStepEvaluationTypes(str, Enum):
     def choices(cls):
         return [(item.value, item.name) for item in cls]
 
-
-class CourseStepEvaluationStatus:
+class CourseStepEvaluationStatus(str, Enum):
     _PREFIX = "COURSE_STEP_EVALUATION_STATUS"
 
     WAITING = "WAITING"
@@ -38,6 +37,10 @@ class CourseStepEvaluationStatus:
     PASSED = "PASSED"
     SKIPPED = "SKIPPED"
     UNKNOWN = "UNKNOWN"
+
+    @classmethod
+    def choices(cls):
+        return [(item.value, item.name) for item in cls]
 
 
 class UserRoles:

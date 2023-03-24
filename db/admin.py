@@ -11,7 +11,7 @@ from .models import (
     CustomUser,
     EvaluationAttempt,
     Exercise,
-    FileEvaluationType,
+    Evaluation,
     FileResource,
     LinkResource,
     Role,
@@ -49,10 +49,10 @@ admin.site.register(CourseStep, CourseStepAdmin)
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("title","author", "is_draft", "course_step_list")
+    list_display = ("title", "author", "is_draft", "course_step_list")
     list_filter = ("is_draft",)
     search_fields = ("title", "description")
-    list_editable = ("author","is_draft")
+    list_editable = ("author", "is_draft")
     fieldsets = (
         (None, {"fields": ("title", "description")}),
         ("Advanced options", {"classes": ("collapse",), "fields": ("is_draft",)}),
@@ -96,11 +96,12 @@ class CourseStepUserCompletionAdmin(admin.ModelAdmin):
 admin.site.register(CourseStepUserCompletion, CourseStepUserCompletionAdmin)
 
 
-class FileEvaluationAdmin(admin.ModelAdmin):
-    pass
+class EvaluationAdmin(admin.ModelAdmin):
+    list_display = ("title", "description", "type")
+    list_editable = ("type",)
 
 
-admin.site.register(FileEvaluationType, FileEvaluationAdmin)
+admin.site.register(Evaluation, EvaluationAdmin)
 
 
 class FileResourceAdmin(admin.ModelAdmin):

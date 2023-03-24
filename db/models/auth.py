@@ -24,8 +24,6 @@ class CustomUser(AbstractUser):
 
     def is_teacher(self):
         return UserRoles.TEACHER in self.roles.all().values_list("name", flat=True)
-    
+
     def is_student(self):
         return UserRoles.STUDENT in self.roles.all().values_list("name", flat=True)
-    
-    

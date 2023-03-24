@@ -6,5 +6,5 @@ from .courses import (
     CourseStepUserCompletion,
 )
 from .exercises import Exercise
-from .evaluations import FileEvaluationType, EvaluationAttempt
+from .evaluations import Evaluation, EvaluationAttempt
 from .auth import Role, CustomUser

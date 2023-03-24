@@ -28,7 +28,11 @@ const siderStyle: React.CSSProperties = {
     backgroundColor: backgroundColor,
 };
 
-const layoutStyle: React.CSSProperties = {
+const mainLayoutStyle: React.CSSProperties = {
+    backgroundColor: backgroundColor,
+};
+
+const contentLayoutStyle: React.CSSProperties = {
     minHeight: '100vh',
     margin: 0,
     padding: 0,
@@ -39,14 +43,14 @@ const layoutStyle: React.CSSProperties = {
 
 const MainLayout = ({ children }) => {
     return (
-        <Layout style={layoutStyle}>
-            <Header style={headerStyle}>
-                <MyHeader />
-            </Header>
-            <Layout>
-                <Sider style={siderStyle}>
-                    <SideBarMenu />
-                </Sider>
+        <Layout style={mainLayoutStyle}>
+            <Sider breakpoint="lg" collapsedWidth={0} style={siderStyle}>
+                <SideBarMenu />
+            </Sider>
+            <Layout style={contentLayoutStyle}>
+                <Header style={headerStyle}>
+                    <MyHeader />
+                </Header>
                 <Content style={contentStyle}>{children}</Content>
             </Layout>
             <Footer style={footerStyle} />

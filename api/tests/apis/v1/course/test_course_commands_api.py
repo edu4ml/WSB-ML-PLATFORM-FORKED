@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from db.models.courses import Course, CourseStep
-from db.models.evaluations import FileEvaluationType
+from db.models.evaluations import Evaluation
 from db.models.exercises import Exercise
 from shared.enums import CommandTypes, CourseStepEvaluationTypes
 
@@ -170,7 +170,7 @@ def test_issue_update_command_add_steps(
                     order=4,
                     uuid=file_evaluation_type.uuid,
                     content_type=ContentType.objects.get_for_model(
-                        FileEvaluationType
+                        Evaluation
                     ).model,
                     evaluation_type=CourseStepEvaluationTypes.TEACHER_EVALUATED,
                 ),

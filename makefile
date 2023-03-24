@@ -48,13 +48,12 @@ test-mutant-report:
 
 
 seed-db:
-	python manage.py flush --no-input
 	python manage.py loaddata db/seed/auth.json
 	python manage.py loaddata db/seed/resources.json
 	python manage.py loaddata db/seed/exercises.json
 	python manage.py loaddata db/seed/evaluation.json
 	python manage.py loaddata db/seed/courses.json
-	python manage.py loaddata db/seed/course_step.json
+	python manage.py loaddata db/seed/course_steps.json
 
 
 run-for-cypress:

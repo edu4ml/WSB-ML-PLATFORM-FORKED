@@ -1,29 +1,27 @@
 from db.models.courses import CourseStepUserCompletion
 from elearning.reporting.entities.student import (
-    StudentInCourse,
+    StudentInCourseStepEvaluationAttempt,
+    StudentWithProgress,
     StudentInCourseProgress,
     StudentInCourseStepProgress,
 )
 from infra.repository import Repository
 from elearning.reporting.teacher import Teacher
 from elearning.reporting.entities.course import Course
-from django.contrib.contenttypes.fields import GenericRelation
-
-from shared.enums import CourseStepEvaluationStatus
 
 
 class ReportRepository(Repository):
     def get_for_teacher(self):
         assert (
             self.user and self.user.is_teacher()
-        ), f"User needs to be a teacher to generate Teacher Report"
+        ), "User needs to be a teacher to generate Teacher Report"
         return Teacher(
             courses=[
                 Course(
                     uuid=course.uuid,
                     title=course.title,
                     students=[
-                        StudentInCourse(
+                        StudentWithProgress(
                             uuid=enrolment.user.uuid,
                             email=enrolment.user.email,
                             progress=StudentInCourseProgress(
@@ -55,17 +53,35 @@ class ReportRepository(Repository):
                         order=step.order,
                         is_completed=step_completion.is_completed,
                         completed_at=step_completion.completed_at,
-                        evaluation_status=CourseStepEvaluationStatus.WAITING,
+                        evaluation_status=[
+                            StudentInCourseStepEvaluationAttempt(
+                                title=evaluation_attempt.title,
+                                description=evaluation_attempt.description,
+                                status=evaluation_attempt.status,
+                            )
+                            for evaluation_attempt in step.evaluation_attempts.filter(
+                                user=student
+                            )
+                        ],
                     )
                 )
-            except Exception as e:
+            except Exception:
                 steps_progress.append(
                     StudentInCourseStepProgress(
                         title=step.object.title,
                         order=step.order,
                         is_completed=False,
                         completed_at=None,
-                        evaluation_status=CourseStepEvaluationStatus.UNKNOWN,
+                        evaluation_status=[
+                            StudentInCourseStepEvaluationAttempt(
+                                title=evaluation_attempt.title,
+                                description=evaluation_attempt.description,
+                                status=evaluation_attempt.status,
+                            )
+                            for evaluation_attempt in step.evaluation_attempts.filter(
+                                user=student
+                            )
+                        ],
                     )
                 )
 

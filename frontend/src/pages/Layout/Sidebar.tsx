@@ -13,7 +13,15 @@ const SideBarMenu = () => {
             style={{ backgroundColor: 'rgb(0,0,0,0)', height: '100%' }}
             items={[
                 {
-                    key: 1,
+                    key: 'dashboard',
+                    label: 'Panel',
+                    icon: <FolderTwoTone />,
+                    onClick: () => {
+                        navigate('/dashboard');
+                    },
+                },
+                {
+                    key: 'courses',
                     label: 'Kursy',
                     icon: <FolderTwoTone />,
                     onClick: () => {
@@ -21,19 +29,11 @@ const SideBarMenu = () => {
                     },
                 },
                 {
-                    key: 2,
+                    key: 'exercises',
                     label: 'Ćwiczenia',
                     icon: <FolderTwoTone />,
                     onClick: () => {
                         navigate('/exercises');
-                    },
-                },
-                {
-                    key: 3,
-                    label: 'Panel',
-                    icon: <FolderTwoTone />,
-                    onClick: () => {
-                        navigate('/dashboard');
                     },
                 },
             ]}

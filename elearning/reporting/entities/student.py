@@ -1,8 +1,16 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import List
 from uuid import UUID
 
 from shared.enums import CourseStepEvaluationStatus
+
+
+@dataclass
+class StudentInCourseStepEvaluationAttempt:
+    title: str
+    description: str
+    status: CourseStepEvaluationStatus
 
 
 @dataclass
@@ -12,7 +20,7 @@ class StudentInCourseStepProgress:
     completed_at: datetime
     is_completed: bool
 
-    evaluation_status: CourseStepEvaluationStatus
+    evaluation_status: List[StudentInCourseStepEvaluationAttempt]
 
 
 @dataclass
@@ -25,14 +33,15 @@ class StudentInCourseProgress:
         self._calculate_current_step()
 
     def _calculate_current_step(self):
-        self.current_step = len(
-            list(filter(lambda c: c.is_completed == True, self.steps))
-        )
+        self.current_step = len(list(filter(lambda c: c.is_completed, self.steps)))
 
 
 @dataclass
-class StudentInCourse:
+class Student:
     uuid: UUID
     email: str
 
+
+@dataclass
+class StudentWithProgress(Student):
     progress: StudentInCourseProgress
