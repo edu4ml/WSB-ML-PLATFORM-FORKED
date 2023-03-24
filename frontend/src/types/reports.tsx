@@ -24,7 +24,13 @@ interface ReportCourseStudentProgressStepsType {
     order: number;
     completed_at: string;
     is_completed: boolean;
-    evaluation_status: string;
+    evaluation_status: EvaluationStatusType;
+}
+
+interface EvaluationStatusType {
+    title: string;
+    description: string;
+    status: string;
 }
 
 export {

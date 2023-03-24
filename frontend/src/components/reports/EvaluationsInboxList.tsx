@@ -1,89 +1,46 @@
-import { Button, Collapse, List, Space, Table, Typography } from 'antd';
+import { Card, Space } from 'antd';
 import React from 'react';
-import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
-import { UserOutlined } from '@ant-design/icons';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
+import { useGetTeacherReportQuery } from '../../features/reports/reportsApi';
+import FileSubmissionCard from './evaluation/FileSubmittionCard';
 
-const { Text } = Typography;
+const EvaluationsInboxList = () => {
+    const { data: report, isSuccess } =
+        useGetTeacherReportQuery('teacher-report');
 
-const EvaluationsInboxList = ({ evaluations }) => {
-    const courseEvaluationInboxes = (courseEvaluations) => {
-        let totalEvaluations = 0;
-        for (const student of courseEvaluations.students) {
-            totalEvaluations += student.evaluations.length;
-        }
-        return totalEvaluations;
+    const getEvaluationInbox = (courses) => {
+        let evaluationInbox = [];
+        courses?.forEach((course) => {
+            course.students.forEach((student) => {
+                student.progress.steps.forEach((step) => {
+                    if (step.evaluation_status.length > 0) {
+                        step.evaluation_status.forEach((evaluation) => {
+                            evaluationInbox.push({
+                                course: {
+                                    uuid: course.uuid,
+                                    title: course.title,
+                                },
+                                student: {
+                                    uuid: student.uuid,
+                                    email: student.email,
+                                },
+                                status: evaluation.status,
+                                title: evaluation.title,
+                                description: evaluation.description,
+                            });
+                        });
+                    }
+                });
+            });
+        });
+        return evaluationInbox;
     };
 
     return (
-        <Collapse>
-            {evaluations?.map((courseEvaluations) => (
-                <Collapse.Panel
-                    extra={
-                        <Space>
-                            <MailOutlinedIcon />
-                            {courseEvaluationInboxes(courseEvaluations)}
-                        </Space>
-                    }
-                    key={courseEvaluations.title}
-                    header={<Text strong>{courseEvaluations.title}</Text>}
-                    collapsible={
-                        courseEvaluationInboxes(courseEvaluations)
-                            ? undefined
-                            : 'disabled'
-                    }
-                >
-                    <List
-                        bordered
-                        dataSource={courseEvaluations.students}
-                        renderItem={(student) => (
-                            <List.Item>
-                                <List.Item.Meta
-                                    title={
-                                        <Space
-                                            direction="vertical"
-                                            style={{ width: '100%' }}
-                                        >
-                                            <Space
-                                                direction="horizontal"
-                                                style={{ width: '100%' }}
-                                            >
-                                                <UserOutlined />
-                                                {student.email}
-                                            </Space>
-                                            <List
-                                                dataSource={student.evaluations}
-                                                renderItem={(evaluation) => {
-                                                    return (
-                                                        <List.Item
-                                                            actions={[
-                                                                <Button
-                                                                    type="text"
-                                                                    onClick={() => {
-                                                                        console.log(
-                                                                            'Clicked: ',
-                                                                            evaluation
-                                                                        );
-                                                                    }}
-                                                                >
-                                                                    <DoneAllIcon />
-                                                                </Button>,
-                                                            ]}
-                                                        >
-                                                            {evaluation.title}
-                                                        </List.Item>
-                                                    );
-                                                }}
-                                            />
-                                        </Space>
-                                    }
-                                />
-                            </List.Item>
-                        )}
-                    ></List>
-                </Collapse.Panel>
+        <Space direction="vertical" style={{ width: '100%' }}>
+            {getEvaluationInbox(report?.courses).map((evaluationInboxItem) => (
+                <FileSubmissionCard evaluation={evaluationInboxItem} />
             ))}
-        </Collapse>
+        </Space>
     );
 };
 

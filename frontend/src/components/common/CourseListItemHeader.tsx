@@ -1,9 +1,9 @@
 import { Col, Progress, Row } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CourseListItemType } from '../../types/course';
+import { CourseType } from '../../types/course';
 
-const CourseListItemHeader = ({ course }: { course: CourseListItemType }) => {
+const CourseListItemHeader = ({ course }: { course: CourseType }) => {
     if (course.is_enrolled && !course.is_draft) {
         return (
             <Row>

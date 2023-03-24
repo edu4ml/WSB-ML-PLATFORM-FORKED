@@ -1,4 +1,13 @@
-import { Collapse, Typography, Space, List, Steps } from 'antd';
+import {
+    Collapse,
+    Typography,
+    Space,
+    List,
+    Steps,
+    Progress,
+    Col,
+    Row,
+} from 'antd';
 import React from 'react';
 import {
     ReportCourseStudentProgressType,
@@ -56,9 +65,11 @@ const CoursesProgressList = ({
         courseProgress: ReportCourseStudentProgressType
     ) => {
         return courseProgress.steps.map((step) => {
+            console.log(step);
             return {
-                title: stepEvaluationStatusToDescription[step.evaluation_status]
-                    .text,
+                title: stepEvaluationStatusToDescription[
+                    step.evaluation_status.status
+                ].text,
                 description: step.title,
             };
         });
@@ -87,7 +98,6 @@ const CoursesProgressList = ({
                     }
                 >
                     <List
-                        bordered
                         dataSource={course.students}
                         renderItem={(student) => (
                             <List.Item>
@@ -95,24 +105,17 @@ const CoursesProgressList = ({
                                     style={{ width: '100%' }}
                                     direction="vertical"
                                 >
-                                    <List.Item.Meta
-                                        title={
+                                    <Row>
+                                        <Col span={16}>
                                             <Space direction="horizontal">
                                                 <UserOutlined />
                                                 {student.email}
                                             </Space>
-                                        }
-                                        style={{ marginBottom: '20px' }}
-                                    />
-                                    <Steps
-                                        progressDot={(dot, data) => <>{dot}</>}
-                                        current={student.progress.current_step}
-                                        size="small"
-                                        labelPlacement="vertical"
-                                        items={getStudentCourseProgress(
-                                            student.progress
-                                        )}
-                                    />
+                                        </Col>
+                                        <Col span={8}>
+                                            <Progress percent={36} />
+                                        </Col>
+                                    </Row>
                                 </Space>
                             </List.Item>
                         )}
