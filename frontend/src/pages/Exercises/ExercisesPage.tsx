@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Card } from 'antd';
 import ExerciseList from '../../components/exercises/ExerciseList';
-import { useGetExercisesCatalogQuery } from '../../features/exercises/exerciseApi';
 import CardHeader from '../../components/common/CardHeader';
+import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 
 const tabList = [
     {
@@ -16,11 +16,12 @@ const tabList = [
 ];
 
 const ExercisesPage = () => {
-    const { data } = useGetExercisesCatalogQuery('exercise-catalog');
+    const { data: courseComponents } =
+        useGetCourseComponentsQuery('course-components');
     const [activeTabKey, setActiveTabKey] = useState<string>('exercises');
 
     const cardContentList: Record<string, React.ReactNode> = {
-        exercises: <ExerciseList exercises={data} />,
+        exercises: <ExerciseList exercises={courseComponents} />,
     };
     return (
         <Card
