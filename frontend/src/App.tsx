@@ -8,10 +8,13 @@ import CoursesPage from './pages/Courses/CoursesPage';
 import CourseDetailPage from './pages/Courses/CourseDetailPage';
 import { Button, Result } from 'antd';
 import './App.css';
-import ExercisesPage from './pages/Exercises/ExercisesPage';
 import ExerciseDetailPage from './pages/Exercises/ExerciseDetailPage';
 import CourseEditPage from './pages/Courses/CourseEditPage';
 import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
+import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage';
+import DashboardLayout from './pages/Layout/DashboardLayout';
+import CourseComponentsLayout from './pages/Layout/CourseComponentsLayout';
+import SimpleLayout from './pages/Layout/SimpleLayout';
 
 const App = () => {
     return (
@@ -31,7 +34,9 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <ProfileCard />
+                                    <SimpleLayout>
+                                        <ProfileCard />
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -41,7 +46,9 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <CoursesPage />
+                                    <SimpleLayout>
+                                        <CoursesPage />
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -51,7 +58,9 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <CourseDetailPage />
+                                    <SimpleLayout>
+                                        <CourseDetailPage />
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -61,17 +70,21 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <CourseEditPage />
+                                    <SimpleLayout>
+                                        <CourseEditPage />
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
                     />
                     <Route
-                        path="/exercises"
+                        path="/course-components"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <ExercisesPage />
+                                    <CourseComponentsLayout>
+                                        <CourseComponentsPage />
+                                    </CourseComponentsLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -91,7 +104,9 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <TeacherDashboardPage />
+                                    <DashboardLayout>
+                                        <TeacherDashboardPage />
+                                    </DashboardLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }

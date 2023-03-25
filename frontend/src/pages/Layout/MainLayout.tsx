@@ -54,7 +54,8 @@ const MainLayout = ({ children }) => {
             <Header style={headerStyle}>
                 <MyHeader />
             </Header>
-            <Layout style={mainLayoutStyle}>
+            {children}
+            {/* <Layout style={mainLayoutStyle}>
                 <Sider
                     breakpoint="lg"
                     collapsedWidth={0}
@@ -73,7 +74,7 @@ const MainLayout = ({ children }) => {
                 >
                     <RightSidebar />
                 </Sider>
-            </Layout>
+            </Layout> */}
         </Layout>
     );
 };

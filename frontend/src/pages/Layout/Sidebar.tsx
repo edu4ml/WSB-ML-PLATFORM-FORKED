@@ -33,7 +33,7 @@ const SideBarMenu = () => {
                     label: 'Ćwiczenia',
                     icon: <FolderTwoTone />,
                     onClick: () => {
-                        navigate('/exercises');
+                        navigate('/course-components');
                     },
                 },
             ]}

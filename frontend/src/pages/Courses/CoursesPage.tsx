@@ -17,7 +17,7 @@ import {
     TEXT_CREATE_COURSE,
     TEXT_NEW_COURSE,
     TEXT_NEW_COURSE_TITLE,
-    TEXT_NEW_COURSE_TITLE_WARNING,
+    TEXT_FORM_NO_TITLE_WARNING,
 } from '../../texts';
 
 const tabList = [
@@ -115,7 +115,7 @@ const CoursesPage = () => {
                         rules={[
                             {
                                 required: true,
-                                message: TEXT_NEW_COURSE_TITLE_WARNING,
+                                message: TEXT_FORM_NO_TITLE_WARNING,
                             },
                         ]}
                     >
