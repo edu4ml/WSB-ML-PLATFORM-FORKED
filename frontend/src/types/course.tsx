@@ -1,22 +1,38 @@
 import type { ButtonType } from 'antd/es/button/buttonHelpers';
 
-interface CourseType {
+export interface CourseType {
     uuid: string;
+    updated_at: string;
+    created_at: string;
+    author: string;
+    is_enrolled: boolean;
     title: string;
     description: string;
     progress: number;
-    is_enrolled: boolean;
     is_draft: boolean;
-    updated_at: string;
-    created_at: string;
+    steps: Array<CourseStepType>;
 }
 
-interface CourseStepType {
+export interface CourseStepType {
+    order: number;
+    evaluation_type: string;
+    component: CourseComponentType;
+    user_progress: CourseStepUserProgressType | null;
+}
+
+export interface CourseComponentType {
     uuid: string;
     title: string;
     description: string;
-    content_type: string;
-    evaluation_type: string;
+    type: string;
+    resources: Array<ResourceItemType>;
+}
+
+export interface CourseStepUserProgressType {
+    tracking_uuid: string;
+    completed_at: string;
+    is_completed: boolean;
+    is_blocked: boolean;
 }
 
 interface ResourceItemType {
@@ -38,10 +54,4 @@ interface CardHeaderRightButtonActionType {
     dataCy: string;
 }
 
-export {
-    CourseType,
-    CourseStepType,
-    ResourceItemType,
-    ExerciseItemType,
-    CardHeaderRightButtonActionType,
-};
+export { ResourceItemType, ExerciseItemType, CardHeaderRightButtonActionType };

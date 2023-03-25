@@ -2,6 +2,7 @@ import { Result, Spin } from 'antd';
 import React from 'react';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import LogoutButton from '../../pages/Login/LogoutButton';
+import { TEXT_403_DESCRIPTION } from '../../texts';
 
 const PrivateRoute = ({ children }) => {
     const { data, isSuccess, isFetching } =
@@ -14,7 +15,7 @@ const PrivateRoute = ({ children }) => {
             <Result
                 status="403"
                 title="403"
-                subTitle="Ups, nie powinno Cię tu być!."
+                subTitle={TEXT_403_DESCRIPTION}
                 extra={<LogoutButton />}
             />
         );

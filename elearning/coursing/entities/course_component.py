@@ -1,7 +1,5 @@
-from dataclasses import dataclass
-from typing import List
+from dataclasses import dataclass, field
 from uuid import UUID
-from shared.enums import CourseStepComponentTypes
 
 
 @dataclass
@@ -9,5 +7,5 @@ class CourseComponent:
     uuid: UUID
     title: str
     description: str
-    type: CourseStepComponentTypes
-    resources: List[dict]
+    type: str
+    resources: list[dict] = field(default_factory=lambda: list())

@@ -13,7 +13,6 @@ from db.models import (
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
-from elearning.coursing.entities.course_step import CourseStepComponent
 from infra.logging import logger
 from infra.repository import Repository
 from shared.enums import UserRoles
@@ -166,7 +165,8 @@ class CourseRepository(Repository):
                     course=course, component=step.component
                 ),
                 evaluation_type=step.evaluation_type,
-                component=CourseStepComponent(
+                component=CourseComponent(
+                    uuid=step.component.uuid,
                     title=step.component.title,
                     description=step.component.description,
                     type=step.component.type,

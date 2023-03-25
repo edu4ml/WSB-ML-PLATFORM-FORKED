@@ -14,12 +14,21 @@ import {
     CardHeaderRightButtonActionType,
     CourseStepType,
 } from '../../types/course';
+import {
+    TEXT_COURSE_PUBLISHED,
+    TEXT_COURSE_SAVED,
+    TEXT_DRAFT_VERSION,
+    TEXT_PUBLISH,
+    TEXT_SAVE,
+    TEXT_SOMETHING_WENT_WRONG,
+} from '../../texts';
 
 const { Paragraph } = Typography;
 
 const CourseEditPage = () => {
     const { courseId } = useParams();
     const { data: course, isLoading, isSuccess } = useGetCourseQuery(courseId);
+
     const [issueCommand, {}] = useIssueCourseCommandMutation();
     const [dataSource, setDataSource] = useState([]);
     const [editedButNotSaved, setEditedButNotSaved] = useState(false);
@@ -42,8 +51,7 @@ const CourseEditPage = () => {
 
     const mapToCourseSteps = (data) => {
         return data.map((item: CourseStepType, index: number) => ({
-            content_type: item.content_type,
-            uuid: item.uuid,
+            component: item.component.uuid,
             order: index + 1,
             evaluation_type: item.evaluation_type,
         }));
@@ -51,7 +59,7 @@ const CourseEditPage = () => {
 
     let actions: Array<CardHeaderRightButtonActionType> = [
         {
-            text: 'Opublikuj',
+            text: TEXT_PUBLISH,
             onClick: () => {
                 const command = {
                     type: Enums.COMMAND_TYPES.UPDATE_COURSE,
@@ -63,25 +71,23 @@ const CourseEditPage = () => {
                 issueCommand({ id: courseId, command })
                     .unwrap()
                     .then((res) => {
-                        console.log('Success!', res);
                         notification.info({
-                            message: 'Kurs opublikowany!',
+                            message: TEXT_COURSE_PUBLISHED,
                             duration: 2,
                         });
                         navigate('/courses/');
                     })
                     .catch((err) => {
                         notification.error({
-                            message: 'Ups! coś poszło nie tak!',
+                            message: TEXT_SOMETHING_WENT_WRONG,
                         });
-                        console.error('Err: ', err);
                     });
             },
             type: 'default',
             dataCy: 'course-details-edit-publish',
         },
         {
-            text: 'Zapisz',
+            text: TEXT_SAVE,
             type: editedButNotSaved ? 'primary' : 'default',
             onClick: () => {
                 const command = {
@@ -94,16 +100,15 @@ const CourseEditPage = () => {
                     .unwrap()
                     .then((res) => {
                         notification.info({
-                            message: 'Kurs zapisany!',
+                            message: TEXT_COURSE_SAVED,
                             duration: 2,
                         });
                         setEditedButNotSaved(false);
                     })
                     .catch((err) => {
                         notification.error({
-                            message: 'Ups! coś poszło nie tak!',
+                            message: TEXT_SOMETHING_WENT_WRONG,
                         });
-                        console.log('Err: ', err);
                     });
             },
             dataCy: 'course-details-edit-save',
@@ -117,8 +122,8 @@ const CourseEditPage = () => {
                     <CardHeader
                         title={
                             course.is_draft
-                                ? `${course.title} (Wersja robocza)`
-                                : `${course.title} (Ten kurs jest opublikowany)`
+                                ? `${course.title} (${TEXT_DRAFT_VERSION})`
+                                : `${course.title} (${TEXT_COURSE_PUBLISHED})`
                         }
                         actions={course.is_draft ? actions : []}
                     />

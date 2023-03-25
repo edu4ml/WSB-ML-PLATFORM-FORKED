@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Card, Skeleton, Space, Typography } from 'antd';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
-import { useAppSelector } from '../../hooks';
 
 const { Title, Paragraph } = Typography;
 

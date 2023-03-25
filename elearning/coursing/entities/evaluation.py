@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from shared.enums import CourseStepContentTypes
+# from shared.enums import CourseStepContentTypes
 
 
 @dataclass
@@ -10,4 +10,4 @@ class Evaluation:
     title: str
     description: str
 
-    content_type: str = CourseStepContentTypes.FILE_EVALUATION_TYPE
+    # content_type: str = CourseStepContentTypes.FILE_EVALUATION_TYPE

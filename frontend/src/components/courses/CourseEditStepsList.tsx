@@ -18,25 +18,33 @@ import {
 import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
-import { CourseStepType } from '../../types/course';
+import { CourseComponentType, CourseStepType } from '../../types/course';
+import {
+    TEXT_ADD_STEP,
+    TEXT_AUTOMATIC,
+    TEXT_DESCRIPTION,
+    TEXT_EVALUATION,
+    TEXT_EXERCISES,
+    TEXT_MANUALLY,
+    TEXT_SEND_FILE,
+    TEXT_TITLE,
+    TEXT_VERIFICATION,
+} from '../../texts';
 
 const contentTypeToIconMap = {
-    [Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE]: <ReadOutlined />,
-    [Enums.COURSE_STEP_CONTENT_TYPES.FILE_EVALUATION_TYPE]: (
-        <FileDoneOutlined />
-    ),
+    [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]: <ReadOutlined />,
+    [Enums.COURSE_STEP_COMPONENT_TYPES.FILE_EVALUATION]: <FileDoneOutlined />,
 };
 
 const contentTypeToGroupTitleMap = {
-    [Enums.COURSE_STEP_CONTENT_TYPES.EXERCISE]: 'Ćwiczenia',
-    [Enums.COURSE_STEP_CONTENT_TYPES.FILE_EVALUATION_TYPE]: 'Weryfikacja',
+    [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]: TEXT_EXERCISES,
+    [Enums.COURSE_STEP_COMPONENT_TYPES.FILE_EVALUATION]: TEXT_VERIFICATION,
 };
 
 const evaluationTypeKeyToNameMap: { [key: string]: string } = {
-    [Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED]: 'automatyczne',
-    [Enums.COURSE_STEP_EVALUATION_TYPES.FILE_EVALUATED]: 'przesłanie pliku',
-    [Enums.COURSE_STEP_EVALUATION_TYPES.TEACHER_EVALUATED]: 'ręcznie',
-    // [Enums.COURSE_STEP_EVALUATION_TYPES.TEST_EVALUATED]: 'quiz',
+    [Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED]: TEXT_AUTOMATIC,
+    [Enums.COURSE_STEP_EVALUATION_TYPES.FILE_EVALUATED]: TEXT_SEND_FILE,
+    [Enums.COURSE_STEP_EVALUATION_TYPES.TEACHER_EVALUATED]: TEXT_MANUALLY,
 };
 
 const CourseEditStepsList = ({
@@ -51,13 +59,14 @@ const CourseEditStepsList = ({
     const [count, setCount] = useState(dataSource.length);
 
     const onDragEnd = ({ active, over }: DragEndEvent) => {
+        console.log(active, over);
         if (active.id !== over?.id) {
             setDataSource((previous: Array<CourseStepType>) => {
                 const activeIndex = previous.findIndex(
-                    (i: CourseStepType) => i.uuid === active.id
+                    (i: CourseStepType) => i.order === active.id
                 );
                 const overIndex = previous.findIndex(
-                    (i: CourseStepType) => i.uuid === over?.id
+                    (i: CourseStepType) => i.order === over?.id
                 );
                 return arrayMove(previous, activeIndex, overIndex);
             });
@@ -66,16 +75,15 @@ const CourseEditStepsList = ({
     };
 
     const handleAdd = (clickEvent) => {
-        const chosenElement = availableSteps.find(
+        const chosenElement: CourseComponentType = availableSteps.find(
             (availableSteps) => availableSteps.uuid == clickEvent.key
         );
 
         const newData: CourseStepType = {
-            uuid: chosenElement.uuid,
-            title: chosenElement.title,
-            description: chosenElement.description,
-            content_type: chosenElement.content_type,
             evaluation_type: Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED,
+            component: chosenElement,
+            user_progress: null,
+            order: dataSource.length + 1,
         };
 
         setDataSource([...dataSource, newData]);
@@ -85,31 +93,31 @@ const CourseEditStepsList = ({
 
     const handleRemove = (key: string) => {
         const newData = dataSource.filter(
-            (item: CourseStepType) => item.uuid !== key
+            (item: CourseStepType) => item.component.uuid !== key
         );
         setDataSource(newData);
         setEditedButNotSaved(true);
     };
 
-    const isAvailable = (item: CourseStepType) => {
+    const isAvailable = (item: CourseComponentType) => {
         return dataSource.find(
-            (element: CourseStepType) => element.uuid === item.uuid
+            (element: CourseStepType) => element.component.uuid === item.uuid
         );
     };
 
-    const mapToDropdown = (items: Array<CourseStepType>) => {
+    const mapToDropdown = (items: Array<CourseComponentType>) => {
         if (items) {
             const groupedItems = items?.reduce((acc, item) => {
-                if (!acc[item.content_type]) {
-                    acc[item.content_type] = {
+                if (!acc[item.type]) {
+                    acc[item.type] = {
                         type: 'group',
-                        label: contentTypeToGroupTitleMap[item.content_type],
+                        label: contentTypeToGroupTitleMap[item.type],
                         children: [],
                     };
                 }
-                acc[item.content_type].children.push({
+                acc[item.type].children.push({
                     label: item.title,
-                    icon: contentTypeToIconMap[item.content_type],
+                    icon: contentTypeToIconMap[item.type],
                     key: item.uuid,
                     disabled: isAvailable(item),
                 });
@@ -142,30 +150,30 @@ const CourseEditStepsList = ({
 
     const columns: ColumnsType<CourseStepType> = [
         {
-            key: editable ? 'sort' : 'uuid',
+            key: editable ? 'sort' : 'component',
             render: (_, item) =>
-                item.content_type ===
-                    Enums.COURSE_STEP_CONTENT_TYPES.FILE_EVALUATION_TYPE && (
+                item.component.type ===
+                    Enums.COURSE_STEP_COMPONENT_TYPES.FILE_EVALUATION && (
                     <FileDoneOutlined />
                 ),
         },
         {
-            title: 'Tytuł',
-            dataIndex: 'title',
+            title: TEXT_TITLE,
+            render: (_, item) => item.component.title,
         },
         {
-            title: 'Opis',
-            dataIndex: 'description',
+            title: TEXT_DESCRIPTION,
+            render: (_, item) => item.component.description,
         },
         {
-            title: 'Zaliczenie',
+            title: TEXT_EVALUATION,
             render: (_, item) => {
                 const items: MenuProps['items'] = Object.entries(
                     evaluationTypeKeyToNameMap
                 ).map(([key, value]) => ({ key, label: value }));
 
                 const onClick = (e) => {
-                    updateEvaluationType(item.uuid, e.key);
+                    updateEvaluationType(item.component.uuid, e.key);
                 };
 
                 return (
@@ -189,7 +197,7 @@ const CourseEditStepsList = ({
                 return (
                     editable && (
                         <DeleteTwoTone
-                            onClick={() => handleRemove(item.uuid)}
+                            onClick={() => handleRemove(item.component.uuid)}
                         />
                     )
                 );
@@ -201,7 +209,7 @@ const CourseEditStepsList = ({
         <>
             <DndContext onDragEnd={onDragEnd}>
                 <SortableContext
-                    items={dataSource.map((i: CourseStepType) => i.uuid)}
+                    items={dataSource.map((i: CourseStepType) => i.order)}
                     strategy={verticalListSortingStrategy}
                 >
                     <Table
@@ -210,13 +218,13 @@ const CourseEditStepsList = ({
                                 row: CourseEditStepRow,
                             },
                         }}
-                        rowKey="uuid"
+                        rowKey="order"
                         columns={columns}
                         dataSource={dataSource}
                         rowClassName={(row, index) => {
-                            return row.content_type ===
-                                Enums.COURSE_STEP_CONTENT_TYPES
-                                    .FILE_EVALUATION_TYPE
+                            return row.component.type ===
+                                Enums.COURSE_STEP_COMPONENT_TYPES
+                                    .FILE_EVALUATION
                                 ? 'blue-table-row'
                                 : '';
                         }}
@@ -234,7 +242,7 @@ const CourseEditStepsList = ({
                     >
                         <Button block type="primary">
                             <Space>
-                                Dodaj
+                                {TEXT_ADD_STEP}
                                 <DownOutlined />
                             </Space>
                         </Button>

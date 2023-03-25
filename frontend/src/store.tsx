@@ -2,13 +2,13 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import authApi from './features/auth/authApi';
 import courseApi from './features/courses/coursesApi';
-import authReducer from './features/auth/authSlice';
+// import authReducer from './features/auth/authSlice';
 import exerciseApi from './features/exercises/exerciseApi';
 import reportsApi from './features/reports/reportsApi';
 
 export const store = configureStore({
     reducer: {
-        auth: authReducer,
+        // auth: authReducer,
         [authApi.reducerPath]: authApi.reducer,
         [courseApi.reducerPath]: courseApi.reducer,
         [exerciseApi.reducerPath]: exerciseApi.reducer,

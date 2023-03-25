@@ -3,14 +3,14 @@ from typing import List
 from uuid import UUID
 
 from infra.command import Command
-from shared.enums import CommandTypes, CourseStepContentTypes, UserRoles
+from shared.enums import CommandTypes, UserRoles, CourseStepComponentTypes
 
 
 @dataclass
 class UpdateCourseStepType:
     order: int
     id: UUID
-    content_type: CourseStepContentTypes
+    type: CourseStepComponentTypes
 
 
 @dataclass

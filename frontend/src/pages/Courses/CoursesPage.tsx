@@ -11,11 +11,19 @@ import { Enums } from '../../shared';
 import { CardHeaderRightButtonActionType } from '../../types/course';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import { isTeacher } from '../../helpers/permissions';
+import {
+    TEXT_COURSES_ALL,
+    TEXT_COURSE_TITLE,
+    TEXT_CREATE_COURSE,
+    TEXT_NEW_COURSE,
+    TEXT_NEW_COURSE_TITLE,
+    TEXT_NEW_COURSE_TITLE_WARNING,
+} from '../../texts';
 
 const tabList = [
     {
         key: 'coursesAll',
-        tab: 'Wszystkie Kursy',
+        tab: TEXT_COURSES_ALL,
     },
 ];
 
@@ -44,7 +52,7 @@ const CoursesPage = () => {
 
     const actions: Array<CardHeaderRightButtonActionType> = [
         {
-            text: 'Nowy kurs',
+            text: TEXT_NEW_COURSE,
             onClick: showModal,
             type: 'primary',
             dataCy: 'course-catalog-create-new',
@@ -88,7 +96,7 @@ const CoursesPage = () => {
                 {cardContentList[activeTabKey]}
             </Card>
             <Modal
-                title={'Podaj nazwę nowego kursu'}
+                title={TEXT_NEW_COURSE_TITLE}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -102,12 +110,12 @@ const CoursesPage = () => {
                     layout="vertical"
                 >
                     <Form.Item
-                        label="Tytuł kursu"
+                        label={TEXT_COURSE_TITLE}
                         name="title"
                         rules={[
                             {
                                 required: true,
-                                message: 'Podaj nazwę nowego kursu!',
+                                message: TEXT_NEW_COURSE_TITLE_WARNING,
                             },
                         ]}
                     >
@@ -120,7 +128,7 @@ const CoursesPage = () => {
                             htmlType="submit"
                             style={{ float: 'right' }}
                         >
-                            Utwórz
+                            {TEXT_CREATE_COURSE}
                         </Button>
                     </Form.Item>
                 </Form>
