@@ -3,21 +3,25 @@ import {
     Button,
     Card,
     Col,
+    Divider,
     Form,
     Input,
     Modal,
     notification,
     Row,
     Select,
+    Space,
     Table,
     Tag,
     Typography,
 } from 'antd';
-import EditTwoTone from '@ant-design/icons/lib/icons/EditTwoTone';
+import { EditTwoTone, DeleteTwoTone } from '@ant-design/icons/lib/icons';
 import CardHeader from '../../components/common/CardHeader';
 import {
     useCreateCourseComponentsMutation,
+    useDeleteCourseComponentMutation,
     useGetCourseComponentsQuery,
+    useUpdateCourseComponentMutation,
 } from '../../features/courses/coursesApi';
 import {
     TEXT_CREATE_COURSE_COMPONENT,
@@ -37,6 +41,8 @@ import {
     TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
     TEXT_COURSE_COMPONENT_CREATED,
     TEXT_SOMETHING_WENT_WRONG,
+    TEXT_COURSE_COMPONENT_UPDATED,
+    TEXT_COURSE_COMPONENT_DELETED,
 } from '../../texts';
 import { Enums } from '../../shared';
 import { CourseComponentType } from '../../types/course';
@@ -65,6 +71,7 @@ const CourseComponentsPage = () => {
         useGetCourseComponentsQuery('course-components');
 
     const [createCourseComponent, {}] = useCreateCourseComponentsMutation();
+    const [deleteCourseComponent, {}] = useDeleteCourseComponentMutation();
 
     const columns = [
         {
@@ -94,11 +101,38 @@ const CourseComponentsPage = () => {
             dataIndex: 'description',
         },
         {
-            key: 'action',
+            key: 'actions',
             render: (component) => (
-                <Button onClick={() => showEditModal(component)}>
-                    <EditTwoTone />
-                </Button>
+                <Space direction="horizontal">
+                    <Divider type="vertical" />
+                    <Button
+                        type="text"
+                        onClick={() => showEditModal(component)}
+                    >
+                        <EditTwoTone />
+                    </Button>
+                    <Button
+                        type="text"
+                        onClick={() => {
+                            deleteCourseComponent(component.uuid)
+                                .unwrap()
+                                .then((res) => {
+                                    notification.info({
+                                        message: TEXT_COURSE_COMPONENT_DELETED,
+                                        duration: 2,
+                                    });
+                                })
+                                .catch((err) => {
+                                    notification.error({
+                                        message: TEXT_SOMETHING_WENT_WRONG,
+                                        duration: 2,
+                                    });
+                                });
+                        }}
+                    >
+                        <DeleteTwoTone />
+                    </Button>
+                </Space>
             ),
         },
     ];
@@ -139,8 +173,31 @@ const CourseComponentsPage = () => {
     const [courseComponentDescription, setCourseComponentDescription] =
         React.useState('');
     const [courseComponentType, setCourseComponentType] = React.useState('');
+    const [courseComponentUUID, setCourseComponentUUID] = React.useState('');
+    const [updateCourseComponent, {}] = useUpdateCourseComponentMutation();
 
-    const handleEditModalOk = () => {
+    const handleEditModalOk = (payload) => {
+        updateCourseComponent({
+            id: payload.uuid,
+            payload: {
+                title: payload.title,
+                description: payload.description,
+                type: payload.type,
+            },
+        })
+            .unwrap()
+            .then((res) => {
+                notification.info({
+                    message: TEXT_COURSE_COMPONENT_UPDATED,
+                    duration: 2,
+                });
+            })
+            .catch((err) => {
+                notification.error({
+                    message: TEXT_SOMETHING_WENT_WRONG,
+                    duration: 2,
+                });
+            });
         setIsEditModalOpen(false);
     };
 
@@ -151,6 +208,7 @@ const CourseComponentsPage = () => {
         setCourseComponentTitle(component.title);
         setCourseComponentDescription(component.description);
         setCourseComponentType(component.type);
+        setCourseComponentUUID(component.uuid);
         setIsEditModalOpen(true);
     };
 
@@ -262,7 +320,6 @@ const CourseComponentsPage = () => {
             <Modal
                 title={TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
                 open={isEditModalOpen}
-                onOk={handleEditModalOk}
                 onCancel={handleEditModalCancel}
                 footer={null}
             >
@@ -273,11 +330,15 @@ const CourseComponentsPage = () => {
                         title: courseComponentTitle,
                         description: courseComponentDescription,
                         type: courseComponentType,
+                        uuid: courseComponentUUID,
                     }}
                     onFinish={handleEditModalOk}
                     autoComplete="off"
                     layout="vertical"
                 >
+                    <Form.Item hidden={true} name="uuid">
+                        <Input />
+                    </Form.Item>
                     <Form.Item
                         label={TEXT_TITLE}
                         name="title"
