@@ -4,6 +4,7 @@ from api.apis.v1.auth import GoogleLoginApi
 from api.apis.v1.course import (
     CourseApi,
     CourseCommandApi,
+    CourseComponentDetailApi,
     CourseDetailApi,
     CourseComponentApi,
 )
@@ -16,6 +17,11 @@ from api.apis.v1.reports.tacher import TeacherReport
 urlpatterns_v1 = [
     path("course/", CourseApi.as_view(), name="course"),
     path("course-components/", CourseComponentApi.as_view(), name="course-components"),
+    path(
+        "course-components/<uuid:component_uuid>",
+        CourseComponentDetailApi.as_view(),
+        name="course-components-detail",
+    ),
     path(
         "course/<uuid:course_uuid>",
         CourseDetailApi.as_view(),

@@ -48,3 +48,37 @@ class Repository:
             self.resource = self.retrieve(parent_uuid)
             yield self.resource
             self.update(self.resource)
+
+
+class RepositoryCrud:
+    root_model = None
+    root_entity = None
+
+    def retrieve(self, uuid: UUID):
+        try:
+            obj = self.root_model.objects.get(uuid=uuid)
+            return self._prepare_domain_entity(obj)
+        except self.root_model.DoesNotExist:
+            return None
+
+    def list(self):
+        return [
+            self._prepare_domain_entity(obj) for obj in self.root_model.objects.all()
+        ]
+
+    def create(self, **kwargs):
+        obj = self.root_model.objects.create(**kwargs)
+        return self._prepare_domain_entity(obj)
+
+    def update(self, obj_uuid, **kwargs):
+        obj = self.root_model.objects.get(uuid=obj_uuid)
+        for key, value in kwargs.items():
+            setattr(obj, key, value)
+        obj.save()
+        return self._prepare_domain_entity(obj)
+
+    def delete(self, uuid: UUID):
+        self.root_model.objects.get(uuid=uuid).delete()
+
+    def _prepare_domain_entity(self, obj):
+        raise NotImplementedError("Implement this method in child class")

@@ -14,7 +14,7 @@ from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
 from infra.logging import logger
-from infra.repository import Repository
+from infra.repository import Repository, RepositoryCrud
 from shared.enums import UserRoles
 
 
@@ -26,6 +26,38 @@ class CourseStepRepository(Repository):
 @logger
 class CourseStepUserCompletionRepository(Repository):
     root_model = CourseStepUserCompletionDbModel
+
+
+@logger
+class CourseComponentRepositoryCRUD(RepositoryCrud):
+    root_model = CourseComponentDbModel
+    root_entity = CourseComponent
+
+    def create(self, **kwargs):
+        # this can be done with a serializer
+        assert "title" in kwargs.keys()
+        assert "description" in kwargs.keys()
+        assert "type" in kwargs.keys()
+
+        return super().create(**kwargs)
+
+    def _prepare_domain_entity(self, object: CourseComponentDbModel):
+        return self.root_entity(
+            uuid=object.uuid,
+            title=object.title,
+            description=object.description,
+            type=object.type,
+            resources=self._get_resources(object),
+        )
+
+    def _get_resources(self, object: CourseComponentDbModel):
+        return [
+            dict(
+                title=resource.title,
+                url=resource.url,
+            )
+            for resource in object.resources.all()
+        ]
 
 
 @logger
@@ -83,12 +115,14 @@ class CourseRepository(Repository):
     course_step: CourseStepRepository
     course_step_user_completion: CourseStepUserCompletionRepository
     course_component: CourseComponentRepository
+    course_component_CRUD: CourseComponentRepositoryCRUD
 
     def __init__(self, user=None) -> None:
         super().__init__(user)
         self.course_step = CourseStepRepository(user=user)
         self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
         self.course_component = CourseComponentRepository(user=user)
+        self.course_component_CRUD = CourseComponentRepositoryCRUD()
 
     def persist(self, aggregate: Course):
         obj = CourseDbModel.objects.create(

@@ -173,8 +173,8 @@ def test_create_course_component_with_valid_data(admin_client):
 def test_create_course_component_with_missing_data(admin_client):
 
     course_component_data = dict(
-        title="New course component",
         description="A new course component for testing",
+        type=CourseStepComponentTypes.EXERCISE,
     )
 
     response = admin_client.post(
@@ -184,3 +184,78 @@ def test_create_course_component_with_missing_data(admin_client):
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_get_course_component(admin_client, course_components):
+    component = course_components[0]
+    response = admin_client.get(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        )
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["uuid"] == str(component.uuid)
+
+
+@pytest.mark.django_db
+def test_get_course_component_not_found(admin_client):
+    response = admin_client.get(
+        reverse("api:v1:course-components-detail", kwargs={"component_uuid": uuid4()})
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# Test PUT method
+@pytest.mark.django_db
+def test_update_course_component(admin_client, course_components):
+    component = course_components[0]
+    updated_data = {
+        "title": "Updated Course Component",
+        "description": "Updated course component for testing",
+        "type": "UNKNOWN",
+    }
+    response = admin_client.put(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        ),
+        updated_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["title"] == updated_data["title"]
+    assert response.json()["description"] == updated_data["description"]
+    assert response.json()["type"] == updated_data["type"]
+
+
+@pytest.mark.django_db
+def test_update_course_component_missing_data(admin_client, course_components):
+    component = course_components[0]
+    updated_data = {
+        "title": "Updated Course Component",
+        "description": "Updated course component for testing",
+    }
+    response = admin_client.put(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        ),
+        updated_data,
+        content_type="application/json",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["title"] == updated_data["title"]
+    assert response.json()["description"] == updated_data["description"]
+    assert response.json()["type"] == component.type
+
+
+# Test DELETE method
+@pytest.mark.django_db
+def test_delete_course_component(admin_client, course_components):
+    component = course_components[0]
+    response = admin_client.delete(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        )
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
