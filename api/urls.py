@@ -5,9 +5,9 @@ from api.apis.v1.course import (
     CourseApi,
     CourseCommandApi,
     CourseDetailApi,
-    CourseStepApi,
+    CourseComponentApi,
 )
-from api.apis.v1.exercise import ExerciseApi, ExerciseDetailApi 
+from api.apis.v1.exercise import ExerciseApi, ExerciseDetailApi
 from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
 
 from api.apis.v1.reports.tacher import TeacherReport
@@ -15,7 +15,7 @@ from api.apis.v1.reports.tacher import TeacherReport
 
 urlpatterns_v1 = [
     path("course/", CourseApi.as_view(), name="course"),
-    path("course-components/", CourseStepApi.as_view(), name="course-components"),
+    path("course-components/", CourseComponentApi.as_view(), name="course-components"),
     path(
         "course/<uuid:course_uuid>",
         CourseDetailApi.as_view(),
@@ -37,6 +37,4 @@ urlpatterns_v1 = [
     path("auth/", include((auth_urlpatterns, "auth"))),
 ]
 
-urlpatterns = [
-    path("v1/", include((urlpatterns_v1, "v1")))
-]
+urlpatterns = [path("v1/", include((urlpatterns_v1, "v1")))]

@@ -40,3 +40,4 @@ export const TEXT_COURSE_COMPONENTS_PAGE_TITLE =
 export const TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION = 'Zadanie z plikiem';
 export const TEXT_COURSE_COMPONENT_TYPE_EXERCISE = 'Ćwiczenie';
 export const TEXT_COURSE_COMPONENT_TYPE_UNKNOWN = 'Inne';
+export const TEXT_COURSE_COMPONENT_CREATED = 'Komponent utworzony!';

@@ -66,9 +66,27 @@ class CourseCommandApi(AuthMixin):
             )
 
 
-class CourseStepApi(AuthMixin):
+class CourseComponentApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, **kwargs):
         components = CourseRepository(request.user).course_component.list()
         serialized = [asdict(i) for i in components]
         return Response(serialized, status=status.HTTP_200_OK)
+
+    @api_has_one_of_the_roles([UserRoles.TEACHER])
+    def post(self, request, **kwargs):
+        try:
+            component = CourseRepository(request.user).course_component.persist(
+                request.data
+            )
+            return Response(asdict(component), status.HTTP_201_CREATED)
+        except KeyError:
+            return Response(
+                dict(
+                    error=True,
+                    success=False,
+                    payload=request.data,
+                    message="Missing required fields",
+                ),
+                status.HTTP_400_BAD_REQUEST,
+            )

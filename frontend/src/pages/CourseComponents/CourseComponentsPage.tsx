@@ -6,6 +6,7 @@ import {
     Form,
     Input,
     Modal,
+    notification,
     Row,
     Select,
     Table,
@@ -14,7 +15,10 @@ import {
 } from 'antd';
 import EditTwoTone from '@ant-design/icons/lib/icons/EditTwoTone';
 import CardHeader from '../../components/common/CardHeader';
-import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
+import {
+    useCreateCourseComponentsMutation,
+    useGetCourseComponentsQuery,
+} from '../../features/courses/coursesApi';
 import {
     TEXT_CREATE_COURSE_COMPONENT,
     TEXT_DESCRIPTION,
@@ -31,6 +35,8 @@ import {
     TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
     TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
     TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
+    TEXT_COURSE_COMPONENT_CREATED,
+    TEXT_SOMETHING_WENT_WRONG,
 } from '../../texts';
 import { Enums } from '../../shared';
 import { CourseComponentType } from '../../types/course';
@@ -57,6 +63,8 @@ const getUniqueTypes = (components: Array<CourseComponentType>) => {
 const CourseComponentsPage = () => {
     const { data: courseComponents } =
         useGetCourseComponentsQuery('course-components');
+
+    const [createCourseComponent, {}] = useCreateCourseComponentsMutation();
 
     const columns = [
         {
@@ -99,7 +107,21 @@ const CourseComponentsPage = () => {
     // Modal Create New
 
     const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
-    const handleCreateModalOk = () => {
+    const handleCreateModalOk = (payload) => {
+        createCourseComponent(payload)
+            .unwrap()
+            .then((res) => {
+                notification.info({
+                    message: TEXT_COURSE_COMPONENT_CREATED,
+                    duration: 2,
+                });
+            })
+            .catch((err) => {
+                notification.error({
+                    message: TEXT_SOMETHING_WENT_WRONG,
+                    duration: 2,
+                });
+            });
         setIsCreateModalOpen(false);
     };
     const handleCreateModalCancel = () => {

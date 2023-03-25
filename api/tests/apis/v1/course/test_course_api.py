@@ -4,7 +4,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import CommandTypes
+from shared.enums import CommandTypes, CourseStepComponentTypes
 
 
 @pytest.mark.django_db
@@ -147,3 +147,40 @@ def test_list_course_components(admin_client, course_components):
     response = admin_client.get(reverse("api:v1:course-components"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == len(course_components)
+
+
+@pytest.mark.django_db
+def test_create_course_component_with_valid_data(admin_client):
+    course_component_data = dict(
+        title="New course component",
+        description="A new course component for testing",
+        type=CourseStepComponentTypes.EXERCISE,
+    )
+
+    response = admin_client.post(
+        reverse("api:v1:course-components"),
+        course_component_data,
+        content_type="application/json",
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json()["title"] == course_component_data["title"]
+    assert response.json()["description"] == course_component_data["description"]
+    assert response.json()["type"] == course_component_data["type"]
+
+
+@pytest.mark.django_db
+def test_create_course_component_with_missing_data(admin_client):
+
+    course_component_data = dict(
+        title="New course component",
+        description="A new course component for testing",
+    )
+
+    response = admin_client.post(
+        reverse("api:v1:course-components"),
+        course_component_data,
+        content_type="application/json",
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

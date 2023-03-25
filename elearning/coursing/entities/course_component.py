@@ -4,7 +4,7 @@ from uuid import UUID
 
 @dataclass
 class CourseComponent:
-    uuid: UUID
+    uuid: UUID | None
     title: str
     description: str
     type: str

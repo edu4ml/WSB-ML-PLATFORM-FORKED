@@ -31,6 +31,14 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
+        createCourseComponents: builder.mutation({
+            query: (command) => ({
+                url: '/course-components/',
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-component-list'],
+        }),
         issueCourseCommand: builder.mutation({
             query: ({ id, command }) => ({
                 url: `/course/${id}/command`,
@@ -48,5 +56,6 @@ export const {
     useGetCourseComponentsQuery,
     useCreateCourseMutation,
     useIssueCourseCommandMutation,
+    useCreateCourseComponentsMutation,
 } = courseApi;
 export default courseApi;

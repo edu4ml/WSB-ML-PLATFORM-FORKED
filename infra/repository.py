@@ -24,7 +24,7 @@ class Repository:
         raise NotImplementedError
 
     def delete(self, entity):
-        raise NotImplemented
+        raise NotImplementedError
 
     @contextmanager
     def with_obj(self, obj_uuid, obj=None):
