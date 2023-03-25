@@ -59,8 +59,7 @@ class OnUpdateCourse(CommandHandler):
                 course.steps = [
                     CourseStep(
                         order=s["order"],
-                        content_type=s["content_type"],
-                        uuid=s["uuid"],
+                        component=s["component"],
                         evaluation_type=s["evaluation_type"],
                     )
                     for s in command.steps

@@ -7,8 +7,6 @@ from rest_framework.response import Response
 
 from api.apis.mixins import AuthMixin
 from db.repository.course import CourseRepository
-from db.repository.evaluation import EvaluationRepository
-from db.repository.exercise import ExerciseRepository
 from elearning.apps import APP_NAME
 from infra.command_bus import CommandBus
 from infra.permissions import api_has_one_of_the_roles
@@ -28,7 +26,7 @@ class CourseApi(AuthMixin):
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
             course = command_bus.issue(request)
             return Response(asdict(course), status.HTTP_201_CREATED)
-        except NotImplementedError as e:
+        except NotImplementedError:
             return Response(
                 dict(
                     error=True,
@@ -56,7 +54,7 @@ class CourseCommandApi(AuthMixin):
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
             command_bus.issue(request, course_uuid=course_uuid)
             return Response(dict(), status.HTTP_202_ACCEPTED)
-        except NotImplementedError as e:
+        except NotImplementedError:
             return Response(
                 dict(
                     error=True,
@@ -71,8 +69,6 @@ class CourseCommandApi(AuthMixin):
 class CourseStepApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, **kwargs):
-        exercises = ExerciseRepository(request.user).list()
-        evaluations = EvaluationRepository(request.user).list()
-
-        serialized = [asdict(i) for i in [*exercises, *evaluations]]
+        components = CourseRepository(request.user).course_component.list()
+        serialized = [asdict(i) for i in components]
         return Response(serialized, status=status.HTTP_200_OK)

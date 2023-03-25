@@ -5,13 +5,7 @@ from django.test import Client
 from django.urls import reverse
 from model_bakery import baker
 
-from db.models import (
-    Course as CourseDbModel,
-    CourseStep,
-    Exercise,
-    Evaluation,
-    Role,
-)
+from db.models import Course, CourseStep, Role, CourseComponent
 from elearning.auth.user import User
 from shared.enums import UserRoles
 
@@ -60,7 +54,8 @@ def client():
 @pytest.fixture
 def admin_client(admin, client):
     response = client.post(
-        reverse("api:v1:auth:rest_login"), dict(username=admin.username, password="adminadmin")
+        reverse("api:v1:auth:rest_login"),
+        dict(username=admin.username, password="adminadmin"),
     )
     assert response.status_code == 200
     return client
@@ -88,48 +83,38 @@ def teacher_client(teacher, client):
 
 @pytest.fixture
 def courses():
-    return baker.make(CourseDbModel, 4, is_draft=False)
+    return baker.make(Course, 4, is_draft=False)
 
 
 @pytest.fixture
 def course():
-    return baker.make(CourseDbModel)
+    return baker.make(Course)
 
 
 @pytest.fixture
-def exercises():
-    return baker.make(Exercise, 3)
+def course_components():
+    return baker.make(CourseComponent, 4)
 
 
 @pytest.fixture
-def exercise():
-    return baker.make(Exercise)
+def course_component():
+    return baker.make(CourseComponent)
 
 
 @pytest.fixture
-def course_with_steps(exercises):
-    course = baker.make(CourseDbModel)
+def course_with_steps(course_components):
+    course = baker.make(Course)
     steps = []
     order = 1
-    for exercise in exercises:
+    for component in course_components:
         steps.append(
             baker.make(
                 CourseStep,
                 course=course,
-                object=exercise,
+                component=component,
                 order=order,
                 make_m2m=True,
             )
         )
         order += 1
     return course, steps
-
-
-@pytest.fixture
-def file_evaluation_type():
-    return baker.make(Evaluation)
-
-
-@pytest.fixture
-def file_evaluation_types():
-    return baker.make(Evaluation, 5)

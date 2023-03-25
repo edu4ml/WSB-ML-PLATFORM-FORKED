@@ -4,8 +4,6 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from elearning.coursing.commands.complete_course_step import CompleteCourseStep
-from elearning.coursing.commands.create_course import CreateCourse
 from shared.enums import CommandTypes
 
 
@@ -51,7 +49,7 @@ def test_issue_enroll_for_course(admin_client, admin, courses):
     response = admin_client.get(
         reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid))
     )
-    assert response.json().get("is_enrolled") == False
+    assert response.json().get("is_enrolled") is False
 
     response = admin_client.put(
         reverse("api:v1:course-command", kwargs=dict(course_uuid=course.uuid)),
@@ -63,7 +61,7 @@ def test_issue_enroll_for_course(admin_client, admin, courses):
     response = admin_client.get(
         reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid))
     )
-    assert response.json().get("is_enrolled") == True
+    assert response.json().get("is_enrolled") is True
 
 
 @pytest.mark.django_db
@@ -73,7 +71,7 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
     response = admin_client.get(
         reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid))
     )
-    assert response.json()["steps"][0]["user_progress"]["is_completed"] == False
+    assert response.json()["steps"][0]["user_progress"]["is_completed"] is False
     progress_tracking_uuid = response.json()["steps"][0]["user_progress"][
         "tracking_uuid"
     ]
@@ -93,7 +91,7 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
     response = admin_client.get(
         reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid))
     )
-    assert response.json()["steps"][0]["user_progress"]["is_completed"] == True
+    assert response.json()["steps"][0]["user_progress"]["is_completed"] is True
 
 
 @pytest.mark.django_db
@@ -115,7 +113,7 @@ def test_issue_create_course_command(admin_client):
 
     assert data["title"] == "TEST-COURSE-TITLE"
     assert data["description"] == "TEST-COURSE-DESCRIPTION"
-    assert data["is_draft"] == True
+    assert data["is_draft"] is True
 
 
 @pytest.mark.django_db
@@ -145,7 +143,7 @@ def test_raise_exception_when_course_command_unknown(admin_client, courses):
 
 
 @pytest.mark.django_db
-def test_list_course_components(admin_client, exercises, file_evaluation_types):
+def test_list_course_components(admin_client, course_components):
     response = admin_client.get(reverse("api:v1:course-components"))
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == len(exercises) + len(file_evaluation_types)
+    assert len(response.json()) == len(course_components)

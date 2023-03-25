@@ -1,10 +1,10 @@
-from .resources import FileResource, LinkResource
+from .resources import ExternalResource
 from .courses import (
     Course,
     CourseEnrollment,
     CourseStep,
     CourseStepUserCompletion,
+    CourseComponent,
 )
-from .exercises import Exercise
-from .evaluations import Evaluation, EvaluationAttempt
+from .evaluations import EvaluationAttempt
 from .auth import Role, CustomUser

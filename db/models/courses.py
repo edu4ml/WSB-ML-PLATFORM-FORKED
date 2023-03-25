@@ -1,9 +1,8 @@
 from django.conf import settings
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from db.models.resources import ExternalResource
 
-from shared.enums import CourseStepEvaluationTypes
+from shared.enums import CourseStepComponentTypes, CourseStepEvaluationTypes
 
 from .mixin import TimestampedModel
 
@@ -39,6 +38,21 @@ class CourseEnrollment(TimestampedModel):
         return f"{self.course.title} - {self.user.get_username()}"  # pragma: no cover
 
 
+class CourseComponent(TimestampedModel):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    resources = models.ManyToManyField(ExternalResource, blank=True)
+
+    type = models.CharField(
+        max_length=40,
+        choices=CourseStepComponentTypes.choices(),
+        default=CourseStepComponentTypes.UNKNOWN,
+    )
+
+    def __str__(self) -> str:
+        return f"{self.title} ({self.type})"  # pragma: no cover
+
+
 class CourseStep(TimestampedModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="steps")
     order = models.PositiveIntegerField()
@@ -49,21 +63,19 @@ class CourseStep(TimestampedModel):
         default=CourseStepEvaluationTypes.SELF_EVALUATED,
     )
 
-    content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, null=True, default=None, blank=True
+    component = models.ForeignKey(
+        CourseComponent, on_delete=models.PROTECT, null=True, default=None, blank=True
     )
-    object_uuid = models.UUIDField(null=True, default=None, blank=True)
-    object = GenericForeignKey("content_type", "object_uuid")
 
     class Meta:
         unique_together = (
-            ("course", "content_type", "object_uuid"),
+            ("course", "component"),
             ("course", "order"),
         )
         ordering = ["order"]
 
     def __str__(self) -> str:
-        return f"{self.course.title} ({self.order}) - {self.object.title}"  # pragma: no cover
+        return f"{self.course.title} ({self.order})"  # - {self.component.title}"  # pragma: no cover
 
 
 class CourseStepUserCompletion(TimestampedModel):
@@ -75,17 +87,14 @@ class CourseStepUserCompletion(TimestampedModel):
     )
 
     completed_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-
-    content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, null=True, default=None
-    )
-    object_uuid = models.UUIDField(null=True, default=None)
-    object = GenericForeignKey("content_type", "object_uuid")
+    component = models.ForeignKey(CourseComponent, on_delete=models.PROTECT)
 
     is_completed = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ("user", "content_type", "object_uuid", "course")
+        unique_together = ("user", "component", "course")
 
     def __str__(self) -> str:
-        return f"{self.user.get_username()} - {self.object.title}"  # pragma: no cover
+        return (
+            f"{self.user.get_username()} - {self.component.title}"  # pragma: no cover
+        )

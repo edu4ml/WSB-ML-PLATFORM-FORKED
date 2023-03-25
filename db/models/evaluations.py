@@ -2,21 +2,10 @@ from django.conf import settings
 from django.db import models
 from db.models.courses import CourseStep
 
-from shared.enums import CourseStepEvaluationStatus, CourseStepEvaluationTypes
+from shared.enums import CourseStepEvaluationStatus
 
-from .mixin import CourseStepBaseModel, TimestampedModel
-from .resources import FileResource
-
-
-class Evaluation(CourseStepBaseModel):
-    type = models.CharField(
-        max_length=40,
-        choices=CourseStepEvaluationTypes.choices(),
-        default=CourseStepEvaluationTypes.TEACHER_EVALUATED,
-    )
-
-    def __str__(self) -> str:
-        return self.title  # pragma: no cover
+from .mixin import TimestampedModel
+from .resources import ExternalResource
 
 
 class EvaluationAttempt(TimestampedModel):
@@ -33,7 +22,7 @@ class EvaluationAttempt(TimestampedModel):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     file = models.ForeignKey(
-        FileResource, on_delete=models.PROTECT, null=True, blank=True
+        ExternalResource, on_delete=models.PROTECT, null=True, blank=True
     )
 
     status = models.CharField(

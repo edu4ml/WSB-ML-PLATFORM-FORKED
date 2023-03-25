@@ -17,6 +17,20 @@ class CourseStepContentTypes:
     FILE_EVALUATION_TYPE = "fileevaluationtype"
 
 
+class CourseStepComponentTypes(str, Enum):
+    _PREFIX = "COURSE_STEP_COMPONENT_TYPES"
+
+    UNKNOWN = "UNKNOWN"
+    EXERCISE = "EXERCISE"
+    FILE_EVALUATION = "FILE_EVALUATION"
+    TEST_EVALUATION = "TEST_EVALUATION"
+    TEACHER_EVALUATION = "TEACHER_EVALUATION"
+
+    @classmethod
+    def choices(cls):
+        return [(item.value, item.name) for item in cls if item.name != "_PREFIX"]
+
+
 class CourseStepEvaluationTypes(str, Enum):
     _PREFIX = "COURSE_STEP_EVALUATION_TYPES"
 
@@ -27,7 +41,8 @@ class CourseStepEvaluationTypes(str, Enum):
 
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name) for item in cls if item.name != "_PREFIX"]
+
 
 class CourseStepEvaluationStatus(str, Enum):
     _PREFIX = "COURSE_STEP_EVALUATION_STATUS"
@@ -40,7 +55,7 @@ class CourseStepEvaluationStatus(str, Enum):
 
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name) for item in cls if item.name != "_PREFIX"]
 
 
 class UserRoles:

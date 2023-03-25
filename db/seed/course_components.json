@@ -1,6 +1,6 @@
 [
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 1,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440003",
@@ -15,7 +15,7 @@
         }
     },
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 2,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440004",
@@ -25,11 +25,12 @@
             "description": "Explore the K-Means clustering algorithm and practice implementing it on various datasets.",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000"
-            ]
+            ],
+            "type": "UNKNOWN"
         }
     },
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 3,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440008",
@@ -40,11 +41,12 @@
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440001",
                 "550e8400-e29b-41d4-a716-446655440006"
-            ]
+            ],
+            "type": "UNKNOWN"
         }
     },
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 4,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440009",
@@ -52,6 +54,7 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Reinforcement Learning Exercise",
             "description": "Implement and experiment with reinforcement learning algorithms, such as Q-learning and Deep Q-Networks, in various environments.",
+            "type": "UNKNOWN",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440005"
@@ -59,7 +62,7 @@
         }
     },
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 5,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440010",
@@ -67,6 +70,7 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Natural Language Processing Exercise",
             "description": "Practice implementing various natural language processing techniques, such as sentiment analysis, named entity recognition, and text classification.",
+            "type": "UNKNOWN",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440006"
@@ -74,7 +78,7 @@
         }
     },
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 6,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440011",
@@ -82,13 +86,14 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Generative Adversarial Networks Exercise",
             "description": "Implement generative adversarial networks (GANs) and experiment with generating realistic images, text, or other data types.",
+            "type": "UNKNOWN",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440001"
             ]
         }
     },
     {
-        "model": "db.exercise",
+        "model": "db.coursecomponent",
         "pk": 7,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440012",
@@ -96,6 +101,71 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Transfer Learning Exercise",
             "description": "Learn about transfer learning and fine-tune pre-trained models to perform tasks, such as image classification and object detection.",
+            "type": "UNKNOWN",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 1,
+        "fields": {
+            "uuid": "7c67a55f-0ee4-4fc1-a48e-4f335ecf4b87",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "title": "Test Submission",
+            "description": "A file submission for a machine learning test.",
+            "type": "UNKNOWN",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 2,
+        "fields": {
+            "uuid": "c3146858-7b89-4689-93e2-0e2746a69a37",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "title": "Project Submission",
+            "description": "A file submission for a machine learning project.",
+            "type": "UNKNOWN",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 3,
+        "fields": {
+            "uuid": "b9acfc12-7d0c-4758-b1f6-979b84cf3086",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "title": "Research Paper Submission",
+            "description": "A file submission for a research paper on a machine learning topic.",
+            "type": "UNKNOWN",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 4,
+        "fields": {
+            "uuid": "a1c0a2b8-7dd9-4e34-b7d4-f72a4d7bbf01",
+            "title": "Code Review Submission",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "description": "A file submission for a code review on a machine learning project.",
+            "type": "UNKNOWN",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"
