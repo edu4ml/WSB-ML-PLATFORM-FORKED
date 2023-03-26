@@ -34,7 +34,7 @@ class OnEnrollForCourse(CommandHandler):
             user__uuid=command.user_uuid, course__uuid=command.parent_uuid
         )
         course = self.repository.course.retrieve(command.parent_uuid)
-        user: User = self.repository.crud.user.retrieve(command.user_uuid)
+        user: User = self.repository.user.crud.retrieve(command.user_uuid)
 
         self._check_user_exists(user)
         self._check_parent_exists(course)
