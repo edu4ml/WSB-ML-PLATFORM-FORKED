@@ -1,17 +1,18 @@
 from django.urls import path, include
 
-from api.apis.v1.auth import GoogleLoginApi
-from api.apis.v1.course import (
+from api.apis.v1.auth.auth import GoogleLoginApi
+from api.apis.v1.course.command import CourseCommandApi
+from api.apis.v1.course.course import (
     CourseApi,
-    CourseCommandApi,
-    CourseComponentDetailApi,
     CourseDetailApi,
-    CourseComponentApi,
 )
-from api.apis.v1.exercise import ExerciseApi, ExerciseDetailApi
 from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
+from api.apis.v1.course_components.course_components import (
+    CourseComponentApi,
+    CourseComponentDetailApi,
+)
 
-from api.apis.v1.reports.tacher import TeacherReport
+from api.apis.v1.reports.teacher import TeacherReport
 
 
 urlpatterns_v1 = [
@@ -31,12 +32,6 @@ urlpatterns_v1 = [
         "course/<uuid:course_uuid>/command",
         CourseCommandApi.as_view(),
         name="course-command",
-    ),
-    path("exercise/", ExerciseApi.as_view(), name="exercise"),
-    path(
-        "exercise/<uuid:exercise_uuid>",
-        ExerciseDetailApi.as_view(),
-        name="exercise-detail",
     ),
     path("report/teacher/", TeacherReport.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
