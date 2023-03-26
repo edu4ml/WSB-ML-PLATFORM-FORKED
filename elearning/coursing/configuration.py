@@ -4,7 +4,6 @@ from db.repository.configuration import RepositoryRoot
 from elearning.coursing.command_handlers import (
     OnCompleteCourseStep,
     OnCreateCourse,
-    OnUpdateCourse,
 )
 from elearning.coursing.commands import (
     CompleteCourseStep,
@@ -12,6 +11,7 @@ from elearning.coursing.commands import (
     EnrollForCourse,
     UpdateCourse,
     OnEnrollForCourse,
+    OnUpdateCourse,
 )
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
