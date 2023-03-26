@@ -3,7 +3,7 @@ from db.models import (
 )
 from elearning.coursing.entities.enrollment import Enrollment
 from infra.logging import logger
-from infra.repository import RepositoryCrud
+from infra.repository import Repository, RepositoryCrud
 
 
 @logger
@@ -17,3 +17,10 @@ class CourseEnrollmentRepositoryCRUD(RepositoryCrud):
             course=obj.course.uuid,
             is_completed=obj.is_completed,
         )
+
+
+@logger
+class CourseEnrollmentRepository(Repository):
+    root_model = CourseEnrollmentDbModel
+    root_entity = Enrollment
+    crud = CourseEnrollmentRepositoryCRUD()
