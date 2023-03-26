@@ -7,14 +7,12 @@ from db.models import (
     CourseEnrollment as CourseEnrollmentDbModel,
     CourseStep as CourseStepDbModel,
     CourseStepUserCompletion as CourseStepUserCompletionDbModel,
-    CourseComponent as CourseComponentDbModel,
 )
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
-from elearning.coursing.entities.enrollment import Enrollment
 from infra.logging import logger
-from infra.repository import Repository, RepositoryCrud
+from infra.repository import Repository
 from shared.enums import UserRoles
 
 
@@ -29,92 +27,6 @@ class CourseStepUserCompletionRepository(Repository):
 
 
 @logger
-class CourseComponentRepositoryCRUD(RepositoryCrud):
-    root_model = CourseComponentDbModel
-    root_entity = CourseComponent
-
-    def create(self, **kwargs):
-        # this can be done with a serializer
-        assert "title" in kwargs.keys()
-        assert "description" in kwargs.keys()
-        assert "type" in kwargs.keys()
-
-        return super().create(**kwargs)
-
-    def _from_object(self, object: CourseComponentDbModel):
-        return self.root_entity(
-            uuid=object.uuid,
-            title=object.title,
-            description=object.description,
-            type=object.type,
-            resources=[
-                dict(
-                    title=resource.title,
-                    url=resource.url,
-                )
-                for resource in object.resources.all()
-            ],
-        )
-
-
-@logger
-class CourseEnrollmentRepositoryCRUD(RepositoryCrud):
-    root_model = CourseEnrollmentDbModel
-    root_entity = Enrollment
-
-    def _from_object(self, obj):
-        return self.root_entity(
-            user=obj.user.uuid,
-            course=obj.course.uuid,
-            is_completed=obj.is_completed,
-        )
-
-
-@logger
-class CourseComponentRepository(Repository):
-    root_model = CourseComponentDbModel
-
-    def list(self):
-        return [
-            CourseComponent(
-                uuid=component.uuid,
-                title=component.title,
-                description=component.description,
-                type=component.type,
-                resources=self._get_resources(component),
-            )
-            for component in self.root_model.objects.all()
-        ]
-
-    def persist(self, data):
-        # This one is done in a CRUD fashion. No logic needed here.
-        obj = self.root_model.objects.create(
-            title=data["title"],
-            description=data["description"],
-            type=data["type"],
-        )
-        return self._prepare_domain_entity(obj)
-
-    def _prepare_domain_entity(self, obj):
-        return CourseComponent(
-            uuid=obj.uuid,
-            title=obj.title,
-            description=obj.description,
-            type=obj.type,
-            resources=self._get_resources(obj),
-        )
-
-    def _get_resources(self, component):
-        return [
-            dict(
-                title=resource.title,
-                url=resource.url,
-            )
-            for resource in component.resources.all()
-        ]
-
-
-@logger
 class CourseRepository(Repository):
     """
     Abstraction layer to retrieve, persist and update
@@ -124,15 +36,11 @@ class CourseRepository(Repository):
     root_model = Course
     course_step: CourseStepRepository
     course_step_user_completion: CourseStepUserCompletionRepository
-    course_component: CourseComponentRepository
-    course_component_CRUD: CourseComponentRepositoryCRUD
 
     def __init__(self, user=None) -> None:
         super().__init__(user)
         self.course_step = CourseStepRepository(user=user)
         self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
-        self.course_component = CourseComponentRepository(user=user)
-        self.course_component_CRUD = CourseComponentRepositoryCRUD()
 
     def persist(self, aggregate: Course):
         obj = CourseDbModel.objects.create(

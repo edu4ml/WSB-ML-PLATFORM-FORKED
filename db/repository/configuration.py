@@ -1,7 +1,7 @@
 from .course import (
     CourseRepository,
-    CourseEnrollmentRepositoryCRUD,
 )
+from .enrollment import CourseEnrollmentRepositoryCRUD
 from .user import UserRepository, UserRepositoryCRUD
 
 

@@ -5,7 +5,9 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from api.apis.mixins import AuthMixin
-from db.repository.course import CourseRepository
+from db.repository.course_component import (
+    CourseComponentRepository,
+)
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
 
@@ -13,14 +15,14 @@ from shared.enums import UserRoles
 class CourseComponentApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, **kwargs):
-        components = CourseRepository(request.user).course_component_CRUD.list()
+        components = CourseComponentRepository(request.user).crud.list()
         serialized = [asdict(i) for i in components]
         return Response(serialized, status=status.HTTP_200_OK)
 
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def post(self, request, **kwargs):
         try:
-            component = CourseRepository(request.user).course_component_CRUD.create(
+            component = CourseComponentRepository(request.user).crud.create(
                 **request.data
             )
             return Response(asdict(component), status.HTTP_201_CREATED)
@@ -40,7 +42,7 @@ class CourseComponentDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, component_uuid: UUID, **kwargs):
 
-        component = CourseRepository(request.user).course_component_CRUD.retrieve(
+        component = CourseComponentRepository(request.user).crud.retrieve(
             uuid=component_uuid
         )
         if component:
@@ -51,7 +53,7 @@ class CourseComponentDetailApi(AuthMixin):
     def put(self, request, component_uuid: UUID, **kwargs):
         try:
 
-            component = CourseRepository(request.user).course_component_CRUD.update(
+            component = CourseComponentRepository(request.user).crud.update(
                 obj_uuid=component_uuid,
                 **request.data,
             )
@@ -69,5 +71,5 @@ class CourseComponentDetailApi(AuthMixin):
 
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def delete(self, request, component_uuid: UUID, **kwargs):
-        CourseRepository(request.user).course_component_CRUD.delete(uuid=component_uuid)
+        CourseComponentRepository(request.user).crud.delete(uuid=component_uuid)
         return Response(dict(), status.HTTP_204_NO_CONTENT)
