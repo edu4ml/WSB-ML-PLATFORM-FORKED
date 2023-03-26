@@ -82,18 +82,40 @@ def teacher_client(teacher, client):
 
 
 @pytest.fixture
-def courses():
-    return baker.make(Course, 4, is_draft=False)
+def courses(teacher):
+    return baker.make(Course, 4, is_draft=False, author=teacher)
 
 
 @pytest.fixture
-def published_course():
-    return baker.make(Course, is_draft=False)
+def admin_published_course(admin):
+    return baker.make(Course, is_draft=False, author=admin)
 
 
 @pytest.fixture
-def draft_course():
-    return baker.make(Course, is_draft=True)
+def admin_draft_course(admin):
+    return baker.make(Course, is_draft=True, author=admin)
+
+
+@pytest.fixture
+def teacher_published_course(teacher):
+    return baker.make(Course, is_draft=False, author=teacher)
+
+
+@pytest.fixture
+def teacher_draft_course(teacher):
+    return baker.make(Course, is_draft=True, author=teacher)
+
+
+@pytest.fixture
+def other_teacher_draft_course():
+    teacher = User.objects.create_user(
+        uuid=uuid4(),
+        username="otherTeacher",
+        email="otherteacher@example.com",
+        password="adminadmin",
+    )
+    teacher.roles.add(Role.objects.get_or_create(name=UserRoles.TEACHER)[0])
+    return baker.make(Course, is_draft=True, author_id=teacher.uuid)
 
 
 @pytest.fixture
@@ -107,8 +129,8 @@ def course_component():
 
 
 @pytest.fixture
-def course_with_steps(course_components):
-    course = baker.make(Course)
+def course_with_steps(course_components, teacher):
+    course = baker.make(Course, author=teacher)
     steps = []
     order = 1
     for component in course_components:

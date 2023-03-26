@@ -37,18 +37,18 @@ def _test_command(
 
 
 @pytest.mark.django_db
-def test_issue_enroll_command(admin_client, published_course, admin):
+def test_issue_enroll_command(admin_client, admin_published_course, admin):
     initial_data = dict(
         is_enrolled=False,
-        title=published_course.title,
-        description=published_course.description,
+        title=admin_published_course.title,
+        description=admin_published_course.description,
     )
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=admin.uuid)
     expected_result = dict(is_enrolled=True)
 
     _test_command(
         admin_client=admin_client,
-        course_obj=published_course,
+        course_obj=admin_published_course,
         initial_data=initial_data,
         command_data=command_data,
         expected_result=expected_result,
@@ -56,14 +56,16 @@ def test_issue_enroll_command(admin_client, published_course, admin):
 
 
 @pytest.mark.django_db
-def test_enroll_in_published_course_teacher(teacher_client, published_course, teacher):
+def test_enroll_in_published_course_teacher(
+    teacher_client, admin_published_course, teacher
+):
     initial_data = dict(is_enrolled=False)
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=teacher.uuid)
     expected_result = dict(is_enrolled=True)
 
     _test_command(
         admin_client=teacher_client,
-        course_obj=published_course,
+        course_obj=admin_published_course,
         initial_data=initial_data,
         command_data=command_data,
         expected_result=expected_result,
@@ -71,14 +73,16 @@ def test_enroll_in_published_course_teacher(teacher_client, published_course, te
 
 
 @pytest.mark.django_db
-def test_enroll_in_published_course_student(student_client, published_course, student):
+def test_enroll_in_published_course_student(
+    student_client, admin_published_course, student
+):
     initial_data = dict(is_enrolled=False)
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=student.uuid)
     expected_result = dict(is_enrolled=True)
 
     _test_command(
         admin_client=student_client,
-        course_obj=published_course,
+        course_obj=admin_published_course,
         initial_data=initial_data,
         command_data=command_data,
         expected_result=expected_result,
@@ -86,13 +90,15 @@ def test_enroll_in_published_course_student(student_client, published_course, st
 
 
 @pytest.mark.django_db
-def test_enroll_in_draft_course_teacher(teacher_client, draft_course, teacher):
+def test_enroll_in_draft_course_teacher(teacher_client, admin_draft_course, teacher):
     command_data = dict(
         type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(teacher.uuid)
     )
 
     response = teacher_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=draft_course.uuid)),
+        reverse(
+            "api:v1:course-command", kwargs=dict(course_uuid=admin_draft_course.uuid)
+        ),
         command_data,
         content_type="application/json",
     )
@@ -105,13 +111,15 @@ def test_enroll_in_draft_course_teacher(teacher_client, draft_course, teacher):
 
 
 @pytest.mark.django_db
-def test_enroll_in_draft_course_student(student_client, draft_course, student):
+def test_enroll_in_draft_course_student(student_client, admin_draft_course, student):
     command_data = dict(
         type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(student.uuid)
     )
 
     response = student_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=draft_course.uuid)),
+        reverse(
+            "api:v1:course-command", kwargs=dict(course_uuid=admin_draft_course.uuid)
+        ),
         command_data,
         content_type="application/json",
     )
@@ -124,7 +132,7 @@ def test_enroll_in_draft_course_student(student_client, draft_course, student):
 
 
 @pytest.mark.django_db
-def test_enroll_twice(teacher_client, published_course, teacher):
+def test_enroll_twice(teacher_client, admin_published_course, teacher):
     command_data = dict(
         type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(teacher.uuid)
     )
@@ -132,7 +140,8 @@ def test_enroll_twice(teacher_client, published_course, teacher):
     # Enroll once
     response = teacher_client.put(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=published_course.uuid)
+            "api:v1:course-command",
+            kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
         content_type="application/json",
@@ -142,7 +151,8 @@ def test_enroll_twice(teacher_client, published_course, teacher):
     # Enroll again
     response = teacher_client.put(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=published_course.uuid)
+            "api:v1:course-command",
+            kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
         content_type="application/json",
@@ -177,12 +187,13 @@ def test_enroll_in_non_existent_course(teacher_client, teacher):
 
 
 @pytest.mark.django_db
-def test_enroll_without_authentication(client, published_course):
+def test_enroll_without_authentication(client, admin_published_course):
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=None)
 
     response = client.put(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=published_course.uuid)
+            "api:v1:course-command",
+            kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
         content_type="application/json",
@@ -191,12 +202,13 @@ def test_enroll_without_authentication(client, published_course):
 
 
 @pytest.mark.django_db
-def test_enroll_with_invalid_user_uuid(teacher_client, published_course):
+def test_enroll_with_invalid_user_uuid(teacher_client, admin_published_course):
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(uuid4()))
 
     response = teacher_client.put(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=published_course.uuid)
+            "api:v1:course-command",
+            kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
         content_type="application/json",

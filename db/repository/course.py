@@ -42,11 +42,12 @@ class CourseRepository(Repository):
         self.course_step = CourseStepRepository(user=user)
         self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
 
-    def persist(self, aggregate: Course):
+    def persist(self, course: Course):
         obj = CourseDbModel.objects.create(
-            title=aggregate.title,
-            description=aggregate.description,
-            is_draft=aggregate.is_draft,
+            title=course.title,
+            description=course.description,
+            is_draft=course.is_draft,
+            author_id=course.author,
         )
         return self._from_model(obj)
 
@@ -114,6 +115,7 @@ class CourseRepository(Repository):
             created_at=course.created_at,
             updated_at=course.updated_at,
             title=course.title,
+            author=course.author.uuid,
             description=course.description,
             is_draft=course.is_draft,
             is_enrolled=course.enrollments.filter(user=self.user).exists(),

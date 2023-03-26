@@ -9,6 +9,7 @@ from api.apis.mixins import AuthMixin
 from db.repository.course import CourseRepository
 from elearning.apps import APP_NAME
 from infra.command_bus import CommandBus
+from infra.exceptions import CommandBusException
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
 
@@ -26,15 +27,15 @@ class CourseApi(AuthMixin):
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
             course = command_bus.issue(request)
             return Response(asdict(course), status.HTTP_201_CREATED)
-        except NotImplementedError:
+        except CommandBusException as e:
             return Response(
                 dict(
                     error=True,
                     success=False,
                     payload=request.data,
-                    message="NotImplemented",
+                    message=e.message,
                 ),
-                status.HTTP_501_NOT_IMPLEMENTED,
+                status=e.status_code,
             )
 
 

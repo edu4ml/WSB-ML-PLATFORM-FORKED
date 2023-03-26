@@ -14,8 +14,13 @@ class CommandProcessingException(CommandBusException):
 
 
 class CommandAlreadyExistException(CommandBusException):
-
     pass
+
+
+class CommandProcessingForbiddenException(CommandBusException):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+        self.status_code = status.HTTP_403_FORBIDDEN
 
 
 class CommandHandlerDoesNotExistException(CommandBusException):

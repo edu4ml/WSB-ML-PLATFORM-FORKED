@@ -30,35 +30,43 @@ def test_list_courses_teacher(teacher_client, courses):
 
 
 @pytest.mark.django_db
-def test_course_detail_unauthorized(client, published_course):
+def test_course_detail_unauthorized(client, admin_published_course):
     response = client.get(
-        reverse("api:v1:course-detail", kwargs={"course_uuid": published_course.uuid})
+        reverse(
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
+        )
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
-def test_course_detail_student(student_client, published_course):
+def test_course_detail_student(student_client, admin_published_course):
     response = student_client.get(
-        reverse("api:v1:course-detail", kwargs={"course_uuid": published_course.uuid})
+        reverse(
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
+        )
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["uuid"] == str(published_course.uuid)
+    assert response.json()["uuid"] == str(admin_published_course.uuid)
 
 
 @pytest.mark.django_db
-def test_course_detail_teacher(teacher_client, published_course):
+def test_course_detail_teacher(teacher_client, admin_published_course):
     response = teacher_client.get(
-        reverse("api:v1:course-detail", kwargs={"course_uuid": published_course.uuid})
+        reverse(
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
+        )
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["uuid"] == str(published_course.uuid)
+    assert response.json()["uuid"] == str(admin_published_course.uuid)
 
 
 @pytest.mark.django_db
-def test_course_detail_admin(admin_client, published_course):
+def test_course_detail_admin(admin_client, admin_published_course):
     response = admin_client.get(
-        reverse("api:v1:course-detail", kwargs={"course_uuid": published_course.uuid})
+        reverse(
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
+        )
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["uuid"] == str(published_course.uuid)
+    assert response.json()["uuid"] == str(admin_published_course.uuid)

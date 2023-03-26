@@ -3,9 +3,9 @@
 from db.repository.configuration import RepositoryRoot
 from elearning.coursing.command_handlers import (
     OnCompleteCourseStep,
-    OnCreateCourse,
 )
 from elearning.coursing.commands import (
+    OnCreateCourse,
     CompleteCourseStep,
     CreateCourse,
     EnrollForCourse,

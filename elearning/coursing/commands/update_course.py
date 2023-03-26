@@ -3,7 +3,11 @@ from typing import List
 from uuid import UUID
 
 from infra.command import Command
-from shared.enums import CommandTypes, UserRoles, CourseStepComponentTypes
+from infra.exceptions import (
+    CommandProcessingException,
+    CommandProcessingForbiddenException,
+)
+from shared.enums import ApiErrors, CommandTypes, UserRoles, CourseStepComponentTypes
 from db.repository.configuration import RepositoryRoot
 from elearning.coursing.entities import CourseStep
 from infra.command_handler import CommandHandler
@@ -31,13 +35,14 @@ class UpdateCourse(Command):
 
     @classmethod
     def build_from_request(cls, request, **kwargs):
-        return UpdateCourse(
+        command = UpdateCourse(
             parent_uuid=kwargs["course_uuid"],
-            title=request.data.get("title"),
             description=request.data.get("description"),
             is_draft=request.data.get("is_draft"),
             steps=request.data.get("steps"),
         )
+        command.issuer = request.user
+        return command
 
 
 class OnUpdateCourse(CommandHandler):
@@ -45,10 +50,16 @@ class OnUpdateCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: UpdateCourse):
+        course = self.repository.course.retrieve(command.parent_uuid)
+        if course is None:
+            raise CommandProcessingException(ApiErrors.COURSE_DOES_NOT_EXIST)
+        self._validate_steps_payload(command.steps)
+        self._check_that_user_is_author(course, command.issuer)
+        self._check_course_is_not_published(course)
+
         with self.repository.course.with_entity(
             parent_uuid=command.parent_uuid
         ) as course:
-            course.title = command.title
             course.description = command.description
             course.is_draft = command.is_draft
 
@@ -63,3 +74,28 @@ class OnUpdateCourse(CommandHandler):
                 ]
             else:
                 course.steps = None
+
+    def _check_that_user_is_author(self, course, user):
+        if course.author != user.uuid:
+            raise CommandProcessingForbiddenException(
+                ApiErrors.CANNOT_UPDATE_COURSE_NOT_AUTHOR
+            )
+
+    def _check_course_is_not_published(self, course):
+        if not course.is_draft:
+            raise CommandProcessingException(ApiErrors.CANNOT_UPDATE_PUBLISHED_COURSE)
+
+    def _validate_steps_payload(self, steps):
+        for step in steps:
+            if step.get("component") is None:
+                raise CommandProcessingException(
+                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_COMPONENT
+                )
+            if step.get("evaluation_type") is None:
+                raise CommandProcessingException(
+                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_EVALUATION_TYPE
+                )
+            if step.get("order") is None:
+                raise CommandProcessingException(
+                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_ORDER
+                )
