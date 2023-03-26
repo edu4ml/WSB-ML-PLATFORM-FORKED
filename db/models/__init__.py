@@ -1,4 +1,4 @@
-from .resources import ExternalResource
+from .external_resources import ExternalResource
 from .courses import (
     Course,
     CourseEnrollment,

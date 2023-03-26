@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from db.models.resources import ExternalResource
+from db.models.external_resources import ExternalResource
 
 from shared.enums import CourseStepComponentTypes, CourseStepEvaluationTypes
 

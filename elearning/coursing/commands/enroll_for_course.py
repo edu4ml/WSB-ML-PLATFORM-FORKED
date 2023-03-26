@@ -30,18 +30,18 @@ class OnEnrollForCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: EnrollForCourse):
-        enrollment = self.repository.enrollment.crud.search(
+        enrollment = self.repository.enrollment.search(
             user__uuid=command.user_uuid, course__uuid=command.parent_uuid
         )
         course = self.repository.course.retrieve(command.parent_uuid)
-        user: User = self.repository.user.crud.retrieve(command.user_uuid)
+        user: User = self.repository.user.retrieve(command.user_uuid)
 
         self._check_user_exists(user)
         self._check_parent_exists(course)
         self._check_is_already_enrolled(enrollment)
         self._check_course_is_not_draft(course)
 
-        return self.repository.enrollment.crud.create(
+        return self.repository.enrollment.create(
             course_id=course.uuid, user_id=user.uuid
         )
 

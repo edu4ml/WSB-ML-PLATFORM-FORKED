@@ -25,15 +25,15 @@ const menuItems: MenuProps['items'] = [
 
 const UserProfileAvatar = () => {
     const { data, isSuccess } = useGetUserProfileQuery('userDetails');
-    const [logout, { }] = useLogoutMutation();
+    const [logout, {}] = useLogoutMutation();
     const navigate = useNavigate();
 
     const onMenuClick = (e) => {
         if (e.key === 'logout') {
             logout('logoutUser');
-            navigate('/');
+            navigate('/app/');
         } else if (e.key === 'profile') {
-            navigate('/profile');
+            navigate('/app/profile');
         }
     };
 

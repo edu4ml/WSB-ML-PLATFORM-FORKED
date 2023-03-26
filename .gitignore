@@ -7,13 +7,13 @@ db.sqlite3
 *.egg
 *.egg-info/
 
-
 cypress/videos
 
-# report for mutation testing 
+# report for mutation testing
 report.html
 
 staticfiles-cdn
+media/
 
 webpack-stats.json
 package-lock.json
@@ -23,7 +23,7 @@ frontend/static/frontend/frontend-*
 keys/*
 !keys/.gitkeep
 
-# Copied and pasted from: 
+# Copied and pasted from:
 # https://github.com/facebook/react/blob/main/.gitignore
 
 .DS_STORE

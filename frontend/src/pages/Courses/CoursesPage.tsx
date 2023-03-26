@@ -61,7 +61,7 @@ const CoursesPage = () => {
             .unwrap()
             .then((response) => {
                 setIsModalOpen(false);
-                navigate(`/courses/${response.uuid}/edit`);
+                navigate(`/app/courses/${response.uuid}/edit`);
             })
             .catch((err) => {
                 console.error('Error: ', err);

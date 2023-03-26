@@ -30,7 +30,8 @@ def home(request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include((api_urlpatterns, "api"))),
-    path("", include((frontend_urlpatterns, "frontend"))),
+    path("app/", include((frontend_urlpatterns, "frontend_app"))),
+    path("", include((frontend_urlpatterns, "frontend_no_prefix"))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

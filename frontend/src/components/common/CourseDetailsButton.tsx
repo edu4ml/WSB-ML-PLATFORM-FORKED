@@ -2,15 +2,15 @@ import { Button } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { CourseListItemType } from '../../types/course';
+import { CourseType } from '../../types/course';
 
-const CourseDetailsButton = ({ course }: { course: CourseListItemType }) => {
+const CourseDetailsButton = ({ course }: { course: CourseType }) => {
     const navigate = useNavigate();
 
     return (
         <Button
             onClick={() => {
-                navigate(`/courses/${course.uuid}/edit`);
+                navigate(`/app/courses/${course.uuid}/edit`);
             }}
             style={{ width: '100%' }}
         >

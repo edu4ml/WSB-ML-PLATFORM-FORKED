@@ -1,10 +1,8 @@
 import React from 'react';
-import { Card, Menu, Space, Typography } from 'antd';
+import { Card, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { FolderTwoTone } from '@ant-design/icons';
 import logoWSB from '../../../public/WSB2.png';
-
-const { Title } = Typography;
 
 const SideBarMenu = () => {
     const navigate = useNavigate();
@@ -30,25 +28,32 @@ const SideBarMenu = () => {
         >
             <img src={logoWSB} alt="logo" style={logoStyle} />
 
-            <Card hoverable onClick={() => navigate('/courses')}>
+            <Card hoverable onClick={() => navigate('/app/courses')}>
                 <Card.Meta
                     avatar={<FolderTwoTone />}
                     title="Kursy"
                     description="Zarządzaj kursami"
                 />
             </Card>
-            <Card hoverable onClick={() => navigate('/dashboard')}>
+            <Card hoverable onClick={() => navigate('/app/dashboard')}>
                 <Card.Meta
                     avatar={<FolderTwoTone />}
                     title="Panel"
                     description="Przeglądaj statystyki"
                 />
             </Card>
-            <Card hoverable onClick={() => navigate('/course-components')}>
+            <Card hoverable onClick={() => navigate('/app/course-components')}>
                 <Card.Meta
                     avatar={<FolderTwoTone />}
                     title="Ćwiczenia"
                     description="Zarządzaj ćwiczeniami i testami"
+                />
+            </Card>
+            <Card hoverable onClick={() => navigate('/app/resources')}>
+                <Card.Meta
+                    avatar={<FolderTwoTone />}
+                    title="Materiały dodatkowe"
+                    description="Zarządzaj materiałami, dodatkowymi plikami i linkami"
                 />
             </Card>
         </Space>

@@ -13,11 +13,21 @@ from api.apis.v1.course_components.course_components import (
 )
 
 from api.apis.v1.reports.teacher import TeacherReport
+from api.apis.v1.resources.resource import (
+    ExternalResourceApi,
+    ExternalResourceDetailApi,
+)
 
 
 urlpatterns_v1 = [
     path("course/", CourseApi.as_view(), name="course"),
     path("course-components/", CourseComponentApi.as_view(), name="course-components"),
+    path("resource/", ExternalResourceApi.as_view(), name="external-resource"),
+    path(
+        "resource/<uuid:resource_uuid>",
+        ExternalResourceDetailApi.as_view(),
+        name="external-resource-detail",
+    ),
     path(
         "course-components/<uuid:component_uuid>",
         CourseComponentDetailApi.as_view(),

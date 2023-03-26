@@ -6,6 +6,7 @@ from django.urls import reverse
 from model_bakery import baker
 
 from db.models import Course, CourseStep, Role, CourseComponent
+from db.models.external_resources import ExternalResource
 from elearning.auth.user import User
 from shared.enums import UserRoles
 
@@ -145,3 +146,8 @@ def course_with_steps(course_components, teacher):
         )
         order += 1
     return course, steps
+
+
+@pytest.fixture
+def external_resources():
+    return baker.make(ExternalResource, 4)

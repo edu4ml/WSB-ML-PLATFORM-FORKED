@@ -30,7 +30,15 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/profile"
+                        path="/app"
+                        element={
+                            <LoginLayout>
+                                <LoginPage />
+                            </LoginLayout>
+                        }
+                    />
+                    <Route
+                        path="/app/profile"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
@@ -42,7 +50,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/courses"
+                        path="/app/courses"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
@@ -54,7 +62,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/courses/:courseId"
+                        path="/app/courses/:courseId"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
@@ -66,7 +74,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/courses/:courseId/edit"
+                        path="/app/courses/:courseId/edit"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
@@ -78,7 +86,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/course-components"
+                        path="/app/course-components"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
@@ -90,23 +98,25 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/exercises/:exerciseId"
-                        element={
-                            <PrivateRoute>
-                                <MainLayout>
-                                    <ExerciseDetailPage />
-                                </MainLayout>
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/dashboard"
+                        path="/app/dashboard"
                         element={
                             <PrivateRoute>
                                 <MainLayout>
                                     <DashboardLayout>
                                         <TeacherDashboardPage />
                                     </DashboardLayout>
+                                </MainLayout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/app/resources"
+                        element={
+                            <PrivateRoute>
+                                <MainLayout>
+                                    <SimpleLayout>
+                                        <CourseComponentsPage />
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }

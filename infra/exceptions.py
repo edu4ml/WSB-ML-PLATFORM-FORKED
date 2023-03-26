@@ -35,5 +35,19 @@ class CommandNotSupported(CommandBusException):
         self.status_code = status.HTTP_400_BAD_REQUEST
 
 
-class CommandExecutionAlreadyInProgressException(CommandBusException):
-    pass
+class ApiException(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+        self.message = args[0]
+
+
+class BadRequestException(ApiException):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+        self.status_code = status.HTTP_400_BAD_REQUEST
+
+
+class NotFoundException(ApiException):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+        self.status_code = status.HTTP_404_NOT_FOUND

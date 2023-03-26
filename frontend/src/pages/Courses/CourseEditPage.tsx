@@ -75,7 +75,7 @@ const CourseEditPage = () => {
                             message: TEXT_COURSE_PUBLISHED,
                             duration: 2,
                         });
-                        navigate('/courses/');
+                        navigate('/app/courses/');
                     })
                     .catch((err) => {
                         notification.error({

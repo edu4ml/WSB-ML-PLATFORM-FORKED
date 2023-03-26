@@ -5,7 +5,7 @@ from db.models.courses import CourseStep
 from shared.enums import CourseStepEvaluationStatus
 
 from .mixin import TimestampedModel
-from .resources import ExternalResource
+from .external_resources import ExternalResource
 
 
 class EvaluationAttempt(TimestampedModel):

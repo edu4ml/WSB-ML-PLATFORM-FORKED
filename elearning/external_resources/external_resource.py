@@ -1,13 +1,10 @@
 from dataclasses import dataclass
-
-
-@dataclass
-class LinkResource:
-    title: str
-    url: str
+from uuid import UUID
 
 
 @dataclass
 class ExternalResource:
+    uuid: UUID
     title: str
     url: str
+    file_link: str

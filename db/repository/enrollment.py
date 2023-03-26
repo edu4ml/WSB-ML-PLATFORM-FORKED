@@ -3,7 +3,7 @@ from db.models import (
 )
 from elearning.coursing.entities.enrollment import Enrollment
 from infra.logging import logger
-from infra.repository import Repository, RepositoryCrud, RepositoryEntityBuilder
+from infra.repository import RepositoryCrud, RepositoryEntityBuilder
 
 
 class CourseEnrollmentEntityBuilder(RepositoryEntityBuilder):
@@ -18,13 +18,6 @@ class CourseEnrollmentEntityBuilder(RepositoryEntityBuilder):
 
 
 @logger
-class CourseEnrollmentRepositoryCRUD(RepositoryCrud):
+class CourseEnrollmentRepository(RepositoryCrud):
     root_model = CourseEnrollmentDbModel
-    entity_builder = CourseEnrollmentEntityBuilder()
-
-
-@logger
-class CourseEnrollmentRepository(Repository):
-    root_model = CourseEnrollmentDbModel
-    crud = CourseEnrollmentRepositoryCRUD()
     entity_builder = CourseEnrollmentEntityBuilder()

@@ -56,7 +56,7 @@ class RepositoryCrud:
 
 class Repository:
     root_model = None
-    crud_repo: RepositoryCrud() = None
+    crud: RepositoryCrud() = None
     entity_builder = RepositoryEntityBuilder()
 
     def __init__(self, user=None) -> None:
