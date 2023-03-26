@@ -16,3 +16,11 @@ CREATE SCHEMA public;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO public;
 ```
+
+
+
+
+# Google Login in WSB platform 
+
+Useful resources: 
+- https://www.hacksoft.io/blog/google-oauth2-with-django-react-part-1

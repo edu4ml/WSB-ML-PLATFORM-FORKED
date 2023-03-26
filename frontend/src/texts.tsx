@@ -43,3 +43,4 @@ export const TEXT_COURSE_COMPONENT_TYPE_UNKNOWN = 'Inne';
 export const TEXT_COURSE_COMPONENT_CREATED = 'Komponent utworzony!';
 export const TEXT_COURSE_COMPONENT_UPDATED = 'Komponent zaktualizowany!';
 export const TEXT_COURSE_COMPONENT_DELETED = 'Komponent usunięty!';
+export const TEXT_COURSE_PAGE_TITLE = 'Twoje kursy';

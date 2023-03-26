@@ -41,8 +41,8 @@ const CourseList = ({ courses }) => {
 
     return (
         <List
+            bordered={false}
             data-cy={'course-catalog-list'}
-            // itemLayout="vertical"
             size={'large'}
             pagination={{ pageSize: 10 }}
             dataSource={sortedCourses}

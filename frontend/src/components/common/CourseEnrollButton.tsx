@@ -44,6 +44,7 @@ const CourseEnrollButton = ({
                     });
             }}
             style={{ width: '100%' }}
+            type={'primary'}
         >
             Dołącz do kursu
         </Button>

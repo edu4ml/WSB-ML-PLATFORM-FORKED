@@ -1,3 +1,14 @@
+# Stories 
+
+- As a Teacher, I want to create a new course and expect the course to be available for students to enroll in.
+- As a Teacher, I want to edit an existing course and expect the changes to be reflected in the course content and structure.
+- As a Teacher, I want to delete a course and expect the course to be removed from the list of available courses for students.
+- As a Teacher, I want to organize course components in a logical order and expect students to follow the defined order while progressing through the course.
+- As a Teacher, I want to set course prerequisites and expect students to fulfill the prerequisites before enrolling in the course.
+- As a Teacher, I want to manage student enrollment in my courses and expect to approve or reject enrollment requests as needed.
+- As a Teacher, I want to monitor individual student progress in my courses and expect to access progress reports to identify areas where students may need additional support.
+- As a Teacher, I want to send course-related announcements or updates and expect students enrolled in the course to receive these notifications.
+
 
 # MVP 
 
@@ -25,18 +36,10 @@
 6. **Reporting Domain**
    - Basic course progress reports.
 
-7. **Payment Domain**
-   - Basic payment processing and validation.
-
-8. **Content Domain**
+7. **Content Domain**
    - Ability to create and edit course content.
    - Basic course content organization.
 
-9. **Analytics Domain**
+8. **Analytics Domain**
    - Basic data collection and storage.
    - Basic data analysis and visualization.
-
-10. **Localization Domain**
-   - Basic language selection and preference management.
-   - Basic translation management and integration.
-

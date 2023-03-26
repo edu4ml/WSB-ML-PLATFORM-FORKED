@@ -1,4 +1,4 @@
-import { List } from 'antd';
+import { List, Card, Col, Row } from 'antd';
 import React from 'react';
 import { CourseType } from '../../types/course';
 import { UserType } from '../../types/user';
@@ -24,17 +24,25 @@ const CourseListItem = ({
     };
 
     return (
-        <List.Item
-            key={course.title}
-            actions={actions(course)}
+        <Card
             data-cy={'course-catalog-list-item'}
-            className={'course-list-item'}
+            style={{ marginTop: '20px' }}
         >
-            <List.Item.Meta
-                title={<CourseListItemHeader course={course} />}
+            <Card.Meta
+                title={
+                    <CourseListItemHeader
+                        course={course}
+                        actions={actions(course)}
+                    />
+                }
                 description={course.description}
             />
-        </List.Item>
+            {/* <List.Item
+                key={course.title}
+                actions={actions(course)}
+                data-cy={'course-catalog-list-item'}
+            ></List.Item> */}
+        </Card>
     );
 };
 

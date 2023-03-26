@@ -56,7 +56,7 @@ const courseComponentTypeToTextMap: { [key: string]: string } = {
         TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
 };
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const getUniqueTypes = (components: Array<CourseComponentType>) => {
     const unique = [...new Set(components?.map((c) => c.type))];
@@ -215,182 +215,188 @@ const CourseComponentsPage = () => {
     // ----------------------------------------
 
     return (
-        <Card
-            title={
-                <CardHeader
-                    title={TEXT_COURSE_COMPONENTS_PAGE_TITLE}
-                    actions={[
-                        {
-                            text: TEXT_CREATE_COURSE_COMPONENT,
-                            onClick: showCreateModal,
-                            type: 'primary',
-                            dataCy: 'course-component-create-new',
-                        },
-                    ]}
+        <Space direction="vertical" style={{ width: '100%' }}>
+            <Title level={1}>{TEXT_COURSE_COMPONENTS_PAGE_TITLE}</Title>
+            <Card
+                title={
+                    <CardHeader
+                        title={''}
+                        actions={[
+                            {
+                                text: TEXT_CREATE_COURSE_COMPONENT,
+                                onClick: showCreateModal,
+                                type: 'primary',
+                                dataCy: 'course-component-create-new',
+                            },
+                        ]}
+                    />
+                }
+                bordered={false}
+            >
+                <Table
+                    columns={columns}
+                    dataSource={courseComponents}
+                    rowKey="uuid"
+                    pagination={{ pageSize: 20 }}
                 />
-            }
-            bordered={false}
-        >
-            <Table
-                columns={columns}
-                dataSource={courseComponents}
-                rowKey="uuid"
-                pagination={{ pageSize: 20 }}
-            />
-            <Modal
-                title={TEXT_NEW_COURSE_COMPONENT_MODAL_TITLE}
-                open={isCreateModalOpen}
-                onOk={handleCreateModalOk}
-                onCancel={handleCreateModalCancel}
-                footer={null}
-                width={1000}
-            >
-                <Form
-                    name="create-new-course-component"
-                    initialValues={{ remember: true }}
-                    onFinish={handleCreateModalOk}
-                    autoComplete="off"
-                    layout="vertical"
+                <Modal
+                    title={TEXT_NEW_COURSE_COMPONENT_MODAL_TITLE}
+                    open={isCreateModalOpen}
+                    onOk={handleCreateModalOk}
+                    onCancel={handleCreateModalCancel}
+                    footer={null}
+                    width={1000}
                 >
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item
-                                label={TEXT_TITLE}
-                                name="title"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: TEXT_FORM_NO_TITLE_WARNING,
-                                    },
-                                ]}
-                            >
-                                <Input data-cy="course-component-create-new-title" />
-                            </Form.Item>
-                            <Form.Item
-                                label={TEXT_DESCRIPTION}
-                                name="description"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            TEXT_FORM_NO_DESCRIPTION_WARNING,
-                                    },
-                                ]}
-                            >
-                                <Input.TextArea data-cy="course-component-create-new-description" />
-                            </Form.Item>
-                            <Form.Item label={TEXT_TYPE} name="type">
-                                <Select
-                                    placeholder={
-                                        TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
-                                    }
+                    <Form
+                        name="create-new-course-component"
+                        initialValues={{ remember: true }}
+                        onFinish={handleCreateModalOk}
+                        autoComplete="off"
+                        layout="vertical"
+                    >
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item
+                                    label={TEXT_TITLE}
+                                    name="title"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: TEXT_FORM_NO_TITLE_WARNING,
+                                        },
+                                    ]}
                                 >
-                                    {Object.entries(
-                                        Enums.COURSE_STEP_COMPONENT_TYPES
-                                    ).map(([key, value]) => (
-                                        <Select.Option value={key} key={key}>
-                                            {
-                                                courseComponentTypeToTextMap[
-                                                    value
-                                                ]
-                                            }
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            Tutaj jeszcze trzeba dodac resource i inne linki do
-                            cwiczen testow itd.
-                        </Col>
-                    </Row>
-                    <Form.Item>
-                        <Button
-                            data-cy="course-component-create-new-submit-button"
-                            type="primary"
-                            htmlType="submit"
-                            style={{ float: 'right' }}
-                        >
-                            {TEXT_CREATE_COURSE_COMPONENT}
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-            {/* EDIT MODAL  */}
-            <Modal
-                title={TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
-                open={isEditModalOpen}
-                onCancel={handleEditModalCancel}
-                footer={null}
-            >
-                <Form
-                    name="edit-course-component"
-                    initialValues={{
-                        remember: true,
-                        title: courseComponentTitle,
-                        description: courseComponentDescription,
-                        type: courseComponentType,
-                        uuid: courseComponentUUID,
-                    }}
-                    onFinish={handleEditModalOk}
-                    autoComplete="off"
-                    layout="vertical"
+                                    <Input data-cy="course-component-create-new-title" />
+                                </Form.Item>
+                                <Form.Item
+                                    label={TEXT_DESCRIPTION}
+                                    name="description"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                TEXT_FORM_NO_DESCRIPTION_WARNING,
+                                        },
+                                    ]}
+                                >
+                                    <Input.TextArea data-cy="course-component-create-new-description" />
+                                </Form.Item>
+                                <Form.Item label={TEXT_TYPE} name="type">
+                                    <Select
+                                        placeholder={
+                                            TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
+                                        }
+                                    >
+                                        {Object.entries(
+                                            Enums.COURSE_STEP_COMPONENT_TYPES
+                                        ).map(([key, value]) => (
+                                            <Select.Option
+                                                value={key}
+                                                key={key}
+                                            >
+                                                {
+                                                    courseComponentTypeToTextMap[
+                                                        value
+                                                    ]
+                                                }
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                Tutaj jeszcze trzeba dodac resource i inne linki
+                                do cwiczen testow itd.
+                            </Col>
+                        </Row>
+                        <Form.Item>
+                            <Button
+                                data-cy="course-component-create-new-submit-button"
+                                type="primary"
+                                htmlType="submit"
+                                style={{ float: 'right' }}
+                            >
+                                {TEXT_CREATE_COURSE_COMPONENT}
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Modal>
+                {/* EDIT MODAL  */}
+                <Modal
+                    title={TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
+                    open={isEditModalOpen}
+                    onCancel={handleEditModalCancel}
+                    footer={null}
                 >
-                    <Form.Item hidden={true} name="uuid">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label={TEXT_TITLE}
-                        name="title"
-                        rules={[
-                            {
-                                required: true,
-                                message: TEXT_FORM_NO_TITLE_WARNING,
-                            },
-                        ]}
+                    <Form
+                        name="edit-course-component"
+                        initialValues={{
+                            remember: true,
+                            title: courseComponentTitle,
+                            description: courseComponentDescription,
+                            type: courseComponentType,
+                            uuid: courseComponentUUID,
+                        }}
+                        onFinish={handleEditModalOk}
+                        autoComplete="off"
+                        layout="vertical"
                     >
-                        <Input data-cy="course-component-create-new-title" />
-                    </Form.Item>
-                    <Form.Item
-                        label={TEXT_DESCRIPTION}
-                        name="description"
-                        rules={[
-                            {
-                                required: true,
-                                message: TEXT_FORM_NO_DESCRIPTION_WARNING,
-                            },
-                        ]}
-                    >
-                        <Input.TextArea data-cy="course-component-create-new-description" />
-                    </Form.Item>
-                    <Form.Item label={TEXT_TYPE} name="type">
-                        <Select
-                            placeholder={
-                                TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
-                            }
+                        <Form.Item hidden={true} name="uuid">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            label={TEXT_TITLE}
+                            name="title"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: TEXT_FORM_NO_TITLE_WARNING,
+                                },
+                            ]}
                         >
-                            {Object.entries(
-                                Enums.COURSE_STEP_COMPONENT_TYPES
-                            ).map(([key, value]) => (
-                                <Select.Option value={key} key={key}>
-                                    {courseComponentTypeToTextMap[value]}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button
-                            data-cy="course-component-edit-submit-button"
-                            type="primary"
-                            htmlType="submit"
-                            style={{ float: 'right' }}
+                            <Input data-cy="course-component-create-new-title" />
+                        </Form.Item>
+                        <Form.Item
+                            label={TEXT_DESCRIPTION}
+                            name="description"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: TEXT_FORM_NO_DESCRIPTION_WARNING,
+                                },
+                            ]}
                         >
-                            {TEXT_SAVE}
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-        </Card>
+                            <Input.TextArea data-cy="course-component-create-new-description" />
+                        </Form.Item>
+                        <Form.Item label={TEXT_TYPE} name="type">
+                            <Select
+                                placeholder={
+                                    TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
+                                }
+                            >
+                                {Object.entries(
+                                    Enums.COURSE_STEP_COMPONENT_TYPES
+                                ).map(([key, value]) => (
+                                    <Select.Option value={key} key={key}>
+                                        {courseComponentTypeToTextMap[value]}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button
+                                data-cy="course-component-edit-submit-button"
+                                type="primary"
+                                htmlType="submit"
+                                style={{ float: 'right' }}
+                            >
+                                {TEXT_SAVE}
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            </Card>{' '}
+        </Space>
     );
 };
 

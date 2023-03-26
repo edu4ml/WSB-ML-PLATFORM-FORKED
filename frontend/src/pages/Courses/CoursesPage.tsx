@@ -1,4 +1,14 @@
-import { Button, Card, Form, Input, Modal } from 'antd';
+import {
+    Button,
+    Card,
+    Col,
+    Form,
+    Input,
+    Modal,
+    Row,
+    Space,
+    Typography,
+} from 'antd';
 import React, { useState } from 'react';
 import CardHeader from '../../components/common/CardHeader';
 import CourseList from '../../components/courses/CourseList';
@@ -18,23 +28,16 @@ import {
     TEXT_NEW_COURSE,
     TEXT_NEW_COURSE_TITLE,
     TEXT_FORM_NO_TITLE_WARNING,
+    TEXT_COURSE_PAGE_TITLE,
 } from '../../texts';
 
-const tabList = [
-    {
-        key: 'coursesAll',
-        tab: TEXT_COURSES_ALL,
-    },
-];
+const { Title } = Typography;
 
 const CoursesPage = () => {
     const [createCourseCommand, {}] = useCreateCourseMutation();
     const { data: courses } = useGetCourseCatalogQuery('course-catalog');
-    const { data: userData } = useGetUserProfileQuery('userDetails');
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [activeTabKey, setActiveTabKey] = useState<string>('coursesAll');
 
     const navigate = useNavigate();
 
@@ -49,15 +52,6 @@ const CoursesPage = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-
-    const actions: Array<CardHeaderRightButtonActionType> = [
-        {
-            text: TEXT_NEW_COURSE,
-            onClick: showModal,
-            type: 'primary',
-            dataCy: 'course-catalog-create-new',
-        },
-    ];
 
     const handleCourseCreate = (values) => {
         createCourseCommand({
@@ -75,26 +69,33 @@ const CoursesPage = () => {
             });
     };
 
-    const cardContentList: Record<string, React.ReactNode> = {
-        coursesAll: <CourseList courses={courses} />,
-    };
-
     return (
-        <>
-            <Card
-                title={
-                    <CardHeader
-                        title={''}
-                        actions={isTeacher(userData) ? actions : []}
-                    />
-                }
-                bordered={false}
-                tabList={tabList}
-                activeTabKey={activeTabKey}
-                onTabChange={setActiveTabKey}
-            >
-                {cardContentList[activeTabKey]}
-            </Card>
+        <Space direction="vertical" style={{ width: '100%' }}>
+            <Row>
+                <Col span={12}>
+                    <Title level={1}>{TEXT_COURSE_PAGE_TITLE}</Title>
+                </Col>
+                <Col span={12}>
+                    <Button
+                        data-cy="course-catalog-create-new"
+                        key={TEXT_NEW_COURSE}
+                        onClick={showModal}
+                        style={{
+                            float: 'right',
+                            position: 'absolute',
+                            right: '0',
+                            bottom: '0',
+                            marginBottom: '10px',
+                        }}
+                        type="primary"
+                    >
+                        {TEXT_NEW_COURSE}
+                    </Button>
+                </Col>
+            </Row>
+            {/* <Card bordered={false}>
+            </Card> */}
+            <CourseList courses={courses} />
             <Modal
                 title={TEXT_NEW_COURSE_TITLE}
                 open={isModalOpen}
@@ -133,7 +134,7 @@ const CoursesPage = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-        </>
+        </Space>
     );
 };
 

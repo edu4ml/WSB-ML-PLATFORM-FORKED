@@ -82,9 +82,9 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <CourseComponentsLayout>
+                                    <SimpleLayout>
                                         <CourseComponentsPage />
-                                    </CourseComponentsLayout>
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
