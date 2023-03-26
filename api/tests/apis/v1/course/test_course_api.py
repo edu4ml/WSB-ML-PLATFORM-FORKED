@@ -4,7 +4,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import CommandApiErrors, CommandTypes, CourseStepComponentTypes
+from shared.enums import ApiErrors, CommandTypes, CourseStepComponentTypes
 
 
 @pytest.mark.django_db
@@ -128,7 +128,7 @@ def test_raise_exception_when_course_command_unknown(admin_client, courses):
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json() == dict(
-        message=CommandApiErrors.COMMAND_TYPE_NOT_SUPPORTED,
+        message=ApiErrors.COMMAND_TYPE_NOT_SUPPORTED,
         error=True,
         success=False,
         payload=command_data,

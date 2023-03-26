@@ -3,7 +3,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import CommandApiErrors, CommandTypes
+from shared.enums import ApiErrors, CommandTypes
 
 
 def get_course(admin_client, course_obj):
@@ -101,9 +101,7 @@ def test_enroll_in_draft_course_teacher(teacher_client, draft_course, teacher):
     assert response_data["error"] is True
     assert response_data["success"] is False
     assert response_data["payload"] == command_data
-    assert (
-        response_data["message"] == CommandApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT
-    )
+    assert response_data["message"] == ApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT
 
 
 @pytest.mark.django_db
@@ -122,9 +120,7 @@ def test_enroll_in_draft_course_student(student_client, draft_course, student):
     assert response_data["error"] is True
     assert response_data["success"] is False
     assert response_data["payload"] == command_data
-    assert (
-        response_data["message"] == CommandApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT
-    )
+    assert response_data["message"] == ApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT
 
 
 @pytest.mark.django_db
@@ -157,8 +153,7 @@ def test_enroll_twice(teacher_client, published_course, teacher):
     assert response_data["success"] is False
     assert response_data["payload"] == command_data
     assert (
-        response_data["message"]
-        == CommandApiErrors.CANNOT_ENROLL_FOR_COURSE_ALREADY_ENROLLED
+        response_data["message"] == ApiErrors.CANNOT_ENROLL_FOR_COURSE_ALREADY_ENROLLED
     )
 
 
@@ -178,7 +173,7 @@ def test_enroll_in_non_existent_course(teacher_client, teacher):
     assert response_data["error"] is True
     assert response_data["success"] is False
     assert response_data["payload"] == command_data
-    assert response_data["message"] == CommandApiErrors.COMMAND_TYPE_HAS_NO_PARENT
+    assert response_data["message"] == ApiErrors.COMMAND_TYPE_HAS_NO_PARENT
 
 
 @pytest.mark.django_db
@@ -193,3 +188,22 @@ def test_enroll_without_authentication(client, published_course):
         content_type="application/json",
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+def test_enroll_with_invalid_user_uuid(teacher_client, published_course):
+    command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(uuid4()))
+
+    response = teacher_client.put(
+        reverse(
+            "api:v1:course-command", kwargs=dict(course_uuid=published_course.uuid)
+        ),
+        command_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    response_data = response.json()
+    assert response_data["error"] is True
+    assert response_data["success"] is False
+    assert response_data["payload"] == command_data
+    assert response_data["message"] == ApiErrors.USER_DOES_NOT_EXIST

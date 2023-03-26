@@ -8,7 +8,6 @@ from db.models import (
     CourseStep as CourseStepDbModel,
     CourseStepUserCompletion as CourseStepUserCompletionDbModel,
     CourseComponent as CourseComponentDbModel,
-    CustomUser as User,
 )
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
@@ -177,9 +176,9 @@ class CourseRepository(Repository):
         return None
 
     def create_enrollment(self, course_uuid, user_uuid):
-        CourseEnrollmentDbModel.objects.create(
-            course=CourseDbModel.objects.get(uuid=course_uuid),
-            user=User.objects.get(uuid=user_uuid),
+        return CourseEnrollmentDbModel.objects.create(
+            course_id=course_uuid,
+            user_id=user_uuid,
         )
 
     def complete_step_for_user(self, course_step_user_completion_uuid):

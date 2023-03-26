@@ -2,7 +2,7 @@ from .course import (
     CourseRepository,
     CourseEnrollmentRepositoryCRUD,
 )
-from .user import UserRepository
+from .user import UserRepository, UserRepositoryCRUD
 
 
 class RepositoryRoot:
@@ -12,6 +12,7 @@ class RepositoryRoot:
                 self.enrollment: CourseEnrollmentRepositoryCRUD = (
                     CourseEnrollmentRepositoryCRUD()
                 )
+                self.user: UserRepositoryCRUD = UserRepositoryCRUD()
 
         self.course: CourseRepository = CourseRepository()
         self.user: UserRepository = CourseRepository()
