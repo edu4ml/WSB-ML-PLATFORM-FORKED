@@ -95,28 +95,6 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
 
 
 @pytest.mark.django_db
-def test_issue_create_course_command(admin_client):
-    command_data = dict(
-        type=CommandTypes.CREATE_COURSE,
-        title="TEST-COURSE-TITLE",
-        description="TEST-COURSE-DESCRIPTION",
-    )
-
-    response = admin_client.put(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_201_CREATED
-
-    data = response.json()
-
-    assert data["title"] == "TEST-COURSE-TITLE"
-    assert data["description"] == "TEST-COURSE-DESCRIPTION"
-    assert data["is_draft"] is True
-
-
-@pytest.mark.django_db
 def test_raise_exception_when_course_command_unknown(admin_client, courses):
     course = courses[0]
     command_data = dict(type="DUMMY-UNKNOWN-COMMAND", foo="bar")

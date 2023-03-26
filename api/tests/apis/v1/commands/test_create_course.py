@@ -1,4 +1,3 @@
-from uuid import uuid4
 import pytest
 from django.urls import reverse
 from rest_framework import status

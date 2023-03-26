@@ -12,7 +12,7 @@ from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
 from infra.logging import logger
-from infra.repository import Repository
+from infra.repository import Repository, RepositoryCrud
 from shared.enums import UserRoles
 
 
@@ -27,6 +27,50 @@ class CourseStepUserCompletionRepository(Repository):
 
 
 @logger
+class CourseRepositoryCRUD(RepositoryCrud):
+    root_model = CourseDbModel
+    root_entity = Course
+
+    def _from_object(self, course):
+        return Course(
+            uuid=course.uuid,
+            created_at=course.created_at,
+            updated_at=course.updated_at,
+            title=course.title,
+            author=course.author.uuid,
+            description=course.description,
+            is_draft=course.is_draft,
+            is_enrolled=course.enrollments.filter(user=self.user).exists(),
+            steps=self._get_course_steps(course),
+        )
+
+    def _get_course_steps(self, course):
+        return [
+            CourseStep(
+                order=step.order,
+                user_progress=self._get_user_progress_on_component(
+                    course=course, component=step.component
+                ),
+                evaluation_type=step.evaluation_type,
+                component=CourseComponent(
+                    uuid=step.component.uuid,
+                    title=step.component.title,
+                    description=step.component.description,
+                    type=step.component.type,
+                    resources=self._get_resources(step.component),
+                ),
+            )
+            for step in course.steps.all()
+        ]
+
+    def _get_resources(self, component):
+        return [
+            dict(title=resource.title, url=resource.url)
+            for resource in component.resources.all()
+        ]
+
+
+@logger
 class CourseRepository(Repository):
     """
     Abstraction layer to retrieve, persist and update
@@ -34,6 +78,7 @@ class CourseRepository(Repository):
     """
 
     root_model = Course
+    crud = CourseRepositoryCRUD()
     course_step: CourseStepRepository
     course_step_user_completion: CourseStepUserCompletionRepository
 
