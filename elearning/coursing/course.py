@@ -25,7 +25,6 @@ class Course:
 
     is_enrolled: bool = False
     current_active: int = None
-
     progress: int = 0
 
     steps: List[CourseStep] = field(default_factory=lambda: list())

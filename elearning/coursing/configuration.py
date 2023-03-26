@@ -4,7 +4,6 @@ from db.repository.configuration import RepositoryRoot
 from elearning.coursing.command_handlers import (
     OnCompleteCourseStep,
     OnCreateCourse,
-    OnEnrollForCourse,
     OnUpdateCourse,
 )
 from elearning.coursing.commands import (
@@ -12,10 +11,10 @@ from elearning.coursing.commands import (
     CreateCourse,
     EnrollForCourse,
     UpdateCourse,
+    OnEnrollForCourse,
 )
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
-from shared.enums import CommandTypes
 
 
 class CourseConfiguration:

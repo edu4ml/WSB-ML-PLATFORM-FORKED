@@ -87,8 +87,13 @@ def courses():
 
 
 @pytest.fixture
-def course():
-    return baker.make(Course)
+def published_course():
+    return baker.make(Course, is_draft=False)
+
+
+@pytest.fixture
+def draft_course():
+    return baker.make(Course, is_draft=True)
 
 
 @pytest.fixture

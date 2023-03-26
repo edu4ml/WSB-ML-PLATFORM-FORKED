@@ -45,16 +45,18 @@ def get_course(admin_client, course_obj):
 
 
 @pytest.mark.django_db
-def test_issue_enroll_command(admin_client, course, admin):
+def test_issue_enroll_command(admin_client, published_course, admin):
     initial_data = dict(
-        is_enrolled=False, title=course.title, description=course.description
+        is_enrolled=False,
+        title=published_course.title,
+        description=published_course.description,
     )
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=admin.uuid)
     expected_result = dict(is_enrolled=True)
 
     _test_command(
         admin_client=admin_client,
-        course_obj=course,
+        course_obj=published_course,
         initial_data=initial_data,
         command_data=command_data,
         expected_result=expected_result,
@@ -62,9 +64,11 @@ def test_issue_enroll_command(admin_client, course, admin):
 
 
 @pytest.mark.django_db
-def test_issue_update_course_properties_command(admin_client, course, admin):
+def test_issue_update_course_properties_command(admin_client, draft_course, admin):
     initial_data = dict(
-        title=course.title, description=course.description, is_draft=True
+        title=draft_course.title,
+        description=draft_course.description,
+        is_draft=True,
     )
     command_data = dict(
         type=CommandTypes.UPDATE_COURSE,
@@ -79,7 +83,7 @@ def test_issue_update_course_properties_command(admin_client, course, admin):
 
     _test_command(
         admin_client=admin_client,
-        course_obj=course,
+        course_obj=draft_course,
         initial_data=initial_data,
         command_data=command_data,
         expected_result=expected_result,
@@ -105,7 +109,9 @@ def test_issue_update_command_remove_steps(admin_client, course_with_steps):
 
 
 @pytest.mark.django_db
-def test_issue_update_command_add_steps(admin_client, course, course_components):
+def test_issue_update_command_add_steps(
+    admin_client, published_course, course_components
+):
     command_data = dict(
         type=CommandTypes.UPDATE_COURSE,
         steps=[
@@ -132,14 +138,14 @@ def test_issue_update_command_add_steps(admin_client, course, course_components)
         ],
     )
 
-    response = get_course(admin_client, course)
+    response = get_course(admin_client, published_course)
     assert len(response["steps"]) == 0
 
     _test_command(
         admin_client=admin_client,
-        course_obj=course,
+        course_obj=published_course,
         command_data=command_data,
     )
 
-    response = get_course(admin_client, course)
+    response = get_course(admin_client, published_course)
     assert len(response["steps"]) == len(command_data["steps"])

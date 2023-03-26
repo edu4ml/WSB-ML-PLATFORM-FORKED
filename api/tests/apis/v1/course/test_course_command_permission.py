@@ -9,10 +9,10 @@ from shared.enums import CommandTypes
 
 # Test UPDATE_COURSE command
 @pytest.mark.django_db
-def test_update_course_command_student(student_client, course):
+def test_update_course_command_student(student_client, published_course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
     response = student_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": published_course.uuid}),
         data,
         content_type="application/json",
     )
@@ -20,10 +20,10 @@ def test_update_course_command_student(student_client, course):
 
 
 @pytest.mark.django_db
-def test_update_course_command_teacher(teacher_client, course):
+def test_update_course_command_teacher(teacher_client, published_course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
     response = teacher_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": published_course.uuid}),
         data,
         content_type="application/json",
     )
@@ -31,10 +31,10 @@ def test_update_course_command_teacher(teacher_client, course):
 
 
 @pytest.mark.django_db
-def test_update_course_command_admin(admin_client, course):
+def test_update_course_command_admin(admin_client, published_course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
     response = admin_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": published_course.uuid}),
         data,
         content_type="application/json",
     )
@@ -43,13 +43,13 @@ def test_update_course_command_admin(admin_client, course):
 
 # Test ENROLL_FOR_COURSE command
 @pytest.mark.django_db
-def test_enroll_for_course_command_student(student, student_client, course):
+def test_enroll_for_course_command_student(student, student_client, published_course):
     command_data = {
         "type": CommandTypes.ENROLL_FOR_COURSE,
         "user_uuid": str(student.uuid),
     }
     response = student_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": published_course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -57,13 +57,13 @@ def test_enroll_for_course_command_student(student, student_client, course):
 
 
 @pytest.mark.django_db
-def test_enroll_for_course_command_teacher(teacher, teacher_client, course):
+def test_enroll_for_course_command_teacher(teacher, teacher_client, published_course):
     command_data = {
         "type": CommandTypes.ENROLL_FOR_COURSE,
         "user_uuid": str(teacher.uuid),
     }
     response = teacher_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": published_course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -71,13 +71,13 @@ def test_enroll_for_course_command_teacher(teacher, teacher_client, course):
 
 
 @pytest.mark.django_db
-def test_enroll_for_course_command_admin(admin, admin_client, course):
+def test_enroll_for_course_command_admin(admin, admin_client, published_course):
     command_data = {
         "type": CommandTypes.ENROLL_FOR_COURSE,
         "user_uuid": str(admin.uuid),
     }
     response = admin_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+        reverse("api:v1:course-command", kwargs={"course_uuid": published_course.uuid}),
         command_data,
         content_type="application/json",
     )

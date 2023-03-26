@@ -13,6 +13,7 @@ from db.models import (
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
+from elearning.coursing.entities.enrollment import Enrollment
 from infra.logging import logger
 from infra.repository import Repository, RepositoryCrud
 from shared.enums import UserRoles
@@ -41,23 +42,33 @@ class CourseComponentRepositoryCRUD(RepositoryCrud):
 
         return super().create(**kwargs)
 
-    def _prepare_domain_entity(self, object: CourseComponentDbModel):
+    def _from_object(self, object: CourseComponentDbModel):
         return self.root_entity(
             uuid=object.uuid,
             title=object.title,
             description=object.description,
             type=object.type,
-            resources=self._get_resources(object),
+            resources=[
+                dict(
+                    title=resource.title,
+                    url=resource.url,
+                )
+                for resource in object.resources.all()
+            ],
         )
 
-    def _get_resources(self, object: CourseComponentDbModel):
-        return [
-            dict(
-                title=resource.title,
-                url=resource.url,
-            )
-            for resource in object.resources.all()
-        ]
+
+@logger
+class CourseEnrollmentRepositoryCRUD(RepositoryCrud):
+    root_model = CourseEnrollmentDbModel
+    root_entity = Enrollment
+
+    def _from_object(self, obj):
+        return self.root_entity(
+            user=obj.user.uuid,
+            course=obj.course.uuid,
+            is_completed=obj.is_completed,
+        )
 
 
 @logger
@@ -130,7 +141,7 @@ class CourseRepository(Repository):
             description=aggregate.description,
             is_draft=aggregate.is_draft,
         )
-        return self._prepare_domain_entity(obj)
+        return self._from_model(obj)
 
     def update(self, entity: Course):
         course = CourseDbModel.objects.get(uuid=entity.uuid)
@@ -156,11 +167,11 @@ class CourseRepository(Repository):
             course_models = CourseDbModel.objects.all()
         else:
             course_models = CourseDbModel.objects.filter(is_draft=False)
-        return [self._prepare_domain_entity(c) for c in course_models]
+        return [self._from_model(c) for c in course_models]
 
     def retrieve(self, uuid: UUID):
         try:
-            return self._prepare_domain_entity(CourseDbModel.objects.get(uuid=uuid))
+            return self._from_model(CourseDbModel.objects.get(uuid=uuid))
         except CourseDbModel.DoesNotExist as e:
             self.logger.error(e)
         return None
@@ -190,7 +201,7 @@ class CourseRepository(Repository):
                 evaluation_type=new_step.evaluation_type,
             )
 
-    def _prepare_domain_entity(self, course: Course) -> Course:
+    def _from_model(self, course: CourseDbModel) -> Course:
         return Course(
             uuid=course.uuid,
             created_at=course.created_at,
@@ -198,16 +209,9 @@ class CourseRepository(Repository):
             title=course.title,
             description=course.description,
             is_draft=course.is_draft,
-            is_enrolled=self._is_enrolled(course),
+            is_enrolled=course.enrollments.filter(user=self.user).exists(),
             steps=self._get_course_steps(course),
         )
-
-    def _is_enrolled(self, course):
-        if not self.user:
-            return False
-        return CourseEnrollmentDbModel.objects.filter(
-            user=self.user, course=course
-        ).exists()
 
     def _get_course_steps(self, course):
         return [
@@ -225,7 +229,7 @@ class CourseRepository(Repository):
                     resources=self._get_resources(step.component),
                 ),
             )
-            for step in CourseStepDbModel.objects.filter(course=course)
+            for step in course.steps.all()
         ]
 
     def _get_resources(self, component):

@@ -4,7 +4,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import CommandTypes, CourseStepComponentTypes
+from shared.enums import CommandApiErrors, CommandTypes, CourseStepComponentTypes
 
 
 @pytest.mark.django_db
@@ -122,23 +122,16 @@ def test_raise_exception_when_course_command_unknown(admin_client, courses):
     command_data = dict(type="DUMMY-UNKNOWN-COMMAND", foo="bar")
 
     response = admin_client.put(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_501_NOT_IMPLEMENTED
-    assert response.json() == dict(
-        message="NotImplemented", error=True, success=False, payload=command_data
-    )
-
-    response = admin_client.put(
         reverse("api:v1:course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
-    assert response.status_code == status.HTTP_501_NOT_IMPLEMENTED
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json() == dict(
-        message="NotImplemented", error=True, success=False, payload=command_data
+        message=CommandApiErrors.COMMAND_TYPE_NOT_SUPPORTED,
+        error=True,
+        success=False,
+        payload=command_data,
     )
 
 

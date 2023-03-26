@@ -2,7 +2,6 @@ from db.repository.configuration import RepositoryRoot
 from elearning.coursing.commands import (
     CompleteCourseStep,
     CreateCourse,
-    EnrollForCourse,
     UpdateCourse,
 )
 from elearning.coursing.course import Course
@@ -25,14 +24,6 @@ class OnCreateCourse(CommandHandler):
             updated_at=None,
         )
         return self.repository.course.persist(entity)
-
-
-class OnEnrollForCourse(CommandHandler):
-    emitting_event: Event | None = None
-    repository: RepositoryRoot = None
-
-    def _handle_command(self, command: EnrollForCourse):
-        self.repository.course.create_enrollment(command.parent_uuid, command.user_uuid)
 
 
 class OnCompleteCourseStep(CommandHandler):

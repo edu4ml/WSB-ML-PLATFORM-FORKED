@@ -31,7 +31,7 @@ class ReportRepository(Repository):
                                 ),
                             ),
                         )
-                        for enrolment in course.enrolled_students.all()
+                        for enrolment in course.enrollments.all()
                     ],
                 )
                 for course in self.user.created_courses.all()

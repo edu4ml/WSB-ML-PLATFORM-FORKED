@@ -39,7 +39,7 @@ class Repository:
         obj.save()
 
     @contextmanager
-    def with_entity(self, parent_uuid: UUID):
+    def with_entity(self, parent_uuid: UUID, commit=True):
         """
         This is ment to retrieve entity model, do operations,
         and perform update automatically in db
@@ -47,7 +47,9 @@ class Repository:
         with transaction.atomic():
             self.resource = self.retrieve(parent_uuid)
             yield self.resource
-            self.update(self.resource)
+
+            if commit:
+                self.update(self.resource)
 
 
 class RepositoryCrud:
@@ -57,28 +59,33 @@ class RepositoryCrud:
     def retrieve(self, uuid: UUID):
         try:
             obj = self.root_model.objects.get(uuid=uuid)
-            return self._prepare_domain_entity(obj)
+            return self._from_object(obj)
+        except self.root_model.DoesNotExist:
+            return None
+
+    def search(self, **kwargs):
+        try:
+            obj = self.root_model.objects.get(**kwargs)
+            return self._from_object(obj)
         except self.root_model.DoesNotExist:
             return None
 
     def list(self):
-        return [
-            self._prepare_domain_entity(obj) for obj in self.root_model.objects.all()
-        ]
+        return [self._from_object(obj) for obj in self.root_model.objects.all()]
 
     def create(self, **kwargs):
         obj = self.root_model.objects.create(**kwargs)
-        return self._prepare_domain_entity(obj)
+        return self._from_object(obj)
 
     def update(self, obj_uuid, **kwargs):
         obj = self.root_model.objects.get(uuid=obj_uuid)
         for key, value in kwargs.items():
             setattr(obj, key, value)
         obj.save()
-        return self._prepare_domain_entity(obj)
+        return self._from_object(obj)
 
     def delete(self, uuid: UUID):
         self.root_model.objects.get(uuid=uuid).delete()
 
-    def _prepare_domain_entity(self, obj):
+    def _from_object(self, obj):
         raise NotImplementedError("Implement this method in child class")
