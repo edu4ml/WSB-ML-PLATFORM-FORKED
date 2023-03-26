@@ -5,9 +5,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
 
+class RepositoryEntityBuilder:
+    def __init__(self, user=None) -> None:
+        self.user = user
+
+    def from_model(self, obj):
+        raise NotImplementedError("Implement this method in child class")
+
+
 class RepositoryCrud:
     root_model = None
-    root_entity = None
+    entity_builder = RepositoryEntityBuilder()
 
     def __init__(self, user=None) -> None:
         self.user = user
@@ -15,41 +23,41 @@ class RepositoryCrud:
     def retrieve(self, uuid: UUID):
         try:
             obj = self.root_model.objects.get(uuid=uuid)
-            return self._from_object(obj)
+            return self.entity_builder.from_model(obj)
         except self.root_model.DoesNotExist:
             return None
 
     def search(self, **kwargs):
         try:
             obj = self.root_model.objects.get(**kwargs)
-            return self._from_object(obj)
+            return self.entity_builder.from_model(obj)
         except self.root_model.DoesNotExist:
             return None
 
     def list(self):
-        return [self._from_object(obj) for obj in self.root_model.objects.all()]
+        return [
+            self.entity_builder.from_model(obj) for obj in self.root_model.objects.all()
+        ]
 
     def create(self, **kwargs):
         obj = self.root_model.objects.create(**kwargs)
-        return self._from_object(obj)
+        return self.entity_builder.from_model(obj)
 
     def update(self, obj_uuid, **kwargs):
         obj = self.root_model.objects.get(uuid=obj_uuid)
         for key, value in kwargs.items():
             setattr(obj, key, value)
         obj.save()
-        return self._from_object(obj)
+        return self.entity_builder.from_model(obj)
 
     def delete(self, uuid: UUID):
         self.root_model.objects.get(uuid=uuid).delete()
-
-    def _from_object(self, obj):
-        raise NotImplementedError("Implement this method in child class")
 
 
 class Repository:
     root_model = None
     crud_repo: RepositoryCrud() = None
+    entity_builder = RepositoryEntityBuilder()
 
     def __init__(self, user=None) -> None:
         self.user = user

@@ -3,13 +3,34 @@ from db.models import (
 )
 from elearning.coursing.entities.course_component import CourseComponent
 from infra.logging import logger
-from infra.repository import Repository, RepositoryCrud
+from infra.repository import Repository, RepositoryCrud, RepositoryEntityBuilder
+
+
+@logger
+class CourseComponentEntityBuilder(RepositoryEntityBuilder):
+    root_entity = CourseComponent
+
+    def from_model(self, obj):
+        return self.root_entity(
+            uuid=obj.uuid,
+            title=obj.title,
+            description=obj.description,
+            type=obj.type,
+            resources=[
+                dict(
+                    title=resource.title,
+                    url=resource.url,
+                )
+                for resource in obj.resources.all()
+            ],
+        )
 
 
 @logger
 class CourseComponentRepositoryCRUD(RepositoryCrud):
     root_model = CourseComponentDbModel
     root_entity = CourseComponent
+    entity_builder = CourseComponentEntityBuilder()
 
     def create(self, **kwargs):
         # this can be done with a serializer
@@ -19,26 +40,12 @@ class CourseComponentRepositoryCRUD(RepositoryCrud):
 
         return super().create(**kwargs)
 
-    def _from_object(self, object: CourseComponentDbModel):
-        return self.root_entity(
-            uuid=object.uuid,
-            title=object.title,
-            description=object.description,
-            type=object.type,
-            resources=[
-                dict(
-                    title=resource.title,
-                    url=resource.url,
-                )
-                for resource in object.resources.all()
-            ],
-        )
-
 
 @logger
 class CourseComponentRepository(Repository):
     root_model = CourseComponentDbModel
     crud = CourseComponentRepositoryCRUD()
+    entity_builder = CourseComponentEntityBuilder()
 
     def list(self):
         return [
