@@ -1,3 +1,4 @@
+from uuid import UUID
 from elearning.external_resources.external_resource import ExternalResource
 from infra.exceptions import BadRequestException, NotFoundException
 from infra.logging import logger
@@ -58,3 +59,8 @@ class ExternalResourceRepository(RepositoryCrud):
             return self.entity_builder.from_model(resource)
         else:
             raise BadRequestException(form.errors)
+
+    def delete(self, uuid: UUID):
+        resource = self.root_model.objects.get(uuid=uuid)
+        resource.file.delete()
+        resource.delete()
