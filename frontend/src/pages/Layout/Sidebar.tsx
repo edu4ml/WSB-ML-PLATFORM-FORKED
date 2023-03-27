@@ -28,7 +28,11 @@ const SideBarMenu = () => {
         >
             <img src={logoWSB} alt="logo" style={logoStyle} />
 
-            <Card hoverable onClick={() => navigate('/app/courses')}>
+            <Card
+                hoverable
+                onClick={() => navigate('/app/courses')}
+                data-cy="courses-menu-tab"
+            >
                 <Card.Meta
                     avatar={<FolderTwoTone />}
                     title="Kursy"

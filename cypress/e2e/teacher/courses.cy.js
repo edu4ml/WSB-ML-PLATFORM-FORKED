@@ -5,7 +5,7 @@ describe('Courses page', () => {
 
     it('should login, navigate to the courses URL and logout', () => {
         // redirected to courses after login
-        cy.url().should('include', '/courses');
+        cy.url().should('include', '/app/courses');
 
         // click on the logout button
         cy.get('[data-cy="top-right-avatar"]').click();
@@ -17,7 +17,7 @@ describe('Courses page', () => {
 
     it('should verify that the teacher has necessary permissions to view list of courses', () => {
         // redirected to courses after login
-        cy.url().should('include', '/courses');
+        cy.url().should('include', '/app/courses');
 
         // Check if the teacher can see the list of courses
         cy.get('[data-cy="course-catalog-list"]').should('be.visible');
@@ -38,7 +38,7 @@ describe('Courses page', () => {
 
     it('should verify that the teacher can create new course and it is visible in the list', () => {
         // redirected to courses after login
-        cy.url().should('include', '/courses');
+        cy.url().should('include', '/app/courses');
 
         const courseTitle = `Test Course - ${Date.now()}`;
 
@@ -47,11 +47,12 @@ describe('Courses page', () => {
         // Check if the user was redirected to the course edit page with a valid UUID
         cy.url().should(
             'match',
-            /\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
+            /\/app\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
         );
 
         // Go to the course list page
-        cy.visit('/courses');
+        // cy.visit('app/courses');
+        cy.get('[data-cy="courses-menu-tab"]').click();
 
         // Check if the new course appears in the list of courses
         cy.get('[data-cy="course-catalog-list"]').should('be.visible');
@@ -62,14 +63,14 @@ describe('Courses page', () => {
 
     it('should verify that the teacher can edit not published course and save it', () => {
         // redirected to courses after login
-        cy.url().should('include', '/courses');
+        cy.url().should('include', '/app/courses');
 
         const courseTitle = `Test Course - ${Date.now()}`;
 
         cy.create_course(courseTitle);
         cy.url().should(
             'match',
-            /\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
+            /\/app\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
         );
 
         cy.get('[data-cy="course-details-edit-description"]').click();
@@ -81,7 +82,7 @@ describe('Courses page', () => {
         cy.get("[data-cy='course-details-edit-publish']").click();
 
         // Check if you are redirected to the '/courses' page
-        cy.url().should('include', '/courses');
+        cy.url().should('include', '/app/courses');
 
         // Verify that the new course is in the list
         // Replace 'New Course Title' with the actual title of the new course you want to check
