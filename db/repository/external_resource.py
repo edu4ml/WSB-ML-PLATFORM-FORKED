@@ -1,5 +1,5 @@
 from uuid import UUID
-from elearning.external_resources.external_resource import ExternalResource
+from elearning.coursing.entities.external_resource import ExternalResource
 from infra.exceptions import BadRequestException, NotFoundException
 from infra.logging import logger
 from infra.repository import RepositoryCrud, RepositoryEntityBuilder

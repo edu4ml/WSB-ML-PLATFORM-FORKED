@@ -2,6 +2,7 @@ from db.models import (
     CourseComponent as CourseComponentDbModel,
 )
 from elearning.coursing.entities.course_component import CourseComponent
+from elearning.coursing.entities.external_resource import ExternalResource
 from infra.exceptions import BadRequestException
 from infra.logging import logger
 from infra.repository import Repository, RepositoryCrud, RepositoryEntityBuilder
@@ -26,9 +27,12 @@ class CourseComponentEntityBuilder(RepositoryEntityBuilder):
             description=obj.description,
             type=obj.type,
             resources=[
-                dict(
+                ExternalResource(
+                    uuid=resource.uuid,
                     title=resource.title,
                     url=resource.url,
+                    file_link=resource.file.url if resource.file else "",
+                    type=resource.type,
                 )
                 for resource in obj.resources.all()
             ],

@@ -8,3 +8,4 @@ class ExternalResource:
     title: str
     url: str
     file_link: str
+    type: str

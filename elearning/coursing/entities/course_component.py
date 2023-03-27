@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from uuid import UUID
 
+from elearning.coursing.entities.external_resource import ExternalResource
+
 
 @dataclass
 class CourseComponent:
@@ -8,4 +10,4 @@ class CourseComponent:
     title: str
     description: str
     type: str
-    resources: list[dict] = field(default_factory=lambda: list())
+    resources: list[ExternalResource] = field(default_factory=lambda: list())
