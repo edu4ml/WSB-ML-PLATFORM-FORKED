@@ -8,6 +8,7 @@ from api.apis.mixins import AuthMixin
 from db.repository.course_component import (
     CourseComponentRepository,
 )
+from db.repository.external_resource import ExternalResourceRepository
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
 
@@ -73,3 +74,28 @@ class CourseComponentDetailApi(AuthMixin):
     def delete(self, request, component_uuid: UUID, **kwargs):
         CourseComponentRepository(request.user).crud.delete(uuid=component_uuid)
         return Response(dict(), status.HTTP_204_NO_CONTENT)
+
+
+class CourseComponentDetailFileUploadApi(AuthMixin):
+    @api_has_one_of_the_roles([UserRoles.TEACHER])
+    def post(self, request, component_uuid: UUID, **kwargs):
+        try:
+            CourseComponentRepository(request.user).add_resource(
+                component_uuid=component_uuid,
+                payload=dict(
+                    post_data=request.POST,
+                    file_data=request.FILES,
+                ),
+            )
+
+            return Response({}, status.HTTP_201_CREATED)
+        except AssertionError:
+            return Response(
+                dict(
+                    error=True,
+                    success=False,
+                    payload=request.data,
+                    message="Missing required fields",
+                ),
+                status.HTTP_400_BAD_REQUEST,
+            )

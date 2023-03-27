@@ -2,8 +2,17 @@ from db.models import (
     CourseComponent as CourseComponentDbModel,
 )
 from elearning.coursing.entities.course_component import CourseComponent
+from infra.exceptions import BadRequestException
 from infra.logging import logger
 from infra.repository import Repository, RepositoryCrud, RepositoryEntityBuilder
+from db.models import ExternalResource as ExternalResourceDbModel
+from django import forms
+
+
+class ExternalResourceForm(forms.ModelForm):
+    class Meta:
+        model = ExternalResourceDbModel
+        fields = ("title", "url", "file")
 
 
 @logger
@@ -85,3 +94,20 @@ class CourseComponentRepository(Repository):
             )
             for resource in component.resources.all()
         ]
+
+    def add_resource(self, component_uuid, payload):
+        file_data = payload.get("file_data")
+        form_data = dict(title=payload["file_data"]["file"].name.replace(" ", "_"))
+
+        form = ExternalResourceForm(form_data, file_data)
+
+        if form.is_valid():
+            resource = form.save()
+            course_component = self.root_model.objects.get(uuid=component_uuid)
+            course_component.resources.add(resource)
+
+            return self.entity_builder.from_model(course_component)
+
+        else:
+            breakpoint()
+            raise BadRequestException(form.errors)

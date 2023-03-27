@@ -34,7 +34,7 @@ export const TEXT_CREATE_COURSE_COMPONENT = 'Utwórz komponent';
 export const TEXT_FORM_NO_DESCRIPTION_WARNING = 'Dodaj opis do formularza!';
 export const TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER =
     'Wybierz typ komponentu';
-export const TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE = 'Edycja komponentu';
+export const TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE = 'Edytuj';
 export const TEXT_COURSE_COMPONENTS_PAGE_TITLE =
     'Komponenty z których składa się kurs';
 export const TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION = 'Zadanie z plikiem';
@@ -44,3 +44,8 @@ export const TEXT_COURSE_COMPONENT_CREATED = 'Komponent utworzony!';
 export const TEXT_COURSE_COMPONENT_UPDATED = 'Komponent zaktualizowany!';
 export const TEXT_COURSE_COMPONENT_DELETED = 'Komponent usunięty!';
 export const TEXT_COURSE_PAGE_TITLE = 'Twoje kursy';
+export const TEXT_EXTERNAL_RESOURCE_CREATE_NEW = 'Utwórz nowy';
+export const TEXT_EXTERNAL_RESOURCE_TITLE = 'Tytuł';
+export const TEXT_EXTERNAL_RESOURCE_NO_TITLE_WARNING = 'Podaj tytuł!';
+export const TEXT_EXTERNAL_RESOURCE_URL = 'URL';
+export const TEXT_EXTERNAL_RESOURCE_NO_URL_WARNING = 'Podaj URL!';

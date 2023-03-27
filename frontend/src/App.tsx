@@ -15,6 +15,7 @@ import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage'
 import DashboardLayout from './pages/Layout/DashboardLayout';
 import CourseComponentsLayout from './pages/Layout/CourseComponentsLayout';
 import SimpleLayout from './pages/Layout/SimpleLayout';
+import ExternalResourcesPage from './pages/ExternalResources/ExternalResourcesPage';
 
 const App = () => {
     return (
@@ -115,7 +116,7 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <SimpleLayout>
-                                        <CourseComponentsPage />
+                                        <ExternalResourcesPage />
                                     </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>

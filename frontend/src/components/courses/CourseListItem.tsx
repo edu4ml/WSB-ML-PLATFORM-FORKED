@@ -37,11 +37,6 @@ const CourseListItem = ({
                 }
                 description={course.description}
             />
-            {/* <List.Item
-                key={course.title}
-                actions={actions(course)}
-                data-cy={'course-catalog-list-item'}
-            ></List.Item> */}
         </Card>
     );
 };

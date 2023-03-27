@@ -39,6 +39,13 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-component-list'],
         }),
+        addFileToCourseComponent: builder.mutation({
+            query: ({ id, payload }) => ({
+                url: `/course-components/${id}/file`,
+                method: 'PUT',
+                body: payload,
+            }),
+        }),
         updateCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
                 url: `/course-components/${id}`,
@@ -66,6 +73,7 @@ export const courseApi = createApi({
 });
 
 export const {
+    useAddFileToCourseComponentMutation,
     useGetCourseCatalogQuery,
     useGetCourseQuery,
     useGetCourseComponentsQuery,

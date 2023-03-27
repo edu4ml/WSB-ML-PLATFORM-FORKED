@@ -10,6 +10,7 @@ from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
 from api.apis.v1.course_components.course_components import (
     CourseComponentApi,
     CourseComponentDetailApi,
+    CourseComponentDetailFileUploadApi,
 )
 
 from api.apis.v1.reports.teacher import TeacherReport
@@ -17,7 +18,6 @@ from api.apis.v1.resources.resource import (
     ExternalResourceApi,
     ExternalResourceDetailApi,
 )
-
 
 urlpatterns_v1 = [
     path("course/", CourseApi.as_view(), name="course"),
@@ -32,6 +32,11 @@ urlpatterns_v1 = [
         "course-components/<uuid:component_uuid>",
         CourseComponentDetailApi.as_view(),
         name="course-components-detail",
+    ),
+    path(
+        "course-components/<uuid:component_uuid>/files-upload",
+        CourseComponentDetailFileUploadApi.as_view(),
+        name="course-components-detail-file-upload",
     ),
     path(
         "course/<uuid:course_uuid>",
