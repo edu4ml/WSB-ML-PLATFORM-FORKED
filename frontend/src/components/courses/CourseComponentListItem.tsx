@@ -28,6 +28,7 @@ import {
     TEXT_FORM_NO_DESCRIPTION_WARNING,
     TEXT_FORM_NO_TITLE_WARNING,
     TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER,
+    TEXT_REMOVE,
     TEXT_SAVE,
     TEXT_SOMETHING_WENT_WRONG,
     TEXT_TITLE,
@@ -41,6 +42,7 @@ import {
     UploadOutlined,
 } from '@ant-design/icons';
 import Cookies from 'js-cookie';
+import CourseComponentEditModal from './CourseComponentEditModal';
 
 const courseComponentTypeToTextMap: { [key: string]: string } = {
     [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]:
@@ -55,11 +57,6 @@ const CourseComponentListItem = ({ component }) => {
     // ----------------------------------------
     // Modal Edit
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
-    const [courseComponentTitle, setCourseComponentTitle] = React.useState('');
-    const [courseComponentDescription, setCourseComponentDescription] =
-        React.useState('');
-    const [courseComponentType, setCourseComponentType] = React.useState('');
-    const [courseComponentUUID, setCourseComponentUUID] = React.useState('');
     const [updateCourseComponent, {}] = useUpdateCourseComponentMutation();
 
     const handleEditModalOk = (payload) => {
@@ -87,15 +84,11 @@ const CourseComponentListItem = ({ component }) => {
         setIsEditModalOpen(false);
     };
 
+    const showEditModal = (component: CourseComponentType) => {
+        setIsEditModalOpen(true);
+    };
     const handleEditModalCancel = () => {
         setIsEditModalOpen(false);
-    };
-    const showEditModal = (component: CourseComponentType) => {
-        setCourseComponentTitle(component.title);
-        setCourseComponentDescription(component.description);
-        setCourseComponentType(component.type);
-        setCourseComponentUUID(component.uuid);
-        setIsEditModalOpen(true);
     };
 
     return (
@@ -108,125 +101,26 @@ const CourseComponentListItem = ({ component }) => {
                 <Space direction="horizontal">
                     <Button
                         icon={<EditOutlined />}
-                        // type="primary"
                         onClick={() => showEditModal(component)}
                     >
                         {TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
                     </Button>
                     <Button
                         icon={<DeleteOutlined />}
-                        // type="primary"
                         onClick={() => console.log('delete not implemented')}
                     >
-                        Usuń
+                        {TEXT_REMOVE}
                     </Button>
                 </Space>
             }
         >
             {component.description}
-
-            {/* edit modal  */}
-
-            <Modal
-                title={TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
-                open={isEditModalOpen}
+            <CourseComponentEditModal
+                component={component}
                 onCancel={handleEditModalCancel}
-                footer={null}
-                width={800}
-            >
-                <Row>
-                    <Col span={12}>
-                        <Form
-                            name="edit-course-component"
-                            initialValues={{
-                                remember: true,
-                                title: courseComponentTitle,
-                                description: courseComponentDescription,
-                                type: courseComponentType,
-                                uuid: courseComponentUUID,
-                            }}
-                            onFinish={handleEditModalOk}
-                            autoComplete="off"
-                            layout="vertical"
-                        >
-                            <Form.Item hidden={true} name="uuid">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label={TEXT_TITLE}
-                                name="title"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: TEXT_FORM_NO_TITLE_WARNING,
-                                    },
-                                ]}
-                            >
-                                <Input data-cy="course-component-create-new-title" />
-                            </Form.Item>
-                            <Form.Item
-                                label={TEXT_DESCRIPTION}
-                                name="description"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            TEXT_FORM_NO_DESCRIPTION_WARNING,
-                                    },
-                                ]}
-                            >
-                                <Input.TextArea data-cy="course-component-create-new-description" />
-                            </Form.Item>
-                            <Form.Item label={TEXT_TYPE} name="type">
-                                <Select
-                                    placeholder={
-                                        TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
-                                    }
-                                >
-                                    {Object.entries(
-                                        Enums.COURSE_STEP_COMPONENT_TYPES
-                                    ).map(([key, value]) => (
-                                        <Select.Option value={key} key={key}>
-                                            {
-                                                courseComponentTypeToTextMap[
-                                                    value
-                                                ]
-                                            }
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button
-                                    data-cy="course-component-edit-submit-button"
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{ float: 'right' }}
-                                >
-                                    {TEXT_SAVE}
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Col>
-                    <Col span={1}>
-                        <Divider type="vertical" style={{ height: '100%' }} />
-                    </Col>
-                    <Col span={11}>
-                        <Upload
-                            listType="picture"
-                            withCredentials={true}
-                            headers={{
-                                'X-CSRFToken': Cookies.get('csrftoken'),
-                            }}
-                            action={`/api/v1/course-components/${component.uuid}/files-upload`}
-                        >
-                            <Button icon={<UploadOutlined />}>
-                                Upload File
-                            </Button>
-                        </Upload>
-                    </Col>
-                </Row>
-            </Modal>
+                onOk={handleEditModalOk}
+                isOpen={isEditModalOpen}
+            />
         </Card>
     );
 };

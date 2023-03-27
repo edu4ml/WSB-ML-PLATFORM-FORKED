@@ -21,6 +21,7 @@ class ExternalResourceEntityBuilder(RepositoryEntityBuilder):
             title=external_resource.title,
             url=external_resource.url,
             file_link=external_resource.file.url if external_resource.file else "",
+            type=external_resource.type,
         )
 
 

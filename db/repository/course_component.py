@@ -113,5 +113,4 @@ class CourseComponentRepository(Repository):
             return self.entity_builder.from_model(course_component)
 
         else:
-            breakpoint()
             raise BadRequestException(form.errors)
