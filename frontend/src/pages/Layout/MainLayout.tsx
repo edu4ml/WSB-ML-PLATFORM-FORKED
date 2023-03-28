@@ -4,7 +4,7 @@ import MyHeader from './Header';
 import SideBarMenu from './Sidebar';
 import RightSidebar from './RightSidebar';
 
-const { Header, Sider } = Layout;
+const { Header, Sider, Footer } = Layout;
 
 const backgroundColor = '#f4f7fc';
 // const backgroundColor = '#fff';
@@ -16,15 +16,16 @@ const headerStyle: React.CSSProperties = {
 const leftSiderStyle: React.CSSProperties = {
     backgroundColor: backgroundColor,
     height: '100vh',
-};
-const mainLayoutStyle: React.CSSProperties = {
-    backgroundColor: backgroundColor,
+    overflow: 'auto',
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    bottom: 0,
 };
 
-const rightSiderStyle: React.CSSProperties = {
+const mainLayoutStyle: React.CSSProperties = {
     backgroundColor: backgroundColor,
-    padding: '20px',
-    paddingLeft: '10px',
+    marginLeft: '350px',
 };
 
 const MainLayout = ({ children }) => {
@@ -38,6 +39,7 @@ const MainLayout = ({ children }) => {
                     <MyHeader />
                 </Header>
                 {children}
+                <Footer style={{ textAlign: 'center' }} />
             </Layout>
         </Layout>
     );

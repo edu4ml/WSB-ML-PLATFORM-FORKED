@@ -86,7 +86,7 @@ const CourseComponentListItem = ({ component }) => {
 
     const componentTitle = (component) => {
         return (
-            <Space direction="vertical">
+            <Space direction="horizontal">
                 <Title level={4}>{component.title}</Title>
                 <Tag color={'geekblue'}> {component.type}</Tag>
             </Space>

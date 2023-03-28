@@ -102,6 +102,7 @@ const CourseComponentsPage = () => {
                 renderItem={(item) => (
                     <CourseComponentListItem component={item} />
                 )}
+                pagination={{ pageSize: 10 }}
             />
 
             <CourseComponentCreateModal
