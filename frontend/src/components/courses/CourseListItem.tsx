@@ -29,7 +29,6 @@ const CourseListItem = ({
         }
         return [];
     };
-
     return (
         <Card
             data-cy={'course-catalog-list-item'}

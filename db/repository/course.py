@@ -11,6 +11,7 @@ from db.models import (
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
+from elearning.coursing.entities.external_resource import ExternalResource
 from infra.logging import logger
 from infra.repository import Repository, RepositoryCrud, RepositoryEntityBuilder
 from shared.enums import UserRoles
@@ -62,7 +63,13 @@ class CourseEntityBuilder(RepositoryEntityBuilder):
 
     def _get_resources(self, component):
         return [
-            dict(title=resource.title, url=resource.url)
+            ExternalResource(
+                uuid=resource.uuid,
+                title=resource.title,
+                url=resource.url,
+                file_link=resource.file.url if resource.file else "",
+                type=resource.type,
+            )
             for resource in component.resources.all()
         ]
 

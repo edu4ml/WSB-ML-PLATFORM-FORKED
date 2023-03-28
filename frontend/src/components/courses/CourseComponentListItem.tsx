@@ -1,5 +1,4 @@
 import {
-    Avatar,
     Button,
     Card,
     Col,
@@ -8,14 +7,10 @@ import {
     Row,
     Space,
     Tag,
-    Tooltip,
     Typography,
 } from 'antd';
 import React from 'react';
-import {
-    useAddFileToCourseComponentMutation,
-    useUpdateCourseComponentMutation,
-} from '../../features/courses/coursesApi';
+import { useUpdateCourseComponentMutation } from '../../features/courses/coursesApi';
 import {
     TEXT_COURSE_COMPONENT_EDIT_RESOURCES,
     TEXT_COURSE_COMPONENT_UPDATED,
@@ -24,14 +19,10 @@ import {
     TEXT_SOMETHING_WENT_WRONG,
 } from '../../texts';
 
-import {
-    EditTwoTone,
-    DeleteTwoTone,
-    FileTextTwoTone,
-    FileOutlined,
-} from '@ant-design/icons';
+import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
 import CourseComponentEditModal from './CourseComponentEditModal';
 import CourseComponentEditResources from './CourseComponentEditResources';
+import FilesAvatars from './FilesAvatars';
 
 const { Title } = Typography;
 
@@ -93,23 +84,6 @@ const CourseComponentListItem = ({ component }) => {
         );
     };
 
-    const filesAvatars = (component) => {
-        return component.resources.map((file) => {
-            return (
-                <Tooltip key={file.uuid} title={file.title} placement="top">
-                    <Avatar
-                        size="large"
-                        icon={<FileOutlined />}
-                        style={{ marginRight: '10px' }}
-                        onClick={() =>
-                            console.log('file clicked', file.file_link)
-                        }
-                    />
-                </Tooltip>
-            );
-        });
-    };
-
     return (
         <Card
             key={component.uuid}
@@ -143,13 +117,7 @@ const CourseComponentListItem = ({ component }) => {
                     <Divider type="vertical" style={{ height: '100%' }} />
                 </Col>
                 <Col span={11}>
-                    <Avatar.Group
-                        maxCount={2}
-                        size="large"
-                        style={{ position: 'absolute', right: '0' }}
-                    >
-                        {filesAvatars(component)}
-                    </Avatar.Group>
+                    <FilesAvatars files={component.resources} />
                 </Col>
             </Row>
             <CourseComponentEditModal

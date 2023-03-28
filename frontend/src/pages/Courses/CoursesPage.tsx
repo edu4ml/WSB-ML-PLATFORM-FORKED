@@ -10,7 +10,6 @@ import {
     Typography,
 } from 'antd';
 import React, { useState } from 'react';
-import CardHeader from '../../components/common/CardHeader';
 import CourseList from '../../components/courses/CourseList';
 import {
     useCreateCourseMutation,
@@ -18,18 +17,8 @@ import {
 } from '../../features/courses/coursesApi';
 import { useNavigate } from 'react-router-dom';
 import { Enums } from '../../shared';
-import { CardHeaderRightButtonActionType } from '../../types/course';
-import { useGetUserProfileQuery } from '../../features/auth/authApi';
-import { isTeacher } from '../../helpers/permissions';
-import {
-    TEXT_COURSES_ALL,
-    TEXT_COURSE_TITLE,
-    TEXT_CREATE_COURSE,
-    TEXT_NEW_COURSE,
-    TEXT_NEW_COURSE_TITLE,
-    TEXT_FORM_NO_TITLE_WARNING,
-    TEXT_COURSE_PAGE_TITLE,
-} from '../../texts';
+import { TEXT_NEW_COURSE, TEXT_COURSE_PAGE_TITLE } from '../../texts';
+import CourseCreateModal from '../../components/courses/CourseCreateModal';
 
 const { Title } = Typography;
 
@@ -43,10 +32,6 @@ const CoursesPage = () => {
 
     const showModal = () => {
         setIsModalOpen(true);
-    };
-
-    const handleOk = () => {
-        setIsModalOpen(false);
     };
 
     const handleCancel = () => {
@@ -93,47 +78,13 @@ const CoursesPage = () => {
                     </Button>
                 </Col>
             </Row>
-            {/* <Card bordered={false}>
-            </Card> */}
+
             <CourseList courses={courses} />
-            <Modal
-                title={TEXT_NEW_COURSE_TITLE}
-                open={isModalOpen}
-                onOk={handleOk}
+            <CourseCreateModal
+                isOpen={isModalOpen}
                 onCancel={handleCancel}
-                footer={null}
-            >
-                <Form
-                    name="create-new-course"
-                    initialValues={{ remember: true }}
-                    onFinish={handleCourseCreate}
-                    autoComplete="off"
-                    layout="vertical"
-                >
-                    <Form.Item
-                        label={TEXT_COURSE_TITLE}
-                        name="title"
-                        rules={[
-                            {
-                                required: true,
-                                message: TEXT_FORM_NO_TITLE_WARNING,
-                            },
-                        ]}
-                    >
-                        <Input data-cy="course-catalog-create-new-name" />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button
-                            data-cy="course-catalog-create-new-submit-button"
-                            type="primary"
-                            htmlType="submit"
-                            style={{ float: 'right' }}
-                        >
-                            {TEXT_CREATE_COURSE}
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
+                onOk={handleCourseCreate}
+            />
         </Space>
     );
 };
