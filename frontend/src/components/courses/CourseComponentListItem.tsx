@@ -23,6 +23,7 @@ import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
 import CourseComponentEditModal from './CourseComponentEditModal';
 import CourseComponentEditResources from './CourseComponentEditResources';
 import FilesAvatars from './FilesAvatars';
+import CourseComponentTitle from './CourseComponentTitle';
 
 const { Title } = Typography;
 
@@ -75,22 +76,13 @@ const CourseComponentListItem = ({ component }) => {
         setIsEditModalOpen(false);
     };
 
-    const componentTitle = (component) => {
-        return (
-            <Space direction="horizontal">
-                <Title level={4}>{component.title}</Title>
-                <Tag color={'geekblue'}> {component.type}</Tag>
-            </Space>
-        );
-    };
-
     return (
         <Card
             key={component.uuid}
             hoverable
             data-cy={'course-component-list-item'}
             style={{ marginTop: '20px' }}
-            title={componentTitle(component)}
+            title={<CourseComponentTitle component={component} />}
             extra={
                 <Space direction="horizontal">
                     <Button icon={<EditTwoTone />} onClick={showEditModal}>

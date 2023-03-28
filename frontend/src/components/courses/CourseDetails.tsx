@@ -4,6 +4,7 @@ import CourseStepSelfEvaluateButton from './CourseStepSelfEvaluateButton';
 import { CourseType } from '../../types/course';
 import { Enums } from '../../shared';
 import FilesAvatars from './FilesAvatars';
+import CourseComponentTitle from './CourseComponentTitle';
 
 const { Title } = Typography;
 
@@ -22,7 +23,6 @@ const getStatusColor = (step) => {
 
 const CourseDetails = ({ course }: { course: CourseType }) => {
     const getActions = (course_uuid, courseComponent) => {
-        console.log('courseComponent', courseComponent);
         let actions: React.ReactNode[] = [];
         if (
             courseComponent.evaluation_type ==
@@ -48,7 +48,7 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
         color: getStatusColor(step),
         children: (
             <Card
-                title={step.component.title}
+                title={<CourseComponentTitle component={step.component} />}
                 extra={getActions(course.uuid, step)}
             >
                 <Row>
