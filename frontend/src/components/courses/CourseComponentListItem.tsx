@@ -96,7 +96,7 @@ const CourseComponentListItem = ({ component }) => {
     const filesAvatars = (component) => {
         return component.resources.map((file) => {
             return (
-                <Tooltip title={file.title} placement="top">
+                <Tooltip key={file.uuid} title={file.title} placement="top">
                     <Avatar
                         size="large"
                         icon={<FileOutlined />}
@@ -112,6 +112,7 @@ const CourseComponentListItem = ({ component }) => {
 
     return (
         <Card
+            key={component.uuid}
             hoverable
             data-cy={'course-component-list-item'}
             style={{ marginTop: '20px' }}
