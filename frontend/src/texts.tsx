@@ -50,3 +50,4 @@ export const TEXT_EXTERNAL_RESOURCE_NO_TITLE_WARNING = 'Podaj tytuł!';
 export const TEXT_EXTERNAL_RESOURCE_URL = 'URL';
 export const TEXT_EXTERNAL_RESOURCE_NO_URL_WARNING = 'Podaj URL!';
 export const TEXT_REMOVE = 'Usuń';
+export const TEXT_COURSE_COMPONENT_EDIT_RESOURCES = 'Załączniki';

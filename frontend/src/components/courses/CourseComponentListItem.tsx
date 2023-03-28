@@ -1,62 +1,47 @@
 import {
+    Avatar,
     Button,
     Card,
     Col,
     Divider,
-    Form,
-    Input,
-    Modal,
     notification,
     Row,
-    Select,
     Space,
-    Upload,
+    Tag,
+    Tooltip,
+    Typography,
 } from 'antd';
 import React from 'react';
 import {
     useAddFileToCourseComponentMutation,
     useUpdateCourseComponentMutation,
 } from '../../features/courses/coursesApi';
-import { Enums } from '../../shared';
 import {
-    TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
+    TEXT_COURSE_COMPONENT_EDIT_RESOURCES,
     TEXT_COURSE_COMPONENT_UPDATED,
-    TEXT_DESCRIPTION,
     TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE,
-    TEXT_FORM_NO_DESCRIPTION_WARNING,
-    TEXT_FORM_NO_TITLE_WARNING,
-    TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER,
     TEXT_REMOVE,
-    TEXT_SAVE,
     TEXT_SOMETHING_WENT_WRONG,
-    TEXT_TITLE,
-    TEXT_TYPE,
 } from '../../texts';
-import { CourseComponentType } from '../../types/course';
 
 import {
-    EditOutlined,
-    DeleteOutlined,
-    UploadOutlined,
+    EditTwoTone,
+    DeleteTwoTone,
+    FileTextTwoTone,
+    FileOutlined,
 } from '@ant-design/icons';
-import Cookies from 'js-cookie';
 import CourseComponentEditModal from './CourseComponentEditModal';
+import CourseComponentEditResources from './CourseComponentEditResources';
 
-const courseComponentTypeToTextMap: { [key: string]: string } = {
-    [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]:
-        TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    [Enums.COURSE_STEP_COMPONENT_TYPES.FILE_EVALUATION]:
-        TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    [Enums.COURSE_STEP_COMPONENT_TYPES.UNKNOWN]:
-        TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
-};
+const { Title } = Typography;
 
 const CourseComponentListItem = ({ component }) => {
     // ----------------------------------------
     // Modal Edit
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+    const [isResourcesModalOpen, setIsResourcesModalOpen] =
+        React.useState(false);
+
     const [updateCourseComponent, {}] = useUpdateCourseComponentMutation();
 
     const handleEditModalOk = (payload) => {
@@ -84,11 +69,45 @@ const CourseComponentListItem = ({ component }) => {
         setIsEditModalOpen(false);
     };
 
-    const showEditModal = (component: CourseComponentType) => {
+    const showResourcesModal = () => {
+        setIsResourcesModalOpen(true);
+    };
+
+    const handleResourcesModalCancel = () => {
+        setIsResourcesModalOpen(false);
+    };
+
+    const showEditModal = () => {
         setIsEditModalOpen(true);
     };
     const handleEditModalCancel = () => {
         setIsEditModalOpen(false);
+    };
+
+    const componentTitle = (component) => {
+        return (
+            <Space direction="vertical">
+                <Title level={4}>{component.title}</Title>
+                <Tag color={'geekblue'}> {component.type}</Tag>
+            </Space>
+        );
+    };
+
+    const filesAvatars = (component) => {
+        return component.resources.map((file) => {
+            return (
+                <Tooltip title={file.title} placement="top">
+                    <Avatar
+                        size="large"
+                        icon={<FileOutlined />}
+                        style={{ marginRight: '10px' }}
+                        onClick={() =>
+                            console.log('file clicked', file.file_link)
+                        }
+                    />
+                </Tooltip>
+            );
+        });
     };
 
     return (
@@ -96,17 +115,20 @@ const CourseComponentListItem = ({ component }) => {
             hoverable
             data-cy={'course-component-list-item'}
             style={{ marginTop: '20px' }}
-            title={component.title}
+            title={componentTitle(component)}
             extra={
                 <Space direction="horizontal">
-                    <Button
-                        icon={<EditOutlined />}
-                        onClick={() => showEditModal(component)}
-                    >
+                    <Button icon={<EditTwoTone />} onClick={showEditModal}>
                         {TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
                     </Button>
                     <Button
-                        icon={<DeleteOutlined />}
+                        icon={<FileTextTwoTone />}
+                        onClick={showResourcesModal}
+                    >
+                        {TEXT_COURSE_COMPONENT_EDIT_RESOURCES}
+                    </Button>
+                    <Button
+                        icon={<DeleteTwoTone />}
                         onClick={() => console.log('delete not implemented')}
                     >
                         {TEXT_REMOVE}
@@ -114,12 +136,31 @@ const CourseComponentListItem = ({ component }) => {
                 </Space>
             }
         >
-            {component.description}
+            <Row>
+                <Col span={12}>{component.description}</Col>
+                <Col span={1}>
+                    <Divider type="vertical" style={{ height: '100%' }} />
+                </Col>
+                <Col span={11}>
+                    <Avatar.Group
+                        maxCount={2}
+                        size="large"
+                        style={{ position: 'absolute', right: '0' }}
+                    >
+                        {filesAvatars(component)}
+                    </Avatar.Group>
+                </Col>
+            </Row>
             <CourseComponentEditModal
                 component={component}
                 onCancel={handleEditModalCancel}
                 onOk={handleEditModalOk}
                 isOpen={isEditModalOpen}
+            />
+            <CourseComponentEditResources
+                component={component}
+                onCancel={handleResourcesModalCancel}
+                isOpen={isResourcesModalOpen}
             />
         </Card>
     );
