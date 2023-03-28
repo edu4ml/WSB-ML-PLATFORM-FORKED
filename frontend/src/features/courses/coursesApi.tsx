@@ -61,6 +61,13 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-component-list'],
         }),
+        deleteCourseComponentFileResource: builder.mutation({
+            query: ({ id, resourceId }) => ({
+                url: `/course-components/${id}/file-resources/${resourceId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['course-component-list'],
+        }),
         issueCourseCommand: builder.mutation({
             query: ({ id, command }) => ({
                 url: `/course/${id}/command`,
@@ -73,6 +80,7 @@ export const courseApi = createApi({
 });
 
 export const {
+    useDeleteCourseComponentFileResourceMutation,
     useAddFileToCourseComponentMutation,
     useGetCourseCatalogQuery,
     useGetCourseQuery,

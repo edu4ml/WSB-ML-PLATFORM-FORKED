@@ -5,6 +5,7 @@ import {
     Form,
     Input,
     Modal,
+    notification,
     Row,
     Select,
     Upload,
@@ -15,7 +16,6 @@ import {
     TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
     TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
     TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
-    TEXT_COURSE_COMPONENT_UPDATED,
     TEXT_DESCRIPTION,
     TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE,
     TEXT_FORM_NO_DESCRIPTION_WARNING,
@@ -29,6 +29,7 @@ import {
 import { UploadOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import type { UploadFile } from 'antd/es/upload/interface';
+import { useDeleteCourseComponentFileResourceMutation } from '../../features/courses/coursesApi';
 
 const courseComponentTypeToTextMap: { [key: string]: string } = {
     [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]:
@@ -40,6 +41,9 @@ const courseComponentTypeToTextMap: { [key: string]: string } = {
 };
 
 const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
+    const [removeFileResource, {}] =
+        useDeleteCourseComponentFileResourceMutation();
+
     const defaultFileList: Array<UploadFile> = component.resources
         .filter((file) => file.type === 'FILE')
         .map((file) => {
@@ -47,7 +51,7 @@ const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
                 name: file.title,
                 url: file.file_link,
                 status: 'done',
-                key: file.uuid,
+                uid: file.uuid,
             };
         });
 
@@ -139,7 +143,21 @@ const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
                         headers={{
                             'X-CSRFToken': Cookies.get('csrftoken'),
                         }}
-                        action={`/api/v1/course-components/${component.uuid}/files-upload`}
+                        action={`/api/v1/course-components/${component.uuid}/file-resources`}
+                        onRemove={(file) => {
+                            console.log(file);
+                            removeFileResource({
+                                id: component.uuid,
+                                resourceId: file.uid,
+                            })
+                                .unwrap()
+                                .then(() => {
+                                    console.log('removed');
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        }}
                     >
                         <Button icon={<UploadOutlined />}>Upload File</Button>
                     </Upload>

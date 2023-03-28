@@ -8,7 +8,6 @@ from api.apis.mixins import AuthMixin
 from db.repository.course_component import (
     CourseComponentRepository,
 )
-from db.repository.external_resource import ExternalResourceRepository
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
 
@@ -89,6 +88,28 @@ class CourseComponentDetailFileUploadApi(AuthMixin):
             )
 
             return Response({}, status.HTTP_201_CREATED)
+        except AssertionError:
+            return Response(
+                dict(
+                    error=True,
+                    success=False,
+                    payload=request.data,
+                    message="Missing required fields",
+                ),
+                status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class CourseComponentDetailFileDetailApi(AuthMixin):
+    @api_has_one_of_the_roles([UserRoles.TEACHER])
+    def delete(self, request, component_uuid: UUID, resource_uuid: UUID, **kwargs):
+        try:
+            CourseComponentRepository(request.user).remove_resource(
+                component_uuid=component_uuid,
+                resource_uuid=resource_uuid,
+            )
+
+            return Response({}, status.HTTP_200_OK)
         except AssertionError:
             return Response(
                 dict(

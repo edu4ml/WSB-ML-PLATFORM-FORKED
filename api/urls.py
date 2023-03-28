@@ -11,6 +11,7 @@ from api.apis.v1.course_components.course_components import (
     CourseComponentApi,
     CourseComponentDetailApi,
     CourseComponentDetailFileUploadApi,
+    CourseComponentDetailFileDetailApi,
 )
 
 from api.apis.v1.reports.teacher import TeacherReport
@@ -34,9 +35,14 @@ urlpatterns_v1 = [
         name="course-components-detail",
     ),
     path(
-        "course-components/<uuid:component_uuid>/files-upload",
+        "course-components/<uuid:component_uuid>/file-resources",
         CourseComponentDetailFileUploadApi.as_view(),
-        name="course-components-detail-file-upload",
+        name="course-components-detail-file-resources",
+    ),
+    path(
+        "course-components/<uuid:component_uuid>/file-resources/<uuid:resource_uuid>",
+        CourseComponentDetailFileDetailApi.as_view(),
+        name="course-components-detail-file-resources-detail",
     ),
     path(
         "course/<uuid:course_uuid>",
