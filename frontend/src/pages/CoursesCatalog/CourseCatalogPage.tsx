@@ -1,16 +1,6 @@
-import {
-    Button,
-    Card,
-    Col,
-    Form,
-    Input,
-    Modal,
-    Row,
-    Space,
-    Typography,
-} from 'antd';
+import { Button, Space } from 'antd';
 import React, { useState } from 'react';
-import CourseList from '../../components/courses/CourseList';
+import CourseList from './CourseList';
 import {
     useCreateCourseMutation,
     useGetCourseCatalogQuery,
@@ -18,17 +8,16 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Enums } from '../../shared';
 import { TEXT_NEW_COURSE, TEXT_COURSE_PAGE_TITLE } from '../../texts';
-import CourseCreateModal from '../../components/courses/CourseCreateModal';
-
-const { Title } = Typography;
+import CourseCreateModal from './CourseCreateModal';
+import { isTeacher } from '../../helpers/permissions';
+import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import PageHeader from '../../components/common/PageHeader';
 
 const CoursesPage = () => {
-    const [createCourseCommand, {}] = useCreateCourseMutation();
     const { data: courses } = useGetCourseCatalogQuery('course-catalog');
-
+    const { data: user } = useGetUserProfileQuery('userDetails');
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const navigate = useNavigate();
+    const [createCourseCommand, {}] = useCreateCourseMutation();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -37,6 +26,7 @@ const CoursesPage = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const navigate = useNavigate();
 
     const handleCourseCreate = (values) => {
         createCourseCommand({
@@ -54,32 +44,29 @@ const CoursesPage = () => {
             });
     };
 
+    const actions = isTeacher(user) && (
+        <Button
+            data-cy="course-catalog-create-new"
+            key={TEXT_NEW_COURSE}
+            onClick={showModal}
+            style={{
+                float: 'right',
+                position: 'absolute',
+                right: '0',
+                bottom: '0',
+                marginBottom: '10px',
+            }}
+            type="primary"
+        >
+            {TEXT_NEW_COURSE}
+        </Button>
+    );
+
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
-            <Row>
-                <Col span={12}>
-                    <Title level={1}>{TEXT_COURSE_PAGE_TITLE}</Title>
-                </Col>
-                <Col span={12}>
-                    <Button
-                        data-cy="course-catalog-create-new"
-                        key={TEXT_NEW_COURSE}
-                        onClick={showModal}
-                        style={{
-                            float: 'right',
-                            position: 'absolute',
-                            right: '0',
-                            bottom: '0',
-                            marginBottom: '10px',
-                        }}
-                        type="primary"
-                    >
-                        {TEXT_NEW_COURSE}
-                    </Button>
-                </Col>
-            </Row>
-
-            <CourseList courses={courses} />
+            <PageHeader title={TEXT_COURSE_PAGE_TITLE} actions={[actions]} />
+            <CourseList courses={courses} user={user} />
+            {/* // modal */}
             <CourseCreateModal
                 isOpen={isModalOpen}
                 onCancel={handleCancel}

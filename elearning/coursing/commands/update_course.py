@@ -7,7 +7,7 @@ from infra.exceptions import (
     CommandProcessingException,
     CommandProcessingForbiddenException,
 )
-from shared.enums import ApiErrors, CommandTypes, UserRoles, CourseStepComponentTypes
+from shared.enums import ApiErrors, CommandTypes, UserRoles, CourseComponentType
 from db.repository.configuration import RepositoryRoot
 from elearning.coursing.entities import CourseStep
 from infra.command_handler import CommandHandler
@@ -18,7 +18,7 @@ from infra.event import Event
 class UpdateCourseStepType:
     order: int
     id: UUID
-    type: CourseStepComponentTypes
+    type: CourseComponentType
 
 
 @dataclass
@@ -76,7 +76,7 @@ class OnUpdateCourse(CommandHandler):
                 course.steps = None
 
     def _check_that_user_is_author(self, course, user):
-        if course.author != user.uuid:
+        if course.author != user.uuid and not user.is_admin():
             raise CommandProcessingForbiddenException(
                 ApiErrors.CANNOT_UPDATE_COURSE_NOT_AUTHOR
             )

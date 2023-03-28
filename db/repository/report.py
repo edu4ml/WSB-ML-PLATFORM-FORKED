@@ -1,4 +1,4 @@
-from db.models.courses import CourseStepUserCompletion
+from db.models.courses import CourseStepUserProgress
 from elearning.reporting.entities.student import (
     StudentInCourseStepEvaluationAttempt,
     StudentWithProgress,
@@ -43,7 +43,7 @@ class ReportRepository(Repository):
 
         for step in course.steps.all():
             try:
-                step_completion = CourseStepUserCompletion.objects.get(
+                step_completion = CourseStepUserProgress.objects.get(
                     course=course, user=student, object_uuid=step.object.uuid
                 )
 

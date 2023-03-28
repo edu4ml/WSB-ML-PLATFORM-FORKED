@@ -28,7 +28,7 @@ class EvaluationAttempt(TimestampedModel):
     status = models.CharField(
         max_length=40,
         choices=CourseStepEvaluationStatus.choices(),
-        default=CourseStepEvaluationStatus.UNKNOWN,
+        default=CourseStepEvaluationStatus.WAITING,
     )
 
     def __str__(self) -> str:

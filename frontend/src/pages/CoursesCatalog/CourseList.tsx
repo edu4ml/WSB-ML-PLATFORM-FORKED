@@ -34,9 +34,7 @@ function sortCourses(courses: Array<CourseType>) {
     });
 }
 
-const CourseList = ({ courses }) => {
-    const { data: userData } = useGetUserProfileQuery('userDetails');
-
+const CourseList = ({ courses, user }) => {
     const sortedCourses = sortCourses(courses);
     return (
         <List
@@ -46,7 +44,7 @@ const CourseList = ({ courses }) => {
             pagination={{ pageSize: 10 }}
             dataSource={sortedCourses}
             renderItem={(course: CourseType) => (
-                <CourseListItem course={course} user={userData} />
+                <CourseListItem course={course} user={user} />
             )}
         />
     );

@@ -10,27 +10,39 @@ class CommandTypes:
     UPDATE_COURSE = "UPDATE_COURSE"
 
 
-class CourseStepComponentTypes(str, Enum):
-    _PREFIX = "COURSE_STEP_COMPONENT_TYPES"
+class CourseComponentType(str, Enum):
+    """
+    Indicate what component type is used in course step
 
-    UNKNOWN = "UNKNOWN"
+    - OTHER: for any other type
+    - EXERCISE: for exercise type. This is meant to be used to create a piece of course where student can practice
+    - EVALUATION: for evaluation type. This is meant to be used for evaluation only. Some test to pass etc.
+    """
+
+    _PREFIX = "COURSE_COMPONENT_TYPE"
+
+    OTHER = "OTHER"
     EXERCISE = "EXERCISE"
-    FILE_EVALUATION = "FILE_EVALUATION"
-    # TEST_EVALUATION = "TEST_EVALUATION"
-    # TEACHER_EVALUATION = "TEACHER_EVALUATION"
+    EVALUATION = "EVALUATION"
 
     @classmethod
     def choices(cls):
         return [(item.value, item.name) for item in cls if item.name != "_PREFIX"]
 
 
-class CourseStepEvaluationTypes(str, Enum):
-    _PREFIX = "COURSE_STEP_EVALUATION_TYPES"
+class CourseStepEvaluationType(str, Enum):
+    """
+    Indicate the strategy for evaluating course step.
+    Every course step must have an evaluation type. It can be self evaluated, teacher evaluated, file evaluated etc.
+    - FILE_EVALUATED: sending a file is enough to pass the course step
+    - TEACHER_EVALUATED: teacher must approve the course step
+    - TEST_EVALUATED: test must be passed to pass the course step
+    """
+
+    _PREFIX = "COURSE_STEP_EVALUATION_TYPE"
 
     SELF_EVALUATED = "SELF_EVALUATED"
     FILE_EVALUATED = "FILE_EVALUATED"
-    TEST_EVALUATED = "TEST_EVALUATED"
-    TEACHER_EVALUATED = "TEACHER_EVALUATED"
 
     @classmethod
     def choices(cls):
@@ -38,13 +50,35 @@ class CourseStepEvaluationTypes(str, Enum):
 
 
 class CourseStepEvaluationStatus(str, Enum):
+    """
+    Indicate the status of course step evaluation
+    - WAITING: waiting for evaluation to be submitted
+    - SUBMITTED: evaluation is submitted
+    - PASSED: evaluation is passed
+    """
+
     _PREFIX = "COURSE_STEP_EVALUATION_STATUS"
 
     WAITING = "WAITING"
     SUBMITTED = "SUBMITTED"
+    FAILED = "FAILED"
     PASSED = "PASSED"
-    SKIPPED = "SKIPPED"
-    UNKNOWN = "UNKNOWN"
+
+    @classmethod
+    def choices(cls):
+        return [(item.value, item.name) for item in cls if item.name != "_PREFIX"]
+
+
+class CourseStepUserProgressStatus(str, Enum):
+    """
+    Indicate the status of course step for a user (if it is completed or not, blocked or not etc.)
+    """
+
+    _PREFIX = "COURSE_STEP_USER_PROGRESS_STATUS"
+
+    BLOCKED = "BLOCKED"
+    AVAILABLE = "AVAILABLE"
+    COMPLETED = "COMPLETED"
 
     @classmethod
     def choices(cls):

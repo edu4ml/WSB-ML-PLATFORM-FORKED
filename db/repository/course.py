@@ -6,7 +6,7 @@ from db.models import (
     Course as CourseDbModel,
     CourseEnrollment as CourseEnrollmentDbModel,
     CourseStep as CourseStepDbModel,
-    CourseStepUserCompletion as CourseStepUserCompletionDbModel,
+    CourseStepUserProgress as CourseStepUserCompletionDbModel,
 )
 from elearning.coursing.course import Course
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
@@ -149,8 +149,17 @@ class CourseRepository(Repository):
     def list(self) -> List[Course]:
         user_roles = self.user.roles.values_list("name", flat=True)
 
-        if UserRoles.ADMIN in user_roles or UserRoles.TEACHER in user_roles:
+        # For admins, retrieve all courses
+        if UserRoles.ADMIN in user_roles:
             course_models = CourseDbModel.objects.all()
+
+        # For teachers, retrieve all published courses and all courses they authored
+        elif UserRoles.TEACHER in user_roles:
+            authored_courses = CourseDbModel.objects.filter(author=self.user)
+            published_courses = CourseDbModel.objects.filter(is_draft=False)
+            course_models = authored_courses | published_courses
+
+        # For students, retrieve only published courses
         else:
             course_models = CourseDbModel.objects.filter(is_draft=False)
         return [self.entity_builder.from_model(c) for c in course_models]

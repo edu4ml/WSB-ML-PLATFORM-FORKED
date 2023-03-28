@@ -25,11 +25,7 @@ import CourseComponentEditResources from './CourseComponentEditResources';
 import FilesAvatars from './FilesAvatars';
 import CourseComponentTitle from './CourseComponentTitle';
 
-const { Title } = Typography;
-
 const CourseComponentListItem = ({ component }) => {
-    // ----------------------------------------
-    // Modal Edit
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
     const [isResourcesModalOpen, setIsResourcesModalOpen] =
         React.useState(false);

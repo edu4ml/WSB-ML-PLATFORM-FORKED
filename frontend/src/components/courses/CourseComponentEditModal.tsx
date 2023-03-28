@@ -16,12 +16,10 @@ import {
 } from '../../texts';
 
 const courseComponentTypeToTextMap: { [key: string]: string } = {
-    [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]:
-        TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    [Enums.COURSE_STEP_COMPONENT_TYPES.FILE_EVALUATION]:
+    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
+    [Enums.COURSE_COMPONENT_TYPE.EVALUATION]:
         TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    [Enums.COURSE_STEP_COMPONENT_TYPES.UNKNOWN]:
-        TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
+    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
 };
 
 const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
@@ -79,7 +77,7 @@ const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
                             TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
                         }
                     >
-                        {Object.entries(Enums.COURSE_STEP_COMPONENT_TYPES).map(
+                        {Object.entries(Enums.COURSE_COMPONENT_TYPE).map(
                             ([key, value]) => (
                                 <Select.Option value={key} key={key}>
                                     {courseComponentTypeToTextMap[value]}

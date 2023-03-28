@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 from uuid import uuid4
 
-from shared.enums import CommandTypes, CourseStepEvaluationTypes
+from shared.enums import CommandTypes, CourseStepEvaluationType
 
 
 def get_course(admin_client, course_obj):
@@ -60,22 +60,22 @@ def test_admin_updates_draft_course_description_and_steps(
             dict(
                 order=1,
                 component=str(course_components[0].uuid),
-                evaluation_type=CourseStepEvaluationTypes.FILE_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
             ),
             dict(
                 order=2,
                 component=str(course_components[1].uuid),
-                evaluation_type=CourseStepEvaluationTypes.SELF_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.SELF_EVALUATED,
             ),
             dict(
                 order=3,
                 component=str(course_components[2].uuid),
-                evaluation_type=CourseStepEvaluationTypes.TEST_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.TEST_EVALUATED,
             ),
             dict(
                 order=4,
                 component=str(course_components[3].uuid),
-                evaluation_type=CourseStepEvaluationTypes.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
             ),
         ],
     )
@@ -102,22 +102,22 @@ def test_teacher_updates_own_draft_course_description_and_steps(
             dict(
                 order=1,
                 component=course_components[0].uuid,
-                evaluation_type=CourseStepEvaluationTypes.FILE_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
             ),
             dict(
                 order=2,
                 component=course_components[1].uuid,
-                evaluation_type=CourseStepEvaluationTypes.SELF_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.SELF_EVALUATED,
             ),
             dict(
                 order=3,
                 component=course_components[2].uuid,
-                evaluation_type=CourseStepEvaluationTypes.TEST_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.TEST_EVALUATED,
             ),
             dict(
                 order=4,
                 component=course_components[3].uuid,
-                evaluation_type=CourseStepEvaluationTypes.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
             ),
         ],
     )
@@ -299,7 +299,7 @@ def test_update_course_with_invalid_data_missing_order(
         steps=[
             dict(
                 component=str(course_components[0].uuid),
-                evaluation_type=CourseStepEvaluationTypes.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
             ),
         ],
     )
@@ -324,7 +324,7 @@ def test_update_course_with_invalid_data_missing_component(
         steps=[
             dict(
                 order=1,
-                evaluation_type=CourseStepEvaluationTypes.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
             ),
         ],
     )

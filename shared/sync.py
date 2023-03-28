@@ -3,8 +3,8 @@ import json
 from shared.enums import (
     CommandTypes,
     CourseStepEvaluationStatus,
-    CourseStepComponentTypes,
-    CourseStepEvaluationTypes,
+    CourseComponentType,
+    CourseStepEvaluationType,
     UserRoles,
 )
 
@@ -32,9 +32,9 @@ if __name__ == "__main__":
         [
             CommandTypes,
             UserRoles,
-            CourseStepEvaluationTypes,
+            CourseStepEvaluationType,
             CourseStepEvaluationStatus,
-            CourseStepComponentTypes,
+            CourseComponentType,
         ],
         "shared/enums.json",
     )

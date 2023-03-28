@@ -19,23 +19,13 @@ import CourseComponentCreateModal from '../../components/courses/CourseComponent
 import CourseComponentListItem from '../../components/courses/CourseComponentListItem';
 
 const courseComponentTypeToTextMap: { [key: string]: string } = {
-    [Enums.COURSE_STEP_COMPONENT_TYPES.EXERCISE]:
-        TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    [Enums.COURSE_STEP_COMPONENT_TYPES.FILE_EVALUATION]:
+    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
+    [Enums.COURSE_COMPONENT_TYPE.EVALUATION]:
         TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    [Enums.COURSE_STEP_COMPONENT_TYPES.UNKNOWN]:
-        TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
+    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
 };
 
-const { Text, Title } = Typography;
-
-const getUniqueTypes = (components: Array<CourseComponentType>) => {
-    const unique = [...new Set(components?.map((c) => c.type))];
-    return unique.map((u: string) => ({
-        text: courseComponentTypeToTextMap[u],
-        value: u,
-    }));
-};
+const { Title } = Typography;
 
 const CourseComponentsPage = () => {
     const { data: courseComponents } =

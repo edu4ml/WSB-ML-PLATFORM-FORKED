@@ -4,7 +4,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import ApiErrors, CommandTypes, CourseStepComponentTypes
+from shared.enums import ApiErrors, CommandTypes, CourseComponentType
 
 
 @pytest.mark.django_db
@@ -125,7 +125,7 @@ def test_create_course_component_with_valid_data(admin_client):
     course_component_data = dict(
         title="New course component",
         description="A new course component for testing",
-        type=CourseStepComponentTypes.EXERCISE,
+        type=CourseComponentType.EXERCISE,
     )
 
     response = admin_client.post(
@@ -145,7 +145,7 @@ def test_create_course_component_with_missing_data(admin_client):
 
     course_component_data = dict(
         description="A new course component for testing",
-        type=CourseStepComponentTypes.EXERCISE,
+        type=CourseComponentType.EXERCISE,
     )
 
     response = admin_client.post(

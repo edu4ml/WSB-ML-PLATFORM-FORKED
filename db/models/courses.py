@@ -2,7 +2,11 @@ from django.conf import settings
 from django.db import models
 from db.models.external_resources import ExternalResource
 
-from shared.enums import CourseStepComponentTypes, CourseStepEvaluationTypes
+from shared.enums import (
+    CourseComponentType,
+    CourseStepEvaluationType,
+    CourseStepUserProgressStatus,
+)
 
 from .mixin import TimestampedModel
 
@@ -45,8 +49,8 @@ class CourseComponent(TimestampedModel):
 
     type = models.CharField(
         max_length=40,
-        choices=CourseStepComponentTypes.choices(),
-        default=CourseStepComponentTypes.UNKNOWN,
+        choices=CourseComponentType.choices(),
+        default=CourseComponentType.EXERCISE,
     )
 
     def __str__(self) -> str:
@@ -59,8 +63,8 @@ class CourseStep(TimestampedModel):
 
     evaluation_type = models.CharField(
         max_length=40,
-        choices=CourseStepEvaluationTypes.choices(),
-        default=CourseStepEvaluationTypes.SELF_EVALUATED,
+        choices=CourseStepEvaluationType.choices(),
+        default=CourseStepEvaluationType.SELF_EVALUATED,
     )
 
     component = models.ForeignKey(
@@ -78,7 +82,7 @@ class CourseStep(TimestampedModel):
         return f"{self.course.title} ({self.order})"  # - {self.component.title}"  # pragma: no cover
 
 
-class CourseStepUserCompletion(TimestampedModel):
+class CourseStepUserProgress(TimestampedModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -90,6 +94,12 @@ class CourseStepUserCompletion(TimestampedModel):
     component = models.ForeignKey(CourseComponent, on_delete=models.PROTECT)
 
     is_completed = models.BooleanField(default=False)
+
+    status = models.CharField(
+        max_length=255,
+        choices=CourseStepUserProgressStatus.choices(),
+        default=CourseStepUserProgressStatus.BLOCKED,
+    )
 
     class Meta:
         unique_together = ("user", "component", "course")
