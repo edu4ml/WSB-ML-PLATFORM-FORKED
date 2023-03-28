@@ -39,7 +39,3 @@
 7. **Content Domain**
    - Ability to create and edit course content.
    - Basic course content organization.
-
-8. **Analytics Domain**
-   - Basic data collection and storage.
-   - Basic data analysis and visualization.

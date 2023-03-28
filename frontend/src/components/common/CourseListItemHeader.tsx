@@ -3,14 +3,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CourseType } from '../../types/course';
 
-const CourseListItemHeader = ({ course, actions }: { course: CourseType }) => {
+const CourseListItemHeader = ({
+    course,
+    actions,
+}: {
+    course: CourseType;
+    actions: React.ReactNode[];
+}) => {
     if (course.is_enrolled && !course.is_draft) {
         return (
             <Row>
                 <Col span={16}>
                     <Link
                         data-cy="course-catalog-list-item-link-title"
-                        to={`/courses/${course.uuid}`}
+                        to={`/app/courses/${course.uuid}`}
                     >
                         {course.title}
                     </Link>
@@ -29,7 +35,7 @@ const CourseListItemHeader = ({ course, actions }: { course: CourseType }) => {
                 <Col span={20}>
                     <Link
                         data-cy="course-catalog-list-item-draft-title"
-                        to={`/courses/${course.uuid}/edit`}
+                        to={`/app/courses/${course.uuid}/edit`}
                     >
                         {course.title} {course.is_draft && '(Wersja robocza)'}
                     </Link>

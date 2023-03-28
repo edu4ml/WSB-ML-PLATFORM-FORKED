@@ -1,20 +1,19 @@
 import React from 'react';
+import './App.css';
 import { LoginPage, ProfileCard } from './pages';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Button, Result } from 'antd';
+import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom';
+
 import PrivateRoute from './components/router/PrivateRoute';
 import LoginLayout from './pages/Layout/LoginLayout';
 import MainLayout from './pages/Layout/MainLayout';
+import SimpleLayout from './pages/Layout/SimpleLayout';
 import CoursesPage from './pages/Courses/CoursesPage';
 import CourseDetailPage from './pages/Courses/CourseDetailPage';
-import { Button, Result } from 'antd';
-import './App.css';
-import ExerciseDetailPage from './pages/Exercises/ExerciseDetailPage';
 import CourseEditPage from './pages/Courses/CourseEditPage';
 import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
 import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage';
 import DashboardLayout from './pages/Layout/DashboardLayout';
-import CourseComponentsLayout from './pages/Layout/CourseComponentsLayout';
-import SimpleLayout from './pages/Layout/SimpleLayout';
 import ExternalResourcesPage from './pages/ExternalResources/ExternalResourcesPage';
 
 const App = () => {
@@ -129,7 +128,11 @@ const App = () => {
                                 status="404"
                                 title="404"
                                 subTitle="Przepraszam, ta strona nie istnieje!"
-                                extra={<Button type="primary">Wracam</Button>}
+                                extra={
+                                    <Button type="primary">
+                                        <Link to={'/'}>Wracam</Link>
+                                    </Button>
+                                }
                             />
                         }
                     />

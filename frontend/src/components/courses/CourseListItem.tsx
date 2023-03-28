@@ -1,4 +1,4 @@
-import { List, Card, Col, Row } from 'antd';
+import { Card } from 'antd';
 import React from 'react';
 import { CourseType } from '../../types/course';
 import { UserType } from '../../types/user';
@@ -13,14 +13,21 @@ const CourseListItem = ({
     course: CourseType;
     user: UserType;
 }) => {
-    const actions = (course: CourseType) => {
+    const actions = (course: CourseType): React.ReactNode[] => {
         if (course.is_enrolled) {
             return [];
         } else if (course.is_draft) {
-            return [<CourseDetailsButton course={course} />];
+            return [<CourseDetailsButton key={'details'} course={course} />];
         } else if (!course.is_draft && !course.is_enrolled) {
-            return [<CourseEnrollButton course={course} user={user} />];
+            return [
+                <CourseEnrollButton
+                    key={'enroll'}
+                    course={course}
+                    user={user}
+                />,
+            ];
         }
+        return [];
     };
 
     return (

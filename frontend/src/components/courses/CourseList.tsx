@@ -38,7 +38,6 @@ const CourseList = ({ courses }) => {
     const { data: userData } = useGetUserProfileQuery('userDetails');
 
     const sortedCourses = sortCourses(courses);
-
     return (
         <List
             bordered={false}
