@@ -49,13 +49,6 @@ const CoursesPage = () => {
             data-cy="course-catalog-create-new"
             key={TEXT_NEW_COURSE}
             onClick={showModal}
-            style={{
-                float: 'right',
-                position: 'absolute',
-                right: '0',
-                bottom: '0',
-                marginBottom: '10px',
-            }}
             type="primary"
         >
             {TEXT_NEW_COURSE}

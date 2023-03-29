@@ -26,7 +26,7 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
         let actions: React.ReactNode[] = [];
         if (
             courseComponent.evaluation_type ==
-                Enums.COURSE_STEP_EVALUATION_TYPES.SELF_EVALUATED &&
+                Enums.COURSE_STEP_EVALUATION_TYPE.SELF_EVALUATED &&
             !courseComponent.user_progress.is_blocked &&
             !courseComponent.user_progress.is_completed
         ) {

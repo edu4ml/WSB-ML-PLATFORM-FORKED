@@ -29,41 +29,11 @@ import CourseEditDetails from './CourseEditDetails';
 
 const { Paragraph } = Typography;
 
-const PublishButton = ({ steps }) => {
-    const [issueCommand, {}] = useIssueCourseCommandMutation();
-
-    const publish = () => {
-        const command = {
-            type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-            is_draft: false,
-            description: courseDescription,
-            steps: mapToCourseSteps(courseSteps),
-        };
-
-        issueCommand({ id: courseId, command })
-            .unwrap()
-            .then((res) => {
-                notification.info({
-                    message: TEXT_COURSE_PUBLISHED,
-                    duration: 2,
-                });
-                navigate('/app/courses/');
-            })
-            .catch((err) => {
-                notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
-                });
-            });
-    };
-
+const PublishButton = ({ onClick }) => {
     return (
         <Button
             data-cy="course-details-edit-publish"
             onClick={onClick}
-            style={{
-                float: 'right',
-                marginLeft: '10px',
-            }}
             type="primary"
         >
             {TEXT_PUBLISH}
@@ -72,16 +42,10 @@ const PublishButton = ({ steps }) => {
 };
 
 const SaveButton = ({ onClick }) => {
-    const [issueCommand, {}] = useIssueCourseCommandMutation();
-
     return (
         <Button
             data-cy="course-details-edit-save"
             onClick={onClick}
-            style={{
-                float: 'right',
-                marginLeft: '10px',
-            }}
             type="primary"
         >
             {TEXT_SAVE}
@@ -118,62 +82,114 @@ const CourseEditPage = () => {
         }));
     };
 
-    let actions: Array<CardHeaderRightButtonActionType> = [
-        {
-            text: TEXT_PUBLISH,
-            onClick: () => {
-                const command = {
-                    type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-                    is_draft: false,
-                    description: courseDescription,
-                    steps: mapToCourseSteps(courseSteps),
-                };
+    const publish = () => {
+        const command = {
+            type: Enums.COMMAND_TYPES.UPDATE_COURSE,
+            is_draft: false,
+            description: courseDescription,
+            steps: mapToCourseSteps(courseSteps),
+        };
 
-                issueCommand({ id: courseId, command })
-                    .unwrap()
-                    .then((res) => {
-                        notification.info({
-                            message: TEXT_COURSE_PUBLISHED,
-                            duration: 2,
-                        });
-                        navigate('/app/courses/');
-                    })
-                    .catch((err) => {
-                        notification.error({
-                            message: TEXT_SOMETHING_WENT_WRONG,
-                        });
-                    });
-            },
-            type: 'default',
-            dataCy: 'course-details-edit-publish',
-        },
-        {
-            text: TEXT_SAVE,
-            type: notSaved ? 'primary' : 'default',
-            onClick: () => {
-                const command = {
-                    type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-                    description: courseDescription,
-                    steps: mapToCourseSteps(courseSteps),
-                };
+        issueCommand({ id: courseId, command })
+            .unwrap()
+            .then((res) => {
+                notification.info({
+                    message: TEXT_COURSE_PUBLISHED,
+                    duration: 2,
+                });
+                navigate('/app/courses/');
+            })
+            .catch((err) => {
+                notification.error({
+                    message: TEXT_SOMETHING_WENT_WRONG,
+                });
+            });
+    };
 
-                issueCommand({ id: courseId, command })
-                    .unwrap()
-                    .then((res) => {
-                        notification.info({
-                            message: TEXT_COURSE_SAVED,
-                            duration: 2,
-                        });
-                        setNotSaved(false);
-                    })
-                    .catch((err) => {
-                        notification.error({
-                            message: TEXT_SOMETHING_WENT_WRONG,
-                        });
-                    });
-            },
-            dataCy: 'course-details-edit-save',
-        },
+    const save = () => {
+        const command = {
+            type: Enums.COMMAND_TYPES.UPDATE_COURSE,
+            description: courseDescription,
+            steps: mapToCourseSteps(courseSteps),
+        };
+
+        issueCommand({ id: courseId, command })
+            .unwrap()
+            .then((res) => {
+                notification.info({
+                    message: TEXT_COURSE_SAVED,
+                    duration: 2,
+                });
+                setNotSaved(false);
+            })
+            .catch((err) => {
+                notification.error({
+                    message: TEXT_SOMETHING_WENT_WRONG,
+                });
+            });
+    };
+
+    // let actions2: Array<CardHeaderRightButtonActionType> = [
+    //     {
+    //         text: TEXT_PUBLISH,
+    //         onClick: () => {
+    //             const command = {
+    //                 type: Enums.COMMAND_TYPES.UPDATE_COURSE,
+    //                 is_draft: false,
+    //                 description: courseDescription,
+    //                 steps: mapToCourseSteps(courseSteps),
+    //             };
+
+    //             issueCommand({ id: courseId, command })
+    //                 .unwrap()
+    //                 .then((res) => {
+    //                     notification.info({
+    //                         message: TEXT_COURSE_PUBLISHED,
+    //                         duration: 2,
+    //                     });
+    //                     navigate('/app/courses/');
+    //                 })
+    //                 .catch((err) => {
+    //                     notification.error({
+    //                         message: TEXT_SOMETHING_WENT_WRONG,
+    //                     });
+    //                 });
+    //         },
+    //         type: 'default',
+    //         dataCy: 'course-details-edit-publish',
+    //     },
+    //     {
+    //         text: TEXT_SAVE,
+    //         type: notSaved ? 'primary' : 'default',
+    //         onClick: () => {
+    //             const command = {
+    //                 type: Enums.COMMAND_TYPES.UPDATE_COURSE,
+    //                 description: courseDescription,
+    //                 steps: mapToCourseSteps(courseSteps),
+    //             };
+
+    //             issueCommand({ id: courseId, command })
+    //                 .unwrap()
+    //                 .then((res) => {
+    //                     notification.info({
+    //                         message: TEXT_COURSE_SAVED,
+    //                         duration: 2,
+    //                     });
+    //                     setNotSaved(false);
+    //                 })
+    //                 .catch((err) => {
+    //                     notification.error({
+    //                         message: TEXT_SOMETHING_WENT_WRONG,
+    //                     });
+    //                 });
+    //         },
+    //         dataCy: 'course-details-edit-save',
+    //     },
+    // ];
+
+    const actions = [
+        <PublishButton onClick={publish} />,
+        <SaveButton onClick={save} />,
     ];
 
     // if (!isLoading && isSuccess) {
@@ -214,7 +230,7 @@ const CourseEditPage = () => {
         <Space direction="vertical" style={{ width: '100%' }}>
             <PageHeader
                 title={getCourseTitle(course)}
-                actions={undefined}
+                actions={actions}
                 subtitle={getCourseSubtitle(course)}
             />
             <CourseEditDetails
