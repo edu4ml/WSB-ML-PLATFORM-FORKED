@@ -70,12 +70,12 @@ def test_admin_updates_draft_course_description_and_steps(
             dict(
                 order=3,
                 component=str(course_components[2].uuid),
-                evaluation_type=CourseStepEvaluationType.TEST_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.SELF_EVALUATED,
             ),
             dict(
                 order=4,
                 component=str(course_components[3].uuid),
-                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.SELF_EVALUATED,
             ),
         ],
     )
@@ -112,12 +112,12 @@ def test_teacher_updates_own_draft_course_description_and_steps(
             dict(
                 order=3,
                 component=course_components[2].uuid,
-                evaluation_type=CourseStepEvaluationType.TEST_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
             ),
             dict(
                 order=4,
                 component=course_components[3].uuid,
-                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
             ),
         ],
     )
@@ -299,7 +299,7 @@ def test_update_course_with_invalid_data_missing_order(
         steps=[
             dict(
                 component=str(course_components[0].uuid),
-                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
             ),
         ],
     )
@@ -324,7 +324,7 @@ def test_update_course_with_invalid_data_missing_component(
         steps=[
             dict(
                 order=1,
-                evaluation_type=CourseStepEvaluationType.TEACHER_EVALUATED,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
             ),
         ],
     )
