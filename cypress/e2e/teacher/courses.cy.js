@@ -1,4 +1,4 @@
-describe('Courses page', () => {
+describe('Courses catalog page', () => {
     beforeEach(() => {
         cy.login('teacher', 'adminadmin');
     });

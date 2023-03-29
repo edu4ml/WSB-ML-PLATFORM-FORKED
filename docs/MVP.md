@@ -1,13 +1,56 @@
 # Stories 
 
-- As a Teacher, I want to create a new course and expect the course to be available for students to enroll in.
-- As a Teacher, I want to edit an existing course and expect the changes to be reflected in the course content and structure.
-- As a Teacher, I want to delete a course and expect the course to be removed from the list of available courses for students.
-- As a Teacher, I want to organize course components in a logical order and expect students to follow the defined order while progressing through the course.
-- As a Teacher, I want to set course prerequisites and expect students to fulfill the prerequisites before enrolling in the course.
-- As a Teacher, I want to manage student enrollment in my courses and expect to approve or reject enrollment requests as needed.
-- As a Teacher, I want to monitor individual student progress in my courses and expect to access progress reports to identify areas where students may need additional support.
-- As a Teacher, I want to send course-related announcements or updates and expect students enrolled in the course to receive these notifications.
+Creating a new course:
+
+Test creating a new course with valid data.
+Test creating a new course with missing steps and description (invalid data).
+
+Course availability for students:
+
+Test course visibility for students when is_draft=false.
+Test course invisibility for students when is_draft=true.
+
+Editing an existing course:
+
+Test editing a course with valid data.
+Test editing a course with missing steps and description (invalid data).
+Test course content and structure after the edits are saved.
+
+Organizing course components in a logical order:
+
+Test adding components as a course step.
+Test reordering course steps.
+Test students' ability to follow the defined order while progressing through the course.
+
+Setting course prerequisites:
+
+Test setting prerequisites for a course.
+Test student enrollment when prerequisites are met.
+Test student enrollment when prerequisites are not met.
+
+Monitoring individual student progress:
+
+Test accessing progress reports for students.
+Test identifying areas where students may need additional support based on progress reports.
+
+Sending course-related announcements or updates:
+
+Test sending announcements or updates.
+Test students' ability to receive notifications related to the course.
+
+Changing evaluation type for course steps:
+
+Test changing the evaluation type for a course step.
+Test the impact of the evaluation type change on student progress.
+
+Publishing a course:
+
+Test publishing a course with is_draft=false when it has steps and a description (valid data).
+Test publishing a course with is_draft=false when it is missing steps and a description (invalid data).
+Test the course's visibility for students after publishing.
+
+
+
 
 
 # MVP 
@@ -39,3 +82,6 @@
 7. **Content Domain**
    - Ability to create and edit course content.
    - Basic course content organization.
+
+
+---
