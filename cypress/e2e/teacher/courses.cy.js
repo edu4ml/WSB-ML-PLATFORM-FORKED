@@ -73,13 +73,16 @@ describe('Courses catalog page', () => {
             /\/app\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
         );
 
-        cy.get('[data-cy="course-details-edit-description"]').click();
         cy.get('[data-cy="course-details-edit-description"]')
-            .find('.anticon-edit')
+            .find('[aria-label="Edit"]]')
+            .click();
+
+        cy.get('[data-cy="course-details-edit-description"]')
+            .find('[aria-label="edit"]]')
             .type(`Course test description - ${Date.now()}`);
 
         // Click on the button with data-cy attribute 'course-details-edit-save'
-        cy.get("[data-cy='course-details-edit-publish']").click();
+        cy.get("[data-cy='course-details-edit-save']").click();
 
         // Check if you are redirected to the '/courses' page
         cy.url().should('include', '/app/courses');

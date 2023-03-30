@@ -6,14 +6,15 @@ const { Paragraph } = Typography;
 
 const CourseEditDescription = ({ description, onUpdateDescription }) => {
     return (
-        <Paragraph
-            data-cy={'course-details-edit-description'}
-            editable={{
-                onChange: onUpdateDescription,
-            }}
-        >
-            {description}
-        </Paragraph>
+        <div data-cy={'course-details-edit-description'}>
+            <Paragraph
+                editable={{
+                    onChange: onUpdateDescription,
+                }}
+            >
+                {description}
+            </Paragraph>
+        </div>
     );
 };
 
