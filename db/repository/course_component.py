@@ -1,10 +1,12 @@
 from db.models import (
     CourseComponent as CourseComponentDbModel,
 )
-from elearning.coursing.entities.course_component import CourseComponent
+from elearning.coursing.entities.course_component import (
+    CourseComponent as CourseComponentDomainModel,
+)
 from elearning.coursing.entities.external_resource import ExternalResource
 from infra.logging import logger
-from infra.repository import ModelRepository, RepositoryEntityBuilder
+from infra.repository import ModelRepository
 from db.models import ExternalResource as ExternalResourceDbModel
 from django import forms
 
@@ -16,8 +18,13 @@ class ExternalResourceForm(forms.ModelForm):
 
 
 @logger
-class CourseComponentEntityBuilder(RepositoryEntityBuilder):
-    root_entity = CourseComponent
+class CourseComponentRepo(ModelRepository):
+    root_model = CourseComponentDbModel
+    root_entity = CourseComponentDomainModel
+
+    def create(self, **kwargs):
+        assert "title" in kwargs.keys()
+        return super().create(**kwargs)
 
     def from_model(self, obj):
         return self.root_entity(
@@ -36,13 +43,3 @@ class CourseComponentEntityBuilder(RepositoryEntityBuilder):
                 for resource in obj.resources.all()
             ],
         )
-
-
-@logger
-class CourseComponentRepo(ModelRepository):
-    root_model = CourseComponentDbModel
-    entity_builder = CourseComponentEntityBuilder()
-
-    def create(self, **kwargs):
-        assert "title" in kwargs.keys()
-        return super().create(**kwargs)

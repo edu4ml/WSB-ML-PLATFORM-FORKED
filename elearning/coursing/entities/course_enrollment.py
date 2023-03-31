@@ -3,7 +3,7 @@ from uuid import UUID
 
 
 @dataclass
-class Enrollment:
+class CourseEnrollment:
     user: UUID
     course: UUID
     is_completed: bool = False

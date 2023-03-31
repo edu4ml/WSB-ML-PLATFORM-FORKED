@@ -50,7 +50,7 @@ class OnUpdateCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: UpdateCourse):
-        course = self.repository.course.retrieve(command.parent_uuid)
+        course = self.repository.course.get_by_uuid(command.parent_uuid)
         if course is None:
             raise CommandProcessingException(ApiErrors.COURSE_DOES_NOT_EXIST)
 
@@ -70,7 +70,7 @@ class OnUpdateCourse(CommandHandler):
                 )
                 for s in command.steps
             ]
-        self.repository.course.update(course)
+        self.repository.course.update_with_entity(course)
 
     def _check_that_user_is_author(self, course, user):
         if course.author != user.uuid and not user.is_admin():

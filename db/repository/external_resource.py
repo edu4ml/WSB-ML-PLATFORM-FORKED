@@ -2,7 +2,7 @@ from uuid import UUID
 from elearning.coursing.entities.external_resource import ExternalResource
 from infra.exceptions import BadRequestException, NotFoundException
 from infra.logging import logger
-from infra.repository import ModelRepository, RepositoryEntityBuilder
+from infra.repository import ModelRepository
 from db.models import ExternalResource as ExternalResourceDbModel
 
 from django import forms
@@ -14,21 +14,9 @@ class ExternalResourceForm(forms.ModelForm):
         fields = ("title", "url", "file")
 
 
-class ExternalResourceEntityBuilder(RepositoryEntityBuilder):
-    def from_model(self, external_resource):
-        return ExternalResource(
-            uuid=external_resource.uuid,
-            title=external_resource.title,
-            url=external_resource.url,
-            file_link=external_resource.file.url if external_resource.file else "",
-            type=external_resource.type,
-        )
-
-
 @logger
 class ExternalResourceRepository(ModelRepository):
     root_model = ExternalResourceDbModel
-    entity_builder = ExternalResourceEntityBuilder()
 
     def create(self, **kwargs):
         post_data = kwargs.get("post_data")
@@ -38,11 +26,11 @@ class ExternalResourceRepository(ModelRepository):
 
         if form.is_valid():
             resource = form.save()
-            return self.entity_builder.from_model(resource)
+            return self.from_model(resource)
         else:
             raise BadRequestException(form.errors)
 
-    def updateByUUID(self, uuid, **kwargs):
+    def update_by_uuid(self, uuid, **kwargs):
 
         try:
             resource = ExternalResourceDbModel.objects.get(uuid=uuid)
@@ -57,11 +45,20 @@ class ExternalResourceRepository(ModelRepository):
 
         if form.is_valid():
             resource = form.save()
-            return self.entity_builder.from_model(resource)
+            return self.from_model(resource)
         else:
             raise BadRequestException(form.errors)
 
-    def deleteByUUID(self, uuid: UUID):
+    def delete_by_uuid(self, uuid: UUID):
         resource = self.root_model.objects.get(uuid=uuid)
         resource.file.delete()
         resource.delete()
+
+    def from_model(self, external_resource):
+        return ExternalResource(
+            uuid=external_resource.uuid,
+            title=external_resource.title,
+            url=external_resource.url,
+            file_link=external_resource.file.url if external_resource.file else "",
+            type=external_resource.type,
+        )

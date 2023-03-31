@@ -15,7 +15,7 @@ from shared.enums import UserRoles
 class CourseComponentApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, **kwargs):
-        components = CourseComponentRepo(request.user).listAll()
+        components = CourseComponentRepo(request.user).list_all()
         serialized = [asdict(i) for i in components]
         return Response(serialized, status=status.HTTP_200_OK)
 
@@ -40,7 +40,7 @@ class CourseComponentDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def get(self, request, component_uuid: UUID, **kwargs):
 
-        component = CourseComponentRepo(request.user).getByUUID(component_uuid)
+        component = CourseComponentRepo(request.user).get_by_uuid(component_uuid)
         if component:
             return Response(asdict(component), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
@@ -49,7 +49,7 @@ class CourseComponentDetailApi(AuthMixin):
     def put(self, request, component_uuid: UUID, **kwargs):
         try:
 
-            component = CourseComponentRepo(request.user).updateByUUID(
+            component = CourseComponentRepo(request.user).update_by_uuid(
                 uuid=component_uuid,
                 **request.data,
             )
@@ -67,7 +67,7 @@ class CourseComponentDetailApi(AuthMixin):
 
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def delete(self, request, component_uuid: UUID, **kwargs):
-        CourseComponentRepo(request.user).deleteByUUID(uuid=component_uuid)
+        CourseComponentRepo(request.user).delete_by_uuid(uuid=component_uuid)
         return Response(dict(), status.HTTP_204_NO_CONTENT)
 
 

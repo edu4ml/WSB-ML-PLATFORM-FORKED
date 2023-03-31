@@ -17,7 +17,7 @@ from shared.enums import UserRoles
 class CourseApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, format=None):
-        courses = CourseRepository(request.user).list()
+        courses = CourseRepository(request.user).list_all()
         serialized = [asdict(course) for course in courses]
         return Response(serialized, status.HTTP_200_OK)
 
@@ -42,7 +42,7 @@ class CourseApi(AuthMixin):
 class CourseDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, course_uuid: UUID, **kwargs):
-        course = CourseRepository(request.user).retrieve(uuid=course_uuid)
+        course = CourseRepository(request.user).get_by_uuid(uuid=course_uuid)
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)

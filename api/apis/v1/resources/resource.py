@@ -12,7 +12,7 @@ from rest_framework.response import Response
 class ExternalResourceApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, format=None):
-        resources = ExternalResourceRepository(request.user).listAll()
+        resources = ExternalResourceRepository(request.user).list_all()
         serialized = [asdict(resource) for resource in resources]
         return Response(serialized, status.HTTP_200_OK)
 
@@ -41,13 +41,13 @@ class ExternalResourceApi(AuthMixin):
 class ExternalResourceDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, resource_uuid, format=None):
-        resource = ExternalResourceRepository(request.user).getByUUID(resource_uuid)
+        resource = ExternalResourceRepository(request.user).get_by_uuid(resource_uuid)
         return Response(asdict(resource), status.HTTP_200_OK)
 
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def post(self, request, resource_uuid, format=None):
         try:
-            resource = ExternalResourceRepository(request.user).updateByUUID(
+            resource = ExternalResourceRepository(request.user).update_by_uuid(
                 uuid=resource_uuid,
                 **dict(
                     post_data=request.POST,
@@ -69,7 +69,7 @@ class ExternalResourceDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def delete(self, request, resource_uuid, format=None):
         try:
-            ExternalResourceRepository(request.user).deleteByUUID(resource_uuid)
+            ExternalResourceRepository(request.user).delete_by_uuid(resource_uuid)
             return Response(dict(), status.HTTP_204_NO_CONTENT)
         except ApiException as e:
             return Response(

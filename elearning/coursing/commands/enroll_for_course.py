@@ -30,11 +30,11 @@ class OnEnrollForCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: EnrollForCourse):
-        enrollment = self.repository.enrollment.searchSingle(
+        enrollment = self.repository.enrollment.search_single(
             user__uuid=command.user_uuid, course__uuid=command.parent_uuid
         )
-        course = self.repository.course.retrieve(command.parent_uuid)
-        user: User = self.repository.user.getByUUID(command.user_uuid)
+        course = self.repository.course.get_by_uuid(command.parent_uuid)
+        user: User = self.repository.user.get_by_uuid(command.user_uuid)
 
         self._check_user_exists(user)
         self._check_parent_exists(course)

@@ -37,7 +37,7 @@ class OnCreateCourse(CommandHandler):
 
     def _handle_command(self, command: CreateCourse):
         self._check_if_title_was_provided(command)
-        return self.repository.course.crud.create(
+        return self.repository.course.create(
             **dict(
                 title=command.title,
                 is_draft=True,

@@ -31,6 +31,3 @@ class CommandHandler:
 
     def _emit_event(self):
         self.event_bus.publish(self.emitting_event)
-
-    def with_obj(self, obj_uuid, obj=None):
-        return self.repository.with_obj(obj_uuid, obj)
