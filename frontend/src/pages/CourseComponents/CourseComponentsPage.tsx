@@ -16,7 +16,7 @@ import {
 import { Enums } from '../../shared';
 import { CourseComponentType } from '../../types/course';
 import CourseComponentCreateModal from '../../components/courses/CourseComponentCreateModal';
-import CourseComponentListItem from '../../components/courses/CourseComponentListItem';
+import CourseComponentListItem from './CourseComponentListItem';
 
 const courseComponentTypeToTextMap: { [key: string]: string } = {
     [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_COURSE_COMPONENT_TYPE_EXERCISE,

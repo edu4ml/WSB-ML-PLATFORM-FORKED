@@ -1,14 +1,4 @@
-import {
-    Button,
-    Card,
-    Col,
-    Divider,
-    notification,
-    Row,
-    Space,
-    Tag,
-    Typography,
-} from 'antd';
+import { Button, Card, Col, Divider, notification, Row, Space } from 'antd';
 import React from 'react';
 import { useUpdateCourseComponentMutation } from '../../features/courses/coursesApi';
 import {
@@ -20,10 +10,10 @@ import {
 } from '../../texts';
 
 import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
-import CourseComponentEditModal from './CourseComponentEditModal';
-import CourseComponentEditResources from './CourseComponentEditResources';
-import FilesAvatars from './FilesAvatars';
-import CourseComponentTitle from './CourseComponentTitle';
+import CourseComponentEditModal from '../../components/courses/CourseComponentEditModal';
+import CourseComponentEditResources from '../../components/courses/CourseComponentEditResources';
+import FilesAvatars from '../../components/courses/FilesAvatars';
+import CourseComponentTitle from '../../components/courses/CourseComponentTitle';
 
 const CourseComponentListItem = ({ component }) => {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);

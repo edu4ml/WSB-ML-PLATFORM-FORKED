@@ -8,6 +8,7 @@ const CourseEditDescription = ({ description, onUpdateDescription }) => {
     return (
         <div data-cy={'course-details-edit-description'}>
             <Paragraph
+                data-cy={'course-details-edit-description-button'}
                 editable={{
                     onChange: onUpdateDescription,
                 }}
@@ -25,7 +26,7 @@ const CourseEditDetails = ({
     onUpdateSteps,
 }) => {
     return (
-        <Space direction="vertical">
+        <Space direction="vertical" style={{ width: '100%' }}>
             <Card>
                 <CourseEditDescription
                     description={description}

@@ -43,22 +43,9 @@ describe('Courses catalog page', () => {
         const courseTitle = `Test Course - ${Date.now()}`;
 
         cy.create_course(courseTitle);
-
-        // Check if the user was redirected to the course edit page with a valid UUID
-        cy.url().should(
-            'match',
-            /\/app\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
-        );
-
-        // Go to the course list page
-        // cy.visit('app/courses');
-        cy.get('[data-cy="courses-menu-tab"]').click();
-
-        // Check if the new course appears in the list of courses
-        cy.get('[data-cy="course-catalog-list"]').should('be.visible');
-        cy.get('[data-cy="course-catalog-list-item"]')
-            .contains(courseTitle)
-            .should('be.visible');
+        cy.assert_is_on_course_edit_page()
+        cy.go_to_course_catalog()
+        cy.assert_is_course_visible_in_course_catalog(courseTitle)
     });
 
     it('should verify that the teacher can edit not published course and save it', () => {
@@ -66,29 +53,17 @@ describe('Courses catalog page', () => {
         cy.url().should('include', '/app/courses');
 
         const courseTitle = `Test Course - ${Date.now()}`;
+        const courseDescription = `Test Course Description - ${Date.now()}`;
 
         cy.create_course(courseTitle);
-        cy.url().should(
-            'match',
-            /\/app\/courses\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/edit/
-        );
+        cy.assert_is_on_course_edit_page()
 
-        cy.get('[data-cy="course-details-edit-description"]')
-            .find('[aria-label="Edit"]]')
-            .click();
+        cy.edit_course_description(courseDescription);
+        cy.hit_save_course();
 
-        cy.get('[data-cy="course-details-edit-description"]')
-            .find('[aria-label="edit"]]')
-            .type(`Course test description - ${Date.now()}`);
-
-        // Click on the button with data-cy attribute 'course-details-edit-save'
-        cy.get("[data-cy='course-details-edit-save']").click();
-
-        // Check if you are redirected to the '/courses' page
-        cy.url().should('include', '/app/courses');
-
-        // Verify that the new course is in the list
-        // Replace 'New Course Title' with the actual title of the new course you want to check
         cy.contains(courseTitle).should('be.visible');
+        cy.contains(courseDescription).should('be.visible');
+
     });
+
 });

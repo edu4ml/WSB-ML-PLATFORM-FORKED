@@ -5,7 +5,7 @@ import { Space } from 'antd';
 
 const CourseEditStepsList = ({ steps, onUpdateSteps }) => {
     return (
-        <Space direction="vertical">
+        <Space direction="vertical" style={{ width: '100%' }}>
             <CourseEditStepsListSortable
                 steps={steps}
                 onUpdateSteps={onUpdateSteps}
