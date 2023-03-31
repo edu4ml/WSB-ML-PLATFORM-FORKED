@@ -53,27 +53,24 @@ class OnUpdateCourse(CommandHandler):
         course = self.repository.course.retrieve(command.parent_uuid)
         if course is None:
             raise CommandProcessingException(ApiErrors.COURSE_DOES_NOT_EXIST)
+
         self._validate_steps_payload(command.steps)
         self._check_that_user_is_author(course, command.issuer)
         self._check_course_is_not_published(course)
 
-        with self.repository.course.with_entity(
-            parent_uuid=command.parent_uuid
-        ) as course:
-            course.description = command.description
-            course.is_draft = command.is_draft
+        course.description = command.description
+        course.is_draft = command.is_draft
 
-            if command.steps is not None:
-                course.steps = [
-                    CourseStep(
-                        order=s["order"],
-                        component=s["component"],
-                        evaluation_type=s["evaluation_type"],
-                    )
-                    for s in command.steps
-                ]
-            else:
-                course.steps = None
+        if command.steps is not None:
+            course.steps = [
+                CourseStep(
+                    order=s["order"],
+                    component=s["component"],
+                    evaluation_type=s["evaluation_type"],
+                )
+                for s in command.steps
+            ]
+        self.repository.course.update(course)
 
     def _check_that_user_is_author(self, course, user):
         if course.author != user.uuid and not user.is_admin():

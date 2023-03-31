@@ -13,12 +13,12 @@ from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
 from elearning.coursing.entities.external_resource import ExternalResource
 from infra.logging import logger
-from infra.repository import Repository, RepositoryCrud, RepositoryEntityBuilder
+from infra.repository import ModelRepository, RepositoryEntityBuilder
 from shared.enums import UserRoles
 
 
 @logger
-class CourseStepUserCompletionRepository(RepositoryCrud):
+class CourseStepUserCompletionRepository(ModelRepository):
     root_model = CourseStepUserCompletionDbModel
 
 
@@ -91,13 +91,13 @@ class CourseEntityBuilder(RepositoryEntityBuilder):
 
 
 @logger
-class CourseRepositoryCRUD(RepositoryCrud):
+class CourseRepositoryCRUD(ModelRepository):
     root_model = CourseDbModel
     entity_builder = CourseEntityBuilder()
 
 
 @logger
-class CourseRepository(RepositoryCrud):
+class CourseRepository(ModelRepository):
     """
     Abstraction layer to retrieve, persist and update
     the domain entity of course object and related models

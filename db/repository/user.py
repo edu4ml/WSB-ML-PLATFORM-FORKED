@@ -1,7 +1,7 @@
 from db.models import CustomUser as UserDbModel, Role
 from elearning.coursing.entities.user import User
 from infra.logging import logger
-from infra.repository import RepositoryCrud, RepositoryEntityBuilder
+from infra.repository import ModelRepository, RepositoryEntityBuilder
 from shared.enums import UserRoles
 
 
@@ -16,7 +16,7 @@ class UserRepositoryEntityBuilder(RepositoryEntityBuilder):
 
 
 @logger
-class UserRepository(RepositoryCrud):
+class UserRepository(ModelRepository):
     root_model = UserDbModel
     root_entity = User
     entity_builder = UserRepositoryEntityBuilder()

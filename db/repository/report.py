@@ -5,12 +5,12 @@ from elearning.reporting.entities.student import (
     StudentInCourseProgress,
     StudentInCourseStepProgress,
 )
-from infra.repository import RepositoryCrud
+from infra.repository import ModelRepository
 from elearning.reporting.teacher import Teacher
 from elearning.reporting.entities.course import Course
 
 
-class ReportRepository(RepositoryCrud):
+class ReportRepository(ModelRepository):
     def get_for_teacher(self):
         assert (
             self.user and self.user.is_teacher()

@@ -4,7 +4,7 @@ from db.models import (
 from elearning.coursing.entities.course_component import CourseComponent
 from elearning.coursing.entities.external_resource import ExternalResource
 from infra.logging import logger
-from infra.repository import RepositoryCrud, RepositoryEntityBuilder
+from infra.repository import ModelRepository, RepositoryEntityBuilder
 from db.models import ExternalResource as ExternalResourceDbModel
 from django import forms
 
@@ -39,7 +39,7 @@ class CourseComponentEntityBuilder(RepositoryEntityBuilder):
 
 
 @logger
-class CourseComponentRepo(RepositoryCrud):
+class CourseComponentRepo(ModelRepository):
     root_model = CourseComponentDbModel
     entity_builder = CourseComponentEntityBuilder()
 

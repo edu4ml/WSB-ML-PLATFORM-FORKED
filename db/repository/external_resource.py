@@ -2,7 +2,7 @@ from uuid import UUID
 from elearning.coursing.entities.external_resource import ExternalResource
 from infra.exceptions import BadRequestException, NotFoundException
 from infra.logging import logger
-from infra.repository import RepositoryCrud, RepositoryEntityBuilder
+from infra.repository import ModelRepository, RepositoryEntityBuilder
 from db.models import ExternalResource as ExternalResourceDbModel
 
 from django import forms
@@ -26,7 +26,7 @@ class ExternalResourceEntityBuilder(RepositoryEntityBuilder):
 
 
 @logger
-class ExternalResourceRepository(RepositoryCrud):
+class ExternalResourceRepository(ModelRepository):
     root_model = ExternalResourceDbModel
     entity_builder = ExternalResourceEntityBuilder()
 
