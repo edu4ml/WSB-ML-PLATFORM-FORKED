@@ -18,12 +18,7 @@ from shared.enums import UserRoles
 
 
 @logger
-class CourseStepRepository(Repository):
-    root_model = CourseStepDbModel
-
-
-@logger
-class CourseStepUserCompletionRepository(Repository):
+class CourseStepUserCompletionRepository(RepositoryCrud):
     root_model = CourseStepUserCompletionDbModel
 
 
@@ -102,7 +97,7 @@ class CourseRepositoryCRUD(RepositoryCrud):
 
 
 @logger
-class CourseRepository(Repository):
+class CourseRepository(RepositoryCrud):
     """
     Abstraction layer to retrieve, persist and update
     the domain entity of course object and related models
@@ -111,12 +106,10 @@ class CourseRepository(Repository):
     root_model = Course
     crud = CourseRepositoryCRUD()
     entity_builder = CourseEntityBuilder()
-    course_step: CourseStepRepository
     course_step_user_completion: CourseStepUserCompletionRepository
 
     def __init__(self, user=None) -> None:
         super().__init__(user)
-        self.course_step = CourseStepRepository(user=user)
         self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
         self.entity_builder = CourseEntityBuilder(user=user)
 

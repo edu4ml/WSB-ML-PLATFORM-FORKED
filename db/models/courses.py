@@ -43,7 +43,9 @@ class CourseEnrollment(TimestampedModel):
 
 
 class CourseComponent(TimestampedModel):
-    title = models.CharField(max_length=100)
+    title = models.CharField(
+        max_length=100,
+    )
     description = models.TextField()
     resources = models.ManyToManyField(ExternalResource, blank=True)
 

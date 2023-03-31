@@ -20,21 +20,21 @@ class RepositoryCrud:
     def __init__(self, user=None) -> None:
         self.user = user
 
-    def retrieve(self, uuid: UUID):
+    def getByUUID(self, uuid: UUID):
         try:
             obj = self.root_model.objects.get(uuid=uuid)
             return self.entity_builder.from_model(obj)
         except self.root_model.DoesNotExist:
             return None
 
-    def search(self, **kwargs):
+    def searchSingle(self, **kwargs):
         try:
             obj = self.root_model.objects.get(**kwargs)
             return self.entity_builder.from_model(obj)
         except self.root_model.DoesNotExist:
             return None
 
-    def list(self):
+    def listAll(self):
         return [
             self.entity_builder.from_model(obj) for obj in self.root_model.objects.all()
         ]
@@ -43,15 +43,40 @@ class RepositoryCrud:
         obj = self.root_model.objects.create(**kwargs)
         return self.entity_builder.from_model(obj)
 
-    def update(self, obj_uuid, **kwargs):
-        obj = self.root_model.objects.get(uuid=obj_uuid)
+    def updateByUUID(self, uuid: UUID, **kwargs):
+        obj = self.root_model.objects.get(uuid=uuid)
         for key, value in kwargs.items():
             setattr(obj, key, value)
         obj.save()
         return self.entity_builder.from_model(obj)
 
-    def delete(self, uuid: UUID):
+    def deleteByUUID(self, uuid: UUID):
         self.root_model.objects.get(uuid=uuid).delete()
+
+    @contextmanager
+    def with_obj(self, obj_uuid, obj=None):
+        if obj is None:
+            try:
+                obj = self.root_model.objects.get(uuid=obj_uuid)
+            except ObjectDoesNotExist:
+                raise self.root_model.DoesNotExist(
+                    f"{self.root_model.__name__} with ID {obj_uuid} does not exist"
+                )
+        yield obj
+        obj.save()
+
+    # @contextmanager
+    # def with_entity(self, parent_uuid: UUID, commit=True):
+    #     """
+    #     This is meant to retrieve entity model, do operations,
+    #     and perform update automatically in db
+    #     """
+    #     with transaction.atomic():
+    #         self.resource = self.getByUUID(parent_uuid)
+    #         yield self.resource
+
+    #         if commit:
+    #             self.updateByUUID(uuid=parent_uuid, self.resource)
 
 
 class Repository:

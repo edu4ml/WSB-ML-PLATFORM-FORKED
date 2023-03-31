@@ -18,6 +18,6 @@ class CourseEnrollmentEntityBuilder(RepositoryEntityBuilder):
 
 
 @logger
-class CourseEnrollmentRepository(RepositoryCrud):
+class CourseEnrollmentRepo(RepositoryCrud):
     root_model = CourseEnrollmentDbModel
     entity_builder = CourseEnrollmentEntityBuilder()

@@ -42,7 +42,7 @@ class ExternalResourceRepository(RepositoryCrud):
         else:
             raise BadRequestException(form.errors)
 
-    def update(self, uuid, **kwargs):
+    def updateByUUID(self, uuid, **kwargs):
 
         try:
             resource = ExternalResourceDbModel.objects.get(uuid=uuid)
@@ -61,7 +61,7 @@ class ExternalResourceRepository(RepositoryCrud):
         else:
             raise BadRequestException(form.errors)
 
-    def delete(self, uuid: UUID):
+    def deleteByUUID(self, uuid: UUID):
         resource = self.root_model.objects.get(uuid=uuid)
         resource.file.delete()
         resource.delete()
