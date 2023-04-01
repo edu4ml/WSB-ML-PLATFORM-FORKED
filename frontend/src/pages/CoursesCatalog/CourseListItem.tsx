@@ -1,4 +1,4 @@
-import { Card, Col, Progress, Row } from 'antd';
+import { Card, Col, Progress, Row, Space, Typography } from 'antd';
 import React from 'react';
 import { CourseType } from '../../types/course';
 import { UserType } from '../../types/user';
@@ -7,16 +7,20 @@ import CourseEnrollButton from '../../components/common/CourseEnrollButton';
 import { Link } from 'react-router-dom';
 import { getCourseTitle } from '../../helpers/namesFactory';
 
+const { Title } = Typography;
+
 const PublishedEnrolledHeader = ({ course }) => {
     return (
         <Row>
             <Col span={16}>
-                <Link
-                    data-cy="course-catalog-list-item-link-title"
-                    to={`/app/courses/${course.uuid}`}
-                >
-                    {getCourseTitle(course)}
-                </Link>
+                <Title level={4}>
+                    <Link
+                        data-cy="course-catalog-list-item-link-title"
+                        to={`/app/courses/${course.uuid}`}
+                    >
+                        {getCourseTitle(course)}
+                    </Link>
+                </Title>
             </Col>
             <Col span={8}>
                 <Progress
@@ -32,9 +36,11 @@ const PublishedNotEnrolledHeader = ({ course, user }) => {
     return (
         <Row>
             <Col span={20}>
-                <div data-cy="course-catalog-list-item-no-link-title">
-                    {getCourseTitle(course)}
-                </div>
+                <Title level={4}>
+                    <div data-cy="course-catalog-list-item-no-link-title">
+                        {getCourseTitle(course)}
+                    </div>
+                </Title>
             </Col>
             <Col span={4}>
                 <CourseEnrollButton
@@ -51,12 +57,14 @@ const NotPublishedHeader = ({ course, user }) => {
     return (
         <Row>
             <Col span={20}>
-                <Link
-                    data-cy="course-catalog-list-item-draft-title"
-                    to={`/app/courses/${course.uuid}/edit`}
-                >
-                    {getCourseTitle(course)}
-                </Link>
+                <Title level={4}>
+                    <Link
+                        data-cy="course-catalog-list-item-draft-title"
+                        to={`/app/courses/${course.uuid}/edit`}
+                    >
+                        {getCourseTitle(course)}
+                    </Link>
+                </Title>
             </Col>
             <Col span={4}>
                 <CourseDetailsButton key={'details'} course={course} />
@@ -65,7 +73,13 @@ const NotPublishedHeader = ({ course, user }) => {
     );
 };
 
-const Header = ({ course, user }: { course: CourseType; user: UserType }) => {
+const CourseListItemTitle = ({
+    course,
+    user,
+}: {
+    course: CourseType;
+    user: UserType;
+}) => {
     if (course.is_enrolled && !course.is_draft) {
         return <PublishedEnrolledHeader course={course} />;
     } else if (!course.is_enrolled && !course.is_draft) {
@@ -86,11 +100,9 @@ const CourseListItem = ({
         <Card
             data-cy={'course-catalog-list-item'}
             style={{ marginTop: '20px' }}
+            title={<CourseListItemTitle course={course} user={user} />}
         >
-            <Card.Meta
-                title={<Header course={course} user={user} />}
-                description={course.description}
-            />
+            description={course.description}
         </Card>
     );
 };

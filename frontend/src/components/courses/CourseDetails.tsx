@@ -4,7 +4,7 @@ import CourseStepSelfEvaluateButton from './CourseStepSelfEvaluateButton';
 import { CourseType } from '../../types/course';
 import { Enums } from '../../shared';
 import FilesAvatars from './FilesAvatars';
-import CourseComponentTitle from './CourseComponentTitle';
+import CourseComponentTitle from '../../pages/CourseComponents/CourseComponentTitle';
 
 const { Title } = Typography;
 

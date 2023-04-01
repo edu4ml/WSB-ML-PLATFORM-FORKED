@@ -17,7 +17,7 @@ import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
 import CourseComponentEditModal from '../../components/courses/CourseComponentEditModal';
 import CourseComponentEditResources from '../../components/courses/CourseComponentEditResources';
 import FilesAvatars from '../../components/courses/FilesAvatars';
-import CourseComponentTitle from '../../components/courses/CourseComponentTitle';
+import CourseComponentTitle from './CourseComponentTitle';
 
 const CourseComponentListItem = ({ component }) => {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
