@@ -35,6 +35,3 @@ urlpatterns = [
     path("app/", include((frontend_urlpatterns, "frontend_app"))),
     path("", include((frontend_urlpatterns, "frontend_no_prefix"))),
 ]
-# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

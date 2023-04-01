@@ -9,7 +9,7 @@ on:
 jobs:
   tests:
     env:
-      DJANGO_SETTINGS_MODULE: 'server.settings'
+      DJANGO_SETTINGS_MODULE: 'server.test_settings'
       DEBUG: 1
       DATABASE_PASSWORD: password
       DATABASE_NAME: elearning
@@ -24,7 +24,7 @@ jobs:
       postgres: 
         image: postgres:latest
         env:
-          POSTGRES_DB: elearning
+          POSTGRES_DB: test_elearning
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         ports:
