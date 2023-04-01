@@ -1,21 +1,49 @@
 from django.urls import path, include
 
-from api.apis.v1.auth import GoogleLoginApi
-from api.apis.v1.course import (
+from api.apis.v1.auth.auth import GoogleLoginApi
+from api.apis.v1.course.command import CourseCommandApi
+from api.apis.v1.course.course import (
     CourseApi,
-    CourseCommandApi,
     CourseDetailApi,
-    CourseStepApi,
 )
-from api.apis.v1.exercise import ExerciseApi, ExerciseDetailApi 
 from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
+from api.apis.v1.course_components.course_components import (
+    CourseComponentApi,
+    CourseComponentDetailApi,
+    CourseComponentDetailFileUploadApi,
+    CourseComponentDetailFileDetailApi,
+)
 
-from api.apis.v1.reports.tacher import TeacherReport
-
+from api.apis.v1.reports.teacher import TeacherReport
+from api.apis.v1.resources.resource import (
+    ExternalResourceApi,
+    ExternalResourceDetailApi,
+)
 
 urlpatterns_v1 = [
     path("course/", CourseApi.as_view(), name="course"),
-    path("course-components/", CourseStepApi.as_view(), name="course-components"),
+    path("course-components/", CourseComponentApi.as_view(), name="course-components"),
+    path("resource/", ExternalResourceApi.as_view(), name="external-resource"),
+    path(
+        "resource/<uuid:resource_uuid>",
+        ExternalResourceDetailApi.as_view(),
+        name="external-resource-detail",
+    ),
+    path(
+        "course-components/<uuid:component_uuid>",
+        CourseComponentDetailApi.as_view(),
+        name="course-components-detail",
+    ),
+    path(
+        "course-components/<uuid:component_uuid>/file-resources",
+        CourseComponentDetailFileUploadApi.as_view(),
+        name="course-components-detail-file-resources",
+    ),
+    path(
+        "course-components/<uuid:component_uuid>/file-resources/<uuid:resource_uuid>",
+        CourseComponentDetailFileDetailApi.as_view(),
+        name="course-components-detail-file-resources-detail",
+    ),
     path(
         "course/<uuid:course_uuid>",
         CourseDetailApi.as_view(),
@@ -26,17 +54,9 @@ urlpatterns_v1 = [
         CourseCommandApi.as_view(),
         name="course-command",
     ),
-    path("exercise/", ExerciseApi.as_view(), name="exercise"),
-    path(
-        "exercise/<uuid:exercise_uuid>",
-        ExerciseDetailApi.as_view(),
-        name="exercise-detail",
-    ),
     path("report/teacher/", TeacherReport.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
     path("auth/", include((auth_urlpatterns, "auth"))),
 ]
 
-urlpatterns = [
-    path("v1/", include((urlpatterns_v1, "v1")))
-]
+urlpatterns = [path("v1/", include((urlpatterns_v1, "v1")))]

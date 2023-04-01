@@ -1,9 +1,9 @@
-from .resources import ExternalResource
+from .external_resources import ExternalResource
 from .courses import (
     Course,
     CourseEnrollment,
     CourseStep,
-    CourseStepUserCompletion,
+    CourseStepUserProgress,
     CourseComponent,
 )
 from .evaluations import EvaluationAttempt

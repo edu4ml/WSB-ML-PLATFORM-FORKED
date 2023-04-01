@@ -1,3 +1,57 @@
+# Stories 
+
+Creating a new course:
+
+Test creating a new course with valid data.
+Test creating a new course with missing steps and description (invalid data).
+
+Course availability for students:
+
+Test course visibility for students when is_draft=false.
+Test course invisibility for students when is_draft=true.
+
+Editing an existing course:
+
+Test editing a course with valid data.
+Test editing a course with missing steps and description (invalid data).
+Test course content and structure after the edits are saved.
+
+Organizing course components in a logical order:
+
+Test adding components as a course step.
+Test reordering course steps.
+Test students' ability to follow the defined order while progressing through the course.
+
+Setting course prerequisites:
+
+Test setting prerequisites for a course.
+Test student enrollment when prerequisites are met.
+Test student enrollment when prerequisites are not met.
+
+Monitoring individual student progress:
+
+Test accessing progress reports for students.
+Test identifying areas where students may need additional support based on progress reports.
+
+Sending course-related announcements or updates:
+
+Test sending announcements or updates.
+Test students' ability to receive notifications related to the course.
+
+Changing evaluation type for course steps:
+
+Test changing the evaluation type for a course step.
+Test the impact of the evaluation type change on student progress.
+
+Publishing a course:
+
+Test publishing a course with is_draft=false when it has steps and a description (valid data).
+Test publishing a course with is_draft=false when it is missing steps and a description (invalid data).
+Test the course's visibility for students after publishing.
+
+
+
+
 
 # MVP 
 
@@ -25,18 +79,9 @@
 6. **Reporting Domain**
    - Basic course progress reports.
 
-7. **Payment Domain**
-   - Basic payment processing and validation.
-
-8. **Content Domain**
+7. **Content Domain**
    - Ability to create and edit course content.
    - Basic course content organization.
 
-9. **Analytics Domain**
-   - Basic data collection and storage.
-   - Basic data analysis and visualization.
 
-10. **Localization Domain**
-   - Basic language selection and preference management.
-   - Basic translation management and integration.
-
+---

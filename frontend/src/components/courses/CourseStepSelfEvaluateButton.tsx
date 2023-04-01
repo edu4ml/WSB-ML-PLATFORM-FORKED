@@ -2,6 +2,7 @@ import { Button } from 'antd';
 import React from 'react';
 import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
+import { CheckCircleTwoTone } from '@ant-design/icons';
 
 const CourseStepSelfEvaluateButton = ({
     progress_tracking_uuid,
@@ -16,8 +17,8 @@ const CourseStepSelfEvaluateButton = ({
 
     return (
         <Button
+            icon={<CheckCircleTwoTone />}
             block
-            type="primary"
             onClick={() => {
                 issueCommand({ id: course_uuid, command });
             }}

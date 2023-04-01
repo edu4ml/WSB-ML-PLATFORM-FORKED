@@ -34,7 +34,7 @@ const CourseEnrollButton = ({
                             message: 'Zapisano!',
                             duration: 2,
                         });
-                        navigate(`/courses/${course.uuid}`);
+                        navigate(`/app/courses/${course.uuid}`);
                     })
                     .catch((err) => {
                         notification.error({
@@ -44,6 +44,8 @@ const CourseEnrollButton = ({
                     });
             }}
             style={{ width: '100%' }}
+            type={'primary'}
+            data-cy="course-catalog-list-item-enroll-button"
         >
             Dołącz do kursu
         </Button>

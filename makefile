@@ -52,6 +52,7 @@ seed-db:
 	python manage.py loaddata db/seed/resources.json
 	python manage.py loaddata db/seed/course_components.json
 	python manage.py loaddata db/seed/courses.json
+	python manage.py loaddata db/seed/course_steps.json
 
 
 run-for-cypress:

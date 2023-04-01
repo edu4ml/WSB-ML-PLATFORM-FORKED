@@ -1,13 +1,13 @@
 import pytest
 from django.contrib.auth import get_user_model
 
-from infra.repository import Repository
+from infra.repository import ModelRepository
 
 
 UserModel = get_user_model()
 
 
-class DummyUserRepo(Repository):
+class DummyUserRepo(ModelRepository):
     root_model = UserModel
 
 
@@ -26,21 +26,14 @@ def test_repository_retrieve_single_context_manager_success():
 
 @pytest.mark.django_db
 def test_repository_retrieve_single_context_manager_exception():
-    with pytest.raises(UserModel.DoesNotExist) as e:
-        with DummyUserRepo(UserModel()).with_obj(1) as user:
+    with pytest.raises(UserModel.DoesNotExist):
+        with DummyUserRepo(UserModel()).with_obj(1):
             pass  # pragma: no cover
 
 
+@pytest.mark.django_db
 def test_repository_needs_implementation_for_persist_method():
     with pytest.raises(NotImplementedError):
-        Repository(UserModel()).persist(UserModel())
-
-
-def test_repository_needs_implementation_for_list_method():
-    with pytest.raises(NotImplementedError):
-        Repository(UserModel()).list()
-
-
-def test_repository_needs_implementation_for_retrieve_method():
-    with pytest.raises(NotImplementedError):
-        Repository(UserModel()).retrieve(1)
+        DummyUserRepo(UserModel()).create(
+            **dict(email="example@example.com", username="example")
+        )

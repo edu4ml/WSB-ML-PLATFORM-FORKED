@@ -22,6 +22,36 @@ export const TEXT_NEW_COURSE = 'Nowy kurs';
 export const TEXT_COURSES_ALL = 'Wszystkie kursy';
 export const TEXT_NEW_COURSE_TITLE = 'Tytuł nowego kursu';
 export const TEXT_COURSE_TITLE = 'Tytuł kursu';
-export const TEXT_NEW_COURSE_TITLE_WARNING = 'Podaj tytuł nowego kursu!';
+export const TEXT_FORM_NO_TITLE_WARNING = 'Podaj tytuł nowego kursu!';
 export const TEXT_CREATE_COURSE = 'Utwórz kurs';
 export const TEXT_403_DESCRIPTION = 'Ups, nie powinno Cię tu być!.';
+export const TEXT_TESTS = 'Testy';
+export const TEXT_TASKS = 'Zadania';
+export const TEXT_NAME = 'Nazwa';
+export const TEXT_TYPE = 'Typ';
+export const TEXT_NEW_COURSE_COMPONENT_MODAL_TITLE = 'Nowy komponent';
+export const TEXT_CREATE_COURSE_COMPONENT = 'Utwórz komponent';
+export const TEXT_FORM_NO_DESCRIPTION_WARNING = 'Dodaj opis do formularza!';
+export const TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER =
+    'Wybierz typ komponentu';
+export const TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE = 'Edytuj';
+export const TEXT_COURSE_COMPONENTS_PAGE_TITLE =
+    'Komponenty z których składa się kurs';
+export const TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION = 'Zadanie z plikiem';
+export const TEXT_COURSE_COMPONENT_TYPE_EXERCISE = 'Ćwiczenie';
+export const TEXT_COURSE_COMPONENT_TYPE_UNKNOWN = 'Inne';
+export const TEXT_COURSE_COMPONENT_CREATED = 'Komponent utworzony!';
+export const TEXT_COURSE_COMPONENT_UPDATED = 'Komponent zaktualizowany!';
+export const TEXT_COURSE_COMPONENT_DELETED = 'Komponent usunięty!';
+export const TEXT_COURSE_PAGE_TITLE = 'Twoje kursy';
+export const TEXT_EXTERNAL_RESOURCE_CREATE_NEW = 'Utwórz nowy';
+export const TEXT_EXTERNAL_RESOURCE_TITLE = 'Tytuł';
+export const TEXT_EXTERNAL_RESOURCE_NO_TITLE_WARNING = 'Podaj tytuł!';
+export const TEXT_EXTERNAL_RESOURCE_URL = 'URL';
+export const TEXT_EXTERNAL_RESOURCE_NO_URL_WARNING = 'Podaj URL!';
+export const TEXT_REMOVE = 'Usuń';
+export const TEXT_COURSE_COMPONENT_EDIT_RESOURCES = 'Załączniki';
+export const TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING =
+    'Kurs nie zawiera żadnych kroków lub opisu! Dodaj, aby opublikować.';
+export const TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING =
+    'Kurs nie zawiera żadnych kroków ani opisu! Dodaj krok lub opis, aby zapisać.';

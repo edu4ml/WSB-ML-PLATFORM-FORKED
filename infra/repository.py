@@ -1,30 +1,59 @@
 from contextlib import contextmanager
+from typing import Generic, TypeVar
 from uuid import UUID
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
 
 
-class Repository:
-    root_model = None
+RootModel = TypeVar("RootModel")
+
+
+class ModelRepository(Generic[RootModel]):
+    root_model: RootModel = None
 
     def __init__(self, user=None) -> None:
         self.user = user
 
-    def persist(self, model):
-        raise NotImplementedError
+    def from_model(self, obj):
+        raise NotImplementedError("Implement this method in child class")
 
-    def list(self):
-        raise NotImplementedError
+    def update_with_entity(self, entity: RootModel):
+        """
+        This is specific for root model method so it should implement
+        logic for root model only
+        """
+        raise NotImplementedError("Implement this method in child class")
 
-    def retrieve(self, uuid: UUID):
-        raise NotImplementedError
+    def get_by_uuid(self, uuid: UUID):
+        try:
+            obj = self.root_model.objects.get(uuid=uuid)
+            return self.from_model(obj)
+        except self.root_model.DoesNotExist:
+            return None
 
-    def update(self, entity):
-        raise NotImplementedError
+    def search_single(self, **kwargs):
+        try:
+            obj = self.root_model.objects.get(**kwargs)
+            return self.from_model(obj)
+        except self.root_model.DoesNotExist:
+            return None
 
-    def delete(self, entity):
-        raise NotImplemented
+    def list_all(self):
+        return [self.from_model(obj) for obj in self.root_model.objects.all()]
+
+    def create(self, **kwargs):
+        obj = self.root_model.objects.create(**kwargs)
+        return self.from_model(obj)
+
+    def update_by_uuid(self, uuid: UUID, **kwargs):
+        obj = self.root_model.objects.get(uuid=uuid)
+        for key, value in kwargs.items():
+            setattr(obj, key, value)
+        obj.save()
+        return self.from_model(obj)
+
+    def delete_by_uuid(self, uuid: UUID):
+        self.root_model.objects.get(uuid=uuid).delete()
 
     @contextmanager
     def with_obj(self, obj_uuid, obj=None):
@@ -37,14 +66,3 @@ class Repository:
                 )
         yield obj
         obj.save()
-
-    @contextmanager
-    def with_entity(self, parent_uuid: UUID):
-        """
-        This is ment to retrieve entity model, do operations,
-        and perform update automatically in db
-        """
-        with transaction.atomic():
-            self.resource = self.retrieve(parent_uuid)
-            yield self.resource
-            self.update(self.resource)

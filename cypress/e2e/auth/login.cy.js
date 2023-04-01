@@ -20,6 +20,6 @@ describe('Login and Logout', () => {
         cy.contains('Wyloguj').click();
 
         // verify user is redirected to the login page
-        cy.url().should('include', '/');
+        cy.url().should('include', '/app');
     });
 });

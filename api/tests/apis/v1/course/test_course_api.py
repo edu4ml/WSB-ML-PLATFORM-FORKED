@@ -4,7 +4,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import CommandTypes
+from shared.enums import ApiErrors, CommandTypes, CourseComponentType
 
 
 @pytest.mark.django_db
@@ -95,50 +95,21 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
 
 
 @pytest.mark.django_db
-def test_issue_create_course_command(admin_client):
-    command_data = dict(
-        type=CommandTypes.CREATE_COURSE,
-        title="TEST-COURSE-TITLE",
-        description="TEST-COURSE-DESCRIPTION",
-    )
-
-    response = admin_client.put(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_201_CREATED
-
-    data = response.json()
-
-    assert data["title"] == "TEST-COURSE-TITLE"
-    assert data["description"] == "TEST-COURSE-DESCRIPTION"
-    assert data["is_draft"] is True
-
-
-@pytest.mark.django_db
 def test_raise_exception_when_course_command_unknown(admin_client, courses):
     course = courses[0]
     command_data = dict(type="DUMMY-UNKNOWN-COMMAND", foo="bar")
-
-    response = admin_client.put(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_501_NOT_IMPLEMENTED
-    assert response.json() == dict(
-        message="NotImplemented", error=True, success=False, payload=command_data
-    )
 
     response = admin_client.put(
         reverse("api:v1:course-command", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
-    assert response.status_code == status.HTTP_501_NOT_IMPLEMENTED
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json() == dict(
-        message="NotImplemented", error=True, success=False, payload=command_data
+        message=ApiErrors.COMMAND_TYPE_NOT_SUPPORTED,
+        error=True,
+        success=False,
+        payload=command_data,
     )
 
 
@@ -147,3 +118,115 @@ def test_list_course_components(admin_client, course_components):
     response = admin_client.get(reverse("api:v1:course-components"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == len(course_components)
+
+
+@pytest.mark.django_db
+def test_create_course_component_with_valid_data(admin_client):
+    course_component_data = dict(
+        title="New course component",
+        description="A new course component for testing",
+        type=CourseComponentType.EXERCISE,
+    )
+
+    response = admin_client.post(
+        reverse("api:v1:course-components"),
+        course_component_data,
+        content_type="application/json",
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json()["title"] == course_component_data["title"]
+    assert response.json()["description"] == course_component_data["description"]
+    assert response.json()["type"] == course_component_data["type"]
+
+
+@pytest.mark.django_db
+def test_create_course_component_with_missing_data(admin_client):
+
+    course_component_data = dict(
+        description="A new course component for testing",
+        type=CourseComponentType.EXERCISE,
+    )
+
+    response = admin_client.post(
+        reverse("api:v1:course-components"),
+        course_component_data,
+        content_type="application/json",
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_get_course_component(admin_client, course_components):
+    component = course_components[0]
+    response = admin_client.get(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        )
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["uuid"] == str(component.uuid)
+
+
+@pytest.mark.django_db
+def test_get_course_component_not_found(admin_client):
+    response = admin_client.get(
+        reverse("api:v1:course-components-detail", kwargs={"component_uuid": uuid4()})
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# Test PUT method
+@pytest.mark.django_db
+def test_update_course_component(admin_client, course_components):
+    component = course_components[0]
+    updated_data = {
+        "title": "Updated Course Component",
+        "description": "Updated course component for testing",
+        "type": "UNKNOWN",
+    }
+    response = admin_client.put(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        ),
+        updated_data,
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["title"] == updated_data["title"]
+    assert response.json()["description"] == updated_data["description"]
+    assert response.json()["type"] == updated_data["type"]
+
+
+@pytest.mark.django_db
+def test_update_course_component_missing_data(admin_client, course_components):
+    component = course_components[0]
+    updated_data = {
+        "title": "Updated Course Component",
+        "description": "Updated course component for testing",
+    }
+    response = admin_client.put(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        ),
+        updated_data,
+        content_type="application/json",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["title"] == updated_data["title"]
+    assert response.json()["description"] == updated_data["description"]
+    assert response.json()["type"] == component.type
+
+
+# Test DELETE method
+@pytest.mark.django_db
+def test_delete_course_component(admin_client, course_components):
+    component = course_components[0]
+    response = admin_client.delete(
+        reverse(
+            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
+        )
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT

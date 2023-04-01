@@ -6,7 +6,7 @@ from .models import (
     Course,
     CourseEnrollment,
     CourseStep,
-    CourseStepUserCompletion,
+    CourseStepUserProgress,
     CourseComponent,
     CustomUser,
     EvaluationAttempt,
@@ -75,7 +75,7 @@ class CourseStepUserCompletionAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(CourseStepUserCompletion, CourseStepUserCompletionAdmin)
+admin.site.register(CourseStepUserProgress, CourseStepUserCompletionAdmin)
 
 
 class EvaluationAttemptAdmin(admin.ModelAdmin):

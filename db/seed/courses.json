@@ -9,7 +9,7 @@
             "title": "Machine Learning Fundamentals",
             "is_draft": false,
             "description": "Learn the fundamentals of machine learning, including supervised and unsupervised learning, and build a strong foundation for advanced topics.",
-            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96"
         }
     },
     {
@@ -22,7 +22,7 @@
             "title": "Deep Learning Concepts",
             "is_draft": false,
             "description": "Gain a deeper understanding of neural networks, convolutional neural networks, and recurrent neural networks in this deep learning course.",
-            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96"
         }
     },
     {
@@ -35,7 +35,7 @@
             "is_draft": true,
             "title": "Data Science Essentials",
             "description": "Learn the essentials of data science, including data analysis, visualization, and machine learning algorithms.",
-            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96"
         }
     },
     {
@@ -48,7 +48,7 @@
             "is_draft": true,
             "title": "Advanced Machine Learning",
             "description": "Explore advanced machine learning topics, such as deep learning architectures, natural language processing, and reinforcement learning.",
-            "author": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96"
         }
     }
 ]

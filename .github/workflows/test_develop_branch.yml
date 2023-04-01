@@ -1,0 +1,90 @@
+name: Platform CI/CD
+
+on:
+  push:
+    branches:
+      - develop
+
+
+jobs:
+  tests:
+    env:
+      DJANGO_SETTINGS_MODULE: 'server.test_settings'
+      DEBUG: 1
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: elearning
+      DATABASE_HOST: 0.0.0.0
+      DATABASE_USER: postgres
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: ['unit-test', 'e2e-test']
+    services:
+      postgres: 
+        image: postgres:latest
+        env:
+          POSTGRES_DB: test_elearning
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Cache Python Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python Dependencies
+        run: |
+          make sync-all-deps
+
+      - name: Run Migrations (locally - workflow)
+        run: |
+          python manage.py migrate
+
+      - name: Run Unit Tests
+        if: matrix.type == 'unit-test'
+        run: pytest .
+
+      - name: Set Up Node.js
+        if: matrix.type == 'e2e-test'
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Cache Node.js dependencies
+        if: matrix.type == 'e2e-test'
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Node.js dependencies
+        if: matrix.type == 'e2e-test'
+        run: npm install
+
+      - name: Cypress Tests Run
+        if: matrix.type == 'e2e-test'
+        uses: cypress-io/github-action@v5.5.1
+        with:
+          browser: chrome
+          build: npm run build
+          start: make run-for-cypress
+          wait-on: http://0.0.0.0:8000
+          wait-on-timeout: 10

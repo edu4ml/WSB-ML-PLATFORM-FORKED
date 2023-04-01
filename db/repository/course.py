@@ -1,86 +1,31 @@
-from typing import List
-from uuid import UUID
-
-
 from db.models import (
     Course as CourseDbModel,
-    CourseEnrollment as CourseEnrollmentDbModel,
     CourseStep as CourseStepDbModel,
-    CourseStepUserCompletion as CourseStepUserCompletionDbModel,
-    CourseComponent as CourseComponentDbModel,
-    CustomUser as User,
+    CourseStepUserProgress as CourseStepUserProgressDbModel,
 )
-from elearning.coursing.course import Course
+from elearning.coursing.course import Course as CourseDomainModel
 from elearning.coursing.entities import CourseComponentCompletion, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
+from elearning.coursing.entities.external_resource import ExternalResource
 from infra.logging import logger
-from infra.repository import Repository
-from shared.enums import UserRoles
+from infra.repository import ModelRepository
 
 
 @logger
-class CourseStepRepository(Repository):
-    root_model = CourseStepDbModel
-
-
-@logger
-class CourseStepUserCompletionRepository(Repository):
-    root_model = CourseStepUserCompletionDbModel
-
-
-@logger
-class CourseComponentRepository(Repository):
-    root_model = CourseComponentDbModel
-
-    def list(self):
-        return [
-            CourseComponent(
-                uuid=component.uuid,
-                title=component.title,
-                description=component.description,
-                type=component.type,
-                resources=self._get_resources(component),
-            )
-            for component in self.root_model.objects.all()
-        ]
-
-    def _get_resources(self, component):
-        return [
-            dict(
-                title=resource.title,
-                url=resource.url,
-            )
-            for resource in component.resources.all()
-        ]
-
-
-@logger
-class CourseRepository(Repository):
+class CourseRepository(ModelRepository[CourseDbModel]):
     """
     Abstraction layer to retrieve, persist and update
     the domain entity of course object and related models
     """
 
-    root_model = Course
-    course_step: CourseStepRepository
-    course_step_user_completion: CourseStepUserCompletionRepository
-    course_component: CourseComponentRepository
+    root_model = CourseDbModel
+    root_entity = CourseDomainModel
 
     def __init__(self, user=None) -> None:
         super().__init__(user)
-        self.course_step = CourseStepRepository(user=user)
-        self.course_step_user_completion = CourseStepUserCompletionRepository(user=user)
-        self.course_component = CourseComponentRepository(user=user)
 
-    def persist(self, aggregate: Course):
-        obj = CourseDbModel.objects.create(
-            title=aggregate.title,
-            description=aggregate.description,
-            is_draft=aggregate.is_draft,
-        )
-        return self._prepare_domain_entity(obj)
-
-    def update(self, entity: Course):
+    def update_with_entity(self, entity: CourseDomainModel):
+        # fix me. Not sure why but I dont like it
         course = CourseDbModel.objects.get(uuid=entity.uuid)
 
         if entity.description is not None:
@@ -93,69 +38,48 @@ class CourseRepository(Repository):
             course.is_draft = entity.is_draft
 
         if entity.steps is not None:
-            self._update_course_steps(course, entity.steps)
+            course.steps.all().delete()
+
+            for new_step in entity.steps:
+                CourseStepDbModel.objects.create(
+                    course=course,
+                    order=new_step.order,
+                    component_id=new_step.component,
+                    evaluation_type=new_step.evaluation_type,
+                )
 
         course.save()
 
-    def list(self) -> List[Course]:
-        user_roles = self.user.roles.values_list("name", flat=True)
+    # def list_all(self) -> List[CourseDomainModel]:
+    #     user_roles = self.user.roles.values_list("name", flat=True)
 
-        if UserRoles.ADMIN in user_roles or UserRoles.TEACHER in user_roles:
-            course_models = CourseDbModel.objects.all()
-        else:
-            course_models = CourseDbModel.objects.filter(is_draft=False)
-        return [self._prepare_domain_entity(c) for c in course_models]
+    #     # For admins, retrieve all courses
+    #     if UserRoles.ADMIN in user_roles:
+    #         course_models = CourseDbModel.objects.all()
 
-    def retrieve(self, uuid: UUID):
-        try:
-            return self._prepare_domain_entity(CourseDbModel.objects.get(uuid=uuid))
-        except CourseDbModel.DoesNotExist as e:
-            self.logger.error(e)
-        return None
+    #     # For teachers, retrieve all published courses and all courses they authored
+    #     elif UserRoles.TEACHER in user_roles:
+    #         authored_courses = CourseDbModel.objects.filter(author=self.user)
+    #         published_courses = CourseDbModel.objects.filter(is_draft=False)
+    #         course_models = authored_courses | published_courses
 
-    def create_enrollment(self, course_uuid, user_uuid):
-        CourseEnrollmentDbModel.objects.create(
-            course=CourseDbModel.objects.get(uuid=course_uuid),
-            user=User.objects.get(uuid=user_uuid),
-        )
+    #     # For students, retrieve only published courses
+    #     else:
+    #         course_models = CourseDbModel.objects.filter(is_draft=False)
+    #     return [self.from_model(c) for c in course_models]
 
-    def complete_step_for_user(self, course_step_user_completion_uuid):
-        with self.course_step_user_completion.with_obj(
-            course_step_user_completion_uuid
-        ) as obj:
-            obj.is_completed = True
-
-    # -----------------------------------------------------
-
-    def _update_course_steps(self, course: Course, new_steps: List[CourseStep]):
-        course.steps.all().delete()
-
-        for new_step in new_steps:
-            CourseStepDbModel.objects.create(
-                course=course,
-                order=new_step.order,
-                component_id=new_step.component,
-                evaluation_type=new_step.evaluation_type,
-            )
-
-    def _prepare_domain_entity(self, course: Course) -> Course:
-        return Course(
+    def from_model(self, course):
+        return self.root_entity(
             uuid=course.uuid,
             created_at=course.created_at,
             updated_at=course.updated_at,
             title=course.title,
+            author=course.author.uuid,
             description=course.description,
             is_draft=course.is_draft,
-            is_enrolled=self._is_enrolled(course),
+            is_enrolled=course.enrollments.filter(user=self.user).exists(),
             steps=self._get_course_steps(course),
         )
-
-    def _is_enrolled(self, course):
-        if not self.user:
-            return False
-        return CourseEnrollmentDbModel.objects.filter(
-            user=self.user, course=course
-        ).exists()
 
     def _get_course_steps(self, course):
         return [
@@ -170,15 +94,22 @@ class CourseRepository(Repository):
                     title=step.component.title,
                     description=step.component.description,
                     type=step.component.type,
+                    created_at=step.component.created_at,
                     resources=self._get_resources(step.component),
                 ),
             )
-            for step in CourseStepDbModel.objects.filter(course=course)
+            for step in course.steps.all()
         ]
 
     def _get_resources(self, component):
         return [
-            dict(title=resource.title, url=resource.url)
+            ExternalResource(
+                uuid=resource.uuid,
+                title=resource.title,
+                url=resource.url,
+                file_link=resource.file.url if resource.file else "",
+                type=resource.type,
+            )
             for resource in component.resources.all()
         ]
 
@@ -191,7 +122,7 @@ class CourseRepository(Repository):
                 is_completed=None,
             )
 
-        step_completion, _ = CourseStepUserCompletionDbModel.objects.get_or_create(
+        step_completion, _ = CourseStepUserProgressDbModel.objects.get_or_create(
             user=self.user,
             course=course,
             component=component,

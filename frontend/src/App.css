@@ -1,5 +1,7 @@
 body {
     background-color: #f4f7fc;
+    padding: 0;
+    margin: 0;
 }
 section {
     background-color: #fff;

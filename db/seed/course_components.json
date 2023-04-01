@@ -11,7 +11,8 @@
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"
-            ]
+            ],
+            "type": "EXERCISE"
         }
     },
     {
@@ -26,7 +27,7 @@
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000"
             ],
-            "type": "UNKNOWN"
+            "type": "EXERCISE"
         }
     },
     {
@@ -42,7 +43,7 @@
                 "550e8400-e29b-41d4-a716-446655440001",
                 "550e8400-e29b-41d4-a716-446655440006"
             ],
-            "type": "UNKNOWN"
+            "type": "EXERCISE"
         }
     },
     {
@@ -54,7 +55,7 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Reinforcement Learning Exercise",
             "description": "Implement and experiment with reinforcement learning algorithms, such as Q-learning and Deep Q-Networks, in various environments.",
-            "type": "UNKNOWN",
+            "type": "EXERCISE",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440005"
@@ -70,7 +71,7 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Natural Language Processing Exercise",
             "description": "Practice implementing various natural language processing techniques, such as sentiment analysis, named entity recognition, and text classification.",
-            "type": "UNKNOWN",
+            "type": "EXERCISE",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440006"
@@ -86,7 +87,7 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Generative Adversarial Networks Exercise",
             "description": "Implement generative adversarial networks (GANs) and experiment with generating realistic images, text, or other data types.",
-            "type": "UNKNOWN",
+            "type": "EXERCISE",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440001"
             ]
@@ -101,7 +102,7 @@
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Transfer Learning Exercise",
             "description": "Learn about transfer learning and fine-tune pre-trained models to perform tasks, such as image classification and object detection.",
-            "type": "UNKNOWN",
+            "type": "EXERCISE",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"
@@ -117,7 +118,7 @@
             "updated_at": "2023-03-19T00:00:00Z",
             "title": "Test Submission",
             "description": "A file submission for a machine learning test.",
-            "type": "UNKNOWN",
+            "type": "EVALUATION",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"
@@ -133,7 +134,7 @@
             "updated_at": "2023-03-19T00:00:00Z",
             "title": "Project Submission",
             "description": "A file submission for a machine learning project.",
-            "type": "UNKNOWN",
+            "type": "EVALUATION",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"
@@ -149,7 +150,7 @@
             "updated_at": "2023-03-19T00:00:00Z",
             "title": "Research Paper Submission",
             "description": "A file submission for a research paper on a machine learning topic.",
-            "type": "UNKNOWN",
+            "type": "EVALUATION",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"
@@ -165,7 +166,39 @@
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",
             "description": "A file submission for a code review on a machine learning project.",
-            "type": "UNKNOWN",
+            "type": "EVALUATION",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 5,
+        "fields": {
+            "uuid": "3e8a3d2a-7a9c-45a6-8c3d-2d7f454201e1",
+            "title": "CypressCourseComponentEvaluation001",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "description": "A file submission for a code review on a machine learning project.",
+            "type": "EVALUATION",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 5,
+        "fields": {
+            "uuid": "45fa7dd1-c1a9-4a26-95f7-7a2c45b101e2",
+            "title": "CypressCourseComponentExercise002",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "description": "Practice implementing linear regression from scratch and using popular machine learning libraries.",
+            "type": "EXERCISE",
             "resources": [
                 "550e8400-e29b-41d4-a716-446655440000",
                 "550e8400-e29b-41d4-a716-446655440001"

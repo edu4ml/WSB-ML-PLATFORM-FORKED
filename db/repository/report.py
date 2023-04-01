@@ -1,16 +1,16 @@
-from db.models.courses import CourseStepUserCompletion
+from db.models.courses import CourseStepUserProgress
 from elearning.reporting.entities.student import (
     StudentInCourseStepEvaluationAttempt,
     StudentWithProgress,
     StudentInCourseProgress,
     StudentInCourseStepProgress,
 )
-from infra.repository import Repository
+from infra.repository import ModelRepository
 from elearning.reporting.teacher import Teacher
 from elearning.reporting.entities.course import Course
 
 
-class ReportRepository(Repository):
+class ReportRepository(ModelRepository):
     def get_for_teacher(self):
         assert (
             self.user and self.user.is_teacher()
@@ -31,7 +31,7 @@ class ReportRepository(Repository):
                                 ),
                             ),
                         )
-                        for enrolment in course.enrolled_students.all()
+                        for enrolment in course.enrollments.all()
                     ],
                 )
                 for course in self.user.created_courses.all()
@@ -43,7 +43,7 @@ class ReportRepository(Repository):
 
         for step in course.steps.all():
             try:
-                step_completion = CourseStepUserCompletion.objects.get(
+                step_completion = CourseStepUserProgress.objects.get(
                     course=course, user=student, object_uuid=step.object.uuid
                 )
 

@@ -3,10 +3,12 @@ from django.core.exceptions import PermissionDenied
 from infra.command import Command
 from infra.command_handler import CommandHandler
 from infra.logging import logger
+from shared.enums import ApiErrors
 
 from .exceptions import (
     CommandAlreadyExistException,
     CommandHandlerDoesNotExistException,
+    CommandNotSupported,
 )
 
 
@@ -37,9 +39,7 @@ class CommandBus:
         if cmd.__class__ in self.services.keys():
             return self.services[cmd.__class__].handle(cmd)
         else:
-            raise CommandHandlerDoesNotExistException(
-                f"Command handler for {cmd.__class__} does not exists or it is not registered"
-            )
+            raise CommandHandlerDoesNotExistException(ApiErrors.HANDLER_DOES_NOT_EXITS)
 
     def _is_allowed_to_create_command(self, request, command: Command):
         return request.user.roles.filter(name__in=command.Meta.roles).exists()
@@ -49,7 +49,7 @@ class CommandBus:
         for command in self.services.keys():
             if command.Meta.name == cmd_type:
                 return command.build_from_request(request, **kwargs)
-        raise NotImplementedError(f"I dont know this command: {request.data}.")
+        raise CommandNotSupported(ApiErrors.COMMAND_TYPE_NOT_SUPPORTED)
 
     def __str__(self):
         repr = "Command Bus\n"

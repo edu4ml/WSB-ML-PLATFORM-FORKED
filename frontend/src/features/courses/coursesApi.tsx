@@ -31,6 +31,43 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
+        createCourseComponents: builder.mutation({
+            query: (payload) => ({
+                url: '/course-components/',
+                method: 'POST',
+                body: payload,
+            }),
+            invalidatesTags: ['course-component-list'],
+        }),
+        addFileToCourseComponent: builder.mutation({
+            query: ({ id, payload }) => ({
+                url: `/course-components/${id}/file`,
+                method: 'PUT',
+                body: payload,
+            }),
+        }),
+        updateCourseComponent: builder.mutation({
+            query: ({ id, payload }) => ({
+                url: `/course-components/${id}`,
+                method: 'PUT',
+                body: payload,
+            }),
+            invalidatesTags: ['course-component-list'],
+        }),
+        deleteCourseComponent: builder.mutation({
+            query: (id) => ({
+                url: `/course-components/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['course-component-list'],
+        }),
+        deleteCourseComponentFileResource: builder.mutation({
+            query: ({ id, resourceId }) => ({
+                url: `/course-components/${id}/file-resources/${resourceId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['course-component-list'],
+        }),
         issueCourseCommand: builder.mutation({
             query: ({ id, command }) => ({
                 url: `/course/${id}/command`,
@@ -43,10 +80,15 @@ export const courseApi = createApi({
 });
 
 export const {
+    useDeleteCourseComponentFileResourceMutation,
+    useAddFileToCourseComponentMutation,
     useGetCourseCatalogQuery,
     useGetCourseQuery,
     useGetCourseComponentsQuery,
     useCreateCourseMutation,
     useIssueCourseCommandMutation,
+    useCreateCourseComponentsMutation,
+    useUpdateCourseComponentMutation,
+    useDeleteCourseComponentMutation,
 } = courseApi;
 export default courseApi;

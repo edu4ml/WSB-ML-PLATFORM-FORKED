@@ -1,11 +1,15 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from uuid import UUID
+
+from elearning.coursing.entities.external_resource import ExternalResource
 
 
 @dataclass
 class CourseComponent:
-    uuid: UUID
+    uuid: UUID | None
+    created_at: datetime | None
     title: str
     description: str
     type: str
-    resources: list[dict] = field(default_factory=lambda: list())
+    resources: list[ExternalResource] = field(default_factory=lambda: list())

@@ -6,6 +6,7 @@ from django.urls import reverse
 from model_bakery import baker
 
 from db.models import Course, CourseStep, Role, CourseComponent
+from db.models.external_resources import ExternalResource
 from elearning.auth.user import User
 from shared.enums import UserRoles
 
@@ -82,13 +83,40 @@ def teacher_client(teacher, client):
 
 
 @pytest.fixture
-def courses():
-    return baker.make(Course, 4, is_draft=False)
+def courses(teacher):
+    return baker.make(Course, 4, is_draft=False, author=teacher)
 
 
 @pytest.fixture
-def course():
-    return baker.make(Course)
+def admin_published_course(admin):
+    return baker.make(Course, is_draft=False, author=admin)
+
+
+@pytest.fixture
+def admin_draft_course(admin):
+    return baker.make(Course, is_draft=True, author=admin)
+
+
+@pytest.fixture
+def teacher_published_course(teacher):
+    return baker.make(Course, is_draft=False, author=teacher)
+
+
+@pytest.fixture
+def teacher_draft_course(teacher):
+    return baker.make(Course, is_draft=True, author=teacher)
+
+
+@pytest.fixture
+def other_teacher_draft_course():
+    teacher = User.objects.create_user(
+        uuid=uuid4(),
+        username="otherTeacher",
+        email="otherteacher@example.com",
+        password="adminadmin",
+    )
+    teacher.roles.add(Role.objects.get_or_create(name=UserRoles.TEACHER)[0])
+    return baker.make(Course, is_draft=True, author_id=teacher.uuid)
 
 
 @pytest.fixture
@@ -102,8 +130,8 @@ def course_component():
 
 
 @pytest.fixture
-def course_with_steps(course_components):
-    course = baker.make(Course)
+def course_with_steps(course_components, teacher):
+    course = baker.make(Course, author=teacher)
     steps = []
     order = 1
     for component in course_components:
@@ -118,3 +146,8 @@ def course_with_steps(course_components):
         )
         order += 1
     return course, steps
+
+
+@pytest.fixture
+def external_resources():
+    return baker.make(ExternalResource, 4)
