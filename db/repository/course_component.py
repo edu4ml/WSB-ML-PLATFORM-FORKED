@@ -5,6 +5,7 @@ from elearning.coursing.entities.course_component import (
     CourseComponent as CourseComponentDomainModel,
 )
 from elearning.coursing.entities.external_resource import ExternalResource
+from infra.exceptions import BadRequestException
 from infra.logging import logger
 from infra.repository import ModelRepository
 from db.models import ExternalResource as ExternalResourceDbModel
@@ -43,3 +44,19 @@ class CourseComponentRepo(ModelRepository):
                 for resource in obj.resources.all()
             ],
         )
+
+    def add_resource(self, component_uuid, payload):
+        file_data = payload.get("file_data")
+        form_data = dict(title=payload["file_data"]["file"].name.replace(" ", "_"))
+
+        form = ExternalResourceForm(form_data, file_data)
+
+        if form.is_valid():
+            resource = form.save()
+            course_component = self.root_model.objects.get(uuid=component_uuid)
+            course_component.resources.add(resource)
+
+            return self.from_model(course_component)
+
+        else:
+            raise BadRequestException(form.errors)
