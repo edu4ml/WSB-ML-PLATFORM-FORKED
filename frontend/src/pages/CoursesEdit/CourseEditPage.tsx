@@ -147,8 +147,8 @@ const CourseEditPage = () => {
     };
 
     const actions = [
-        <PublishButton onClick={publish} />,
-        <SaveButton onClick={save} />,
+        <PublishButton key="publish" onClick={publish} />,
+        <SaveButton key="save" onClick={save} />,
     ];
 
     return (

@@ -1,5 +1,5 @@
-import { Button, Dropdown, Space } from 'antd';
 import React, { useState } from 'react';
+import { Button, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
@@ -12,12 +12,14 @@ import {
 } from '../../helpers/namesFactory';
 
 const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
+    const [count, setCount] = useState(steps.length);
+
     const { data: availableSteps } = useGetCourseComponentsQuery(
         'course-components-catalog'
     );
 
     const handleAdd = (clickEvent) => {
-        const [count, setCount] = useState(steps.length);
+        console.log(clickEvent);
 
         const chosenElement: CourseComponentType = availableSteps.find(
             (availableSteps) => availableSteps.uuid == clickEvent.key

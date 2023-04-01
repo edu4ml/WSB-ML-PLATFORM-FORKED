@@ -1,12 +1,7 @@
 
 Cypress.Commands.add('add_step_to_course', (stepTitle) => {
     cy.get('[data-cy="course-details-add-steps-dropdown"]').click();
-
-    // Wait for the dropdown menu to be visible
     cy.get('.ant-dropdown-menu').should('be.visible');
-
-    // Click on the specific dropdown item based on its label or key
-    // Replace 'Item 1' with the label you're looking for or use the data-key attribute
     cy.get('.ant-dropdown-menu-item').contains(stepTitle).click();
 });
 

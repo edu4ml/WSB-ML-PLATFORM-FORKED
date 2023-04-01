@@ -172,5 +172,37 @@
                 "550e8400-e29b-41d4-a716-446655440001"
             ]
         }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 5,
+        "fields": {
+            "uuid": "3e8a3d2a-7a9c-45a6-8c3d-2d7f454201e1",
+            "title": "CypressCourseComponentEvaluation001",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "description": "A file submission for a code review on a machine learning project.",
+            "type": "EVALUATION",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
+    },
+    {
+        "model": "db.coursecomponent",
+        "pk": 5,
+        "fields": {
+            "uuid": "45fa7dd1-c1a9-4a26-95f7-7a2c45b101e2",
+            "title": "CypressCourseComponentExercise002",
+            "created_at": "2023-03-19T00:00:00Z",
+            "updated_at": "2023-03-19T00:00:00Z",
+            "description": "Practice implementing linear regression from scratch and using popular machine learning libraries.",
+            "type": "EXERCISE",
+            "resources": [
+                "550e8400-e29b-41d4-a716-446655440000",
+                "550e8400-e29b-41d4-a716-446655440001"
+            ]
+        }
     }
 ]

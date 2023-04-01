@@ -71,12 +71,46 @@ describe('Courses catalog page', () => {
         cy.contains(courseTitle).should('be.visible');
         cy.contains(courseDescription).should('be.visible');
 
-        cy.add_step_to_course('Test Step 1');
+        cy.add_step_to_course('CypressCourseComponentExercise002');
+        cy.add_step_to_course('CypressCourseComponentEvaluation001');
 
         cy.hit_publish_course();
 
         cy.go_to_course_catalog()
         cy.assert_is_course_visible_and_can_enroll(courseTitle, courseDescription)
     });
+
+    it('should verify that teacher cannot save course without steps or description', () => {
+        // redirected to courses after login
+        cy.url().should('include', '/app/courses');
+
+        const courseTitle = `Test Course - ${Date.now()}`;
+
+        cy.create_course(courseTitle);
+        cy.assert_is_on_course_edit_page();
+
+        cy.hit_save_course();
+
+        // Check if the proper error message is displayed
+        cy.contains("Kurs nie zawiera żadnych kroków ani opisu! Dodaj krok lub opis, aby zapisać.").should('be.visible');
+    });
+
+    it('should verify that teacher cannot publish course without steps and description', () => {
+        // redirected to courses after login
+        cy.url().should('include', '/app/courses');
+
+        const courseTitle = `Test Course - ${Date.now()}`;
+        const courseDescription = `Test Course Description - ${Date.now()}`;
+
+        cy.create_course(courseTitle);
+        cy.assert_is_on_course_edit_page();
+        cy.edit_course_description(courseDescription);
+        cy.hit_publish_course();
+
+        // Check if the proper error message is displayed
+        cy.contains('Kurs nie zawiera żadnych kroków lub opisu! Dodaj, aby opublikować.').should('be.visible');
+    });
+
+
 
 });
