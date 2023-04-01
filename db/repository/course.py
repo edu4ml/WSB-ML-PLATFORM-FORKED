@@ -50,24 +50,6 @@ class CourseRepository(ModelRepository[CourseDbModel]):
 
         course.save()
 
-    # def list_all(self) -> List[CourseDomainModel]:
-    #     user_roles = self.user.roles.values_list("name", flat=True)
-
-    #     # For admins, retrieve all courses
-    #     if UserRoles.ADMIN in user_roles:
-    #         course_models = CourseDbModel.objects.all()
-
-    #     # For teachers, retrieve all published courses and all courses they authored
-    #     elif UserRoles.TEACHER in user_roles:
-    #         authored_courses = CourseDbModel.objects.filter(author=self.user)
-    #         published_courses = CourseDbModel.objects.filter(is_draft=False)
-    #         course_models = authored_courses | published_courses
-
-    #     # For students, retrieve only published courses
-    #     else:
-    #         course_models = CourseDbModel.objects.filter(is_draft=False)
-    #     return [self.from_model(c) for c in course_models]
-
     def from_model(self, course):
         return self.root_entity(
             uuid=course.uuid,

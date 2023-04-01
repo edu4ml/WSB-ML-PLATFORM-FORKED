@@ -61,3 +61,8 @@ class CourseComponentRepo(ModelRepository):
 
         else:
             raise BadRequestException(form.errors)
+
+    def remove_resource(self, component_uuid, resource_uuid):
+        course_component = self.root_model.objects.get(uuid=component_uuid)
+        course_component.resources.filter(uuid=resource_uuid).delete()
+        return self.from_model(course_component)

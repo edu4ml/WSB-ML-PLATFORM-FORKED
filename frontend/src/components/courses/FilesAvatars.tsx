@@ -16,6 +16,7 @@ const FilesAvatars = ({ files }) => {
                         onClick={() =>
                             console.log('file clicked', file.file_link)
                         }
+                        src={file.file_link}
                     />
                 </Tooltip>
             );

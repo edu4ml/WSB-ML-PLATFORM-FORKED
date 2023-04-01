@@ -40,8 +40,21 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
                     'X-CSRFToken': Cookies.get('csrftoken'),
                 }}
                 action={`/api/v1/course-components/${component.uuid}/file-resources`}
+                onChange={(info) => {
+                    if (info.file.status === 'done') {
+                        console.log(info);
+                        notification.info({
+                            message: 'Zapisano!',
+                            duration: 2,
+                        });
+                    } else if (info.file.status === 'error') {
+                        notification.error({
+                            message: TEXT_SOMETHING_WENT_WRONG,
+                            duration: 2,
+                        });
+                    }
+                }}
                 onRemove={(file) => {
-                    console.log(file);
                     removeFileResource({
                         id: component.uuid,
                         resourceId: file.uid,
@@ -49,7 +62,7 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
                         .unwrap()
                         .then(() => {
                             notification.info({
-                                message: 'Dodano plik!',
+                                message: 'Pomyślnie usunięto plik!',
                                 duration: 2,
                             });
                             console.log('removed');

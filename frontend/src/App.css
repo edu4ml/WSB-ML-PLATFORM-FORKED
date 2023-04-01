@@ -19,3 +19,7 @@ section {
 .course-list-item:hover { 
     background-color: #fafafa;
 }
+
+.ant-upload-select{
+    width: 100%;
+}
