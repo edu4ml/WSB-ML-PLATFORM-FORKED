@@ -1,7 +1,11 @@
 import { Button, Card, Col, Divider, notification, Row, Space } from 'antd';
 import React from 'react';
-import { useUpdateCourseComponentMutation } from '../../features/courses/coursesApi';
 import {
+    useDeleteCourseComponentMutation,
+    useUpdateCourseComponentMutation,
+} from '../../features/courses/coursesApi';
+import {
+    TEXT_COURSE_COMPONENT_DELETED,
     TEXT_COURSE_COMPONENT_EDIT_RESOURCES,
     TEXT_COURSE_COMPONENT_UPDATED,
     TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE,
@@ -21,6 +25,7 @@ const CourseComponentListItem = ({ component }) => {
         React.useState(false);
 
     const [updateCourseComponent, {}] = useUpdateCourseComponentMutation();
+    const [deleteCourseComponent, {}] = useDeleteCourseComponentMutation();
 
     const handleEditModalOk = (payload) => {
         updateCourseComponent({
@@ -82,7 +87,22 @@ const CourseComponentListItem = ({ component }) => {
                     </Button>
                     <Button
                         icon={<DeleteTwoTone />}
-                        onClick={() => console.log('delete not implemented')}
+                        onClick={() => {
+                            deleteCourseComponent(component.uuid)
+                                .unwrap()
+                                .then((res) => {
+                                    notification.info({
+                                        message: TEXT_COURSE_COMPONENT_DELETED,
+                                        duration: 2,
+                                    });
+                                })
+                                .catch((err) => {
+                                    notification.error({
+                                        message: TEXT_SOMETHING_WENT_WRONG,
+                                        duration: 2,
+                                    });
+                                });
+                        }}
                     >
                         {TEXT_REMOVE}
                     </Button>
