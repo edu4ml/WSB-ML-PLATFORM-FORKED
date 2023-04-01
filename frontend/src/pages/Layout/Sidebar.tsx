@@ -33,17 +33,15 @@ const SideBarMenu = () => {
                     avatar={<FolderTwoTone />}
                     title="Panel"
                     description="Przeglądaj statystyki"
+                    data-cy="dashboard-menu-tab"
                 />
             </Card>
-            <Card
-                hoverable
-                onClick={() => navigate('/app/courses')}
-                data-cy="courses-menu-tab"
-            >
+            <Card hoverable onClick={() => navigate('/app/courses')}>
                 <Card.Meta
                     avatar={<FolderTwoTone />}
                     title="Kursy"
                     description="Zarządzaj kursami"
+                    data-cy="courses-menu-tab"
                 />
             </Card>
             <Card hoverable onClick={() => navigate('/app/course-components')}>
@@ -51,6 +49,7 @@ const SideBarMenu = () => {
                     avatar={<FolderTwoTone />}
                     title="Ćwiczenia"
                     description="Zarządzaj ćwiczeniami i testami"
+                    data-cy="course-components-menu-tab"
                 />
             </Card>
         </Space>

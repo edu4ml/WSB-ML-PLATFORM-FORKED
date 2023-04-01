@@ -72,7 +72,11 @@ const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
                 onClick: handleAdd,
             }}
         >
-            <Button block type="primary">
+            <Button
+                data-cy="course-details-add-steps-dropdown"
+                block
+                type="primary"
+            >
                 <Space>
                     {TEXT_ADD_STEP}
                     <DownOutlined />

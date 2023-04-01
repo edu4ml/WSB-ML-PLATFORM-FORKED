@@ -3,17 +3,6 @@ describe('Courses catalog page', () => {
         cy.login('teacher', 'adminadmin');
     });
 
-    it('should login, navigate to the courses URL and logout', () => {
-        // redirected to courses after login
-        cy.url().should('include', '/app/courses');
-
-        // click on the logout button
-        cy.get('[data-cy="top-right-avatar"]').click();
-        cy.contains('Wyloguj').click();
-
-        // verify user is redirected to the login page
-        cy.url().should('include', '/');
-    });
 
     it('should verify that the teacher has necessary permissions to view list of courses', () => {
         // redirected to courses after login

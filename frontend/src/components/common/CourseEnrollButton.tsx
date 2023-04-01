@@ -45,6 +45,7 @@ const CourseEnrollButton = ({
             }}
             style={{ width: '100%' }}
             type={'primary'}
+            data-cy="course-catalog-list-item-enroll-button"
         >
             Dołącz do kursu
         </Button>

@@ -68,10 +68,15 @@ const CourseComponentCreateModal = ({ isOpen, onClose, onCreate }) => {
                         placeholder={
                             TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
                         }
+                        data-cy="course-component-create-new-type"
                     >
                         {Object.entries(Enums.COURSE_COMPONENT_TYPE).map(
                             ([key, value]) => (
-                                <Select.Option value={key} key={key}>
+                                <Select.Option
+                                    value={key}
+                                    key={key}
+                                    data-cy={`course-component-create-new-type-${value}`}
+                                >
                                     {courseComponentTypeToTextMap[value]}
                                 </Select.Option>
                             )
