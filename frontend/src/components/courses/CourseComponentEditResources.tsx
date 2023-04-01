@@ -8,7 +8,6 @@ import {
 import { useDeleteCourseComponentFileResourceMutation } from '../../features/courses/coursesApi';
 import Cookies from 'js-cookie';
 import type { UploadFile } from 'antd/es/upload/interface';
-import { Enums } from '../../shared';
 
 const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
     const [removeFileResource, {}] =
