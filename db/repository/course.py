@@ -94,6 +94,7 @@ class CourseRepository(ModelRepository[CourseDbModel]):
                     title=step.component.title,
                     description=step.component.description,
                     type=step.component.type,
+                    created_at=step.component.created_at,
                     resources=self._get_resources(step.component),
                 ),
             )

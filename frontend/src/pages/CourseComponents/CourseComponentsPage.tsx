@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, List, notification, Row, Space, Typography } from 'antd';
+import { Button, List, notification, Space } from 'antd';
 import {
     useCreateCourseComponentsMutation,
     useGetCourseComponentsQuery,
@@ -7,25 +7,12 @@ import {
 import {
     TEXT_CREATE_COURSE_COMPONENT,
     TEXT_COURSE_COMPONENTS_PAGE_TITLE,
-    TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
-    TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
     TEXT_COURSE_COMPONENT_CREATED,
     TEXT_SOMETHING_WENT_WRONG,
 } from '../../texts';
-import { Enums } from '../../shared';
-import { CourseComponentType } from '../../types/course';
-import CourseComponentCreateModal from '../../components/courses/CourseComponentCreateModal';
+import CourseComponentCreateModal from './CourseComponentCreateModal';
 import CourseComponentListItem from './CourseComponentListItem';
-
-const courseComponentTypeToTextMap: { [key: string]: string } = {
-    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    [Enums.COURSE_COMPONENT_TYPE.EVALUATION]:
-        TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
-};
-
-const { Title } = Typography;
+import PageHeader from '../../components/common/PageHeader';
 
 const CourseComponentsPage = () => {
     const { data: courseComponents } =
@@ -59,34 +46,37 @@ const CourseComponentsPage = () => {
         setIsCreateModalOpen(true);
     };
 
+    const sortComponents = (components) => {
+        if (!Array.isArray(components)) return [];
+        const mutableComponents = [...components];
+        return mutableComponents.sort((a, b) => {
+            return (
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            );
+        });
+    };
+
+    const actions = [
+        <Button
+            data-cy="course-component-create-new"
+            key={TEXT_CREATE_COURSE_COMPONENT}
+            onClick={showCreateModal}
+            type="primary"
+        >
+            {TEXT_CREATE_COURSE_COMPONENT}
+        </Button>,
+    ];
+
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
-            <Row>
-                <Col span={12}>
-                    <Title level={1}>{TEXT_COURSE_COMPONENTS_PAGE_TITLE}</Title>
-                </Col>
-                <Col span={12}>
-                    <Button
-                        data-cy="course-component-create-new"
-                        key={TEXT_CREATE_COURSE_COMPONENT}
-                        onClick={showCreateModal}
-                        style={{
-                            float: 'right',
-                            position: 'absolute',
-                            right: '0',
-                            bottom: '0',
-                            marginBottom: '10px',
-                        }}
-                        type="primary"
-                    >
-                        {TEXT_CREATE_COURSE_COMPONENT}
-                    </Button>
-                </Col>
-            </Row>
-
+            <PageHeader
+                title={TEXT_COURSE_COMPONENTS_PAGE_TITLE}
+                actions={actions}
+            />
             <List
                 bordered={false}
-                dataSource={courseComponents}
+                dataSource={sortComponents(courseComponents)}
                 data-cy="course-components-list"
                 size="large"
                 renderItem={(item) => (
@@ -94,7 +84,7 @@ const CourseComponentsPage = () => {
                 )}
                 pagination={{ pageSize: 10 }}
             />
-
+            {/* modal */}
             <CourseComponentCreateModal
                 isOpen={isCreateModalOpen}
                 onCreate={handleCreateModalOk}

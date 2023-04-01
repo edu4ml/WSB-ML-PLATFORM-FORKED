@@ -33,6 +33,7 @@ class CourseComponentRepo(ModelRepository):
             title=obj.title,
             description=obj.description,
             type=obj.type,
+            created_at=obj.created_at,
             resources=[
                 ExternalResource(
                     uuid=resource.uuid,
