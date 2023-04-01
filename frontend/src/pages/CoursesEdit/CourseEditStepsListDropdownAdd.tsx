@@ -5,11 +5,11 @@ import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
 import { CourseComponentType, CourseStepType } from '../../types/course';
-import { TEXT_ADD_STEP } from '../../texts';
 import {
     getContentTypeIcon,
     getContentTypeName,
 } from '../../helpers/namesFactory';
+import { CATEGORY_BUTTON_TEXTS } from '../../texts';
 
 const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
     const [count, setCount] = useState(steps.length);
@@ -80,7 +80,7 @@ const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
                 type="primary"
             >
                 <Space>
-                    {TEXT_ADD_STEP}
+                    {CATEGORY_BUTTON_TEXTS.addStep}
                     <DownOutlined />
                 </Space>
             </Button>

@@ -1,9 +1,4 @@
 import { Enums } from '../shared';
-import {
-    TEXT_DRAFT_VERSION,
-    TEXT_EXERCISES,
-    TEXT_VERIFICATION,
-} from '../texts';
 import { CourseType } from '../types/course';
 import {
     DownOutlined,
@@ -11,6 +6,7 @@ import {
     ReadOutlined,
 } from '@ant-design/icons';
 import React from 'react';
+import { CATEGORY_OTHER_TEXTS } from '../texts';
 
 const getCourseTitle = (course: CourseType) => {
     if (course) {
@@ -21,15 +17,16 @@ const getCourseTitle = (course: CourseType) => {
 
 const getCourseSubtitle = (course: CourseType) => {
     if (course && course.is_draft) {
-        return TEXT_DRAFT_VERSION;
+        return CATEGORY_OTHER_TEXTS.draftVersion;
     }
     return '';
 };
 
 const getContentTypeName = (contentType: string) => {
     const contentTypeToGroupTitleMap = {
-        [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_EXERCISES,
-        [Enums.COURSE_COMPONENT_TYPE.EVALUATION]: TEXT_VERIFICATION,
+        [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: CATEGORY_OTHER_TEXTS.exercises,
+        [Enums.COURSE_COMPONENT_TYPE.EVALUATION]:
+            CATEGORY_OTHER_TEXTS.verification,
     };
 
     return contentTypeToGroupTitleMap[contentType];

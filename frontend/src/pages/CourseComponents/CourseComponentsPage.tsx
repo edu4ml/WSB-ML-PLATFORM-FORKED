@@ -5,10 +5,10 @@ import {
     useGetCourseComponentsQuery,
 } from '../../features/courses/coursesApi';
 import {
-    TEXT_CREATE_COURSE_COMPONENT,
-    TEXT_COURSE_COMPONENTS_PAGE_TITLE,
-    TEXT_COURSE_COMPONENT_CREATED,
-    TEXT_SOMETHING_WENT_WRONG,
+    BTN_CREATE_COURSE_COMPONENT,
+    TITLE_COURSE_COMPONENTS_PAGE,
+    NOTIF_COURSE_COMPONENT_CREATED,
+    NOTIF_SOMETHING_WENT_WRONG,
 } from '../../texts';
 import CourseComponentCreateModal from './CourseComponentCreateModal';
 import CourseComponentListItem from './CourseComponentListItem';
@@ -26,13 +26,13 @@ const CourseComponentsPage = () => {
             .unwrap()
             .then((res) => {
                 notification.info({
-                    message: TEXT_COURSE_COMPONENT_CREATED,
+                    message: NOTIF_COURSE_COMPONENT_CREATED,
                     duration: 2,
                 });
             })
             .catch((err) => {
                 notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
+                    message: NOTIF_SOMETHING_WENT_WRONG,
                     duration: 2,
                 });
             });
@@ -60,18 +60,18 @@ const CourseComponentsPage = () => {
     const actions = [
         <Button
             data-cy="course-component-create-new"
-            key={TEXT_CREATE_COURSE_COMPONENT}
+            key={BTN_CREATE_COURSE_COMPONENT}
             onClick={showCreateModal}
             type="primary"
         >
-            {TEXT_CREATE_COURSE_COMPONENT}
+            {BTN_CREATE_COURSE_COMPONENT}
         </Button>,
     ];
 
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
             <PageHeader
-                title={TEXT_COURSE_COMPONENTS_PAGE_TITLE}
+                title={TITLE_COURSE_COMPONENTS_PAGE}
                 actions={actions}
             />
             <List

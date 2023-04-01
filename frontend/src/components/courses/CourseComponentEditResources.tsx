@@ -1,10 +1,7 @@
 import { Button, Modal, notification, Upload } from 'antd';
 import React from 'react';
 import { UploadOutlined } from '@ant-design/icons';
-import {
-    TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE,
-    TEXT_SOMETHING_WENT_WRONG,
-} from '../../texts';
+import { BTN_EDIT, NOTIF_SOMETHING_WENT_WRONG } from '../../texts';
 import { useDeleteCourseComponentFileResourceMutation } from '../../features/courses/coursesApi';
 import Cookies from 'js-cookie';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -25,7 +22,7 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
         });
     return (
         <Modal
-            title={TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
+            title={BTN_EDIT}
             open={isOpen}
             onCancel={onCancel}
             footer={null}
@@ -49,7 +46,7 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
                         });
                     } else if (info.file.status === 'error') {
                         notification.error({
-                            message: TEXT_SOMETHING_WENT_WRONG,
+                            message: NOTIF_SOMETHING_WENT_WRONG,
                             duration: 2,
                         });
                     }
@@ -69,7 +66,7 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
                         })
                         .catch((err) => {
                             notification.error({
-                                message: TEXT_SOMETHING_WENT_WRONG,
+                                message: NOTIF_SOMETHING_WENT_WRONG,
                                 duration: 2,
                             });
                             console.log(err);

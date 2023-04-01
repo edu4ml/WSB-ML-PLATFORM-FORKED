@@ -1,13 +1,7 @@
 import { Button, Divider, Form, Input, Modal, Upload } from 'antd';
 import React from 'react';
-import {
-    TEXT_EXTERNAL_RESOURCE_CREATE_NEW,
-    TEXT_EXTERNAL_RESOURCE_NO_TITLE_WARNING,
-    TEXT_EXTERNAL_RESOURCE_NO_URL_WARNING,
-    TEXT_EXTERNAL_RESOURCE_TITLE,
-    TEXT_EXTERNAL_RESOURCE_URL,
-} from '../../texts';
-import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
+import { CATEGORY_OTHER_TEXTS, CATEGORY_TITLES } from '../../texts';
 
 const AddNewResourceModal = ({ isOpen, onCancel, onOk }) => {
     const normFile = (e: any) => {
@@ -20,7 +14,7 @@ const AddNewResourceModal = ({ isOpen, onCancel, onOk }) => {
 
     return (
         <Modal
-            title={TEXT_EXTERNAL_RESOURCE_CREATE_NEW}
+            title={CATEGORY_TITLES.externalResourceCreateNew}
             open={isOpen}
             onOk={onOk}
             onCancel={onCancel}
@@ -33,25 +27,27 @@ const AddNewResourceModal = ({ isOpen, onCancel, onOk }) => {
                 onFinish={onOk}
             >
                 <Form.Item
-                    label={TEXT_EXTERNAL_RESOURCE_TITLE}
+                    label={CATEGORY_OTHER_TEXTS.externalResourceTitle}
                     name="title"
                     rules={[
                         {
                             required: true,
-                            message: TEXT_EXTERNAL_RESOURCE_NO_TITLE_WARNING,
+                            message:
+                                CATEGORY_OTHER_TEXTS.externalResourceNoTitleWarning,
                         },
                     ]}
                 >
                     <Input data-cy="external-resource-create-new-name" />
                 </Form.Item>
                 <Form.Item
-                    label={TEXT_EXTERNAL_RESOURCE_URL}
+                    label={CATEGORY_OTHER_TEXTS.externalResourceUrl}
                     name="url"
                     rules={[
                         {
                             type: 'url',
                             required: true,
-                            message: TEXT_EXTERNAL_RESOURCE_NO_URL_WARNING,
+                            message:
+                                CATEGORY_OTHER_TEXTS.externalResourceNoUrlWarning,
                         },
                     ]}
                 >
@@ -70,15 +66,6 @@ const AddNewResourceModal = ({ isOpen, onCancel, onOk }) => {
                         maxCount={1}
                     >
                         <Button icon={<UploadOutlined />}>Upload</Button>
-                        {/* <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">
-                            Click or drag file to this area to upload
-                        </p>
-                        <p className="ant-upload-hint">
-                            Support for a single or bulk upload.
-                        </p> */}
                     </Upload>
                 </Form.Item>
                 <Divider />
@@ -89,7 +76,7 @@ const AddNewResourceModal = ({ isOpen, onCancel, onOk }) => {
                         htmlType="submit"
                         style={{ float: 'right' }}
                     >
-                        {TEXT_EXTERNAL_RESOURCE_CREATE_NEW}
+                        {CATEGORY_TITLES.externalResourceCreateNew}
                     </Button>
                 </Form.Item>
             </Form>

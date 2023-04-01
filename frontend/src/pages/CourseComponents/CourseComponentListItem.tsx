@@ -5,12 +5,12 @@ import {
     useUpdateCourseComponentMutation,
 } from '../../features/courses/coursesApi';
 import {
-    TEXT_COURSE_COMPONENT_DELETED,
-    TEXT_COURSE_COMPONENT_EDIT_RESOURCES,
-    TEXT_COURSE_COMPONENT_UPDATED,
-    TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE,
-    TEXT_REMOVE,
-    TEXT_SOMETHING_WENT_WRONG,
+    NOTIF_COURSE_COMPONENT_DELETED,
+    TITLE_COURSE_COMPONENT_EDIT_RESOURCES,
+    NOTIF_COURSE_COMPONENT_UPDATED,
+    BTN_EDIT,
+    BTN_REMOVE,
+    NOTIF_SOMETHING_WENT_WRONG,
 } from '../../texts';
 
 import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
@@ -39,13 +39,13 @@ const CourseComponentListItem = ({ component }) => {
             .unwrap()
             .then((res) => {
                 notification.info({
-                    message: TEXT_COURSE_COMPONENT_UPDATED,
+                    message: NOTIF_COURSE_COMPONENT_UPDATED,
                     duration: 2,
                 });
             })
             .catch((err) => {
                 notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
+                    message: NOTIF_SOMETHING_WENT_WRONG,
                     duration: 2,
                 });
             });
@@ -77,13 +77,13 @@ const CourseComponentListItem = ({ component }) => {
             extra={
                 <Space direction="horizontal">
                     <Button icon={<EditTwoTone />} onClick={showEditModal}>
-                        {TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
+                        {BTN_EDIT}
                     </Button>
                     <Button
                         icon={<FileTextTwoTone />}
                         onClick={showResourcesModal}
                     >
-                        {TEXT_COURSE_COMPONENT_EDIT_RESOURCES}
+                        {TITLE_COURSE_COMPONENT_EDIT_RESOURCES}
                     </Button>
                     <Button
                         icon={<DeleteTwoTone />}
@@ -92,19 +92,19 @@ const CourseComponentListItem = ({ component }) => {
                                 .unwrap()
                                 .then((res) => {
                                     notification.info({
-                                        message: TEXT_COURSE_COMPONENT_DELETED,
+                                        message: NOTIF_COURSE_COMPONENT_DELETED,
                                         duration: 2,
                                     });
                                 })
                                 .catch((err) => {
                                     notification.error({
-                                        message: TEXT_SOMETHING_WENT_WRONG,
+                                        message: NOTIF_SOMETHING_WENT_WRONG,
                                         duration: 2,
                                     });
                                 });
                         }}
                     >
-                        {TEXT_REMOVE}
+                        {BTN_REMOVE}
                     </Button>
                 </Space>
             }

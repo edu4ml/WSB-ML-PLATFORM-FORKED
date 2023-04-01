@@ -2,30 +2,30 @@ import { Button, Form, Input, Modal, Select } from 'antd';
 import React from 'react';
 import { Enums } from '../../shared';
 import {
-    TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
-    TEXT_DESCRIPTION,
-    TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE,
-    TEXT_FORM_NO_DESCRIPTION_WARNING,
-    TEXT_FORM_NO_TITLE_WARNING,
-    TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER,
-    TEXT_SAVE,
-    TEXT_TITLE,
-    TEXT_TYPE,
+    TXT_EXERCISE,
+    TXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
+    TXT_OTHER,
+    TXT_DESCRIPTION,
+    BTN_EDIT,
+    TXT_FORM_NO_DESCRIPTION_WARNING,
+    TXT_FORM_NO_TITLE_WARNING,
+    TXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER,
+    BTN_SAVE,
+    TXT_TITLE,
+    TXT_TYPE,
 } from '../../texts';
 
 const courseComponentTypeToTextMap: { [key: string]: string } = {
-    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
+    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TXT_EXERCISE,
     [Enums.COURSE_COMPONENT_TYPE.EVALUATION]:
-        TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
+        TXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
+    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TXT_OTHER,
 };
 
 const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
     return (
         <Modal
-            title={TEXT_EDIT_COURSE_COMPONENT_MODAL_TITLE}
+            title={BTN_EDIT}
             open={isOpen}
             onCancel={onCancel}
             footer={null}
@@ -48,34 +48,32 @@ const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label={TEXT_TITLE}
+                    label={TXT_TITLE}
                     name="title"
                     rules={[
                         {
                             required: true,
-                            message: TEXT_FORM_NO_TITLE_WARNING,
+                            message: TXT_FORM_NO_TITLE_WARNING,
                         },
                     ]}
                 >
                     <Input data-cy="course-component-create-new-title" />
                 </Form.Item>
                 <Form.Item
-                    label={TEXT_DESCRIPTION}
+                    label={TXT_DESCRIPTION}
                     name="description"
                     rules={[
                         {
                             required: true,
-                            message: TEXT_FORM_NO_DESCRIPTION_WARNING,
+                            message: TXT_FORM_NO_DESCRIPTION_WARNING,
                         },
                     ]}
                 >
                     <Input.TextArea data-cy="course-component-create-new-description" />
                 </Form.Item>
-                <Form.Item label={TEXT_TYPE} name="type">
+                <Form.Item label={TXT_TYPE} name="type">
                     <Select
-                        placeholder={
-                            TEXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER
-                        }
+                        placeholder={TXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER}
                     >
                         {Object.entries(Enums.COURSE_COMPONENT_TYPE).map(
                             ([key, value]) => (
@@ -93,7 +91,7 @@ const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
                         htmlType="submit"
                         style={{ float: 'right' }}
                     >
-                        {TEXT_SAVE}
+                        {BTN_SAVE}
                     </Button>
                 </Form.Item>
             </Form>

@@ -18,14 +18,10 @@ import {
     InboxOutlined,
 } from '@ant-design/icons/lib/icons';
 import {
-    TEXT_COURSE_COMPONENTS_PAGE_TITLE,
-    TEXT_COURSE_COMPONENT_DELETED,
-    TEXT_CREATE_COURSE_COMPONENT,
-    TEXT_DESCRIPTION,
-    TEXT_NAME,
-    TEXT_NEW_COURSE,
-    TEXT_SOMETHING_WENT_WRONG,
-    TEXT_TYPE,
+    CATEGORY_BUTTON_TEXTS,
+    CATEGORY_COLUMN_NAMES,
+    CATEGORY_NOTIFICATIONS,
+    CATEGORY_TITLES,
 } from '../../texts';
 import {
     useCreateResourceMutation,
@@ -72,7 +68,7 @@ const ExternalResourcesPage = () => {
 
     const columns = [
         {
-            title: TEXT_NAME,
+            title: CATEGORY_COLUMN_NAMES.name,
             key: 'title',
             dataIndex: 'title',
             render: (title) => <Text strong>{title}</Text>,
@@ -108,13 +104,15 @@ const ExternalResourcesPage = () => {
                                 .unwrap()
                                 .then((res) => {
                                     notification.info({
-                                        message: TEXT_COURSE_COMPONENT_DELETED,
+                                        message:
+                                            CATEGORY_NOTIFICATIONS.courseComponentDeleted,
                                         duration: 2,
                                     });
                                 })
                                 .catch((err) => {
                                     notification.error({
-                                        message: TEXT_SOMETHING_WENT_WRONG,
+                                        message:
+                                            CATEGORY_NOTIFICATIONS.somethingWentWrong,
                                         duration: 2,
                                     });
                                 });
@@ -131,7 +129,9 @@ const ExternalResourcesPage = () => {
         <Space direction="vertical" style={{ width: '100%' }}>
             <Row>
                 <Col span={12}>
-                    <Title level={1}>{TEXT_COURSE_COMPONENTS_PAGE_TITLE}</Title>
+                    <Title level={1}>
+                        {CATEGORY_TITLES.courseComponentsPage}
+                    </Title>
                 </Col>
                 <Col span={12}>
                     <Button
@@ -147,7 +147,7 @@ const ExternalResourcesPage = () => {
                         }}
                         type="primary"
                     >
-                        {TEXT_NEW_COURSE}
+                        {CATEGORY_BUTTON_TEXTS.createCourseComponent}
                     </Button>
                 </Col>
             </Row>

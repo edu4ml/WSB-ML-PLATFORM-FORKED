@@ -1,16 +1,15 @@
 import { Button, Form, Input, Modal } from 'antd';
 import React from 'react';
 import {
-    TEXT_COURSE_TITLE,
-    TEXT_CREATE_COURSE,
-    TEXT_FORM_NO_TITLE_WARNING,
-    TEXT_NEW_COURSE_TITLE,
+    CATEGORY_BUTTON_TEXTS,
+    CATEGORY_OTHER_TEXTS,
+    CATEGORY_TITLES,
 } from '../../texts';
 
 const CourseCreateModal = ({ onOk, onCancel, isOpen }) => {
     return (
         <Modal
-            title={TEXT_NEW_COURSE_TITLE}
+            title={CATEGORY_OTHER_TEXTS.newCourseTitle}
             open={isOpen}
             onOk={onOk}
             onCancel={onCancel}
@@ -24,12 +23,12 @@ const CourseCreateModal = ({ onOk, onCancel, isOpen }) => {
                 layout="vertical"
             >
                 <Form.Item
-                    label={TEXT_COURSE_TITLE}
+                    label={CATEGORY_TITLES.newCourse}
                     name="title"
                     rules={[
                         {
                             required: true,
-                            message: TEXT_FORM_NO_TITLE_WARNING,
+                            message: CATEGORY_OTHER_TEXTS.formNoTitleWarning,
                         },
                     ]}
                 >
@@ -42,7 +41,7 @@ const CourseCreateModal = ({ onOk, onCancel, isOpen }) => {
                         htmlType="submit"
                         style={{ float: 'right' }}
                     >
-                        {TEXT_CREATE_COURSE}
+                        {CATEGORY_BUTTON_TEXTS.createCourse}
                     </Button>
                 </Form.Item>
             </Form>

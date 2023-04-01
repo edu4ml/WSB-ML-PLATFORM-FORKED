@@ -2,18 +2,18 @@ import { Space, Tag, Typography } from 'antd';
 import React from 'react';
 import { Enums } from '../../shared';
 import {
-    TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
-    TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
+    TXT_EXERCISE,
+    TXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
+    TXT_OTHER,
 } from '../../texts';
 
 const { Title } = Typography;
 
 const courseComponentTypeToTextMap = {
-    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TEXT_COURSE_COMPONENT_TYPE_EXERCISE,
+    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: TXT_EXERCISE,
     [Enums.COURSE_COMPONENT_TYPE.EVALUATION]:
-        TEXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
-    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TEXT_COURSE_COMPONENT_TYPE_UNKNOWN,
+        TXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION,
+    [Enums.COURSE_COMPONENT_TYPE.OTHER]: TXT_OTHER,
 };
 
 const CourseComponentTitle = ({ component }) => {

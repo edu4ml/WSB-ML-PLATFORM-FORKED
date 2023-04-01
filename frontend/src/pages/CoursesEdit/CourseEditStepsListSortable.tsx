@@ -18,19 +18,13 @@ import {
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
 import { CourseStepType } from '../../types/course';
-import {
-    TEXT_AUTOMATIC,
-    TEXT_DESCRIPTION,
-    TEXT_EVALUATION,
-    TEXT_EXERCISES,
-    TEXT_SEND_FILE,
-    TEXT_TITLE,
-    TEXT_VERIFICATION,
-} from '../../texts';
+import { CATEGORY_COLUMN_NAMES, CATEGORY_OTHER_TEXTS } from '../../texts';
 
 const evaluationTypeKeyToNameMap: { [key: string]: string } = {
-    [Enums.COURSE_STEP_EVALUATION_TYPE.SELF_EVALUATED]: TEXT_AUTOMATIC,
-    [Enums.COURSE_STEP_EVALUATION_TYPE.FILE_EVALUATED]: TEXT_SEND_FILE,
+    [Enums.COURSE_STEP_EVALUATION_TYPE.SELF_EVALUATED]:
+        CATEGORY_OTHER_TEXTS.courseComponentTypeSelfEvaluation,
+    [Enums.COURSE_STEP_EVALUATION_TYPE.FILE_EVALUATED]:
+        CATEGORY_OTHER_TEXTS.courseComponentTypeFileEvaluation,
 };
 
 const CourseEditStepsListSortable = ({ steps, onUpdateSteps }) => {
@@ -67,15 +61,15 @@ const CourseEditStepsListSortable = ({ steps, onUpdateSteps }) => {
                 ),
         },
         {
-            title: TEXT_TITLE,
+            title: CATEGORY_COLUMN_NAMES.title,
             render: (_, item) => item.component.title,
         },
         {
-            title: TEXT_DESCRIPTION,
+            title: CATEGORY_COLUMN_NAMES.description,
             render: (_, item) => item.component.description,
         },
         {
-            title: TEXT_EVALUATION,
+            title: CATEGORY_COLUMN_NAMES.evaluation,
             render: (_, item) => {
                 const items: MenuProps['items'] = Object.entries(
                     evaluationTypeKeyToNameMap

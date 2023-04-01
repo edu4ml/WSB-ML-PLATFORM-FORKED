@@ -9,19 +9,15 @@ import {
 } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import { CourseStepType } from '../../types/course';
-import {
-    TEXT_COURSE_PUBLISHED,
-    TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING,
-    TEXT_COURSE_SAVED,
-    TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING,
-    TEXT_PUBLISH,
-    TEXT_SAVE,
-    TEXT_SOMETHING_WENT_WRONG,
-} from '../../texts';
 
 import PageHeader from '../../components/common/PageHeader';
 import { getCourseTitle, getCourseSubtitle } from '../../helpers/namesFactory';
 import CourseEditDetails from './CourseEditDetails';
+import {
+    CATEGORY_BUTTON_TEXTS,
+    CATEGORY_NOTIFICATIONS,
+    CATEGORY_OTHER_TEXTS,
+} from '../../texts';
 
 const PublishButton = ({ onClick }) => {
     return (
@@ -30,7 +26,7 @@ const PublishButton = ({ onClick }) => {
             onClick={onClick}
             type="primary"
         >
-            {TEXT_PUBLISH}
+            {CATEGORY_BUTTON_TEXTS.publish}
         </Button>
     );
 };
@@ -42,7 +38,7 @@ const SaveButton = ({ onClick }) => {
             onClick={onClick}
             type="primary"
         >
-            {TEXT_SAVE}
+            {CATEGORY_BUTTON_TEXTS.save}
         </Button>
     );
 };
@@ -86,7 +82,8 @@ const CourseEditPage = () => {
 
         if (!validateBeforePublish(command.steps, command.description)) {
             notification.error({
-                message: TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING,
+                message:
+                    CATEGORY_OTHER_TEXTS.coursePublishNoStepOrDescriptionWarning,
             });
             return;
         }
@@ -95,14 +92,14 @@ const CourseEditPage = () => {
             .unwrap()
             .then((res) => {
                 notification.info({
-                    message: TEXT_COURSE_PUBLISHED,
+                    message: CATEGORY_NOTIFICATIONS.coursePublished,
                     duration: 2,
                 });
                 navigate('/app/courses/');
             })
             .catch((err) => {
                 notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
+                    message: CATEGORY_NOTIFICATIONS.somethingWentWrong,
                 });
             });
     };
@@ -117,7 +114,8 @@ const CourseEditPage = () => {
         console.log(command);
         if (!validateBeforeSave(command.steps, command.description)) {
             notification.error({
-                message: TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING,
+                message:
+                    CATEGORY_OTHER_TEXTS.courseSaveNoStepOrDescriptionWarning,
             });
             return;
         }
@@ -126,14 +124,14 @@ const CourseEditPage = () => {
             .unwrap()
             .then((res) => {
                 notification.info({
-                    message: TEXT_COURSE_SAVED,
+                    message: CATEGORY_NOTIFICATIONS.courseSaved,
                     duration: 2,
                 });
                 setNotSaved(false);
             })
             .catch((err) => {
                 notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
+                    message: CATEGORY_NOTIFICATIONS.somethingWentWrong,
                 });
             });
     };
