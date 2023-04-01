@@ -1,7 +1,6 @@
-import { Button, Card, notification, Space, Typography } from 'antd';
+import { Button, notification, Space } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import CardHeader from '../../components/common/CardHeader';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,15 +8,12 @@ import {
     useGetCourseQuery,
 } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
-import CourseEditStepsList from './CourseEditStepsList';
-import {
-    CardHeaderRightButtonActionType,
-    CourseStepType,
-} from '../../types/course';
+import { CourseStepType } from '../../types/course';
 import {
     TEXT_COURSE_PUBLISHED,
+    TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING,
     TEXT_COURSE_SAVED,
-    TEXT_DRAFT_VERSION,
+    TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING,
     TEXT_PUBLISH,
     TEXT_SAVE,
     TEXT_SOMETHING_WENT_WRONG,
@@ -26,8 +22,6 @@ import {
 import PageHeader from '../../components/common/PageHeader';
 import { getCourseTitle, getCourseSubtitle } from '../../helpers/namesFactory';
 import CourseEditDetails from './CourseEditDetails';
-
-const { Paragraph } = Typography;
 
 const PublishButton = ({ onClick }) => {
     return (
@@ -56,7 +50,7 @@ const SaveButton = ({ onClick }) => {
 const CourseEditPage = () => {
     const navigate = useNavigate();
     const { courseId } = useParams();
-    const { data: course, isLoading, isSuccess } = useGetCourseQuery(courseId);
+    const { data: course } = useGetCourseQuery(courseId);
 
     const [issueCommand, {}] = useIssueCourseCommandMutation();
     const [courseSteps, setCourseSteps] = useState([]);
@@ -90,6 +84,13 @@ const CourseEditPage = () => {
             steps: mapToCourseSteps(courseSteps),
         };
 
+        if (!validateBeforePublish(command.steps, command.description)) {
+            notification.error({
+                message: TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING,
+            });
+            return;
+        }
+
         issueCommand({ id: courseId, command })
             .unwrap()
             .then((res) => {
@@ -113,6 +114,14 @@ const CourseEditPage = () => {
             steps: mapToCourseSteps(courseSteps),
         };
 
+        console.log(command);
+        if (!validateBeforeSave(command.steps, command.description)) {
+            notification.error({
+                message: TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING,
+            });
+            return;
+        }
+
         issueCommand({ id: courseId, command })
             .unwrap()
             .then((res) => {
@@ -129,102 +138,18 @@ const CourseEditPage = () => {
             });
     };
 
-    // let actions2: Array<CardHeaderRightButtonActionType> = [
-    //     {
-    //         text: TEXT_PUBLISH,
-    //         onClick: () => {
-    //             const command = {
-    //                 type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-    //                 is_draft: false,
-    //                 description: courseDescription,
-    //                 steps: mapToCourseSteps(courseSteps),
-    //             };
+    const validateBeforePublish = (steps, description) => {
+        return steps.length > 0 && description.length > 0;
+    };
 
-    //             issueCommand({ id: courseId, command })
-    //                 .unwrap()
-    //                 .then((res) => {
-    //                     notification.info({
-    //                         message: TEXT_COURSE_PUBLISHED,
-    //                         duration: 2,
-    //                     });
-    //                     navigate('/app/courses/');
-    //                 })
-    //                 .catch((err) => {
-    //                     notification.error({
-    //                         message: TEXT_SOMETHING_WENT_WRONG,
-    //                     });
-    //                 });
-    //         },
-    //         type: 'default',
-    //         dataCy: 'course-details-edit-publish',
-    //     },
-    //     {
-    //         text: TEXT_SAVE,
-    //         type: notSaved ? 'primary' : 'default',
-    //         onClick: () => {
-    //             const command = {
-    //                 type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-    //                 description: courseDescription,
-    //                 steps: mapToCourseSteps(courseSteps),
-    //             };
-
-    //             issueCommand({ id: courseId, command })
-    //                 .unwrap()
-    //                 .then((res) => {
-    //                     notification.info({
-    //                         message: TEXT_COURSE_SAVED,
-    //                         duration: 2,
-    //                     });
-    //                     setNotSaved(false);
-    //                 })
-    //                 .catch((err) => {
-    //                     notification.error({
-    //                         message: TEXT_SOMETHING_WENT_WRONG,
-    //                     });
-    //                 });
-    //         },
-    //         dataCy: 'course-details-edit-save',
-    //     },
-    // ];
+    const validateBeforeSave = (steps, description) => {
+        return steps.length > 0 || description.length > 0;
+    };
 
     const actions = [
         <PublishButton onClick={publish} />,
         <SaveButton onClick={save} />,
     ];
-
-    // if (!isLoading && isSuccess) {
-    //     return (
-    //         <Card
-    //             title={
-    //                 <CardHeader
-    //                     title={
-    //                         course.is_draft
-    //                             ? `${course.title} (${TEXT_DRAFT_VERSION})`
-    //                             : `${course.title} (${TEXT_COURSE_PUBLISHED})`
-    //                     }
-    //                     actions={course.is_draft ? actions : []}
-    //                 />
-    //             }
-    //             bordered={false}
-    //         >
-    //             <Paragraph
-    //                 data-cy={'course-details-edit-description'}
-    //                 editable={{
-    //                     onChange: handleDescriptionChange,
-    //                 }}
-    //             >
-    //                 {editableDescription}
-    //             </Paragraph>
-    //             <CourseEditStepsList
-    //                 editable={course.is_draft}
-    //                 dataSource={dataSource}
-    //                 setDataSource={setDataSource}
-    //                 setEditedButNotSaved={setEditedButNotSaved}
-    //             />
-    //         </Card>
-    //     );
-    // }
-    // return <div></div>;
 
     return (
         <Space direction="vertical" style={{ width: '100%' }}>

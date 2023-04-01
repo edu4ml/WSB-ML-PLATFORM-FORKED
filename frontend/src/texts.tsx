@@ -51,3 +51,7 @@ export const TEXT_EXTERNAL_RESOURCE_URL = 'URL';
 export const TEXT_EXTERNAL_RESOURCE_NO_URL_WARNING = 'Podaj URL!';
 export const TEXT_REMOVE = 'Usuń';
 export const TEXT_COURSE_COMPONENT_EDIT_RESOURCES = 'Załączniki';
+export const TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING =
+    'Kurs nie zawiera żadnych kroków lub opisu! Dodaj, aby opublikować.';
+export const TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING =
+    'Kurs nie zawiera żadnych kroków ani opisu! Dodaj krok lub opis, aby zapisać.';
