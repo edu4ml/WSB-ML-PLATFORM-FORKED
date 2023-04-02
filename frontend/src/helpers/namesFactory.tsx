@@ -1,18 +1,51 @@
 import { Enums } from '../shared';
 import { CourseType } from '../types/course';
-import {
-    DownOutlined,
-    FileDoneOutlined,
-    ReadOutlined,
-} from '@ant-design/icons';
+import { FileDoneOutlined, ReadOutlined } from '@ant-design/icons';
 import React from 'react';
 import { CATEGORY_OTHER_TEXTS } from '../texts';
+import { Typography } from 'antd';
+import { Link } from 'react-router-dom';
 
-const getCourseTitle = (course: CourseType) => {
-    if (course) {
-        return course.title;
+const { Title, Text } = Typography;
+
+const getCourseTitleComponent = (course, size) => {
+    if (!course) {
+        return '';
     }
-    return '';
+    if (course.is_enrolled && !course.is_draft) {
+        return (
+            <Title level={size}>
+                <Link
+                    data-cy="course-catalog-list-item-link-title"
+                    to={`/app/courses/${course.uuid}`}
+                >
+                    {course.title}
+                </Link>
+            </Title>
+        );
+    } else if (!course.is_enrolled && !course.is_draft) {
+        return (
+            <Title level={size}>
+                <div data-cy="course-catalog-list-item-no-link-title">
+                    {course.title}
+                </div>
+            </Title>
+        );
+    } else {
+        return (
+            <Title level={size}>
+                <Link
+                    data-cy="course-catalog-list-item-draft-title"
+                    to={`/app/courses/${course.uuid}/edit`}
+                    style={{ color: 'black' }}
+                >
+                    {course.title}
+                    {'  '}
+                    <Text type="secondary">{getCourseSubtitle(course)}</Text>
+                </Link>
+            </Title>
+        );
+    }
 };
 
 const getCourseSubtitle = (course: CourseType) => {
@@ -41,7 +74,7 @@ const getContentTypeIcon = (contentType: string) => {
 };
 
 export {
-    getCourseTitle,
+    getCourseTitleComponent,
     getCourseSubtitle,
     getContentTypeName,
     getContentTypeIcon,

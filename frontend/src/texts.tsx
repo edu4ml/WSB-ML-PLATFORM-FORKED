@@ -26,7 +26,7 @@ export const NOTIF_COURSE_COMPONENT_UPDATED = 'Komponent zaktualizowany!';
 export const NOTIF_COURSE_COMPONENT_DELETED = 'Komponent usunięty!';
 
 // Other texts
-export const TXT_DRAFT_VERSION = 'Wersja robocza';
+export const TXT_DRAFT_VERSION = 'Wersja robocza. Opublikuj by dołączyć';
 export const TXT_PUBLISHED_VERSION = 'Ten kurs jest opublikowany';
 export const TXT_EXERCISE = 'Ćwiczenie';
 export const TXT_EXERCISES = 'Ćwiczenia';

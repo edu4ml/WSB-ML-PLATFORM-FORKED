@@ -1,12 +1,10 @@
-import { Card, Progress, Typography } from 'antd';
+import { Card, Progress } from 'antd';
 import React from 'react';
 import { CourseType } from '../../types/course';
 import { UserType } from '../../types/user';
 import CourseDetailsButton from '../../components/common/CourseDetailsButton';
 import CourseEnrollButton from '../../components/common/CourseEnrollButton';
-import { Link } from 'react-router-dom';
-
-const { Title } = Typography;
+import { getCourseTitleComponent } from '../../helpers/namesFactory';
 
 const getCourseExtra = (course, user) => {
     if (course.is_enrolled && !course.is_draft) {
@@ -26,34 +24,6 @@ const getCourseExtra = (course, user) => {
     }
 };
 
-const getCourseTitle = (course) => {
-    if (course.is_enrolled && !course.is_draft) {
-        return (
-            <Link
-                data-cy="course-catalog-list-item-link-title"
-                to={`/app/courses/${course.uuid}`}
-            >
-                {course.title}
-            </Link>
-        );
-    } else if (!course.is_enrolled && !course.is_draft) {
-        return (
-            <div data-cy="course-catalog-list-item-no-link-title">
-                {course.title}
-            </div>
-        );
-    } else {
-        return (
-            <Link
-                data-cy="course-catalog-list-item-draft-title"
-                to={`/app/courses/${course.uuid}/edit`}
-            >
-                {course.title}
-            </Link>
-        );
-    }
-};
-
 const CourseListItem = ({
     course,
     user,
@@ -65,7 +35,7 @@ const CourseListItem = ({
         <Card
             data-cy={'course-catalog-list-item'}
             style={{ marginTop: '20px' }}
-            title={<Title level={4}>{getCourseTitle(course)}</Title>}
+            title={getCourseTitleComponent(course, 4)}
             extra={getCourseExtra(course, user)}
         >
             description={course.description}

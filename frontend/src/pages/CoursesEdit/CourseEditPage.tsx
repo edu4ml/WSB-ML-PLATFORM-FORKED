@@ -11,7 +11,7 @@ import { Enums } from '../../shared';
 import { CourseStepType } from '../../types/course';
 
 import PageHeader from '../../components/common/PageHeader';
-import { getCourseTitle, getCourseSubtitle } from '../../helpers/namesFactory';
+import { getCourseSubtitle } from '../../helpers/namesFactory';
 import CourseEditDetails from './CourseEditDetails';
 import {
     CATEGORY_BUTTON_TEXTS,
@@ -149,7 +149,7 @@ const CourseEditPage = () => {
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
             <PageHeader
-                title={getCourseTitle(course)}
+                title={course?.title}
                 actions={actions}
                 subtitle={getCourseSubtitle(course)}
             />
