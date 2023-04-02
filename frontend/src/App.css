@@ -23,3 +23,7 @@ section {
 .ant-upload-select{
     width: 100%;
 }
+
+.ant-timeline-item-head {
+    background-color: #f4f7fc !important;
+}

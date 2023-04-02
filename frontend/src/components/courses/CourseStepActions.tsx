@@ -28,4 +28,4 @@ const CourseStepSelfEvaluateButton = ({
     );
 };
 
-export default CourseStepSelfEvaluateButton;
+export { CourseStepSelfEvaluateButton };

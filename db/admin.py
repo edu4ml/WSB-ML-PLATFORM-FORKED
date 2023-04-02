@@ -32,13 +32,13 @@ admin.site.register(CourseEnrollment, CourseEnrollmentAdmin)
 class CourseStepAdmin(admin.ModelAdmin):
     list_display = (
         "course",
+        "component",
         "order",
         "evaluation_type",
     )
-    list_editable = ("order", "evaluation_type")
+    list_editable = ("component", "order", "evaluation_type")
     list_editable_groups = [("order",)]
     list_filter = ("course",)
-    # form = CourseStepForm
 
 
 admin.site.register(CourseStep, CourseStepAdmin)
