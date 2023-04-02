@@ -9,7 +9,7 @@ import LoginLayout from './pages/Layout/LoginLayout';
 import MainLayout from './pages/Layout/MainLayout';
 import SimpleLayout from './pages/Layout/SimpleLayout';
 import CoursesPage from './pages/CoursesCatalog/CourseCatalogPage';
-import CourseDetailPage from './pages/CoursesCatalog/CourseDetailPage';
+import CourseDetailPage from './pages/CourseDetails/CourseDetailPage';
 import CourseEditPage from './pages/CoursesEdit/CourseEditPage';
 import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
 import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage';

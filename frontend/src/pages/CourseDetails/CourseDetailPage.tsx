@@ -1,6 +1,7 @@
 import React from 'react';
+import { useParams } from 'react-router';
+import { useGetCourseQuery } from '../../features/courses/coursesApi';
 import { Space, Typography, Timeline } from 'antd';
-import { CourseType } from '../../types/course';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
@@ -21,7 +22,10 @@ const getStatusColor = (step) => {
     }
 };
 
-const CourseDetails = ({ course }: { course: CourseType }) => {
+const CourseDetailPage = () => {
+    const { courseId } = useParams();
+    const { data: course } = useGetCourseQuery(courseId);
+
     const getDot = (step) => {
         if (step.user_progress.is_completed) {
             return <TaskAltIcon />;
@@ -35,7 +39,7 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
         }
     };
 
-    const timelineItems = course.steps.map((step) => ({
+    const timelineItems = course?.steps.map((step) => ({
         color: getStatusColor(step),
         children: <CourseStepItem step={step} course_uuid={course.uuid} />,
         dot: getDot(step),
@@ -43,10 +47,10 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
 
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
-            <Title level={1}>{course.title}</Title>
+            <Title level={1}>{course?.title}</Title>
             <Timeline items={timelineItems} />
         </Space>
     );
 };
 
-export default CourseDetails;
+export default CourseDetailPage;
