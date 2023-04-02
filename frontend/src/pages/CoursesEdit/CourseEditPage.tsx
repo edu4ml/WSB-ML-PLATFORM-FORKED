@@ -51,18 +51,17 @@ const CourseEditPage = () => {
     const [issueCommand, {}] = useIssueCourseCommandMutation();
     const [courseSteps, setCourseSteps] = useState([]);
     const [courseDescription, setCourseDescription] = useState('');
-    const [notSaved, setNotSaved] = useState(false);
 
     useEffect(() => {
         if (course) {
             setCourseDescription(course.description);
             setCourseSteps(course.steps);
+
+            if (!course.is_draft) {
+                navigate(`/app/courses/`);
+            }
         }
     }, [course]);
-
-    useEffect(() => {
-        setNotSaved(true);
-    }, [courseSteps, courseDescription]);
 
     const mapToCourseSteps = (data) => {
         return data.map((item: CourseStepType, index: number) => ({
@@ -111,7 +110,6 @@ const CourseEditPage = () => {
             steps: mapToCourseSteps(courseSteps),
         };
 
-        console.log(command);
         if (!validateBeforeSave(command.steps, command.description)) {
             notification.error({
                 message:
@@ -127,7 +125,6 @@ const CourseEditPage = () => {
                     message: CATEGORY_NOTIFICATIONS.courseSaved,
                     duration: 2,
                 });
-                setNotSaved(false);
             })
             .catch((err) => {
                 notification.error({
