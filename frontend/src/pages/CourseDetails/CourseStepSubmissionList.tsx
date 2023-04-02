@@ -19,7 +19,7 @@ const CourseStepSubmissionList = ({ submissions, disabled }) => {
                 Przesłane zadania
             </Text>
             {submissions.map((submission) => (
-                <Space style={{ width: '100%' }}>
+                <Space style={{ width: '100%' }} key={submission.uuid}>
                     <ResourceAvatarLink
                         key={submission.uuid}
                         resource={submission}
