@@ -12,6 +12,13 @@ const submissionStatusTagColor = {
     [Enums.COURSE_STEP_EVALUATION_STATUS.SUBMITTED]: 'processing',
 };
 
+const submissionStatusTagText = {
+    [Enums.COURSE_STEP_EVALUATION_STATUS.WAITING]: 'Oczekuje',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.PASSED]: 'Zatwierdzone',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.FAILED]: 'Odrzucone',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.SUBMITTED]: 'Przesłane',
+};
+
 const CourseStepSubmissionList = ({ submissions, disabled }) => {
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
@@ -26,7 +33,7 @@ const CourseStepSubmissionList = ({ submissions, disabled }) => {
                         disabled={disabled}
                     />
                     <Tag color={submissionStatusTagColor[submission.status]}>
-                        {submission.status}
+                        {submissionStatusTagText[submission.status]}
                     </Tag>
                 </Space>
             ))}
