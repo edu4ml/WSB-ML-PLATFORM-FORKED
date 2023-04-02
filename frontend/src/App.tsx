@@ -14,7 +14,6 @@ import CourseEditPage from './pages/CoursesEdit/CourseEditPage';
 import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
 import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage';
 import DashboardLayout from './pages/Layout/DashboardLayout';
-import ExternalResourcesPage from './pages/ExternalResources/ExternalResourcesPage';
 
 const App = () => {
     return (
@@ -105,18 +104,6 @@ const App = () => {
                                     <DashboardLayout>
                                         <TeacherDashboardPage />
                                     </DashboardLayout>
-                                </MainLayout>
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/app/resources"
-                        element={
-                            <PrivateRoute>
-                                <MainLayout>
-                                    <SimpleLayout>
-                                        <ExternalResourcesPage />
-                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }

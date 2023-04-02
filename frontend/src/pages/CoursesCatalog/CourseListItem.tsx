@@ -2,8 +2,10 @@ import { Card, Progress } from 'antd';
 import React from 'react';
 import { CourseType } from '../../types/course';
 import { UserType } from '../../types/user';
-import CourseDetailsButton from '../../components/common/CourseDetailsButton';
-import CourseEnrollButton from '../../components/common/CourseEnrollButton';
+import {
+    CourseDetailsButton,
+    CourseEnrollButton,
+} from './CourseListItemActions';
 import { getCourseTitleComponent } from '../../helpers/namesFactory';
 
 const getCourseExtra = (course, user) => {

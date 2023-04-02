@@ -8,12 +8,11 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import type { ColumnsType } from 'antd/es/table';
-import CourseEditStepRow from '../../components/courses/CourseEditStepRow';
+import CourseEditStepRow from './CourseEditStepRow';
 import {
     DownOutlined,
     DeleteTwoTone,
     FileDoneOutlined,
-    ReadOutlined,
 } from '@ant-design/icons';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';

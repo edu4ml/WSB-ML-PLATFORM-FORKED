@@ -9,10 +9,6 @@ from elearning.coursing.entities.author import Author
 
 @dataclass
 class Course:
-    """
-    Main Aggregate in coursing domain
-    """
-
     uuid: UUID | None
     updated_at: datetime | None
     created_at: datetime | None

@@ -2,8 +2,6 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from db.models import CourseStepUserProgress
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 

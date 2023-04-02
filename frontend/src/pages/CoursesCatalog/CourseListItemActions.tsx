@@ -1,10 +1,25 @@
-import { Button, notification } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CourseType } from '../../types/course';
+import { Button, notification } from 'antd';
 import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
-import { CourseType } from '../../types/course';
 import { UserType } from '../../types/user';
-import { useNavigate } from 'react-router-dom';
+
+const CourseDetailsButton = ({ course }: { course: CourseType }) => {
+    const navigate = useNavigate();
+
+    return (
+        <Button
+            onClick={() => {
+                navigate(`/app/courses/${course.uuid}/edit`);
+            }}
+            style={{ width: '100%' }}
+        >
+            {course.is_draft ? 'Edytuj' : 'Szczegóły'}
+        </Button>
+    );
+};
 
 const CourseEnrollButton = ({
     course,
@@ -52,4 +67,4 @@ const CourseEnrollButton = ({
     );
 };
 
-export default CourseEnrollButton;
+export { CourseEnrollButton, CourseDetailsButton };
