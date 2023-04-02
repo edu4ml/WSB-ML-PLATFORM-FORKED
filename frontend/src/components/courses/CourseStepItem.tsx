@@ -1,12 +1,74 @@
 import React from 'react';
-import { Card, Space, Typography, Row, Col, Divider } from 'antd';
+import { Card, Space, Typography, Row, Col, Divider, Avatar } from 'antd';
 import {
     CourseStepSelfEvaluateButton,
     CourseStepUploadSubmissionButton,
 } from './CourseStepActions';
 import { Enums } from '../../shared';
-import FilesAvatars from './FilesAvatars';
-const { Title } = Typography;
+const { Title, Text } = Typography;
+import { FileOutlined, LinkOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+
+const ResourceLink = ({ resource, disabled }) => {
+    const isFIleResourceType = resource.type === 'FILE';
+
+    const avatar = (
+        <Space>
+            <Avatar
+                size={'small'}
+                icon={isFIleResourceType ? <FileOutlined /> : <LinkOutlined />}
+                src={resource.file_link}
+            />
+            <Text disabled={disabled}>{resource.title}</Text>
+        </Space>
+    );
+
+    if (disabled) {
+        return avatar;
+    }
+    return (
+        <Link
+            target={'_blank'}
+            to={isFIleResourceType ? resource.file_link : resource.url}
+        >
+            {avatar}
+        </Link>
+    );
+};
+const CourseStepExtraResources = ({ resources, disabled = true }) => {
+    return (
+        <Space direction="vertical">
+            <Text disabled={disabled} strong>
+                Meteriały dodatkowe
+            </Text>
+
+            {resources.map((resource) => (
+                <ResourceLink
+                    key={resource.uuid}
+                    resource={resource}
+                    disabled={disabled}
+                />
+            ))}
+        </Space>
+    );
+};
+
+const CourseSubmissions = ({ submissions, disabled }) => {
+    return (
+        <Space direction="vertical">
+            <Text disabled={disabled} strong>
+                Przesłane zadania
+            </Text>
+            {submissions.map((submission) => (
+                <ResourceLink
+                    key={submission.uuid}
+                    resource={submission}
+                    disabled={disabled}
+                />
+            ))}
+        </Space>
+    );
+};
 
 const CourseStepItem = ({ step, course_uuid }) => {
     const getActions = (course_uuid, courseComponent) => {
@@ -46,16 +108,36 @@ const CourseStepItem = ({ step, course_uuid }) => {
     };
     return (
         <Card
-            title={<Title level={4}>{step.component.title}</Title>}
+            title={
+                <Title level={4} disabled={step.user_progress.is_blocked}>
+                    {step.component.title}
+                </Title>
+            }
             extra={getActions(course_uuid, step)}
         >
             <Row>
-                <Col span={12}>{step.component.description}</Col>
+                <Col span={8}>
+                    <Text disabled={step.user_progress.is_blocked}>
+                        {step.component.description}
+                    </Text>
+                </Col>
                 <Col span={1}>
                     <Divider type="vertical" style={{ height: '100%' }} />
                 </Col>
-                <Col span={11}>
-                    <FilesAvatars files={step.component.resources} />
+                <Col span={8}>
+                    <CourseStepExtraResources
+                        resources={step.component.resources}
+                        disabled={step.user_progress.is_blocked}
+                    />
+                </Col>
+                <Col span={1}>
+                    <Divider type="vertical" style={{ height: '100%' }} />
+                </Col>
+                <Col span={6}>
+                    <CourseSubmissions
+                        submissions={[]}
+                        disabled={step.user_progress.is_blocked}
+                    />
                 </Col>
             </Row>
         </Card>
