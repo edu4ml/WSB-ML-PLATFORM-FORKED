@@ -1,6 +1,6 @@
 from uuid import UUID
 from elearning.coursing.entities.external_resource import ExternalResource
-from infra.exceptions import BadRequestException, NotFoundException
+from infra.exceptions import RequestException
 from infra.logging import logger
 from infra.repository import ModelRepository
 from db.models import ExternalResource as ExternalResourceDbModel
@@ -28,14 +28,14 @@ class ExternalResourceRepository(ModelRepository):
             resource = form.save()
             return self.from_model(resource)
         else:
-            raise BadRequestException(form.errors)
+            raise RequestException(form.errors, status_code=400)
 
     def update_by_uuid(self, uuid, **kwargs):
 
         try:
             resource = ExternalResourceDbModel.objects.get(uuid=uuid)
         except ExternalResourceDbModel.DoesNotExist:
-            raise NotFoundException("Resource not found")
+            raise RequestException("Resource not found", status_code=404)
 
         post_data = kwargs.get("post_data")
         file_data = kwargs.get("file_data")
@@ -47,12 +47,15 @@ class ExternalResourceRepository(ModelRepository):
             resource = form.save()
             return self.from_model(resource)
         else:
-            raise BadRequestException(form.errors)
+            raise RequestException(form.errors, status_code=400)
 
     def delete_by_uuid(self, uuid: UUID):
-        resource = self.root_model.objects.get(uuid=uuid)
-        resource.file.delete()
-        resource.delete()
+        try:
+            resource = self.root_model.objects.get(uuid=uuid)
+            resource.file.delete()
+            resource.delete()
+        except self.root_model.DoesNotExist:
+            raise RequestException("Resource not found", status_code=404)
 
     def from_model(self, external_resource):
         return ExternalResource(

@@ -4,7 +4,7 @@ from db.models import (
 )
 from db.models.courses import EvaluationAttempt
 from elearning.coursing.entities.course_step_user_progress import CourseStepUserProgress
-from infra.exceptions import BadRequestException
+from infra.exceptions import RequestException
 from infra.logging import logger
 from infra.repository import ModelRepository
 
@@ -42,4 +42,4 @@ class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbM
             return self.get_by_uuid(user_progress_uuid)
 
         else:
-            raise BadRequestException(form.errors)
+            raise RequestException(form.errors, status_code=400)

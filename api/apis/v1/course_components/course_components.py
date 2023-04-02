@@ -8,6 +8,7 @@ from api.apis.mixins import AuthMixin
 from db.repository.course_component import (
     CourseComponentRepo,
 )
+from infra.exceptions import RequestException
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
 
@@ -24,15 +25,15 @@ class CourseComponentApi(AuthMixin):
         try:
             component = CourseComponentRepo(request.user).create(**request.data)
             return Response(asdict(component), status.HTTP_201_CREATED)
-        except AssertionError:
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
                     success=False,
                     payload=request.data,
-                    message="Missing required fields",
+                    message=e.message,
                 ),
-                status.HTTP_400_BAD_REQUEST,
+                status=e.status_code,
             )
 
 
@@ -48,21 +49,20 @@ class CourseComponentDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def put(self, request, component_uuid: UUID, **kwargs):
         try:
-
             component = CourseComponentRepo(request.user).update_by_uuid(
                 uuid=component_uuid,
                 **request.data,
             )
             return Response(asdict(component), status.HTTP_200_OK)
-        except KeyError:
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
                     success=False,
                     payload=request.data,
-                    message="Missing required fields",
+                    message=e.message,
                 ),
-                status.HTTP_400_BAD_REQUEST,
+                status=e.status_code,
             )
 
     @api_has_one_of_the_roles([UserRoles.TEACHER])
@@ -75,24 +75,23 @@ class CourseComponentDetailFileUploadApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def post(self, request, component_uuid: UUID, **kwargs):
         try:
-            CourseComponentRepo(request.user).add_resource(
+            component = CourseComponentRepo(request.user).add_resource(
                 component_uuid=component_uuid,
                 payload=dict(
                     post_data=request.POST,
                     file_data=request.FILES,
                 ),
             )
-
-            return Response({}, status.HTTP_201_CREATED)
-        except AssertionError:
+            return Response(asdict(component), status.HTTP_201_CREATED)
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
                     success=False,
                     payload=request.data,
-                    message="Missing required fields",
+                    message=e.message,
                 ),
-                status.HTTP_400_BAD_REQUEST,
+                status=e.status_code,
             )
 
 
@@ -106,13 +105,13 @@ class CourseComponentDetailFileDetailApi(AuthMixin):
             )
 
             return Response({}, status.HTTP_200_OK)
-        except AssertionError:
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
                     success=False,
                     payload=request.data,
-                    message="Missing required fields",
+                    message=e.message,
                 ),
-                status.HTTP_400_BAD_REQUEST,
+                status=e.status_code,
             )

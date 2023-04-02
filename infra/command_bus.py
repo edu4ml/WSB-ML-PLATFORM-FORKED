@@ -5,11 +5,7 @@ from infra.command_handler import CommandHandler
 from infra.logging import logger
 from shared.enums import ApiErrors
 
-from .exceptions import (
-    CommandAlreadyExistException,
-    CommandHandlerDoesNotExistException,
-    CommandNotSupported,
-)
+from .exceptions import CommandBusException
 
 
 @logger
@@ -25,7 +21,7 @@ class CommandBus:
 
     def register(self, service: CommandHandler, to: Command) -> None:
         if to in self.services.keys():
-            raise CommandAlreadyExistException
+            raise CommandBusException(ApiErrors.COMMAND_ALREADY_EXISTS, 500)
         self.services[to] = service
 
     def issue(self, request, **kwargs):
@@ -39,7 +35,7 @@ class CommandBus:
         if cmd.__class__ in self.services.keys():
             return self.services[cmd.__class__].handle(cmd)
         else:
-            raise CommandHandlerDoesNotExistException(ApiErrors.HANDLER_DOES_NOT_EXITS)
+            raise CommandBusException(ApiErrors.HANDLER_DOES_NOT_EXITS, 501)
 
     def _is_allowed_to_create_command(self, request, command: Command):
         return request.user.roles.filter(name__in=command.Meta.roles).exists()
@@ -49,7 +45,7 @@ class CommandBus:
         for command in self.services.keys():
             if command.Meta.name == cmd_type:
                 return command.build_from_request(request, **kwargs)
-        raise CommandNotSupported(ApiErrors.COMMAND_TYPE_NOT_SUPPORTED)
+        raise CommandBusException(ApiErrors.COMMAND_TYPE_NOT_SUPPORTED, 400)
 
     def __str__(self):
         repr = "Command Bus\n"

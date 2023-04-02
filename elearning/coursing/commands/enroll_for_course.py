@@ -6,7 +6,7 @@ from shared.enums import CommandTypes, UserRoles
 from db.repository.configuration import RepositoryRoot
 from infra.command_handler import CommandHandler
 from infra.event import Event
-from infra.exceptions import CommandProcessingException
+from infra.exceptions import CommandBusException
 from shared.enums import ApiErrors
 
 
@@ -47,20 +47,18 @@ class OnEnrollForCourse(CommandHandler):
 
     def _check_user_exists(self, user):
         if user is None:
-            raise CommandProcessingException(ApiErrors.USER_DOES_NOT_EXIST)
+            raise CommandBusException(ApiErrors.USER_DOES_NOT_EXIST, 400)
 
     def _check_is_already_enrolled(self, enrollment):
         if enrollment is not None:
-            raise CommandProcessingException(
-                ApiErrors.CANNOT_ENROLL_FOR_COURSE_ALREADY_ENROLLED
+            raise CommandBusException(
+                ApiErrors.CANNOT_ENROLL_FOR_COURSE_ALREADY_ENROLLED, 400
             )
 
     def _check_course_is_not_draft(self, course):
         if course.is_draft:
-            raise CommandProcessingException(
-                ApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT
-            )
+            raise CommandBusException(ApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT, 400)
 
     def _check_parent_exists(self, course):
         if course is None:
-            raise CommandProcessingException(ApiErrors.COMMAND_TYPE_HAS_NO_PARENT)
+            raise CommandBusException(ApiErrors.COMMAND_TYPE_HAS_NO_PARENT, 400)

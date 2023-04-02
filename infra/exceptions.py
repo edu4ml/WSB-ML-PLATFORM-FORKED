@@ -1,53 +1,12 @@
-from rest_framework import status
-
-
 class CommandBusException(Exception):
-    def __init__(self, *args: object) -> None:
+    def __init__(self, message, status_code, *args: object) -> None:
         super().__init__(*args)
-        self.message = args[0]
+        self.message = message
+        self.status_code = status_code
 
 
-class CommandProcessingException(CommandBusException):
-    def __init__(self, *args: object) -> None:
+class RequestException(Exception):
+    def __init__(self, message, status_code, *args: object) -> None:
         super().__init__(*args)
-        self.status_code = status.HTTP_400_BAD_REQUEST
-
-
-class CommandAlreadyExistException(CommandBusException):
-    pass
-
-
-class CommandProcessingForbiddenException(CommandBusException):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-        self.status_code = status.HTTP_403_FORBIDDEN
-
-
-class CommandHandlerDoesNotExistException(CommandBusException):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-        self.status_code = status.HTTP_501_NOT_IMPLEMENTED
-
-
-class CommandNotSupported(CommandBusException):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-        self.status_code = status.HTTP_400_BAD_REQUEST
-
-
-class ApiException(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-        self.message = args[0]
-
-
-class BadRequestException(ApiException):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-        self.status_code = status.HTTP_400_BAD_REQUEST
-
-
-class NotFoundException(ApiException):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-        self.status_code = status.HTTP_404_NOT_FOUND
+        self.message = message
+        self.status_code = status_code

@@ -1,8 +1,8 @@
 from dataclasses import asdict
+
 from api.apis.mixins import AuthMixin
-from db.models.external_resources import ExternalResource
 from db.repository.external_resource import ExternalResourceRepository
-from infra.exceptions import ApiException
+from infra.exceptions import RequestException
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
 from rest_framework import status
@@ -26,7 +26,7 @@ class ExternalResourceApi(AuthMixin):
                 )
             )
             return Response(asdict(resource), status.HTTP_201_CREATED)
-        except ApiException as e:
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
@@ -55,7 +55,7 @@ class ExternalResourceDetailApi(AuthMixin):
                 )
             )
             return Response(asdict(resource), status.HTTP_200_OK)
-        except ApiException as e:
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
@@ -71,7 +71,7 @@ class ExternalResourceDetailApi(AuthMixin):
         try:
             ExternalResourceRepository(request.user).delete_by_uuid(resource_uuid)
             return Response(dict(), status.HTTP_204_NO_CONTENT)
-        except ApiException as e:
+        except RequestException as e:
             return Response(
                 dict(
                     error=True,
@@ -81,5 +81,3 @@ class ExternalResourceDetailApi(AuthMixin):
                 ),
                 status=e.status_code,
             )
-        except ExternalResource.DoesNotExist:
-            return Response(dict(), status.HTTP_404_NOT_FOUND)

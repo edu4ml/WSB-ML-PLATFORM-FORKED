@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from infra.command import Command
-from infra.exceptions import CommandProcessingException
+from infra.exceptions import CommandBusException
 from shared.enums import ApiErrors, CommandTypes, UserRoles
 from db.repository.configuration import RepositoryRoot
 from infra.command_handler import CommandHandler
@@ -47,6 +47,4 @@ class OnCreateCourse(CommandHandler):
 
     def _check_if_title_was_provided(self, command):
         if command.title is None or command.title == "":
-            raise CommandProcessingException(
-                ApiErrors.CANNOT_CREATE_COURSE_WITHOUT_TITLE
-            )
+            raise CommandBusException(ApiErrors.CANNOT_CREATE_COURSE_WITHOUT_TITLE, 400)

@@ -4,8 +4,7 @@ from uuid import UUID
 
 from infra.command import Command
 from infra.exceptions import (
-    CommandProcessingException,
-    CommandProcessingForbiddenException,
+    CommandBusException,
 )
 from shared.enums import ApiErrors, CommandTypes, UserRoles, CourseComponentType
 from db.repository.configuration import RepositoryRoot
@@ -52,7 +51,7 @@ class OnUpdateCourse(CommandHandler):
     def _handle_command(self, command: UpdateCourse):
         course = self.repository.course.get_by_uuid(command.parent_uuid)
         if course is None:
-            raise CommandProcessingException(ApiErrors.COURSE_DOES_NOT_EXIST)
+            raise CommandBusException(ApiErrors.COURSE_DOES_NOT_EXIST, 400)
 
         self._validate_steps_payload(command.steps)
         self._check_that_user_is_author(course, command.issuer)
@@ -75,25 +74,23 @@ class OnUpdateCourse(CommandHandler):
 
     def _check_that_user_is_author(self, course, user):
         if course.author != user.uuid and not user.is_admin():
-            raise CommandProcessingForbiddenException(
-                ApiErrors.CANNOT_UPDATE_COURSE_NOT_AUTHOR
-            )
+            raise CommandBusException(ApiErrors.CANNOT_UPDATE_COURSE_NOT_AUTHOR, 403)
 
     def _check_course_is_not_published(self, course):
         if not course.is_draft:
-            raise CommandProcessingException(ApiErrors.CANNOT_UPDATE_PUBLISHED_COURSE)
+            raise CommandBusException(ApiErrors.CANNOT_UPDATE_PUBLISHED_COURSE, 400)
 
     def _validate_steps_payload(self, steps):
         for step in steps:
             if step.get("component") is None:
-                raise CommandProcessingException(
-                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_COMPONENT
+                raise CommandBusException(
+                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_COMPONENT, 400
                 )
             if step.get("evaluation_type") is None:
-                raise CommandProcessingException(
-                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_EVALUATION_TYPE
+                raise CommandBusException(
+                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_EVALUATION_TYPE, 400
                 )
             if step.get("order") is None:
-                raise CommandProcessingException(
-                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_ORDER
+                raise CommandBusException(
+                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_ORDER, 400
                 )

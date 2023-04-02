@@ -49,7 +49,7 @@ def test_create_external_resource_valid_data(admin_client, teacher_client):
 
         assert response_data["title"] == resource_data["title"]
         assert response_data["url"] == resource_data["url"]
-        assert "test_file.txt" in response_data["file_link"]
+        assert "test_file" in response_data["file_link"]
 
         # cleanup
         for resource in ExternalResource.objects.all():

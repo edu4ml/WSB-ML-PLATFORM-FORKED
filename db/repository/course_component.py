@@ -1,11 +1,13 @@
 from db.models import (
     CourseComponent as CourseComponentDbModel,
 )
+from rest_framework import status
+
 from elearning.coursing.entities.course_component import (
     CourseComponent as CourseComponentDomainModel,
 )
 from elearning.coursing.entities.external_resource import ExternalResource
-from infra.exceptions import BadRequestException
+from infra.exceptions import RequestException
 from infra.logging import logger
 from infra.repository import ModelRepository
 from db.models import ExternalResource as ExternalResourceDbModel
@@ -24,6 +26,10 @@ class CourseComponentRepo(ModelRepository):
     root_entity = CourseComponentDomainModel
 
     def create(self, **kwargs):
+        if "title" not in kwargs.keys():
+            raise RequestException(
+                "Missing title", status_code=status.HTTP_400_BAD_REQUEST
+            )
         assert "title" in kwargs.keys()
         return super().create(**kwargs)
 
@@ -47,20 +53,27 @@ class CourseComponentRepo(ModelRepository):
         )
 
     def add_resource(self, component_uuid, payload):
-        file_data = payload.get("file_data")
-        form_data = dict(title=payload["file_data"]["file"].name.replace(" ", "_"))
+        try:
+            file_data = payload.get("file_data")
+            form_data = dict(title=payload["file_data"]["file"].name.replace(" ", "_"))
 
-        form = ExternalResourceForm(form_data, file_data)
+            form = ExternalResourceForm(form_data, file_data)
 
-        if form.is_valid():
-            resource = form.save()
-            course_component = self.root_model.objects.get(uuid=component_uuid)
-            course_component.resources.add(resource)
+            if form.is_valid():
+                resource = form.save()
+                course_component = self.root_model.objects.get(uuid=component_uuid)
+                course_component.resources.add(resource)
 
-            return self.from_model(course_component)
+                return self.from_model(course_component)
 
-        else:
-            raise BadRequestException(form.errors)
+            else:
+                raise RequestException(
+                    form.errors, status_code=status.HTTP_400_BAD_REQUEST
+                )
+        except Exception as e:
+            raise RequestException(
+                f"MultiValueDictError: {e}", status_code=status.HTTP_400_BAD_REQUEST
+            )
 
     def remove_resource(self, component_uuid, resource_uuid):
         course_component = self.root_model.objects.get(uuid=component_uuid)
