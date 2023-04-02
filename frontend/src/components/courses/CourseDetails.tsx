@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card, Space, Typography, Timeline, Row, Col, Divider } from 'antd';
-import CourseStepSelfEvaluateButton from './CourseStepSelfEvaluateButton';
+import { CourseStepSelfEvaluateButton } from './CourseStepActions';
 import { CourseType } from '../../types/course';
 import { Enums } from '../../shared';
 import FilesAvatars from './FilesAvatars';
-import CourseComponentTitle from '../../pages/CourseComponents/CourseComponentTitle';
-
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
+import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 const { Title } = Typography;
 
 const getStatusColor = (step) => {
@@ -40,15 +41,27 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
                 />
             );
         }
-
         return actions;
+    };
+
+    const getDot = (step) => {
+        if (step.user_progress.is_completed) {
+            return <TaskAltIcon />;
+        } else if (
+            !step.user_progress.is_blocked &&
+            !step.user_progress.is_completed
+        ) {
+            return <ArrowForwardOutlinedIcon />;
+        } else if (step.user_progress.is_blocked) {
+            return <BlockOutlinedIcon />;
+        }
     };
 
     const timelineItems = course.steps.map((step) => ({
         color: getStatusColor(step),
         children: (
             <Card
-                title={<CourseComponentTitle component={step.component} />}
+                title={<Title level={4}>{step.component.title}</Title>}
                 extra={getActions(course.uuid, step)}
             >
                 <Row>
@@ -62,6 +75,7 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
                 </Row>
             </Card>
         ),
+        dot: getDot(step),
     }));
 
     return (
