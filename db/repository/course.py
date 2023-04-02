@@ -4,8 +4,9 @@ from db.models import (
     CourseStepUserProgress as CourseStepUserProgressDbModel,
 )
 from elearning.coursing.course import Course as CourseDomainModel
-from elearning.coursing.entities import CourseComponentCompletion, CourseStep
+from elearning.coursing.entities import CourseStepUserProgress, CourseStep
 from elearning.coursing.entities.course_component import CourseComponent
+from elearning.coursing.entities.evaluation_attempt import EvaluationAttempt
 from elearning.coursing.entities.external_resource import ExternalResource
 from infra.logging import logger
 from infra.repository import ModelRepository
@@ -67,9 +68,7 @@ class CourseRepository(ModelRepository[CourseDbModel]):
         return [
             CourseStep(
                 order=step.order,
-                user_progress=self._get_user_progress_on_component(
-                    course=course, component=step.component
-                ),
+                user_progress=self._get_user_progress(step=step),
                 evaluation_type=step.evaluation_type,
                 component=CourseComponent(
                     uuid=step.component.uuid,
@@ -95,23 +94,31 @@ class CourseRepository(ModelRepository[CourseDbModel]):
             for resource in component.resources.all()
         ]
 
-    def _get_user_progress_on_component(self, course, component):
+    def _get_user_progress(self, step):
         # whole key is passed here so it is safe to do get_or_create here
         if not self.user:
-            return CourseComponentCompletion(
-                tracking_uuid=None,
-                completed_at=None,
-                is_completed=None,
+            return CourseStepUserProgress(
+                tracking_uuid=None, completed_at=None, is_completed=None, submissions=[]
             )
 
-        step_completion, _ = CourseStepUserProgressDbModel.objects.get_or_create(
+        step_progress, _ = CourseStepUserProgressDbModel.objects.get_or_create(
             user=self.user,
-            course=course,
-            component=component,
+            # course=step.course,
+            step=step,
         )
 
-        return CourseComponentCompletion(
-            tracking_uuid=step_completion.uuid,
-            completed_at=step_completion.completed_at,
-            is_completed=step_completion.is_completed,
+        return CourseStepUserProgress(
+            tracking_uuid=step_progress.uuid,
+            completed_at=step_progress.completed_at,
+            is_completed=step_progress.is_completed,
+            submissions=[
+                EvaluationAttempt(
+                    uuid=attempt.uuid,
+                    title=attempt.title,
+                    description=attempt.description,
+                    file_link=attempt.file.url if attempt.file else "",
+                    status=attempt.status,
+                )
+                for attempt in step.evaluation_attempts.filter(user=step_progress.user)
+            ],
         )

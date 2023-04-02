@@ -66,16 +66,15 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.register(Course, CourseAdmin)
 
 
-class CourseStepUserCompletionAdmin(admin.ModelAdmin):
+class CourseStepUserProgressAdmin(admin.ModelAdmin):
     list_display = (
         "user",
-        "course",
         "is_completed",
         "completed_at",
     )
 
 
-admin.site.register(CourseStepUserProgress, CourseStepUserCompletionAdmin)
+admin.site.register(CourseStepUserProgress, CourseStepUserProgressAdmin)
 
 
 class EvaluationAttemptAdmin(admin.ModelAdmin):

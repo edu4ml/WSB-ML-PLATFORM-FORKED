@@ -1,11 +1,10 @@
 from django.conf import settings
 from django.db import models
 from db.models.external_resources import ExternalResource
-
 from shared.enums import (
     CourseComponentType,
     CourseStepEvaluationType,
-    CourseStepUserProgressStatus,
+    CourseStepEvaluationStatus,
 )
 
 from .mixin import TimestampedModel
@@ -85,28 +84,42 @@ class CourseStep(TimestampedModel):
 
 
 class CourseStepUserProgress(TimestampedModel):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    step = models.ForeignKey(CourseStep, on_delete=models.PROTECT)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="course_steps_completion",
     )
 
-    completed_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    component = models.ForeignKey(CourseComponent, on_delete=models.PROTECT)
-
     is_completed = models.BooleanField(default=False)
-
-    status = models.CharField(
-        max_length=255,
-        choices=CourseStepUserProgressStatus.choices(),
-        default=CourseStepUserProgressStatus.BLOCKED,
-    )
+    completed_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     class Meta:
-        unique_together = ("user", "component", "course")
+        unique_together = ("user", "step")
 
     def __str__(self) -> str:
-        return (
-            f"{self.user.get_username()} - {self.component.title}"  # pragma: no cover
-        )
+        return f"{self.user.get_username()} - {self.step.component.title}"  # pragma: no cover
+
+
+class EvaluationAttempt(TimestampedModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+
+    course_step = models.ForeignKey(
+        CourseStep,
+        null=True,
+        on_delete=models.PROTECT,
+        default=None,
+        related_name="evaluation_attempts",
+    )
+
+    file = models.FileField(upload_to="uploads/")
+    status = models.CharField(
+        max_length=40,
+        choices=CourseStepEvaluationStatus.choices(),
+        default=CourseStepEvaluationStatus.WAITING,
+    )
+
+    def __str__(self) -> str:
+        return f"{self.course_step} | {self.user}  | {self.status}"

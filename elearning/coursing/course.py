@@ -33,8 +33,6 @@ class Course:
         self._calculate_blocked_steps()
         self._calculate_progress()
 
-    # ---------------------------------------------------------------------------
-
     def _calculate_progress(self) -> int:
         steps_total = len(self.steps)
         steps_completed = len(
@@ -46,6 +44,11 @@ class Course:
             self.progress = int((steps_completed / steps_total) * 100)
 
     def _calculate_blocked_steps(self):
+        """
+        This calculation needs to be done from whole course perspective
+        so having it in CourseStep or lower entity is not a good idea
+        cause we need to know about all steps in course
+        """
         previous_step = None
 
         for step in self.steps:
