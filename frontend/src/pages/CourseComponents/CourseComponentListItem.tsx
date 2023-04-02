@@ -14,8 +14,8 @@ import {
 } from '../../texts';
 
 import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
-import CourseComponentEditModal from '../../components/courses/CourseComponentEditModal';
-import CourseComponentEditResources from '../../components/courses/CourseComponentEditResources';
+import CourseComponentEditModal from './CourseComponentEditModal';
+import CourseComponentEditResources from './CourseComponentEditResources';
 import FilesAvatars from '../../components/courses/FilesAvatars';
 import CourseComponentTitle from './CourseComponentTitle';
 

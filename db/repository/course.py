@@ -67,6 +67,7 @@ class CourseRepository(ModelRepository[CourseDbModel]):
     def _get_course_steps(self, course):
         return [
             CourseStep(
+                uuid=step.uuid,
                 order=step.order,
                 user_progress=self._get_user_progress(step=step),
                 evaluation_type=step.evaluation_type,

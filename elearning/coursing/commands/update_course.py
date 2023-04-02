@@ -64,6 +64,7 @@ class OnUpdateCourse(CommandHandler):
         if command.steps is not None:
             course.steps = [
                 CourseStep(
+                    uuid=None,
                     order=s["order"],
                     component=s["component"],
                     evaluation_type=s["evaluation_type"],

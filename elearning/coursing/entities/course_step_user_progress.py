@@ -12,4 +12,4 @@ class CourseStepUserProgress:
     submissions: List[EvaluationAttempt]
     completed_at: datetime | None = None
     is_completed: bool = False
-    is_blocked: bool = False
+    is_blocked: bool | None = None

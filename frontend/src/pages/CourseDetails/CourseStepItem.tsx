@@ -10,36 +10,34 @@ import CourseStepSubmissionList from './CourseStepSubmissionList';
 import CourseStepResourcesList from './CourseStepResourcesList';
 
 const CourseStepItem = ({ step, course_uuid }) => {
-    const getActions = (course_uuid, courseComponent) => {
+    const getActions = (courseUUID, courseStep) => {
         let actions: React.ReactNode[] = [];
         if (
-            courseComponent.evaluation_type ==
+            courseStep.evaluation_type ==
                 Enums.COURSE_STEP_EVALUATION_TYPE.SELF_EVALUATED &&
-            !courseComponent.user_progress.is_blocked &&
-            !courseComponent.user_progress.is_completed
+            !courseStep.user_progress.is_blocked &&
+            !courseStep.user_progress.is_completed
         ) {
             actions.push(
                 <CourseStepSelfEvaluateButton
                     key={'self-evaluate'}
-                    course_uuid={course_uuid}
+                    course_uuid={courseUUID}
                     progress_tracking_uuid={
-                        courseComponent.user_progress.tracking_uuid
+                        courseStep.user_progress.tracking_uuid
                     }
                 />
             );
         }
 
         if (
-            !courseComponent.user_progress.is_blocked &&
-            !courseComponent.user_progress.is_completed
+            !courseStep.user_progress.is_blocked &&
+            !courseStep.user_progress.is_completed
         ) {
             actions.push(
                 <CourseStepUploadSubmissionButton
                     key={'upload-submission'}
-                    course_uuid={course_uuid}
-                    progress_tracking_uuid={
-                        courseComponent.user_progress.tracking_uuid
-                    }
+                    courseUUID={courseUUID}
+                    courseStep={courseStep}
                 />
             );
         }

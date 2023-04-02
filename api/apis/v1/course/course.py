@@ -46,3 +46,9 @@ class CourseDetailApi(AuthMixin):
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
+
+
+# class CourseDetailsFileSubmissionUploadApi(AuthMixin):
+#     @api_has_one_of_the_roles([UserRoles.STUDENT])
+#     def post(self, request, course_uuid: UUID, **kwargs):
+#         try:

@@ -7,6 +7,13 @@ from api.apis.v1.course.course import (
     CourseDetailApi,
 )
 from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
+from api.apis.v1.course.course_step import (
+    CourseStepApi,
+    CourseStepDetailApi,
+    CourseStepDetailSubmissions,
+    CourseStepUserProgressDetails,
+    CourseStepUserProgressSubmissionUpload,
+)
 from api.apis.v1.course_components.course_components import (
     CourseComponentApi,
     CourseComponentDetailApi,
@@ -48,6 +55,31 @@ urlpatterns_v1 = [
         "course/<uuid:course_uuid>",
         CourseDetailApi.as_view(),
         name="course-detail",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step",
+        CourseStepApi.as_view(),
+        name="course-detail-steps",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>",
+        CourseStepDetailApi.as_view(),
+        name="course-detail-steps-detail",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/submissions",
+        CourseStepDetailSubmissions.as_view(),
+        name="course-detail-steps-detail-submissions",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user-progress/<uuid:user_progress_uuid>",
+        CourseStepUserProgressDetails.as_view(),
+        name="course-detail-steps-detail-user-progress",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user-progress/<uuid:user_progress_uuid>/submission",
+        CourseStepUserProgressSubmissionUpload.as_view(),
+        name="course-detail-steps-detail-user-progress",
     ),
     path(
         "course/<uuid:course_uuid>/command",
