@@ -28,4 +28,23 @@ const CourseStepSelfEvaluateButton = ({
     );
 };
 
-export { CourseStepSelfEvaluateButton };
+const CourseStepUploadSubmissionButton = ({
+    progress_tracking_uuid,
+    course_uuid,
+}) => {
+    const [issueCommand, {}] = useIssueCourseCommandMutation();
+
+    return (
+        <Button
+            icon={<CheckCircleTwoTone />}
+            block
+            onClick={() => {
+                console.log('TODO: upload submission');
+            }}
+        >
+            Prześlij rozwiązanie
+        </Button>
+    );
+};
+
+export { CourseStepSelfEvaluateButton, CourseStepUploadSubmissionButton };

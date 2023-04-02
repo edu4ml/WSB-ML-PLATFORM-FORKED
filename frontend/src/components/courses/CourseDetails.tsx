@@ -1,6 +1,9 @@
 import React from 'react';
 import { Card, Space, Typography, Timeline, Row, Col, Divider } from 'antd';
-import { CourseStepSelfEvaluateButton } from './CourseStepActions';
+import {
+    CourseStepSelfEvaluateButton,
+    CourseStepUploadSubmissionButton,
+} from './CourseStepActions';
 import { CourseType } from '../../types/course';
 import { Enums } from '../../shared';
 import FilesAvatars from './FilesAvatars';
@@ -41,7 +44,22 @@ const CourseDetails = ({ course }: { course: CourseType }) => {
                 />
             );
         }
-        return actions;
+
+        if (
+            !courseComponent.user_progress.is_blocked &&
+            !courseComponent.user_progress.is_completed
+        ) {
+            actions.push(
+                <CourseStepUploadSubmissionButton
+                    key={'upload-submission'}
+                    course_uuid={course_uuid}
+                    progress_tracking_uuid={
+                        courseComponent.user_progress.tracking_uuid
+                    }
+                />
+            );
+        }
+        return <Space direction="horizontal">{actions}</Space>;
     };
 
     const getDot = (step) => {
