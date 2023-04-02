@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Space, Typography, Row, Col, Divider, Avatar } from 'antd';
+import { Card, Space, Typography, Row, Col, Divider, Avatar, Tag } from 'antd';
 import {
     CourseStepSelfEvaluateButton,
     CourseStepUploadSubmissionButton,
@@ -8,6 +8,13 @@ import { Enums } from '../../shared';
 const { Title, Text } = Typography;
 import { FileOutlined, LinkOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+
+const submissionStatusTagColor = {
+    [Enums.COURSE_STEP_EVALUATION_STATUS.WAITING]: 'warning',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.PASSED]: 'success',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.FAILED]: 'error',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.SUBMITTED]: 'processing',
+};
 
 const ResourceLink = ({ resource, disabled }) => {
     const isFIleResourceType = resource.type === 'FILE';
@@ -55,16 +62,21 @@ const CourseStepExtraResources = ({ resources, disabled = true }) => {
 
 const CourseSubmissions = ({ submissions, disabled }) => {
     return (
-        <Space direction="vertical">
+        <Space direction="vertical" style={{ width: '100%' }}>
             <Text disabled={disabled} strong>
                 Przesłane zadania
             </Text>
             {submissions.map((submission) => (
-                <ResourceLink
-                    key={submission.uuid}
-                    resource={submission}
-                    disabled={disabled}
-                />
+                <Space style={{ width: '100%' }}>
+                    <ResourceLink
+                        key={submission.uuid}
+                        resource={submission}
+                        disabled={disabled}
+                    />
+                    <Tag color={submissionStatusTagColor[submission.status]}>
+                        {submission.status}
+                    </Tag>
+                </Space>
             ))}
         </Space>
     );
@@ -135,7 +147,7 @@ const CourseStepItem = ({ step, course_uuid }) => {
                 </Col>
                 <Col span={6}>
                     <CourseSubmissions
-                        submissions={[]}
+                        submissions={step.user_progress.submissions}
                         disabled={step.user_progress.is_blocked}
                     />
                 </Col>
