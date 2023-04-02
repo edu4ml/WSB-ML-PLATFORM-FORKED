@@ -87,6 +87,7 @@ export const courseApi = createApi({
                 method: 'POST',
                 body: formData,
             }),
+            invalidatesTags: ['course-list'],
         }),
     }),
 });

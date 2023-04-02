@@ -3,7 +3,7 @@ import React from 'react';
 import ResourceAvatarLink from '../../components/common/ResourceAvatarLink';
 import { Enums } from '../../shared';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const submissionStatusTagColor = {
     [Enums.COURSE_STEP_EVALUATION_STATUS.WAITING]: 'warning',

@@ -1,55 +1,19 @@
-import { Button, Form, Input, Modal, notification, Upload } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Upload } from 'antd';
+import React from 'react';
 import Cookies from 'js-cookie';
-import { useUploadCourseStepSubmissionMutation } from '../../features/courses/coursesApi';
-import { RcFile } from 'antd/lib/upload/interface';
-
-interface FormFields {
-    title: string;
-    description: string;
-}
 
 const CourseStepAddSubmissionModal = ({
     courseUUID,
     courseStep,
     isOpen,
     onCancel,
+    setFileList,
+    onFileChange,
     onOk,
 }) => {
-    const [fileList, setFileList] = useState<RcFile[]>([]);
-    const [form] = Form.useForm<FormFields>();
-    const [uploadSubmission, {}] = useUploadCourseStepSubmissionMutation();
-    const onFileChange = ({ fileList }) => setFileList(fileList);
-
     const beforeUpload = (file) => {
         setFileList([file]);
         return false;
-    };
-
-    const handleSubmit = async (values: FormFields) => {
-        if (!fileList.length) {
-            notification.error({ message: 'Please attach a file' });
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', fileList[0].originFileObj);
-        formData.append('title', values.title);
-        formData.append('description', values.description);
-
-        uploadSubmission({
-            courseUUID,
-            stepUUID: courseStep.uuid,
-            progressTrackingUUID: courseStep.user_progress.tracking_uuid,
-            formData,
-        })
-            .unwrap()
-            .then((response) => {
-                console.log('response', response);
-            })
-            .catch((err) => {
-                console.error('Error: ', err);
-            });
     };
 
     return (
@@ -62,7 +26,7 @@ const CourseStepAddSubmissionModal = ({
             <Form
                 name="create-new-course-step-submission"
                 initialValues={{ remember: true }}
-                onFinish={handleSubmit}
+                onFinish={onOk}
                 autoComplete="off"
                 layout="vertical"
             >

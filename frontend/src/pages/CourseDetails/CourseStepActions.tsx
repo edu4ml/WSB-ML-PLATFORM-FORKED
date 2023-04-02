@@ -1,9 +1,22 @@
-import { Button } from 'antd';
-import React from 'react';
+import { Button, notification } from 'antd';
+import React, { useState } from 'react';
 import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import CourseStepAddSubmissionModal from './CourseStepAddSubmissionModal';
+import { useUploadCourseStepSubmissionMutation } from '../../features/courses/coursesApi';
+import { RcFile } from 'antd/lib/upload/interface';
+import Cookies from 'js-cookie';
+import { NOTIF_SOMETHING_WENT_WRONG } from '../../texts';
+
+interface FormFields {
+    title: string;
+    description: string;
+}
+
+interface CustomRcFile extends RcFile {
+    originFileObj: Blob;
+}
 
 const CourseStepSelfEvaluateButton = ({
     progress_tracking_uuid,
@@ -30,9 +43,10 @@ const CourseStepSelfEvaluateButton = ({
 };
 
 const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
-    const [issueCommand, {}] = useIssueCourseCommandMutation();
-
     const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [fileList, setFileList] = useState<CustomRcFile[]>([]);
+    const [uploadSubmission, {}] = useUploadCourseStepSubmissionMutation();
+    const onFileChange = ({ fileList }) => setFileList(fileList);
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -42,22 +56,42 @@ const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
         setIsModalOpen(false);
     };
 
-    const onOk = (values) => {
-        const command = {
-            type: 'Enums.COMMAND_TYPES.ADD_COURSE_STEP_SUBMISSION',
-            // course,
-            ...values,
-        };
+    const handleSubmit = async (values: FormFields) => {
+        if (!fileList.length) {
+            notification.error({
+                message: 'Please attach a file',
+                duration: 2,
+            });
+            return;
+        }
 
-        // issueCommand({ id: course_uuid, command })
-        //     .unwrap()
-        //     .then((response) => {
-        //         setIsModalOpen(false);
-        //     })
-        //     .catch((err) => {
-        //         console.error('Error: ', err);
-        //         setIsModalOpen(false);
-        //     });
+        const formData = new FormData();
+        formData.append('file', fileList[0].originFileObj);
+        formData.append('title', values.title);
+        formData.append('description', values.description);
+
+        uploadSubmission({
+            courseUUID,
+            stepUUID: courseStep.uuid,
+            progressTrackingUUID: courseStep.user_progress.tracking_uuid,
+            formData,
+        })
+            .unwrap()
+            .then((response) => {
+                notification.info({
+                    message: 'Rozwiązanie przesłane!',
+                    duration: 2,
+                });
+                console.log('response', response);
+            })
+            .catch((err) => {
+                notification.error({
+                    message: NOTIF_SOMETHING_WENT_WRONG,
+                    duration: 2,
+                });
+                console.error('Error: ', err);
+            });
+        setIsModalOpen(false);
     };
 
     return (
@@ -75,9 +109,11 @@ const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
             <CourseStepAddSubmissionModal
                 courseUUID={courseUUID}
                 courseStep={courseStep}
+                onFileChange={onFileChange}
+                setFileList={setFileList}
                 isOpen={isModalOpen}
                 onCancel={onCancel}
-                onOk={onOk}
+                onOk={handleSubmit}
             />
         </>
     );
