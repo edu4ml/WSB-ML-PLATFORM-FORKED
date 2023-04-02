@@ -1,4 +1,13 @@
-import { Button, Card, Col, Divider, notification, Row, Space } from 'antd';
+import {
+    Button,
+    Card,
+    Col,
+    Divider,
+    notification,
+    Row,
+    Space,
+    Typography,
+} from 'antd';
 import React from 'react';
 import {
     useDeleteCourseComponentMutation,
@@ -16,8 +25,10 @@ import {
 import { EditTwoTone, DeleteTwoTone, FileTextTwoTone } from '@ant-design/icons';
 import CourseComponentEditModal from './CourseComponentEditModal';
 import CourseComponentEditResources from './CourseComponentEditResources';
-import FilesAvatars from '../../components/courses/FilesAvatars';
 import CourseComponentTitle from './CourseComponentTitle';
+import ResourceAvatarLink from '../../components/common/ResourceAvatarLink';
+
+const { Text } = Typography;
 
 const CourseComponentListItem = ({ component }) => {
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
@@ -115,7 +126,19 @@ const CourseComponentListItem = ({ component }) => {
                     <Divider type="vertical" style={{ height: '100%' }} />
                 </Col>
                 <Col span={11}>
-                    <FilesAvatars files={component.resources} />
+                    <Space direction="vertical">
+                        <Text disabled={false} strong>
+                            Meteriały dodatkowe
+                        </Text>
+
+                        {component.resources.map((resource) => (
+                            <ResourceAvatarLink
+                                key={resource.uuid}
+                                resource={resource}
+                                disabled={false}
+                            />
+                        ))}
+                    </Space>
                 </Col>
             </Row>
             <CourseComponentEditModal
