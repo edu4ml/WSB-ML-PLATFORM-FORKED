@@ -9,7 +9,7 @@ RootModel = TypeVar("RootModel")
 
 
 class ModelRepository(Generic[RootModel]):
-    root_model: RootModel = None
+    db_model: RootModel = None
 
     def __init__(self, user=None) -> None:
         self.user = user
@@ -26,43 +26,43 @@ class ModelRepository(Generic[RootModel]):
 
     def get_by_uuid(self, uuid: UUID):
         try:
-            obj = self.root_model.objects.get(uuid=uuid)
+            obj = self.db_model.objects.get(uuid=uuid)
             return self.from_model(obj)
-        except self.root_model.DoesNotExist:
+        except self.db_model.DoesNotExist:
             return None
 
     def search_single(self, **kwargs):
         try:
-            obj = self.root_model.objects.get(**kwargs)
+            obj = self.db_model.objects.get(**kwargs)
             return self.from_model(obj)
-        except self.root_model.DoesNotExist:
+        except self.db_model.DoesNotExist:
             return None
 
     def list_all(self):
-        return [self.from_model(obj) for obj in self.root_model.objects.all()]
+        return [self.from_model(obj) for obj in self.db_model.objects.all()]
 
     def create(self, **kwargs):
-        obj = self.root_model.objects.create(**kwargs)
+        obj = self.db_model.objects.create(**kwargs)
         return self.from_model(obj)
 
     def update_by_uuid(self, uuid: UUID, **kwargs):
-        obj = self.root_model.objects.get(uuid=uuid)
+        obj = self.db_model.objects.get(uuid=uuid)
         for key, value in kwargs.items():
             setattr(obj, key, value)
         obj.save()
         return self.from_model(obj)
 
     def delete_by_uuid(self, uuid: UUID):
-        self.root_model.objects.get(uuid=uuid).delete()
+        self.db_model.objects.get(uuid=uuid).delete()
 
     @contextmanager
     def with_obj(self, obj_uuid, obj=None):
         if obj is None:
             try:
-                obj = self.root_model.objects.get(uuid=obj_uuid)
+                obj = self.db_model.objects.get(uuid=obj_uuid)
             except ObjectDoesNotExist:
-                raise self.root_model.DoesNotExist(
-                    f"{self.root_model.__name__} with ID {obj_uuid} does not exist"
+                raise self.db_model.DoesNotExist(
+                    f"{self.db_model.__name__} with ID {obj_uuid} does not exist"
                 )
         yield obj
         obj.save()

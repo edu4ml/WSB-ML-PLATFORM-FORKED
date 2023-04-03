@@ -16,7 +16,7 @@ class ExternalResourceForm(forms.ModelForm):
 
 @logger
 class ExternalResourceRepository(ModelRepository):
-    root_model = ExternalResourceDbModel
+    db_model = ExternalResourceDbModel
 
     def create(self, **kwargs):
         post_data = kwargs.get("post_data")
@@ -51,10 +51,10 @@ class ExternalResourceRepository(ModelRepository):
 
     def delete_by_uuid(self, uuid: UUID):
         try:
-            resource = self.root_model.objects.get(uuid=uuid)
+            resource = self.db_model.objects.get(uuid=uuid)
             resource.file.delete()
             resource.delete()
-        except self.root_model.DoesNotExist:
+        except self.db_model.DoesNotExist:
             raise RequestException("Resource not found", status_code=404)
 
     def from_model(self, external_resource):

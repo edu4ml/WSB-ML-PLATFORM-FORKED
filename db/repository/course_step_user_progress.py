@@ -17,7 +17,7 @@ class EvaluationAttemptForm(forms.ModelForm):
 
 @logger
 class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbModel]):
-    root_model = CourseStepUserProgressDbModel
+    db_model = CourseStepUserProgressDbModel
 
     def from_model(self, obj):
         return CourseStepUserProgress(
@@ -31,7 +31,7 @@ class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbM
 
         form_payload = request.POST.copy()
         form_payload["user"] = request.user
-        form_payload["course_step"] = self.root_model.objects.get(
+        form_payload["course_step"] = self.db_model.objects.get(
             uuid=user_progress_uuid
         ).step
 

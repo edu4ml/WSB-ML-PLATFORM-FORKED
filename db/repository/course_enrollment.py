@@ -10,11 +10,11 @@ from infra.repository import ModelRepository
 
 @logger
 class CourseEnrollmentRepo(ModelRepository[CourseEnrollmentDbModel]):
-    root_model = CourseEnrollmentDbModel
-    root_entity = CourseEnrollmentDomainModel
+    db_model = CourseEnrollmentDbModel
+    domain_model = CourseEnrollmentDomainModel
 
     def from_model(self, obj):
-        return self.root_entity(
+        return self.domain_model(
             user=obj.user.uuid,
             course=obj.course.uuid,
             is_completed=obj.is_completed,

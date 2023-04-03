@@ -22,8 +22,8 @@ class ExternalResourceForm(forms.ModelForm):
 
 @logger
 class CourseComponentRepo(ModelRepository):
-    root_model = CourseComponentDbModel
-    root_entity = CourseComponentDomainModel
+    db_model = CourseComponentDbModel
+    domain_model = CourseComponentDomainModel
 
     def create(self, **kwargs):
         if "title" not in kwargs.keys():
@@ -34,7 +34,7 @@ class CourseComponentRepo(ModelRepository):
         return super().create(**kwargs)
 
     def from_model(self, obj):
-        return self.root_entity(
+        return self.domain_model(
             uuid=obj.uuid,
             title=obj.title,
             description=obj.description,
@@ -61,7 +61,7 @@ class CourseComponentRepo(ModelRepository):
 
             if form.is_valid():
                 resource = form.save()
-                course_component = self.root_model.objects.get(uuid=component_uuid)
+                course_component = self.db_model.objects.get(uuid=component_uuid)
                 course_component.resources.add(resource)
 
                 return self.from_model(course_component)
@@ -76,6 +76,6 @@ class CourseComponentRepo(ModelRepository):
             )
 
     def remove_resource(self, component_uuid, resource_uuid):
-        course_component = self.root_model.objects.get(uuid=component_uuid)
+        course_component = self.db_model.objects.get(uuid=component_uuid)
         course_component.resources.filter(uuid=resource_uuid).delete()
         return self.from_model(course_component)

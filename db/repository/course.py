@@ -14,16 +14,8 @@ from infra.repository import ModelRepository
 
 @logger
 class CourseRepository(ModelRepository[CourseDbModel]):
-    """
-    Abstraction layer to retrieve, persist and update
-    the domain entity of course object and related models
-    """
-
-    root_model = CourseDbModel
-    root_entity = CourseDomainModel
-
-    def __init__(self, user=None) -> None:
-        super().__init__(user)
+    db_model = CourseDbModel
+    domain_model = CourseDomainModel
 
     def update_with_entity(self, entity: CourseDomainModel):
         # fix me. Not sure why but I dont like it
@@ -52,7 +44,7 @@ class CourseRepository(ModelRepository[CourseDbModel]):
         course.save()
 
     def from_model(self, course):
-        return self.root_entity(
+        return self.domain_model(
             uuid=course.uuid,
             created_at=course.created_at,
             updated_at=course.updated_at,
@@ -104,7 +96,6 @@ class CourseRepository(ModelRepository[CourseDbModel]):
 
         step_progress, _ = CourseStepUserProgressDbModel.objects.get_or_create(
             user=self.user,
-            # course=step.course,
             step=step,
         )
 

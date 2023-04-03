@@ -28,15 +28,7 @@ class CourseApi(AuthMixin):
             course = command_bus.issue(request)
             return Response(asdict(course), status.HTTP_201_CREATED)
         except CommandBusException as e:
-            return Response(
-                dict(
-                    error=True,
-                    success=False,
-                    payload=request.data,
-                    message=e.message,
-                ),
-                status=e.status_code,
-            )
+            return self._return_exception_response(e, request)
 
 
 class CourseDetailApi(AuthMixin):
@@ -46,9 +38,3 @@ class CourseDetailApi(AuthMixin):
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
-
-
-# class CourseDetailsFileSubmissionUploadApi(AuthMixin):
-#     @api_has_one_of_the_roles([UserRoles.STUDENT])
-#     def post(self, request, course_uuid: UUID, **kwargs):
-#         try:
