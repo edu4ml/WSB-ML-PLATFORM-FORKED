@@ -88,7 +88,7 @@ class CourseStepUserProgress(TimestampedModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="course_steps_completion",
+        related_name="steps_progress",
     )
 
     is_completed = models.BooleanField(default=False)
@@ -115,6 +115,7 @@ class EvaluationAttempt(TimestampedModel):
     )
 
     file = models.FileField(upload_to="uploads/")
+
     status = models.CharField(
         max_length=40,
         choices=CourseStepEvaluationStatus.choices(),

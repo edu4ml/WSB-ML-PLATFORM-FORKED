@@ -10,9 +10,9 @@ from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
 from api.apis.v1.course.course_step import (
     CourseStepApi,
     CourseStepDetailApi,
-    CourseStepDetailSubmissions,
-    CourseStepUserProgressDetails,
-    CourseStepUserProgressSubmissionUpload,
+    CourseStepDetailSubmissionsApi,
+    CourseStepUserProgressDetailsApi,
+    CourseStepUserProgressSubmissionUploadApi,
 )
 from api.apis.v1.course_components.course_components import (
     CourseComponentApi,
@@ -21,10 +21,9 @@ from api.apis.v1.course_components.course_components import (
     CourseComponentDetailFileDetailApi,
 )
 
-from api.apis.v1.reports.teacher import TeacherReport
+from api.apis.v1.reports.report import DashboardApi
 
 urlpatterns_v1 = [
-    path("course/", CourseApi.as_view(), name="course"),
     path("course-components/", CourseComponentApi.as_view(), name="course-components"),
     path(
         "course-components/<uuid:component_uuid>",
@@ -41,6 +40,7 @@ urlpatterns_v1 = [
         CourseComponentDetailFileDetailApi.as_view(),
         name="course-components-detail-file-resources-detail",
     ),
+    path("course/", CourseApi.as_view(), name="course"),
     path(
         "course/<uuid:course_uuid>",
         CourseDetailApi.as_view(),
@@ -58,17 +58,17 @@ urlpatterns_v1 = [
     ),
     path(
         "course/<uuid:course_uuid>/step/<uuid:step_uuid>/submissions",
-        CourseStepDetailSubmissions.as_view(),
+        CourseStepDetailSubmissionsApi.as_view(),
         name="course-detail-steps-detail-submissions",
     ),
     path(
         "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user-progress/<uuid:user_progress_uuid>",
-        CourseStepUserProgressDetails.as_view(),
+        CourseStepUserProgressDetailsApi.as_view(),
         name="course-detail-steps-detail-user-progress",
     ),
     path(
         "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user-progress/<uuid:user_progress_uuid>/submission",
-        CourseStepUserProgressSubmissionUpload.as_view(),
+        CourseStepUserProgressSubmissionUploadApi.as_view(),
         name="course-detail-steps-detail-user-progress",
     ),
     path(
@@ -76,7 +76,7 @@ urlpatterns_v1 = [
         CourseCommandApi.as_view(),
         name="course-command",
     ),
-    path("report/teacher/", TeacherReport.as_view(), name="teacher-report"),
+    path("report/teacher/", DashboardApi.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
     path("auth/", include((auth_urlpatterns, "auth"))),
 ]

@@ -27,7 +27,7 @@ class CourseStepDetailApi(AuthMixin):
         return Response(asdict(step), status.HTTP_200_OK)
 
 
-class CourseStepDetailSubmissions(AuthMixin):
+class CourseStepDetailSubmissionsApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, course_uuid: UUID, step_uuid: UUID, **kwargs):
         course = CourseRepository(request.user).get_by_uuid(uuid=course_uuid)
@@ -37,7 +37,7 @@ class CourseStepDetailSubmissions(AuthMixin):
         )
 
 
-class CourseStepUserProgressDetails(AuthMixin):
+class CourseStepUserProgressDetailsApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def get(self, request, user_progress_uuid: UUID, **kwargs):
         user_progress = CourseStepUserProgressRepository(user=request.user).get_by_uuid(
@@ -46,7 +46,7 @@ class CourseStepUserProgressDetails(AuthMixin):
         return Response(asdict(user_progress), status.HTTP_200_OK)
 
 
-class CourseStepUserProgressSubmissionUpload(AuthMixin):
+class CourseStepUserProgressSubmissionUploadApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
     def post(self, request, user_progress_uuid: UUID, **kwargs):
         user_progress = CourseStepUserProgressRepository(request.user).add_submission(

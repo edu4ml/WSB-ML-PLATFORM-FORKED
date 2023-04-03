@@ -40,7 +40,7 @@ const CourseListItem = ({
             title={getCourseTitleComponent(course, 4)}
             extra={getCourseExtra(course, user)}
         >
-            description={course.description}
+            {course.description}
         </Card>
     );
 };
