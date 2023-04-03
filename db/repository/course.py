@@ -1,3 +1,4 @@
+from typing import List
 from db.models import (
     Course as CourseDbModel,
     CourseStep as CourseStepDbModel,
@@ -29,19 +30,18 @@ class CourseRepository(ModelRepository[CourseDbModel]):
 
         if entity.is_draft is not None:
             course.is_draft = entity.is_draft
-
-        if entity.steps is not None:
-            course.steps.all().delete()
-
-            for new_step in entity.steps:
-                CourseStepDbModel.objects.create(
-                    course=course,
-                    order=new_step.order,
-                    component_id=new_step.component,
-                    evaluation_type=new_step.evaluation_type,
-                )
-
         course.save()
+
+    def update_course_steps(self, uuid, steps: List[CourseStep]):
+        course = CourseDbModel.objects.get(uuid=uuid)
+        course.steps.all().delete()
+        for new_step in steps:
+            CourseStepDbModel.objects.create(
+                course=course,
+                order=new_step.order,
+                component_id=new_step.component,
+                evaluation_type=new_step.evaluation_type,
+            )
 
     def from_model(self, course):
         return self.domain_model(

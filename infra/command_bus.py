@@ -25,10 +25,11 @@ class CommandBus:
         self.services[to] = service
 
     def issue(self, request, **kwargs):
-        cmd = self._build_command(request, **kwargs)
-
-        if not self._is_allowed_to_create_command(request, cmd):
+        commandBaseClass = self._get_command_base_class(request)
+        if not self._is_allowed_to_create_command(request, commandBaseClass):
             raise PermissionDenied
+
+        cmd = commandBaseClass.build_from_request(request, **kwargs)
 
         self.logger.info(f"{cmd} issued into command bus")
 
@@ -37,14 +38,14 @@ class CommandBus:
         else:
             raise CommandBusException(ApiErrors.HANDLER_DOES_NOT_EXITS, 501)
 
-    def _is_allowed_to_create_command(self, request, command: Command):
-        return request.user.roles.filter(name__in=command.Meta.roles).exists()
+    def _is_allowed_to_create_command(self, request, commandBaseClass: Command):
+        return request.user.roles.filter(name__in=commandBaseClass.Meta.roles).exists()
 
-    def _build_command(self, request, **kwargs):
+    def _get_command_base_class(self, request):
         cmd_type = request.data.get("type")
-        for command in self.services.keys():
-            if command.Meta.name == cmd_type:
-                return command.build_from_request(request, **kwargs)
+        for commandBaseClass in self.services.keys():
+            if commandBaseClass.Meta.name == cmd_type:
+                return commandBaseClass
         raise CommandBusException(ApiErrors.COMMAND_TYPE_NOT_SUPPORTED, 400)
 
     def __str__(self):
