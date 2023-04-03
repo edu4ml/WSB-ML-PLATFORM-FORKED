@@ -3,7 +3,7 @@ from db.models import (
     CourseStepUserProgress as CourseStepUserProgressDbModel,
 )
 from db.models.courses import EvaluationAttempt
-from elearning.coursing.entities.course_step_user_progress import CourseStepUserProgress
+from elearning.coursing.entities.user_progress import CourseStepUserProgress
 from infra.exceptions import RequestException
 from infra.logging import logger
 from infra.repository import ModelRepository

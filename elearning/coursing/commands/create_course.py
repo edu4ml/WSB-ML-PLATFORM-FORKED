@@ -17,9 +17,8 @@ class CreateCourse(Command):
 
     class Meta:
         name = CommandTypes.CREATE_COURSE
-        is_initial = True
-
         roles = [UserRoles.TEACHER, UserRoles.ADMIN]
+        is_initial = True
 
     @classmethod
     def build_from_request(cls, request, **kwargs):

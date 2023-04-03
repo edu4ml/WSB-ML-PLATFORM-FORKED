@@ -9,25 +9,22 @@ from elearning.coursing.entities.author import Author
 
 @dataclass
 class Course:
-    uuid: UUID | None
-    updated_at: datetime | None
-    created_at: datetime | None
+    uuid: UUID
+    updated_at: datetime
+    created_at: datetime
 
     title: str
     description: str
     is_draft: bool
+    author: Author
 
-    author: Author | None = None
-
-    is_enrolled: bool = False
-    current_active: int = None
-    progress: int = 0
-
+    is_enrolled: bool
     steps: List[CourseStep] = field(default_factory=lambda: list())
+    progress: int = field(init=False, default=0)
 
     def __post_init__(self):
         self._calculate_blocked_steps()
-        self._calculate_progress()
+        self.progress = self._calculate_progress()
 
     def _calculate_progress(self) -> int:
         steps_total = len(self.steps)
@@ -35,9 +32,9 @@ class Course:
             list(filter(lambda step: step.user_progress.is_completed, self.steps))
         )
         if steps_total == 0:
-            self.progress = 0
+            return 0
         else:
-            self.progress = int((steps_completed / steps_total) * 100)
+            return int((steps_completed / steps_total) * 100)
 
     def _calculate_blocked_steps(self):
         """
@@ -50,10 +47,8 @@ class Course:
         for step in self.steps:
             if step.order == 1:
                 step.user_progress.is_blocked = False
-                self.current_active = step.order
             elif previous_step.user_progress.is_completed:
                 step.user_progress.is_blocked = False
-                self.current_active = step.order
             else:
                 step.user_progress.is_blocked = True
             previous_step = step

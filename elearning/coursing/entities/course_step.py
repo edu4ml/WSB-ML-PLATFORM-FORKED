@@ -7,8 +7,8 @@ from shared.enums import CourseStepEvaluationType
 
 @dataclass
 class CourseStep:
-    uuid: UUID | None
+    uuid: UUID
     order: int
     component: CourseComponent
     evaluation_type: CourseStepEvaluationType
-    user_progress: CourseStepUserProgress | None = None
+    user_progress: CourseStepUserProgress
