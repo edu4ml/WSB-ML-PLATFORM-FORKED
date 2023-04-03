@@ -1,19 +1,19 @@
-# from db.models.courses import CourseStepUserProgress
 from db.models.courses import (
     CourseEnrollment,
     CourseStep as CourseStepModel,
     CourseStepUserProgress,
     EvaluationAttempt,
 )
-from elearning.reporting.entities.report_submissions import Submission
-from infra.repository import ModelRepository
-from elearning.reporting.entities.report import Report
-from elearning.reporting.entities.report_courses import (
-    Course,
+from elearning.reporting.entities.report import (
+    CourseStudents,
+    CourseInfo,
     CourseStep,
+    Report,
     StudentCourseProgress,
     StudentInfo,
+    Submission,
 )
+from infra.repository import ModelRepository
 
 
 class ReportRepository(ModelRepository):
@@ -40,13 +40,23 @@ class ReportRepository(ModelRepository):
 
         return [
             Submission(
-                user=attempt.user.uuid,
+                uuid=attempt.uuid,
+                user=StudentInfo(
+                    uuid=attempt.user.uuid,
+                    email=attempt.user.email,
+                ),
                 title=attempt.title,
                 description=attempt.description,
                 status=attempt.status,
                 file_link=attempt.file.url,
-                course=attempt.course_step.course.uuid,
-                course_component=attempt.course_step.component.uuid,
+                course=CourseInfo(
+                    uuid=attempt.course_step.course.uuid,
+                    title=attempt.course_step.course.title,
+                ),
+                course_component=CourseStep(
+                    uuid=attempt.course_step.uuid,
+                    title=attempt.course_step.component.title,
+                ),
             )
             for attempt in evaluation_attempts
         ]
@@ -90,8 +100,8 @@ class ReportRepository(ModelRepository):
 
                 course_students.append(student_progress)
 
-            course_info = Course(
-                course=course.uuid,
+            course_info = CourseStudents(
+                uuid=course.uuid,
                 title=course.title,
                 students=course_students,
             )

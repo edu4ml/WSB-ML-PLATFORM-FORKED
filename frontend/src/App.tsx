@@ -11,7 +11,7 @@ import SimpleLayout from './pages/Layout/SimpleLayout';
 import CoursesPage from './pages/CoursesCatalog/CourseCatalogPage';
 import CourseDetailPage from './pages/CourseDetails/CourseDetailPage';
 import CourseEditPage from './pages/CoursesEdit/CourseEditPage';
-import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
+import DashboardPage from './pages/Dashboards/DashboardPage';
 import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage';
 import DashboardLayout from './pages/Layout/DashboardLayout';
 
@@ -101,9 +101,9 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <DashboardLayout>
-                                        <TeacherDashboardPage />
-                                    </DashboardLayout>
+                                    <SimpleLayout>
+                                        <DashboardPage />
+                                    </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
                         }
