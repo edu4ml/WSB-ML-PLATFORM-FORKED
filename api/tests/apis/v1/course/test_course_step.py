@@ -2,17 +2,6 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from django.core.files.uploadedfile import SimpleUploadedFile
-
-
-@pytest.fixture
-def tmp_uploaded_file():
-    file_content = b"Dummy file content"
-    uploaded_file = SimpleUploadedFile(
-        "test_file.txt", file_content, content_type="text/plain"
-    )
-    return uploaded_file
-
 
 @pytest.mark.django_db
 def test_course_step_api_get(admin_client, course_with_steps):

@@ -2,9 +2,12 @@ from dataclasses import asdict
 from uuid import UUID
 from api.apis.mixins import AuthMixin
 from db.repository.submission import SubmissionRepository
-from infra.exceptions import RequestException
+from infra.command_bus import CommandBus
+from infra.exceptions import CommandBusException, RequestException
 from infra.permissions import api_has_one_of_the_roles
 from shared.enums import UserRoles
+from elearning.apps import APP_NAME
+from django.apps import apps
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,6 +21,15 @@ class SubmissionApi(AuthMixin):
             serialized = [asdict(submission) for submission in submissions]
             return Response(serialized, status.HTTP_200_OK)
         except RequestException as e:
+            return self._return_exception_response(e, request)
+
+    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
+    def post(self, request, **kwargs):
+        try:
+            command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
+            submission = command_bus.issue(request)
+            return Response(asdict(submission), status.HTTP_201_CREATED)
+        except CommandBusException as e:
             return self._return_exception_response(e, request)
 
 

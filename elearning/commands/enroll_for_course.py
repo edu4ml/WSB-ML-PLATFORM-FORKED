@@ -21,7 +21,9 @@ class EnrollForCourse(Command):
     @classmethod
     def build_from_request(cls, request, **kwargs):
         return EnrollForCourse(
-            parent_uuid=kwargs["course_uuid"], user_uuid=request.data.get("user_uuid")
+            issuer=request.user,
+            parent_uuid=kwargs["course_uuid"],
+            user_uuid=request.data.get("user_uuid"),
         )
 
 

@@ -23,6 +23,7 @@ class CreateCourse(Command):
     @classmethod
     def build_from_request(cls, request, **kwargs):
         command = CreateCourse(
+            issuer=request.user,
             title=request.data.get("title"),
             description=request.data.get("description", ""),
         )

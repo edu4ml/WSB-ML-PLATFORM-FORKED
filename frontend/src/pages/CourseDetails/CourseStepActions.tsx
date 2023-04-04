@@ -4,7 +4,7 @@ import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi
 import { Enums } from '../../shared';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import CourseStepAddSubmissionModal from './CourseStepAddSubmissionModal';
-import { useUploadCourseStepSubmissionMutation } from '../../features/courses/coursesApi';
+import { useUploadSubmissionMutation } from '../../features/courses/coursesApi';
 import { RcFile } from 'antd/lib/upload/interface';
 import Cookies from 'js-cookie';
 import { NOTIF_SOMETHING_WENT_WRONG } from '../../texts';
@@ -45,7 +45,7 @@ const CourseStepSelfEvaluateButton = ({
 const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [fileList, setFileList] = useState<CustomRcFile[]>([]);
-    const [uploadSubmission, {}] = useUploadCourseStepSubmissionMutation();
+    const [uploadSubmission, {}] = useUploadSubmissionMutation();
     const onFileChange = ({ fileList }) => setFileList(fileList);
 
     const showModal = () => {
@@ -66,15 +66,18 @@ const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
         }
 
         const formData = new FormData();
+        formData.append('type', 'SUBMIT_SUBMISSION');
         formData.append('file', fileList[0].originFileObj);
         formData.append('title', values.title);
         formData.append('description', values.description);
+        formData.append('course_step', courseStep.uuid);
 
         uploadSubmission({
-            courseUUID,
-            stepUUID: courseStep.uuid,
-            progressTrackingUUID: courseStep.user_progress.tracking_uuid,
-            formData,
+            command: formData,
+            // courseUUID,
+            // stepUUID: courseStep.uuid,
+            // progressTrackingUUID: courseStep.user_progress.tracking_uuid,
+            // formData,
         })
             .unwrap()
             .then((response) => {

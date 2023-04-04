@@ -76,16 +76,12 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
-        uploadCourseStepSubmission: builder.mutation({
-            query: ({
-                courseUUID,
-                formData,
-                stepUUID,
-                progressTrackingUUID,
-            }) => ({
-                url: `/course/${courseUUID}/step/${stepUUID}/user-progress/${progressTrackingUUID}/submission`,
+        uploadSubmission: builder.mutation({
+            query: ({ command }) => ({
+                url: `/submission`,
+                // url: `/course/${courseUUID}/step/${stepUUID}/user-progress/${progressTrackingUUID}/submission`,
                 method: 'POST',
-                body: formData,
+                body: command,
             }),
             invalidatesTags: ['course-list'],
         }),
@@ -93,7 +89,7 @@ export const courseApi = createApi({
 });
 
 export const {
-    useUploadCourseStepSubmissionMutation,
+    useUploadSubmissionMutation,
     useDeleteCourseComponentFileResourceMutation,
     useAddFileToCourseComponentMutation,
     useGetCourseCatalogQuery,

@@ -7,17 +7,6 @@ from rest_framework import status
 
 from db.models import CourseComponent
 
-from django.core.files.uploadedfile import SimpleUploadedFile
-
-
-@pytest.fixture
-def tmp_uploaded_file():
-    file_content = b"Dummy file content"
-    uploaded_file = SimpleUploadedFile(
-        "test_file.txt", file_content, content_type="text/plain"
-    )
-    return uploaded_file
-
 
 @pytest.fixture
 def course_component_data():

@@ -15,6 +15,7 @@ from db.models import (
 from db.models.external_resources import ExternalResource
 from elearning.auth.user import User
 from shared.enums import UserRoles
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 @pytest.fixture
@@ -162,3 +163,12 @@ def external_resources():
 @pytest.fixture
 def submissions():
     return baker.make(Submission, 10)
+
+
+@pytest.fixture
+def tmp_uploaded_file():
+    file_content = b"Dummy file content"
+    uploaded_file = SimpleUploadedFile(
+        "test_file.txt", file_content, content_type="text/plain"
+    )
+    return uploaded_file

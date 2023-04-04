@@ -18,6 +18,7 @@ class CompleteCourseStep(Command):
     @classmethod
     def build_from_request(cls, request, **kwargs):
         return CompleteCourseStep(
+            issuer=request.user,
             parent_uuid=kwargs["course_uuid"],
             progress_tracking_uuid=request.data.get("progress_tracking_uuid"),
         )

@@ -9,7 +9,7 @@ from infra.repository import ModelRepository
 
 
 @logger
-class CourseEnrollmentRepo(ModelRepository[CourseEnrollmentDbModel]):
+class CourseEnrollmentRepository(ModelRepository[CourseEnrollmentDbModel]):
     db_model = CourseEnrollmentDbModel
     domain_model = CourseEnrollmentDomainModel
 

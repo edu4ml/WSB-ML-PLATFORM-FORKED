@@ -28,7 +28,8 @@ class UpdateCourse(Command):
     def build_from_request(cls, request, **kwargs):
         cls.validate(request.data)
 
-        command = UpdateCourse(
+        return UpdateCourse(
+            issuer=request.user,
             parent_uuid=kwargs["course_uuid"],
             description=request.data.get("description"),
             is_draft=request.data.get("is_draft"),
@@ -41,8 +42,6 @@ class UpdateCourse(Command):
                 for step in request.data.get("steps")
             ],
         )
-        command.issuer = request.user
-        return command
 
     @classmethod
     def validate(cls, payload):
