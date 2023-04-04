@@ -1,95 +1,117 @@
-import { Card, Table, Dropdown, Menu, Typography } from 'antd';
+import { Card, Table, Dropdown, Menu, Typography, Tag, Space } from 'antd';
 import React from 'react';
-import { DownOutlined } from '@ant-design/icons';
+import { Enums } from '../../shared';
+import UserCardAvatar from '../../components/common/UserCardAvatar';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const { Text } = Typography;
 
-const SubmissionsInbox = ({ submissions }) => {
-    const handleMenuClick = (record, e) => {
-        if (e.key === 'download') {
-            window.open(record.file_link, '_blank', 'noopener noreferrer');
-        } else if (e.key === 'approve') {
-            console.log('Approve', record);
-            // Implement approve action here
-        } else if (e.key === 'reject') {
-            console.log('Reject', record);
-            // Implement reject action here
-        }
-    };
+const submissionStatusTagColor = {
+    [Enums.COURSE_STEP_EVALUATION_STATUS.WAITING]: 'warning',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.PASSED]: 'success',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.FAILED]: 'error',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.SUBMITTED]: 'processing',
+};
 
-    const menu = (record) => (
-        <Menu onClick={(e) => handleMenuClick(record, e)}>
-            <Menu.Item key="download">Download</Menu.Item>
-            <Menu.Item key="approve">Approve</Menu.Item>
-            <Menu.Item key="reject">Reject</Menu.Item>
-        </Menu>
-    );
+const submissionStatusTagText = {
+    [Enums.COURSE_STEP_EVALUATION_STATUS.WAITING]: 'Oczekuje',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.PASSED]: 'Zatwierdzone',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.FAILED]: 'Odrzucone',
+    [Enums.COURSE_STEP_EVALUATION_STATUS.SUBMITTED]: 'Przesłane',
+};
+
+const SubmissionsInbox = ({ submissions }) => {
+    const menu = [
+        {
+            key: 'download',
+            label: 'Pobierz',
+            onClick: (record) => {
+                console.log('Download', record);
+            },
+        },
+        {
+            key: 'approve',
+            label: 'Zaakceptuj',
+            onClick: (record) => {
+                console.log('Approve', record);
+            },
+        },
+        {
+            key: 'reject',
+            label: 'Odrzuć',
+            onClick: (record) => {
+                console.log('Reject', record);
+            },
+        },
+    ];
 
     const columns = [
         {
             title: 'Student',
             dataIndex: 'user',
             key: 'user',
-            render: (user) => <Text>{user.email}</Text>,
-        },
-        {
-            title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
-        },
-        {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Course Component',
-            dataIndex: 'course_component',
-            key: 'course_component',
-            render: (course_component) => <Text>{course_component.title}</Text>,
-        },
-        {
-            title: 'Course',
-            dataIndex: 'course',
-            key: 'course',
-            render: (course) => <Text>{course.title}</Text>,
+            width: 300,
+            render: (student) => <UserCardAvatar user={student} />,
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-        },
-        {
-            title: 'File',
-            dataIndex: 'file_link',
-            key: 'file_link',
-            render: (text) => (
-                <a href={text} target="_blank" rel="noopener noreferrer">
-                    Download
-                </a>
+            render: (status) => (
+                <Tag color={submissionStatusTagColor[status]}>
+                    {submissionStatusTagText[status]}
+                </Tag>
             ),
         },
         {
-            title: 'Action',
+            title: 'Wiadomość',
+            key: 'submission',
+            width: 600,
+            render: (submission) => (
+                <Card>
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                        <Text strong>{submission.title}</Text>
+                        <Text>{submission.description}</Text>
+                    </Space>
+                </Card>
+            ),
+        },
+        {
+            title: 'Ćwiczenie',
+            key: 'course_component',
+            render: (submission) => (
+                <Card hoverable>
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                        <Text strong>{submission.course.title}</Text>
+                        <Text>{submission.course_component.title}</Text>
+                    </Space>
+                </Card>
+            ),
+        },
+        {
+            title: '',
             dataIndex: '',
             key: 'action',
+            width: '50',
             render: (_, record) => (
-                <Dropdown overlay={menu(record)} trigger={['click']}>
+                <Dropdown
+                    menu={{ items: menu }}
+                    trigger={['click', 'hover']}
+                    placement="bottomRight"
+                >
                     <a
                         className="ant-dropdown-link"
                         onClick={(e) => e.preventDefault()}
                     >
-                        Actions <DownOutlined />
+                        <MoreVertIcon />
                     </a>
                 </Dropdown>
             ),
         },
     ];
 
-    console.log(submissions);
-
     return (
-        <Card title={'Prace do sprawdzenia'}>
+        <Card title={'Prace do sprawdzenia'} bodyStyle={{ padding: 0 }}>
             <Table columns={columns} dataSource={submissions} rowKey={'uuid'} />
         </Card>
     );

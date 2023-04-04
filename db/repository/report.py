@@ -89,13 +89,13 @@ class ReportRepository(ModelRepository):
                         uuid=student.uuid,
                         email=student.email,
                     ),
-                    course=enrollment.course.uuid,
-                    completed_steps=completed_steps_count,
+                    steps_completed=completed_steps_count,
                     current_step=CourseStep(
                         uuid=current_step.uuid,
                         title=current_step.component.title,
                     ),
                     is_completed=enrollment.is_completed,
+                    progress=int(completed_steps_count / course.steps.count() * 100),
                 )
 
                 course_students.append(student_progress)
@@ -103,6 +103,7 @@ class ReportRepository(ModelRepository):
             course_info = CourseStudents(
                 uuid=course.uuid,
                 title=course.title,
+                description=course.description,
                 students=course_students,
             )
 

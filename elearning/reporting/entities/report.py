@@ -17,18 +17,18 @@ class StudentInfo:
 
 
 @dataclass
-class StudentCourseProgress:
-    student: StudentInfo
-    course: UUID
-    completed_steps: int
-    current_step: CourseStep
-    is_completed: bool
-
-
-@dataclass
 class CourseInfo:
     uuid: UUID
     title: str
+
+
+@dataclass
+class StudentCourseProgress:
+    student: StudentInfo
+    steps_completed: int
+    current_step: CourseStep
+    is_completed: bool
+    progress: int
 
 
 # --------------------------------
@@ -38,6 +38,7 @@ class CourseInfo:
 class CourseStudents:
     uuid: UUID
     title: str
+    description: str
     students: List[StudentCourseProgress]
 
 
