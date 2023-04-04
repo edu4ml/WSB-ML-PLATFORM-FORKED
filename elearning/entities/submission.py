@@ -3,7 +3,7 @@ from uuid import UUID
 
 
 @dataclass
-class EvaluationAttempt:
+class Submission:
     uuid: UUID
     title: str
     description: str

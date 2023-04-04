@@ -4,11 +4,11 @@ from db.models import (
     CourseStep as CourseStepDbModel,
     CourseStepUserProgress as CourseStepUserProgressDbModel,
 )
-from elearning.coursing.course import Course as CourseDomainModel
-from elearning.coursing.entities import CourseStepUserProgress, CourseStep
-from elearning.coursing.entities.course_component import CourseComponent
-from elearning.coursing.entities.evaluation_attempt import EvaluationAttempt
-from elearning.coursing.entities.external_resource import ExternalResource
+from elearning.entities.course import Course as CourseDomainModel
+from elearning.entities import CourseStepUserProgress, CourseStep
+from elearning.entities.course_component import CourseComponent
+from elearning.entities.submission import Submission
+from elearning.entities.external_resource import ExternalResource
 from infra.logging import logger
 from infra.repository import ModelRepository
 
@@ -104,13 +104,13 @@ class CourseRepository(ModelRepository[CourseDbModel]):
             completed_at=step_progress.completed_at,
             is_completed=step_progress.is_completed,
             submissions=[
-                EvaluationAttempt(
+                Submission(
                     uuid=attempt.uuid,
                     title=attempt.title,
                     description=attempt.description,
                     file_link=attempt.file.url if attempt.file else "",
                     status=attempt.status,
                 )
-                for attempt in step.evaluation_attempts.filter(user=step_progress.user)
+                for attempt in step.submissions.filter(user=step_progress.user)
             ],
         )

@@ -1,7 +1,7 @@
 from db.models import (
     CourseEnrollment as CourseEnrollmentDbModel,
 )
-from elearning.coursing.entities import (
+from elearning.entities import (
     CourseEnrollment as CourseEnrollmentDomainModel,
 )
 from infra.logging import logger

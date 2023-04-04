@@ -101,7 +101,7 @@ class CourseStepUserProgress(TimestampedModel):
         return f"{self.user.get_username()} - {self.step.component.title}"  # pragma: no cover
 
 
-class EvaluationAttempt(TimestampedModel):
+class Submission(TimestampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -111,7 +111,7 @@ class EvaluationAttempt(TimestampedModel):
         null=True,
         on_delete=models.PROTECT,
         default=None,
-        related_name="evaluation_attempts",
+        related_name="submissions",
     )
 
     file = models.FileField(upload_to="uploads/")

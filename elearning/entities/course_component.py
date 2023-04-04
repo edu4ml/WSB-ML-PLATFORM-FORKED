@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import UUID
 
-from elearning.coursing.entities.external_resource import ExternalResource
+from elearning.entities.external_resource import ExternalResource
 
 
 @dataclass

@@ -5,7 +5,13 @@ from django.test import Client
 from django.urls import reverse
 from model_bakery import baker
 
-from db.models import Course, CourseStep, Role, CourseComponent
+from db.models import (
+    Course,
+    CourseStep,
+    Role,
+    CourseComponent,
+    Submission,
+)
 from db.models.external_resources import ExternalResource
 from elearning.auth.user import User
 from shared.enums import UserRoles
@@ -151,3 +157,8 @@ def course_with_steps(course_components, teacher):
 @pytest.fixture
 def external_resources():
     return baker.make(ExternalResource, 4)
+
+
+@pytest.fixture
+def submissions():
+    return baker.make(Submission, 10)

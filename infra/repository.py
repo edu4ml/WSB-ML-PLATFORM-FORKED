@@ -4,7 +4,6 @@ from uuid import UUID
 
 from django.core.exceptions import ObjectDoesNotExist
 
-
 RootModel = TypeVar("RootModel")
 
 
@@ -36,7 +35,7 @@ class ModelRepository(Generic[RootModel]):
             obj = self.db_model.objects.get(**kwargs)
             return self.from_model(obj)
         except self.db_model.DoesNotExist:
-            return None
+            return
 
     def list_all(self):
         return [self.from_model(obj) for obj in self.db_model.objects.all()]

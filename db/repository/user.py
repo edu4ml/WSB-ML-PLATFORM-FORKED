@@ -1,5 +1,5 @@
 from db.models import CustomUser as UserDbModel, Role
-from elearning.coursing.entities.user import User
+from elearning.entities.user import User
 from infra.logging import logger
 from infra.repository import ModelRepository
 from shared.enums import UserRoles

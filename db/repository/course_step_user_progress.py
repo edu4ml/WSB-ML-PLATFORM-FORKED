@@ -2,8 +2,8 @@ from django import forms
 from db.models import (
     CourseStepUserProgress as CourseStepUserProgressDbModel,
 )
-from db.models.courses import EvaluationAttempt
-from elearning.coursing.entities.user_progress import CourseStepUserProgress
+from db.models.courses import Submission
+from elearning.entities.user_progress import CourseStepUserProgress
 from infra.exceptions import RequestException
 from infra.logging import logger
 from infra.repository import ModelRepository
@@ -11,7 +11,7 @@ from infra.repository import ModelRepository
 
 class EvaluationAttemptForm(forms.ModelForm):
     class Meta:
-        model = EvaluationAttempt
+        model = Submission
         fields = ("user", "title", "description", "file", "course_step")
 
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from elearning.coursing.entities.course_step import NewCourseStep
+from elearning.entities.course_step import NewCourseStep
 
 from infra.command import Command
 from infra.exceptions import (

@@ -3,10 +3,10 @@ from db.models import (
 )
 from rest_framework import status
 
-from elearning.coursing.entities.course_component import (
+from elearning.entities.course_component import (
     CourseComponent as CourseComponentDomainModel,
 )
-from elearning.coursing.entities.external_resource import ExternalResource
+from elearning.entities.external_resource import ExternalResource
 from infra.exceptions import RequestException
 from infra.logging import logger
 from infra.repository import ModelRepository

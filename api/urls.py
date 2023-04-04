@@ -20,6 +20,10 @@ from api.apis.v1.course_components.course_components import (
     CourseComponentDetailFileUploadApi,
     CourseComponentDetailFileDetailApi,
 )
+from api.apis.v1.submission.submission import (
+    SubmissionApi,
+    SubmissionDetailApi,
+)
 
 from api.apis.v1.reports.report import DashboardApi
 
@@ -79,6 +83,12 @@ urlpatterns_v1 = [
     path("report/teacher/", DashboardApi.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
     path("auth/", include((auth_urlpatterns, "auth"))),
+    path("submission-attempt/", SubmissionApi.as_view(), name="submission"),
+    path(
+        "submission-attempt/<uuid:submission_uuid>",
+        SubmissionDetailApi.as_view(),
+        name="submission-detail",
+    ),
 ]
 
 urlpatterns = [path("v1/", include((urlpatterns_v1, "v1")))]

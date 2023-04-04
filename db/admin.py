@@ -9,7 +9,7 @@ from .models import (
     CourseStepUserProgress,
     CourseComponent,
     CustomUser,
-    EvaluationAttempt,
+    Submission,
     ExternalResource,
     Role,
 )
@@ -81,7 +81,7 @@ class EvaluationAttemptAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(EvaluationAttempt, EvaluationAttemptAdmin)
+admin.site.register(Submission, EvaluationAttemptAdmin)
 
 
 class RoleAdmin(admin.ModelAdmin):

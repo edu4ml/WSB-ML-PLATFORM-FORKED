@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from elearning.coursing.entities.user import User
+from elearning.entities.user import User
 
 from infra.command import Command
 from shared.enums import CommandTypes, UserRoles

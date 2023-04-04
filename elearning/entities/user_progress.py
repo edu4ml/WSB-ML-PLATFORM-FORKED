@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 from uuid import UUID
 
-from elearning.coursing.entities.evaluation_attempt import EvaluationAttempt
+from elearning.entities.submission import Submission
 
 
 @dataclass
@@ -11,7 +11,7 @@ class CourseStepUserProgress:
     tracking_uuid: UUID
     is_completed: bool
     completed_at: datetime
-    submissions: List[EvaluationAttempt]
+    submissions: List[Submission]
 
     #
     is_blocked: bool = field(init=False)

@@ -2,9 +2,9 @@ from db.models.courses import (
     CourseEnrollment,
     CourseStep as CourseStepModel,
     CourseStepUserProgress,
-    EvaluationAttempt,
+    Submission as SubmissionDbModel,
 )
-from elearning.reporting.entities.report import (
+from elearning.entities.report import (
     CourseStudents,
     CourseInfo,
     CourseStep,
@@ -34,31 +34,31 @@ class ReportRepository(ModelRepository):
 
     def _get_submission_inbox(self):
         author_courses = self.user.created_courses.all()
-        evaluation_attempts = EvaluationAttempt.objects.filter(
+        submissions = SubmissionDbModel.objects.filter(
             course_step__course__in=author_courses
         )
 
         return [
             Submission(
-                uuid=attempt.uuid,
+                uuid=submission.uuid,
                 user=StudentInfo(
-                    uuid=attempt.user.uuid,
-                    email=attempt.user.email,
+                    uuid=submission.user.uuid,
+                    email=submission.user.email,
                 ),
-                title=attempt.title,
-                description=attempt.description,
-                status=attempt.status,
-                file_link=attempt.file.url,
+                title=submission.title,
+                description=submission.description,
+                status=submission.status,
+                file_link=submission.file.url,
                 course=CourseInfo(
-                    uuid=attempt.course_step.course.uuid,
-                    title=attempt.course_step.course.title,
+                    uuid=submission.course_step.course.uuid,
+                    title=submission.course_step.course.title,
                 ),
                 course_component=CourseStep(
-                    uuid=attempt.course_step.uuid,
-                    title=attempt.course_step.component.title,
+                    uuid=submission.course_step.uuid,
+                    title=submission.course_step.component.title,
                 ),
             )
-            for attempt in evaluation_attempts
+            for submission in submissions
         ]
 
     def _get_students_progress_for_courses(self):

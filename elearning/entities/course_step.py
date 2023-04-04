@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
-from elearning.coursing.entities import CourseStepUserProgress
-from elearning.coursing.entities.course_component import CourseComponent
+from elearning.entities import CourseStepUserProgress
+from elearning.entities.course_component import CourseComponent
 from shared.enums import CourseComponentType, CourseStepEvaluationType
 
 

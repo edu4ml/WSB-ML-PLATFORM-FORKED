@@ -3,8 +3,8 @@ from datetime import datetime
 from typing import List
 from uuid import UUID
 
-from elearning.coursing.entities import CourseStep
-from elearning.coursing.entities.author import Author
+from elearning.entities import CourseStep
+from elearning.entities.author import Author
 
 
 @dataclass

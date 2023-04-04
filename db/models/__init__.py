@@ -5,6 +5,6 @@ from .courses import (
     CourseStep,
     CourseStepUserProgress,
     CourseComponent,
-    EvaluationAttempt,
+    Submission,
 )
 from .auth import Role, CustomUser
