@@ -38,3 +38,20 @@ class CourseDetailApi(AuthMixin):
         if course:
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
+
+    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
+    def post(self, request, course_uuid: UUID, **kwargs):
+        try:
+            command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
+            command_bus.issue(request, course_uuid=course_uuid)
+            return Response(dict(), status.HTTP_202_ACCEPTED)
+        except CommandBusException as e:
+            return Response(
+                dict(
+                    error=True,
+                    success=False,
+                    payload=request.data,
+                    message=e.message,
+                ),
+                status=e.status_code,
+            )

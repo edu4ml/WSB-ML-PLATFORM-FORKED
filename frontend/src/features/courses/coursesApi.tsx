@@ -70,8 +70,8 @@ export const courseApi = createApi({
         }),
         issueCourseCommand: builder.mutation({
             query: ({ id, command }) => ({
-                url: `/course/${id}/command`,
-                method: 'PUT',
+                url: `/course/${id}`,
+                method: 'POST',
                 body: command,
             }),
             invalidatesTags: ['course-list'],

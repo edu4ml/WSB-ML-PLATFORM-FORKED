@@ -27,8 +27,8 @@ def _test_command_update_course(
         assert response[key] == value
 
     # Send command
-    response = client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=course_obj.uuid)),
+    response = client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_obj.uuid)),
         command_data,
         content_type="application/json",
     )
@@ -145,9 +145,9 @@ def test_teacher_cannot_update_draft_course_not_created_by_them(
         ],
     )
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=other_teacher_draft_course.uuid),
         ),
         command_data,
@@ -166,9 +166,9 @@ def test_student_cannot_update_draft_course(student_client, teacher_draft_course
         ],
     )
 
-    response = student_client.put(
+    response = student_client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=teacher_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=teacher_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",
@@ -187,9 +187,9 @@ def test_admin_cannot_update_published_course(admin_client, admin_published_cour
         ],
     )
 
-    response = admin_client.put(
+    response = admin_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
@@ -211,9 +211,9 @@ def test_teacher_cannot_update_published_course(
         ],
     )
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=teacher_published_course.uuid),
         ),
         command_data,
@@ -235,9 +235,9 @@ def test_student_cannot_update_published_course(
         ],
     )
 
-    response = student_client.put(
+    response = student_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=teacher_published_course.uuid),
         ),
         command_data,
@@ -256,8 +256,8 @@ def test_update_non_existent_course(teacher_client):
         ],
     )
 
-    response = teacher_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=uuid4())),
+    response = teacher_client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=uuid4())),
         command_data,
         content_type="application/json",
     )
@@ -279,9 +279,9 @@ def test_update_course_with_invalid_data_missing_evaluation_type(
         ],
     )
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=teacher_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=teacher_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",
@@ -304,9 +304,9 @@ def test_update_course_with_invalid_data_missing_order(
         ],
     )
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=teacher_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=teacher_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",
@@ -329,9 +329,9 @@ def test_update_course_with_invalid_data_missing_component(
         ],
     )
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=teacher_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=teacher_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",
@@ -349,9 +349,9 @@ def test_update_course_without_authentication(client, teacher_draft_course):
         ],
     )
 
-    response = client.put(
+    response = client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=teacher_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=teacher_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",

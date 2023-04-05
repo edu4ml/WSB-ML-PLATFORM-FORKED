@@ -22,8 +22,8 @@ def _test_command(
         assert response[key] == value
 
     # Send command
-    response = admin_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=course_obj.uuid)),
+    response = admin_client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_obj.uuid)),
         command_data,
         content_type="application/json",
     )
@@ -95,9 +95,9 @@ def test_enroll_in_draft_course_teacher(teacher_client, admin_draft_course, teac
         type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(teacher.uuid)
     )
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=admin_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=admin_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",
@@ -116,9 +116,9 @@ def test_enroll_in_draft_course_student(student_client, admin_draft_course, stud
         type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(student.uuid)
     )
 
-    response = student_client.put(
+    response = student_client.post(
         reverse(
-            "api:v1:course-command", kwargs=dict(course_uuid=admin_draft_course.uuid)
+            "api:v1:course-detail", kwargs=dict(course_uuid=admin_draft_course.uuid)
         ),
         command_data,
         content_type="application/json",
@@ -138,9 +138,9 @@ def test_enroll_twice(teacher_client, admin_published_course, teacher):
     )
 
     # Enroll once
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
@@ -149,9 +149,9 @@ def test_enroll_twice(teacher_client, admin_published_course, teacher):
     assert response.status_code == status.HTTP_202_ACCEPTED
 
     # Enroll again
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
@@ -173,8 +173,8 @@ def test_enroll_in_non_existent_course(teacher_client, teacher):
         type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(teacher.uuid)
     )
 
-    response = teacher_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=uuid4())),
+    response = teacher_client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=uuid4())),
         command_data,
         content_type="application/json",
     )
@@ -190,9 +190,9 @@ def test_enroll_in_non_existent_course(teacher_client, teacher):
 def test_enroll_without_authentication(client, admin_published_course):
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=None)
 
-    response = client.put(
+    response = client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
@@ -205,9 +205,9 @@ def test_enroll_without_authentication(client, admin_published_course):
 def test_enroll_with_invalid_user_uuid(teacher_client, admin_published_course):
     command_data = dict(type=CommandTypes.ENROLL_FOR_COURSE, user_uuid=str(uuid4()))
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs=dict(course_uuid=admin_published_course.uuid),
         ),
         command_data,
