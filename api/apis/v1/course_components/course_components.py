@@ -47,7 +47,7 @@ class CourseComponentDetailApi(AuthMixin):
         return Response(dict(), status.HTTP_404_NOT_FOUND)
 
     @api_has_one_of_the_roles([UserRoles.TEACHER])
-    def put(self, request, component_uuid: UUID, **kwargs):
+    def post(self, request, component_uuid: UUID, **kwargs):
         try:
             component = CourseComponentRepo(request.user).update_by_uuid(
                 uuid=component_uuid,

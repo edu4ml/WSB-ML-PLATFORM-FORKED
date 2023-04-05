@@ -70,14 +70,14 @@ def test_course_component_detail_api_get_not_found(admin_client):
 
 
 @pytest.mark.django_db
-def test_course_component_detail_api_put(
+def test_course_component_detail_api_post(
     admin_client, course_components, course_component_data
 ):
     component = course_components[0]
     updated_data = course_component_data.copy()
     updated_data["title"] = "Updated Course Component"
 
-    response = admin_client.put(
+    response = admin_client.post(
         reverse(
             "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
         ),

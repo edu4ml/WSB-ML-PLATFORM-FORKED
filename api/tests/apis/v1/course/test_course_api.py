@@ -51,8 +51,8 @@ def test_issue_enroll_for_course(admin_client, admin, courses):
     )
     assert response.json().get("is_enrolled") is False
 
-    response = admin_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=course.uuid)),
+    response = admin_client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
@@ -81,8 +81,8 @@ def test_issue_complete_course_step(admin_client, admin, course_with_steps):
         progress_tracking_uuid=progress_tracking_uuid,
     )
 
-    response = admin_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=course.uuid)),
+    response = admin_client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
@@ -99,8 +99,8 @@ def test_raise_exception_when_course_command_unknown(admin_client, courses):
     course = courses[0]
     command_data = dict(type="DUMMY-UNKNOWN-COMMAND", foo="bar")
 
-    response = admin_client.put(
-        reverse("api:v1:course-command", kwargs=dict(course_uuid=course.uuid)),
+    response = admin_client.post(
+        reverse("api:v1:course-detail", kwargs=dict(course_uuid=course.uuid)),
         command_data,
         content_type="application/json",
     )
@@ -177,7 +177,6 @@ def test_get_course_component_not_found(admin_client):
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
-# Test PUT method
 @pytest.mark.django_db
 def test_update_course_component(admin_client, course_components):
     component = course_components[0]
@@ -186,7 +185,7 @@ def test_update_course_component(admin_client, course_components):
         "description": "Updated course component for testing",
         "type": "UNKNOWN",
     }
-    response = admin_client.put(
+    response = admin_client.post(
         reverse(
             "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
         ),
@@ -206,7 +205,7 @@ def test_update_course_component_missing_data(admin_client, course_components):
         "title": "Updated Course Component",
         "description": "Updated course component for testing",
     }
-    response = admin_client.put(
+    response = admin_client.post(
         reverse(
             "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
         ),

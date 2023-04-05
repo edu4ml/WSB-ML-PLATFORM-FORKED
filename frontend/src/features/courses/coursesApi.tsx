@@ -30,7 +30,7 @@ export const courseApi = createApi({
         createCourse: builder.mutation({
             query: (command) => ({
                 url: '/course/',
-                method: 'PUT',
+                method: 'POST',
                 body: command,
             }),
             invalidatesTags: ['course-list'],
@@ -40,10 +40,10 @@ export const courseApi = createApi({
             providesTags: ['course-component-list'],
         }),
         createCourseComponents: builder.mutation({
-            query: (payload) => ({
+            query: (command) => ({
                 url: '/course-components/',
                 method: 'POST',
-                body: payload,
+                body: command,
             }),
             invalidatesTags: ['course-component-list'],
         }),

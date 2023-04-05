@@ -31,6 +31,7 @@ class CourseRepository(ModelRepository[CourseDbModel]):
         if entity.is_draft is not None:
             course.is_draft = entity.is_draft
         course.save()
+        return self.from_model(course)
 
     def update_course_steps(self, uuid, steps: List[CourseStep]):
         course = CourseDbModel.objects.get(uuid=uuid)
@@ -42,6 +43,7 @@ class CourseRepository(ModelRepository[CourseDbModel]):
                 component_id=new_step.component,
                 evaluation_type=new_step.evaluation_type,
             )
+        return self.from_model(course)
 
     def from_model(self, course):
         return self.domain_model(
@@ -91,7 +93,10 @@ class CourseRepository(ModelRepository[CourseDbModel]):
         # whole key is passed here so it is safe to do get_or_create here
         if not self.user:
             return CourseStepUserProgress(
-                tracking_uuid=None, completed_at=None, is_completed=None, submissions=[]
+                tracking_uuid=None,
+                completed_at=None,
+                is_completed=None,
+                submissions=[],
             )
 
         step_progress, _ = CourseStepUserProgressDbModel.objects.get_or_create(

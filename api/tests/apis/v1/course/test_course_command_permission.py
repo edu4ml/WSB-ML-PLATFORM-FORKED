@@ -11,9 +11,9 @@ from shared.enums import CommandTypes
 @pytest.mark.django_db
 def test_update_course_command_student(student_client, admin_published_course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE})
-    response = student_client.put(
+    response = student_client.post(
         reverse(
-            "api:v1:course-command", kwargs={"course_uuid": admin_published_course.uuid}
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
         ),
         data,
         content_type="application/json",
@@ -24,9 +24,9 @@ def test_update_course_command_student(student_client, admin_published_course):
 @pytest.mark.django_db
 def test_update_course_command_teacher(teacher_client, teacher_draft_course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE, "steps": []})
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command",
+            "api:v1:course-detail",
             kwargs={"course_uuid": teacher_draft_course.uuid},
         ),
         data,
@@ -38,9 +38,9 @@ def test_update_course_command_teacher(teacher_client, teacher_draft_course):
 @pytest.mark.django_db
 def test_update_course_command_admin(admin_client, admin_draft_course):
     data = json.dumps({"type": CommandTypes.UPDATE_COURSE, "steps": []})
-    response = admin_client.put(
+    response = admin_client.post(
         reverse(
-            "api:v1:course-command", kwargs={"course_uuid": admin_draft_course.uuid}
+            "api:v1:course-detail", kwargs={"course_uuid": admin_draft_course.uuid}
         ),
         data,
         content_type="application/json",
@@ -57,9 +57,9 @@ def test_enroll_for_course_command_student(
         "type": CommandTypes.ENROLL_FOR_COURSE,
         "user_uuid": str(student.uuid),
     }
-    response = student_client.put(
+    response = student_client.post(
         reverse(
-            "api:v1:course-command", kwargs={"course_uuid": admin_published_course.uuid}
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
         ),
         command_data,
         content_type="application/json",
@@ -75,9 +75,9 @@ def test_enroll_for_course_command_teacher(
         "type": CommandTypes.ENROLL_FOR_COURSE,
         "user_uuid": str(teacher.uuid),
     }
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse(
-            "api:v1:course-command", kwargs={"course_uuid": admin_published_course.uuid}
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
         ),
         command_data,
         content_type="application/json",
@@ -91,9 +91,9 @@ def test_enroll_for_course_command_admin(admin, admin_client, admin_published_co
         "type": CommandTypes.ENROLL_FOR_COURSE,
         "user_uuid": str(admin.uuid),
     }
-    response = admin_client.put(
+    response = admin_client.post(
         reverse(
-            "api:v1:course-command", kwargs={"course_uuid": admin_published_course.uuid}
+            "api:v1:course-detail", kwargs={"course_uuid": admin_published_course.uuid}
         ),
         command_data,
         content_type="application/json",
@@ -118,8 +118,8 @@ def test_complete_course_step_command_student(student_client, course_with_steps)
         "type": CommandTypes.COMPLETE_COURSE_STEP,
         "progress_tracking_uuid": progress_tracking_uuid,
     }
-    response = student_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+    response = student_client.post(
+        reverse("api:v1:course-detail", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -142,8 +142,8 @@ def test_complete_course_step_command_teacher(teacher_client, course_with_steps)
         "type": CommandTypes.COMPLETE_COURSE_STEP,
         "progress_tracking_uuid": progress_tracking_uuid,
     }
-    response = teacher_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+    response = teacher_client.post(
+        reverse("api:v1:course-detail", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -166,8 +166,8 @@ def test_complete_course_step_command_admin(admin_client, course_with_steps):
         "type": CommandTypes.COMPLETE_COURSE_STEP,
         "progress_tracking_uuid": progress_tracking_uuid,
     }
-    response = admin_client.put(
-        reverse("api:v1:course-command", kwargs={"course_uuid": course.uuid}),
+    response = admin_client.post(
+        reverse("api:v1:course-detail", kwargs={"course_uuid": course.uuid}),
         command_data,
         content_type="application/json",
     )
@@ -183,7 +183,7 @@ def test_create_course_command_student(student_client):
         "description": "Sample Course Description",
     }
 
-    response = student_client.put(
+    response = student_client.post(
         reverse("api:v1:course"), command_data, content_type="application/json"
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -197,10 +197,10 @@ def test_create_course_command_teacher(teacher_client):
         "description": "Sample Course Description",
     }
 
-    response = teacher_client.put(
+    response = teacher_client.post(
         reverse("api:v1:course"), command_data, content_type="application/json"
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
 
 
 @pytest.mark.django_db
@@ -211,7 +211,7 @@ def test_create_course_command_admin(admin_client):
         "description": "Sample Course Description",
     }
 
-    response = admin_client.put(
+    response = admin_client.post(
         reverse("api:v1:course"), command_data, content_type="application/json"
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED

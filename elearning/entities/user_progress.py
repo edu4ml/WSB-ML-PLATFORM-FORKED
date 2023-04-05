@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 from uuid import UUID
@@ -14,4 +14,4 @@ class CourseStepUserProgress:
     submissions: List[Submission]
 
     #
-    is_blocked: bool = field(init=False)
+    is_blocked: bool | None = None

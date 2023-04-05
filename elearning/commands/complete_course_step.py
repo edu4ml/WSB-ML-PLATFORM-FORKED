@@ -29,6 +29,6 @@ class OnCompleteCourseStep(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: CompleteCourseStep):
-        self.repository.course_step_user_progress.update_by_uuid(
+        return self.repository.course_step_user_progress.update_by_uuid(
             uuid=command.progress_tracking_uuid, is_completed=True
         )

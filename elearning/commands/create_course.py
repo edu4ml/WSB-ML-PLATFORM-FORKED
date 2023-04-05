@@ -22,13 +22,11 @@ class CreateCourse(Command):
 
     @classmethod
     def build_from_request(cls, request, **kwargs):
-        command = CreateCourse(
+        return CreateCourse(
             issuer=request.user,
             title=request.data.get("title"),
             description=request.data.get("description", ""),
         )
-        command.issuer = request.user
-        return command
 
 
 class OnCreateCourse(CommandHandler):

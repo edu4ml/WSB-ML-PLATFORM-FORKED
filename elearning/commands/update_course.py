@@ -80,8 +80,10 @@ class OnUpdateCourse(CommandHandler):
         course.is_draft = command.is_draft
 
         if command.steps is not None:
-            self.repository.course.update_course_steps(course.uuid, command.steps)
-        self.repository.course.update_with_entity(course)
+            return self.repository.course.update_course_steps(
+                course.uuid, command.steps
+            )
+        return self.repository.course.update_with_entity(course)
 
     def _check_that_user_is_author(self, course, user):
         if course.author != user.uuid and not user.is_admin():

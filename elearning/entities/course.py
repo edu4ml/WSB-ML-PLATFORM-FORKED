@@ -43,7 +43,6 @@ class Course:
         cause we need to know about all steps in course
         """
         previous_step = None
-
         for step in self.steps:
             if step.order == 1:
                 step.user_progress.is_blocked = False

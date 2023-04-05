@@ -21,15 +21,6 @@ class CourseApi(AuthMixin):
         serialized = [asdict(course) for course in courses]
         return Response(serialized, status.HTTP_200_OK)
 
-    @api_has_one_of_the_roles([UserRoles.TEACHER])
-    def put(self, request, **kwargs):
-        try:
-            command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-            course = command_bus.issue(request)
-            return Response(asdict(course), status.HTTP_201_CREATED)
-        except CommandBusException as e:
-            return self._return_exception_response(e, request)
-
 
 class CourseDetailApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
@@ -39,19 +30,19 @@ class CourseDetailApi(AuthMixin):
             return Response(asdict(course), status.HTTP_200_OK)
         return Response(dict(), status.HTTP_404_NOT_FOUND)
 
-    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
-    def post(self, request, course_uuid: UUID, **kwargs):
-        try:
-            command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
-            command_bus.issue(request, course_uuid=course_uuid)
-            return Response(dict(), status.HTTP_202_ACCEPTED)
-        except CommandBusException as e:
-            return Response(
-                dict(
-                    error=True,
-                    success=False,
-                    payload=request.data,
-                    message=e.message,
-                ),
-                status=e.status_code,
-            )
+    # @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
+    # def post(self, request, course_uuid: UUID, **kwargs):
+    #     try:
+    #         command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
+    #         command_bus.issue(request, course_uuid=course_uuid)
+    #         return Response(dict(), status.HTTP_202_ACCEPTED)
+    #     except CommandBusException as e:
+    #         return Response(
+    #             dict(
+    #                 error=True,
+    #                 success=False,
+    #                 payload=request.data,
+    #                 message=e.message,
+    #             ),
+    #             status=e.status_code,
+    #         )

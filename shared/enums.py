@@ -13,6 +13,8 @@ class CommandTypes:
     APPROVE_SUBMISSION = "APPROVE_SUBMISSION"
     REJECT_SUBMISSION = "REJECT_SUBMISSION"
 
+    CREATE_COURSE_COMPONENT = "CREATE_COURSE_COMPONENT"
+
 
 class CourseComponentType(str, Enum):
     """

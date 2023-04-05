@@ -28,7 +28,6 @@ class CommandBus:
         commandBaseClass = self._get_command_base_class(request)
         if not self._is_allowed_to_create_command(request, commandBaseClass):
             raise PermissionDenied
-
         cmd = commandBaseClass.build_from_request(request, **kwargs)
 
         self.logger.info(f"{cmd} issued into command bus")

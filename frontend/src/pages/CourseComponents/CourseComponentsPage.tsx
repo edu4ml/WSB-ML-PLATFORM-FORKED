@@ -13,6 +13,7 @@ import {
 import CourseComponentCreateModal from './CourseComponentCreateModal';
 import CourseComponentListItem from './CourseComponentListItem';
 import PageHeader from '../../components/common/PageHeader';
+import { Enums } from '../../shared';
 
 const CourseComponentsPage = () => {
     const { data: courseComponents } =
@@ -22,7 +23,11 @@ const CourseComponentsPage = () => {
 
     const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
     const handleCreateModalOk = (payload) => {
-        createCourseComponent(payload)
+        const command = {
+            type: Enums.COMMAND_TYPES.CREATE_COURSE_COMPONENT,
+            ...payload,
+        };
+        createCourseComponent(command)
             .unwrap()
             .then((res) => {
                 notification.info({
