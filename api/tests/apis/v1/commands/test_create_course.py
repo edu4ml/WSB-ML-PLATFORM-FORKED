@@ -14,7 +14,7 @@ def test_admin_create_course(admin_client, admin):
         command_data,
         content_type="application/json",
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
     course = response.json()
     assert course["title"] == course_title
     assert course["is_draft"] is True
@@ -30,7 +30,7 @@ def test_teacher_create_course(teacher_client, teacher):
         command_data,
         content_type="application/json",
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
     course = response.json()
     assert course["title"] == course_title
     assert course["is_draft"] is True
@@ -70,7 +70,7 @@ def test_course_created_as_draft_by_default(admin_client, admin):
         command_data,
         content_type="application/json",
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
     course = response.json()
     assert course["is_draft"] is True
 

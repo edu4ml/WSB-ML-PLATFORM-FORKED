@@ -25,7 +25,7 @@ def test_admin_submit_submission(admin_client, tmp_uploaded_file, course_with_st
         {"file": tmp_uploaded_file, **command_data},
     )
 
-    assert response.status_code == 201
+    assert response.status_code == 202
     submission = response.json()
     assert submission["title"] == title
     assert submission["description"] == description

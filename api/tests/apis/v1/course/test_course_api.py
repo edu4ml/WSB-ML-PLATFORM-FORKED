@@ -134,7 +134,7 @@ def test_create_course_component_with_valid_data(admin_client):
         content_type="application/json",
     )
 
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
     assert response.json()["title"] == course_component_data["title"]
     assert response.json()["description"] == course_component_data["description"]
     assert response.json()["type"] == course_component_data["type"]

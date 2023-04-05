@@ -54,4 +54,4 @@ class CourseStepUserProgressSubmissionUploadApi(AuthMixin):
             user_progress_uuid=user_progress_uuid,
         )
 
-        return Response(asdict(user_progress), status=status.HTTP_201_CREATED)
+        return Response(asdict(user_progress), status=status.HTTP_202_ACCEPTED)

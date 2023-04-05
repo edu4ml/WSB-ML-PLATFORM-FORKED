@@ -28,7 +28,7 @@ class SubmissionApi(AuthMixin):
         try:
             command_bus: CommandBus = apps.get_app_config(APP_NAME).command_bus
             submission = command_bus.issue(request)
-            return Response(asdict(submission), status.HTTP_201_CREATED)
+            return Response(asdict(submission), status.HTTP_202_ACCEPTED)
         except CommandBusException as e:
             return self._return_exception_response(e, request)
 

@@ -31,7 +31,7 @@ def test_course_component_api_post(admin_client, course_component_data):
         json.dumps(course_component_data),
         content_type="application/json",
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
     assert response.json()["title"] == course_component_data["title"]
     assert response.json()["description"] == course_component_data["description"]
     assert response.json()["type"] == course_component_data["type"]
@@ -114,7 +114,7 @@ def test_course_component_detail_file_upload_api_post(
         ),
         {"file": tmp_uploaded_file},
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_202_ACCEPTED
 
 
 @pytest.mark.django_db

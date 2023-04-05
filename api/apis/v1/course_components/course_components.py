@@ -24,7 +24,7 @@ class CourseComponentApi(AuthMixin):
     def post(self, request, **kwargs):
         try:
             component = CourseComponentRepo(request.user).create(**request.data)
-            return Response(asdict(component), status.HTTP_201_CREATED)
+            return Response(asdict(component), status.HTTP_202_ACCEPTED)
         except RequestException as e:
             return Response(
                 dict(
@@ -82,7 +82,7 @@ class CourseComponentDetailFileUploadApi(AuthMixin):
                     file_data=request.FILES,
                 ),
             )
-            return Response(asdict(component), status.HTTP_201_CREATED)
+            return Response(asdict(component), status.HTTP_202_ACCEPTED)
         except RequestException as e:
             return Response(
                 dict(
