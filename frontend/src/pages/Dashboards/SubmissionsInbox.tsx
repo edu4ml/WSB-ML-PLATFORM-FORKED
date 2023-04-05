@@ -3,6 +3,7 @@ import React from 'react';
 import { Enums } from '../../shared';
 import UserCardAvatar from '../../components/common/UserCardAvatar';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useIssueSubmissionCommandMutation } from '../../features/courses/coursesApi';
 
 const { Text } = Typography;
 
@@ -21,7 +22,9 @@ const submissionStatusTagText = {
 };
 
 const SubmissionsInbox = ({ submissions }) => {
-    const menu = [
+    const [issueSubmissionCommand, {}] = useIssueSubmissionCommandMutation();
+
+    const menu = (submission) => [
         {
             key: 'download',
             label: 'Pobierz',
@@ -32,15 +35,39 @@ const SubmissionsInbox = ({ submissions }) => {
         {
             key: 'approve',
             label: 'Zaakceptuj',
-            onClick: (record) => {
-                console.log('Approve', record);
+            onClick: () => {
+                issueSubmissionCommand({
+                    id: submission.uuid,
+                    command: {
+                        type: Enums.COMMAND_TYPES.APPROVE_SUBMISSION,
+                    },
+                })
+                    .unwrap()
+                    .then((res) => {
+                        console.log(res);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             },
         },
         {
             key: 'reject',
             label: 'Odrzuć',
-            onClick: (record) => {
-                console.log('Reject', record);
+            onClick: () => {
+                issueSubmissionCommand({
+                    id: submission.uuid,
+                    command: {
+                        type: Enums.COMMAND_TYPES.REJECT_SUBMISSION,
+                    },
+                })
+                    .unwrap()
+                    .then((res) => {
+                        console.log(res);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             },
         },
     ];
@@ -95,7 +122,7 @@ const SubmissionsInbox = ({ submissions }) => {
             width: '50',
             render: (_, record) => (
                 <Dropdown
-                    menu={{ items: menu }}
+                    menu={{ items: menu(record) }}
                     trigger={['click', 'hover']}
                     placement="bottomRight"
                 >

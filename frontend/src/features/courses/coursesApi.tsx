@@ -84,10 +84,19 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
+        issueSubmissionCommand: builder.mutation({
+            query: ({ id, command }) => ({
+                url: `/submission/${id}`,
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list'],
+        }),
     }),
 });
 
 export const {
+    useIssueSubmissionCommandMutation,
     useUploadSubmissionMutation,
     useDeleteCourseComponentFileResourceMutation,
     useAddFileToCourseComponentMutation,
