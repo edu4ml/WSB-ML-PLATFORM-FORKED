@@ -19,9 +19,13 @@ export const courseApi = createApi({
             query: (id) => `/course/${id}`,
             providesTags: (result, error, id) => [{ type: 'course-list', id }],
         }),
-        getCourseComponents: builder.query({
-            query: () => '/course-components/',
-            providesTags: ['course-component-list'],
+        issueCourseCommand: builder.mutation({
+            query: ({ id, command }) => ({
+                url: `/course/${id}`,
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list'],
         }),
         createCourse: builder.mutation({
             query: (command) => ({
@@ -30,6 +34,10 @@ export const courseApi = createApi({
                 body: command,
             }),
             invalidatesTags: ['course-list'],
+        }),
+        getCourseComponents: builder.query({
+            query: () => '/course-components/',
+            providesTags: ['course-component-list'],
         }),
         createCourseComponents: builder.mutation({
             query: (payload) => ({
@@ -68,18 +76,9 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-component-list'],
         }),
-        issueCourseCommand: builder.mutation({
-            query: ({ id, command }) => ({
-                url: `/course/${id}`,
-                method: 'POST',
-                body: command,
-            }),
-            invalidatesTags: ['course-list'],
-        }),
         uploadSubmission: builder.mutation({
             query: ({ command }) => ({
                 url: `/submission`,
-                // url: `/course/${courseUUID}/step/${stepUUID}/user-progress/${progressTrackingUUID}/submission`,
                 method: 'POST',
                 body: command,
             }),
