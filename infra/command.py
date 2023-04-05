@@ -11,7 +11,7 @@ class Command:
     Baseclass for commands to interact with domain
     """
 
-    parent_uuid: int
+    parent_uuid: int | None
     created_at: datetime = datetime.now()
     issuer: CustomUser
 

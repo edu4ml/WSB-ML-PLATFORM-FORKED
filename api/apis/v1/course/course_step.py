@@ -47,11 +47,4 @@ class CourseStepUserProgressDetailsApi(AuthMixin):
 
 
 class CourseStepUserProgressSubmissionUploadApi(AuthMixin):
-    @api_has_one_of_the_roles([UserRoles.TEACHER, UserRoles.STUDENT])
-    def post(self, request, user_progress_uuid: UUID, **kwargs):
-        user_progress = CourseStepUserProgressRepository(request.user).add_submission(
-            request=request,
-            user_progress_uuid=user_progress_uuid,
-        )
-
-        return Response(asdict(user_progress), status=status.HTTP_202_ACCEPTED)
+    pass

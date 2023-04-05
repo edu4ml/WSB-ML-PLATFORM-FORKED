@@ -25,6 +25,7 @@ class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbM
             submissions=[],
             completed_at=obj.completed_at,
             is_completed=obj.is_completed,
+            is_blocked=obj.is_blocked,
         )
 
     def add_submission(self, request, user_progress_uuid):
@@ -43,3 +44,21 @@ class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbM
 
         else:
             raise RequestException(form.errors, status_code=400)
+
+    def create_user_progress_for_course(self, course, user):
+        CourseStepUserProgressDbModel.objects.create(
+            user_id=user.uuid, step_id=course.steps[0].uuid, is_blocked=False
+        )
+
+        for step in course.steps[1:]:
+            CourseStepUserProgressDbModel.objects.create(
+                user_id=user.uuid, step_id=step.uuid
+            )
+
+    def complete_step_for_user(self, step_uuid, user_uuid):
+        progress = CourseStepUserProgressDbModel.objects.get(
+            step__uuid=step_uuid, user__uuid=user_uuid
+        )
+        progress.is_completed = True
+        progress.save()
+        return self.from_model(progress)

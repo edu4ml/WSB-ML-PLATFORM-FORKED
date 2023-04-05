@@ -90,7 +90,7 @@ class CourseStepUserProgress(TimestampedModel):
         on_delete=models.CASCADE,
         related_name="steps_progress",
     )
-
+    is_blocked = models.BooleanField(default=True)
     is_completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 

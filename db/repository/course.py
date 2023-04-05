@@ -90,24 +90,27 @@ class CourseRepository(ModelRepository[CourseDbModel]):
         ]
 
     def _get_user_progress(self, step):
-        # whole key is passed here so it is safe to do get_or_create here
-        if not self.user:
+        if step_progress_exists := CourseStepUserProgressDbModel.objects.filter(
+            user=self.user, step=step
+        ).exists():
+            step_progress = CourseStepUserProgressDbModel.objects.get(
+                user=self.user, step=step
+            )
+
+        if not self.user or not step_progress_exists:
             return CourseStepUserProgress(
                 tracking_uuid=None,
                 completed_at=None,
                 is_completed=None,
+                is_blocked=None,
                 submissions=[],
             )
-
-        step_progress, _ = CourseStepUserProgressDbModel.objects.get_or_create(
-            user=self.user,
-            step=step,
-        )
 
         return CourseStepUserProgress(
             tracking_uuid=step_progress.uuid,
             completed_at=step_progress.completed_at,
             is_completed=step_progress.is_completed,
+            is_blocked=step_progress.is_blocked,
             submissions=[
                 Submission(
                     uuid=attempt.uuid,

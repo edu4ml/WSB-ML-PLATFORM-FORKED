@@ -8,11 +8,13 @@ from .user import UserRepository
 
 
 class RepositoryRoot:
+    enrollment: CourseEnrollmentRepository
+
     def __init__(self) -> None:
         self.course: CourseRepository = CourseRepository()
         self.course_step_user_progress: CourseStepUserProgressRepository = (
             CourseStepUserProgressRepository()
         )
         self.user: UserRepository = UserRepository()
-        self.enrollment = CourseEnrollmentRepository()
-        self.submission = SubmissionRepository()
+        self.enrollment: CourseEnrollmentRepository = CourseEnrollmentRepository()
+        self.submission: SubmissionRepository = SubmissionRepository()

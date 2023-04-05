@@ -6,6 +6,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 import CourseStepItem from './CourseStepItem';
+import { useGetUserProfileQuery } from '../../features/auth/authApi';
 
 const { Title } = Typography;
 
@@ -23,6 +24,7 @@ const getStatusColor = (step) => {
 };
 
 const CourseDetailPage = () => {
+    const { data: userData } = useGetUserProfileQuery('userDetails');
     const { courseId } = useParams();
     const { data: course } = useGetCourseQuery(courseId);
 
@@ -41,7 +43,13 @@ const CourseDetailPage = () => {
 
     const timelineItems = course?.steps.map((step) => ({
         color: getStatusColor(step),
-        children: <CourseStepItem step={step} course_uuid={course.uuid} />,
+        children: (
+            <CourseStepItem
+                step={step}
+                courseUUID={course.uuid}
+                userUUID={userData.pk}
+            />
+        ),
         dot: getDot(step),
     }));
 

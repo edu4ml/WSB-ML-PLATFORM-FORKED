@@ -1,6 +1,6 @@
 import { Button, notification } from 'antd';
 import React, { useState } from 'react';
-import { useIssueCourseCommandMutation } from '../../features/courses/coursesApi';
+import { useIssueCourseStepProgressTrackingCommandMutation } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import CourseStepAddSubmissionModal from './CourseStepAddSubmissionModal';
@@ -18,15 +18,12 @@ interface CustomRcFile extends RcFile {
     originFileObj: Blob;
 }
 
-const CourseStepSelfEvaluateButton = ({
-    progress_tracking_uuid,
-    course_uuid,
-}) => {
-    const [issueCommand, {}] = useIssueCourseCommandMutation();
+const CourseStepSelfEvaluateButton = ({ courseUUID, stepUUID, userUUID }) => {
+    const [issueCourseStepProgressCommand, {}] =
+        useIssueCourseStepProgressTrackingCommandMutation();
 
     const command = {
         type: Enums.COMMAND_TYPES.COMPLETE_COURSE_STEP,
-        progress_tracking_uuid,
     };
 
     return (
@@ -34,7 +31,27 @@ const CourseStepSelfEvaluateButton = ({
             icon={<CheckCircleTwoTone />}
             block
             onClick={() => {
-                issueCommand({ id: course_uuid, command });
+                issueCourseStepProgressCommand({
+                    courseId: courseUUID,
+                    stepId: stepUUID,
+                    userId: userUUID,
+                    command,
+                })
+                    .unwrap()
+                    .then((response) => {
+                        notification.info({
+                            message: 'Zadanie zakończone!',
+                            duration: 2,
+                        });
+                        console.log('response', response);
+                    })
+                    .catch((err) => {
+                        notification.error({
+                            message: NOTIF_SOMETHING_WENT_WRONG,
+                            duration: 2,
+                        });
+                        console.error('Error: ', err);
+                    });
             }}
         >
             Zakończ

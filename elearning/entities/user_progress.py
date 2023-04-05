@@ -10,8 +10,6 @@ from elearning.entities.submission import Submission
 class CourseStepUserProgress:
     tracking_uuid: UUID
     is_completed: bool
+    is_blocked: bool
     completed_at: datetime
     submissions: List[Submission]
-
-    #
-    is_blocked: bool | None = None

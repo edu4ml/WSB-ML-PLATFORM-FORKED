@@ -92,10 +92,19 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
+        issueCourseStepProgressTrackingCommand: builder.mutation({
+            query: ({ courseId, stepId, userId, command }) => ({
+                url: `/course/${courseId}/step/${stepId}/user/${userId}`,
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list'],
+        }),
     }),
 });
 
 export const {
+    useIssueCourseStepProgressTrackingCommandMutation,
     useIssueSubmissionCommandMutation,
     useUploadSubmissionMutation,
     useDeleteCourseComponentFileResourceMutation,

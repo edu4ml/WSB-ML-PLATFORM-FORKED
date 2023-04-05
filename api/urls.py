@@ -70,9 +70,9 @@ urlpatterns_v1 = [
         name="course-detail-steps-detail-user-progress",
     ),
     path(
-        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user-progress/<uuid:user_progress_uuid>/submission",
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user/<uuid:user_uuid>",
         CourseStepUserProgressSubmissionUploadApi.as_view(),
-        name="course-detail-steps-detail-user-progress",
+        name="course-steps-user-progress",
     ),
     path("report/teacher/", DashboardApi.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),

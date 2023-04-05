@@ -43,9 +43,15 @@ class OnEnrollForCourse(CommandHandler):
         self._check_is_already_enrolled(enrollment)
         self._check_course_is_not_draft(course)
 
-        return self.repository.enrollment.create(
+        enrollment = self.repository.enrollment.create(
             course_id=course.uuid, user_id=user.uuid
         )
+
+        self.repository.course_step_user_progress.create_user_progress_for_course(
+            course=course, user=user
+        )
+
+        return enrollment
 
     def _check_user_exists(self, user):
         if user is None:

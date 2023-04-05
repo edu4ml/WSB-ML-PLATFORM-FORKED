@@ -9,7 +9,7 @@ const { Title, Text } = Typography;
 import CourseStepSubmissionList from './CourseStepSubmissionList';
 import CourseStepResourcesList from './CourseStepResourcesList';
 
-const CourseStepItem = ({ step, course_uuid }) => {
+const CourseStepItem = ({ step, courseUUID, userUUID }) => {
     const getActions = (courseUUID, courseStep) => {
         let actions: React.ReactNode[] = [];
         if (
@@ -21,10 +21,9 @@ const CourseStepItem = ({ step, course_uuid }) => {
             actions.push(
                 <CourseStepSelfEvaluateButton
                     key={'self-evaluate'}
-                    course_uuid={courseUUID}
-                    progress_tracking_uuid={
-                        courseStep.user_progress.tracking_uuid
-                    }
+                    courseUUID={courseUUID}
+                    stepUUID={courseStep.uuid}
+                    userUUID={userUUID}
                 />
             );
         }
@@ -50,7 +49,7 @@ const CourseStepItem = ({ step, course_uuid }) => {
                     {step.component.title}
                 </Title>
             }
-            extra={getActions(course_uuid, step)}
+            extra={getActions(courseUUID, step)}
         >
             <Row>
                 <Col span={8}>
