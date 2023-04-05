@@ -6,6 +6,8 @@ from db.models import Submission as SubmissionDbModel
 from elearning.entities.submission import Submission
 from django import forms
 
+from shared.enums import CourseStepEvaluationStatus
+
 
 class EvaluationAttemptForm(forms.ModelForm):
     class Meta:
@@ -28,7 +30,6 @@ class SubmissionRepository(ModelRepository[SubmissionDbModel]):
         )
 
     def create(self, file, user, title, description, course_step_uuid):
-
         course_step = CourseStep.objects.get(uuid=course_step_uuid)
         form = EvaluationAttemptForm(
             dict(
@@ -46,3 +47,15 @@ class SubmissionRepository(ModelRepository[SubmissionDbModel]):
 
         else:
             raise RequestException(form.errors, status_code=400)
+
+    def approve(self, uuid):
+        submission = SubmissionDbModel.objects.get(uuid=uuid)
+        submission.status = CourseStepEvaluationStatus.PASSED
+        submission.save()
+        return self.from_model(submission)
+
+    def reject(self, uuid):
+        submission = SubmissionDbModel.objects.get(uuid=uuid)
+        submission.status = CourseStepEvaluationStatus.FAILED
+        submission.save()
+        return self.from_model(submission)

@@ -1,8 +1,10 @@
 from db.repository import RepositoryRoot
+from elearning.commands.approve_submission import ApproveSubmission, OnSubmissionApprove
 from elearning.commands.create_course_component import (
     CreateCourseComponent,
     OnCreateCourseComponent,
 )
+from elearning.commands.reject_submission import OnSubmissionReject, RejectSubmission
 from elearning.commands.submit_submission import OnSubmitSubmission, SubmitSubmission
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
@@ -60,6 +62,18 @@ class Configuration:
                 event_bus=self.event_bus, repository=self.repository
             ),
             to=CreateCourseComponent,
+        )
+        self.command_bus.register(
+            service=OnSubmissionApprove(
+                event_bus=self.event_bus, repository=self.repository
+            ),
+            to=ApproveSubmission,
+        )
+        self.command_bus.register(
+            service=OnSubmissionReject(
+                event_bus=self.event_bus, repository=self.repository
+            ),
+            to=RejectSubmission,
         )
 
     def __repr__(self):  # pragma: no cover
