@@ -26,4 +26,6 @@ class OnSubmissionReject(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: Command):
-        return self.repository.submission.reject(command.parent_uuid)
+        rejected_submission = self.repository.submission.reject(command.parent_uuid)
+
+        return self.repository.submission.from_model(rejected_submission)

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List
+from uuid import UUID
 from elearning.entities.course_step import NewCourseStep
 
 from infra.command import Command
@@ -14,9 +15,9 @@ from infra.event import Event
 
 @dataclass
 class UpdateCourse(Command):
+    course_uuid: UUID
     title: str | None = None
     description: str | None = None
-    is_draft: bool | None = None
 
     steps: List[NewCourseStep] | None = None
 
@@ -30,7 +31,7 @@ class UpdateCourse(Command):
 
         return UpdateCourse(
             issuer=request.user,
-            parent_uuid=kwargs["course_uuid"],
+            course_uuid=request.data["course_uuid"],
             description=request.data.get("description"),
             steps=[
                 NewCourseStep(
@@ -62,7 +63,7 @@ class OnUpdateCourse(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: UpdateCourse):
-        course = self.repository.course.get_by_uuid(command.parent_uuid)
+        course = self.repository.course.get_by_uuid(command.course_uuid)
         if course is None:
             raise CommandBusException("Course does not exists", 404)
 
@@ -70,7 +71,6 @@ class OnUpdateCourse(CommandHandler):
         self._check_course_is_not_published(course)
 
         course.description = command.description
-        course.is_draft = command.is_draft
 
         if command.steps is not None:
             self.repository.course.update_course_steps(course.uuid, command.steps)

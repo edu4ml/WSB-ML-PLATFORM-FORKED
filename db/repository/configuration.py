@@ -11,6 +11,7 @@ from .user import UserRepository
 class RepositoryRoot:
     enrollment: CourseEnrollmentRepository
     course: CourseRepository
+    course_step_user_progress: CourseStepUserProgressRepository
 
     def __init__(self) -> None:
         self.course: CourseRepository = CourseRepository()

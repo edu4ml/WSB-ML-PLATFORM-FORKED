@@ -20,7 +20,7 @@ class SubmitSubmission(Command):
 
     class Meta:
         name = CommandTypes.SUBMIT_SUBMISSION
-        roles = [UserRoles.TEACHER, UserRoles.ADMIN]
+        roles = [UserRoles.TEACHER, UserRoles.ADMIN, UserRoles.STUDENT]
         is_initial = True
 
     @classmethod

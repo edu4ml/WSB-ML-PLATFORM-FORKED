@@ -69,19 +69,23 @@ admin.site.register(Course, CourseAdmin)
 class CourseStepUserProgressAdmin(admin.ModelAdmin):
     list_display = (
         "user",
+        "step",
         "is_completed",
         "completed_at",
     )
+
+    list_editable = ("is_completed",)
 
 
 admin.site.register(CourseStepUserProgress, CourseStepUserProgressAdmin)
 
 
-class EvaluationAttemptAdmin(admin.ModelAdmin):
-    pass
+class SubmissionAdmin(admin.ModelAdmin):
+    list_display = ("user", "title", "course_step", "status")
+    list_editable = ("status",)
 
 
-admin.site.register(Submission, EvaluationAttemptAdmin)
+admin.site.register(Submission, SubmissionAdmin)
 
 
 class RoleAdmin(admin.ModelAdmin):

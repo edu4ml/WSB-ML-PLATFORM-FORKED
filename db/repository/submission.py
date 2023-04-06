@@ -52,10 +52,10 @@ class SubmissionRepository(ModelRepository[SubmissionDbModel]):
         submission = SubmissionDbModel.objects.get(uuid=uuid)
         submission.status = CourseStepEvaluationStatus.PASSED
         submission.save()
-        return self.from_model(submission)
+        return submission
 
     def reject(self, uuid):
         submission = SubmissionDbModel.objects.get(uuid=uuid)
         submission.status = CourseStepEvaluationStatus.FAILED
         submission.save()
-        return self.from_model(submission)
+        return submission

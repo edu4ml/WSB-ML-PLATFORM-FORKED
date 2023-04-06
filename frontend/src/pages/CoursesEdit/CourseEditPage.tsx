@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 
 import { useNavigate } from 'react-router-dom';
 import {
-    useIssueCourseCommandMutation,
+    useIssueCommandMutation,
     useGetCourseQuery,
 } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
@@ -48,7 +48,7 @@ const CourseEditPage = () => {
     const { courseId } = useParams();
     const { data: course } = useGetCourseQuery(courseId);
 
-    const [issueCommand, {}] = useIssueCourseCommandMutation();
+    const [issueCommand, {}] = useIssueCommandMutation();
     const [courseSteps, setCourseSteps] = useState([]);
     const [courseDescription, setCourseDescription] = useState('');
 
@@ -73,13 +73,11 @@ const CourseEditPage = () => {
 
     const publish = () => {
         const command = {
-            type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-            is_draft: false,
-            description: courseDescription,
-            steps: mapToCourseSteps(courseSteps),
+            type: Enums.COMMAND_TYPES.PUBLISH_COURSE,
+            course_uuid: courseId,
         };
 
-        if (!validateBeforePublish(command.steps, command.description)) {
+        if (!validateBeforePublish(courseSteps, courseDescription)) {
             notification.error({
                 message:
                     CATEGORY_OTHER_TEXTS.coursePublishNoStepOrDescriptionWarning,
@@ -108,6 +106,7 @@ const CourseEditPage = () => {
             type: Enums.COMMAND_TYPES.UPDATE_COURSE,
             description: courseDescription,
             steps: mapToCourseSteps(courseSteps),
+            course_uuid: courseId,
         };
 
         if (!validateBeforeSave(command.steps, command.description)) {
@@ -118,7 +117,7 @@ const CourseEditPage = () => {
             return;
         }
 
-        issueCommand({ id: courseId, command })
+        issueCommand({ command })
             .unwrap()
             .then((res) => {
                 notification.info({

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from uuid import UUID
 from db.repository.configuration import RepositoryRoot
 
 from infra.command import Command
@@ -10,6 +11,8 @@ from shared.enums import CommandTypes, UserRoles
 
 @dataclass(kw_only=True)
 class PublishCourse(Command):
+    course_uuid: UUID
+
     class Meta:
         name = CommandTypes.PUBLISH_COURSE
         roles = [UserRoles.TEACHER, UserRoles.ADMIN]
@@ -18,7 +21,7 @@ class PublishCourse(Command):
     def build_from_request(cls, request, **kwargs):
         return cls(
             issuer=request.user,
-            parent_uuid=kwargs["course_uuid"],
+            course_uuid=request.data["course_uuid"],
         )
 
 
@@ -28,11 +31,11 @@ class OnPublishCourse(CommandHandler):
 
     def _handle_command(self, command: Command):
         self._check_if_user_is_author(command)
-        return self.repository.course.publish(command.parent_uuid)
+        return self.repository.course.publish(command.course_uuid)
 
     def _check_if_user_is_author(self, command):
         if (
             command.issuer.uuid
-            != self.repository.course.get_by_uuid(command.parent_uuid).author
+            != self.repository.course.get_by_uuid(command.course_uuid).author
         ):
             raise CommandBusException("Only author can publish the course", 403)

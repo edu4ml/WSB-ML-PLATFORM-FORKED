@@ -41,7 +41,6 @@ class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbM
         if form.is_valid():
             form.save()
             return self.get_by_uuid(user_progress_uuid)
-
         else:
             raise RequestException(form.errors, status_code=400)
 
@@ -61,4 +60,12 @@ class CourseStepUserProgressRepository(ModelRepository[CourseStepUserProgressDbM
         )
         progress.is_completed = True
         progress.save()
-        return self.from_model(progress)
+        return progress
+
+    def unlock_step_for_user(self, step_uuid, user_uuid):
+        progress = CourseStepUserProgressDbModel.objects.get(
+            step__uuid=step_uuid, user__uuid=user_uuid
+        )
+        progress.is_blocked = False
+        progress.save()
+        return progress

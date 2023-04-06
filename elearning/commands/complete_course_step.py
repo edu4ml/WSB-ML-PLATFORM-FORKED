@@ -34,7 +34,16 @@ class OnCompleteCourseStep(CommandHandler):
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: CompleteCourseStep):
-        return self.repository.course_step_user_progress.complete_step_for_user(
-            step_uuid=command.step_uuid,
-            user_uuid=command.user_uuid,
+        step_completed = (
+            self.repository.course_step_user_progress.complete_step_for_user(
+                step_uuid=command.step_uuid,
+                user_uuid=command.user_uuid,
+            )
         )
+        if not step_completed.step.is_last_step:
+            self.repository.course_step_user_progress.unlock_step_for_user(
+                step_uuid=step_completed.step.next_step.uuid,
+                user_uuid=command.user_uuid,
+            )
+
+        return self.repository.course_step_user_progress.from_model(step_completed)

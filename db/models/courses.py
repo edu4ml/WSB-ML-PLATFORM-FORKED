@@ -92,6 +92,14 @@ class CourseStep(TimestampedModel):
     def __str__(self) -> str:
         return f"{self.course.title} ({self.order}) - {self.component.title}"  # pragma: no cover
 
+    @property
+    def next_step(self):
+        return self.course.steps.filter(order=self.order + 1).first()
+
+    @property
+    def is_last_step(self):
+        return self.next_step is None
+
 
 class CourseStepUserProgress(TimestampedModel):
     step = models.ForeignKey(CourseStep, on_delete=models.CASCADE)
@@ -107,15 +115,11 @@ class CourseStepUserProgress(TimestampedModel):
     class Meta:
         unique_together = ("user", "step")
 
-    def __str__(self) -> str:
-        return f"{self.user.get_username()} - {self.step.component.title}"  # pragma: no cover
-
 
 class Submission(TimestampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
-
     course_step = models.ForeignKey(
         CourseStep,
         null=True,
@@ -123,9 +127,7 @@ class Submission(TimestampedModel):
         default=None,
         related_name="submissions",
     )
-
     file = models.FileField(upload_to="uploads/")
-
     status = models.CharField(
         max_length=40,
         choices=CourseStepEvaluationStatus.choices(),
