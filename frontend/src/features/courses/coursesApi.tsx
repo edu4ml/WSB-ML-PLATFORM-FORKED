@@ -9,7 +9,7 @@ export const courseApi = createApi({
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
     }),
-    tagTypes: ['course-list', 'course-component-list'],
+    tagTypes: ['course-list', 'component-list'],
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
             query: () => '/courses/',
@@ -35,9 +35,15 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
-        getCourseComponents: builder.query({
+        getComponentList: builder.query({
             query: () => '/components/',
-            providesTags: ['course-component-list'],
+            providesTags: ['component-list'],
+        }),
+        getComponentDetails: builder.query({
+            query: (id) => `/components/${id}`,
+            providesTags: (result, error, id) => [
+                { type: 'component-list', id },
+            ],
         }),
         createCourseComponents: builder.mutation({
             query: (command) => ({
@@ -45,7 +51,7 @@ export const courseApi = createApi({
                 method: 'POST',
                 body: command,
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
         addFileToCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
@@ -60,21 +66,21 @@ export const courseApi = createApi({
                 method: 'PUT',
                 body: payload,
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
         deleteCourseComponent: builder.mutation({
             query: (id) => ({
                 url: `/components/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
         deleteCourseComponentFileResource: builder.mutation({
             query: ({ id, resourceId }) => ({
                 url: `/components/${id}/file-resources/${resourceId}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
         uploadSubmission: builder.mutation({
             query: ({ command }) => ({
@@ -100,10 +106,19 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['course-list'],
         }),
+        issueCommand: builder.mutation({
+            query: ({ command }) => ({
+                url: '/commands',
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list', 'component-list'],
+        }),
     }),
 });
 
 export const {
+    useIssueCommandMutation,
     useIssueCourseStepProgressTrackingCommandMutation,
     useIssueSubmissionCommandMutation,
     useUploadSubmissionMutation,
@@ -111,7 +126,8 @@ export const {
     useAddFileToCourseComponentMutation,
     useGetCourseCatalogQuery,
     useGetCourseQuery,
-    useGetCourseComponentsQuery,
+    useGetComponentListQuery,
+    useGetComponentDetailsQuery,
     useCreateCourseMutation,
     useIssueCourseCommandMutation,
     useCreateCourseComponentsMutation,

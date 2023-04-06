@@ -83,7 +83,7 @@ const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
         }
 
         const formData = new FormData();
-        formData.append('type', 'SUBMIT_SUBMISSION');
+        formData.append('type', Enums.COMMAND_TYPES.SUBMIT_SUBMISSION);
         formData.append('file', fileList[0].originFileObj);
         formData.append('title', values.title);
         formData.append('description', values.description);
@@ -91,10 +91,6 @@ const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
 
         uploadSubmission({
             command: formData,
-            // courseUUID,
-            // stepUUID: courseStep.uuid,
-            // progressTrackingUUID: courseStep.user_progress.tracking_uuid,
-            // formData,
         })
             .unwrap()
             .then((response) => {
@@ -102,14 +98,12 @@ const CourseStepUploadSubmissionButton = ({ courseStep, courseUUID }) => {
                     message: 'Rozwiązanie przesłane!',
                     duration: 2,
                 });
-                console.log('response', response);
             })
             .catch((err) => {
                 notification.error({
                     message: NOTIF_SOMETHING_WENT_WRONG,
                     duration: 2,
                 });
-                console.error('Error: ', err);
             });
         setIsModalOpen(false);
     };

@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FileOutlined, LinkOutlined } from '@ant-design/icons';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const ResourceAvatarLink = ({ resource, disabled }) => {
     const isFIleResourceType = resource.type === 'FILE';

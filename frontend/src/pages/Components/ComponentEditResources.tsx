@@ -6,7 +6,7 @@ import { useDeleteCourseComponentFileResourceMutation } from '../../features/cou
 import Cookies from 'js-cookie';
 import type { UploadFile } from 'antd/es/upload/interface';
 
-const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
+const ComponentEditResources = ({ component, isOpen, onCancel }) => {
     const [removeFileResource, {}] =
         useDeleteCourseComponentFileResourceMutation();
 
@@ -20,6 +20,7 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
                 uid: file.uuid,
             };
         });
+
     return (
         <Modal
             title={BTN_EDIT}
@@ -81,4 +82,4 @@ const CourseComponentEditResources = ({ component, isOpen, onCancel }) => {
     );
 };
 
-export default CourseComponentEditResources;
+export default ComponentEditResources;

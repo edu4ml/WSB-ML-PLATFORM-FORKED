@@ -16,7 +16,7 @@ const courseComponentTypeToTextMap = {
     [Enums.COURSE_COMPONENT_TYPE.OTHER]: TXT_OTHER,
 };
 
-const CourseComponentTitle = ({ component }) => {
+const ComponentTitle = ({ component }) => {
     return (
         <Space direction="horizontal">
             <Title level={4}>{component.title}</Title>
@@ -28,4 +28,4 @@ const CourseComponentTitle = ({ component }) => {
     );
 };
 
-export default CourseComponentTitle;
+export default ComponentTitle;

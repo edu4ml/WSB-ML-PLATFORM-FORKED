@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from api.apis.v1.auth.auth import GoogleLoginApi
+from api.apis.v1.commands.commands import CommandsApi
 from api.apis.v1.course.course import (
     CourseApi,
     CourseDetailApi,
@@ -83,6 +84,7 @@ urlpatterns_v1 = [
         SubmissionDetailApi.as_view(),
         name="submission-detail",
     ),
+    path("commands", CommandsApi.as_view(), name="command-list"),
 ]
 
 urlpatterns = [path("v1/", include((urlpatterns_v1, "v1")))]

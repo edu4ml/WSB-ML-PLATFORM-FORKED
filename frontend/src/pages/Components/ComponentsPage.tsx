@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, List, notification, Space } from 'antd';
 import {
     useCreateCourseComponentsMutation,
-    useGetCourseComponentsQuery,
+    useGetComponentListQuery,
 } from '../../features/courses/coursesApi';
 import {
     BTN_CREATE_COURSE_COMPONENT,
@@ -10,14 +10,14 @@ import {
     NOTIF_COURSE_COMPONENT_CREATED,
     NOTIF_SOMETHING_WENT_WRONG,
 } from '../../texts';
-import CourseComponentCreateModal from './CourseComponentCreateModal';
-import CourseComponentListItem from './CourseComponentListItem';
+import ComponentCreateModal from './ComponentCreateModal';
+import ComponentListItem from './ComponentListItem';
 import PageHeader from '../../components/common/PageHeader';
 import { Enums } from '../../shared';
 
-const CourseComponentsPage = () => {
+const ComponentsPage = () => {
     const { data: courseComponents } =
-        useGetCourseComponentsQuery('course-components');
+        useGetComponentListQuery('course-components');
 
     const [createCourseComponent, {}] = useCreateCourseComponentsMutation();
 
@@ -84,13 +84,11 @@ const CourseComponentsPage = () => {
                 dataSource={sortComponents(courseComponents)}
                 data-cy="course-components-list"
                 size="large"
-                renderItem={(item) => (
-                    <CourseComponentListItem component={item} />
-                )}
+                renderItem={(item) => <ComponentListItem component={item} />}
                 pagination={{ pageSize: 10 }}
             />
             {/* modal */}
-            <CourseComponentCreateModal
+            <ComponentCreateModal
                 isOpen={isCreateModalOpen}
                 onCreate={handleCreateModalOk}
                 onClose={handleCreateModalCancel}
@@ -99,4 +97,4 @@ const CourseComponentsPage = () => {
     );
 };
 
-export default CourseComponentsPage;
+export default ComponentsPage;

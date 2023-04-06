@@ -22,7 +22,7 @@ const courseComponentTypeToTextMap: { [key: string]: string } = {
     [Enums.COURSE_COMPONENT_TYPE.OTHER]: TXT_OTHER,
 };
 
-const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
+const ComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
     return (
         <Modal
             title={BTN_EDIT}
@@ -99,4 +99,4 @@ const CourseComponentEditModal = ({ component, isOpen, onOk, onCancel }) => {
     );
 };
 
-export default CourseComponentEditModal;
+export default ComponentEditModal;

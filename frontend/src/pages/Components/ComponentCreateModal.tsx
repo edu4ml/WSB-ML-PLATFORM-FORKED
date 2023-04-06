@@ -22,7 +22,7 @@ const courseComponentTypeToTextMap: { [key: string]: string } = {
     [Enums.COURSE_COMPONENT_TYPE.OTHER]: TXT_OTHER,
 };
 
-const CourseComponentCreateModal = ({ isOpen, onClose, onCreate }) => {
+const ComponentCreateModal = ({ isOpen, onClose, onCreate }) => {
     return (
         <Modal
             title={TITLE_NEW_COURSE_COMPONENT}
@@ -96,4 +96,4 @@ const CourseComponentCreateModal = ({ isOpen, onClose, onCreate }) => {
     );
 };
 
-export default CourseComponentCreateModal;
+export default ComponentCreateModal;

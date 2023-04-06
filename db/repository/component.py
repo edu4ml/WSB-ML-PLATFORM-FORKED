@@ -45,12 +45,14 @@ class ComponentRepo(ModelRepository):
             ],
         )
 
-    def add_resource(self, component_uuid, payload):
+    def add_resource(self, component_uuid, title, file):
         try:
-            file_data = payload.get("file_data")
-            form_data = dict(title=payload["file_data"]["file"].name.replace(" ", "_"))
-
-            form = ExternalResourceForm(form_data, file_data)
+            form = ExternalResourceForm(
+                dict(
+                    title=title,
+                ),
+                file,
+            )
 
             if form.is_valid():
                 resource = form.save()

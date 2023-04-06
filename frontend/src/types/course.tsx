@@ -16,11 +16,11 @@ export interface CourseType {
 export interface CourseStepType {
     order: number;
     evaluation_type: string;
-    component: CourseComponentType;
+    component: ComponentType;
     user_progress: CourseStepUserProgressType | null;
 }
 
-export interface CourseComponentType {
+export interface ComponentType {
     uuid: string;
     title: string;
     description: string;

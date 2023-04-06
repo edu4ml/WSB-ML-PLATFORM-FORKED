@@ -1,4 +1,8 @@
 from db.repository import RepositoryRoot
+from elearning.commands.add_attachment_to_component import (
+    AddAttachmentToComponent,
+    OnAddAttachmentToComponent,
+)
 from elearning.commands.approve_submission import ApproveSubmission, OnSubmissionApprove
 from elearning.commands.create_component import (
     CreateComponent,
@@ -6,6 +10,10 @@ from elearning.commands.create_component import (
 )
 from elearning.commands.publish_course import OnPublishCourse, PublishCourse
 from elearning.commands.reject_submission import OnSubmissionReject, RejectSubmission
+from elearning.commands.remove_resource_from_component import (
+    OnRemoveAttachmentFromComponent,
+    RemoveResourceFromComponent,
+)
 from elearning.commands.submit_submission import OnSubmitSubmission, SubmitSubmission
 from infra.command_bus import CommandBus
 from infra.event_bus import EventBus
@@ -81,6 +89,19 @@ class Configuration:
                 event_bus=self.event_bus, repository=self.repository
             ),
             to=PublishCourse,
+        )
+
+        self.command_bus.register(
+            service=OnAddAttachmentToComponent(
+                event_bus=self.event_bus, repository=self.repository
+            ),
+            to=AddAttachmentToComponent,
+        )
+        self.command_bus.register(
+            service=OnRemoveAttachmentFromComponent(
+                event_bus=self.event_bus, repository=self.repository
+            ),
+            to=RemoveResourceFromComponent,
         )
 
     def __repr__(self):  # pragma: no cover
