@@ -7,13 +7,12 @@ const { Text } = Typography;
 
 const ResourceAvatarLink = ({ resource, disabled }) => {
     const isFIleResourceType = resource.type === 'FILE';
-
     const avatar = (
         <Space>
             <Avatar
                 size={'small'}
                 icon={isFIleResourceType ? <FileOutlined /> : <LinkOutlined />}
-                src={resource.file_link}
+                src={resource.file_link ? resource.file_link : null}
             />
             <Text disabled={disabled}>{resource.title}</Text>
         </Space>

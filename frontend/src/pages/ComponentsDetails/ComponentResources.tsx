@@ -20,15 +20,15 @@ const ComponentLinkResources = ({ component }) => {
     };
 
     return (
-        <Card
-            title={'Linki'}
-            extra={[<AddLinkResource component={component} />]}
-        >
+        <Card title={'Linki'} extra={<AddLinkResource component={component} />}>
             <List
                 itemLayout="horizontal"
                 dataSource={linkResources}
                 renderItem={(resource: ComponentType) => (
-                    <List.Item actions={getActions(resource)}>
+                    <List.Item
+                        actions={getActions(resource)}
+                        key={resource.uuid}
+                    >
                         <ResourceAvatarLink
                             key={resource.uuid}
                             resource={resource}
@@ -61,7 +61,10 @@ const ComponentFileResource = ({ component }) => {
                 itemLayout="horizontal"
                 dataSource={fileResources}
                 renderItem={(resource: ComponentType) => (
-                    <List.Item actions={getActions(resource)}>
+                    <List.Item
+                        actions={getActions(resource)}
+                        key={resource.uuid}
+                    >
                         <ResourceAvatarLink
                             key={resource.uuid}
                             resource={resource}

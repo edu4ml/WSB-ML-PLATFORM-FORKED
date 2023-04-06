@@ -14,6 +14,7 @@ const ComponentDescription = ({ component }: { component: ComponentType }) => {
 
     const updateDescriptionButton = (component) => (
         <Button
+            key={'update-description-button'}
             icon={<SaveOutlined />}
             onClick={() => {
                 issueCommand({

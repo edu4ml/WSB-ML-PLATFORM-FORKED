@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, List, notification, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, List, notification, Space } from 'antd';
 import {
     useCreateCourseComponentsMutation,
     useGetComponentListQuery,
@@ -14,17 +14,21 @@ import ComponentCreateModal from './ComponentCreateModal';
 import ComponentListItem from './ComponentListItem';
 import PageHeader from '../../components/common/PageHeader';
 import { Enums } from '../../shared';
+import { ComponentType } from '../../types/course';
 
 const ComponentsPage = () => {
-    const { data: courseComponents } =
-        useGetComponentListQuery('course-components');
-
+    const { data: components } = useGetComponentListQuery('course-components');
     const [createCourseComponent, {}] = useCreateCourseComponentsMutation();
 
+    const [activeTabKey, setActiveTabKey] = useState<string>('EXERCISE');
+    const [filteredResource, setFilteredResource] = useState<
+        Array<ComponentType>
+    >([]);
     const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+
     const handleCreateModalOk = (payload) => {
         const command = {
-            type: Enums.COMMAND_TYPES.CREATE_COURSE_COMPONENT,
+            type: Enums.COMMAND_TYPES.CREATE_COMPONENT,
             ...payload,
         };
         createCourseComponent(command)
@@ -72,6 +76,26 @@ const ComponentsPage = () => {
             {BTN_CREATE_COURSE_COMPONENT}
         </Button>,
     ];
+    const tabList = [
+        {
+            key: 'EXERCISE',
+            tab: 'Ćwiczenia',
+        },
+        {
+            key: 'EVALUATION',
+            tab: 'Zadania sprawdzające',
+        },
+    ];
+
+    useEffect(() => {
+        setFilteredResource(
+            sortComponents(components).filter((c) => c.type === activeTabKey)
+        );
+    }, [activeTabKey, components]);
+
+    const onTabChange = (key: string) => {
+        setActiveTabKey(key);
+    };
 
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
@@ -79,20 +103,34 @@ const ComponentsPage = () => {
                 title={TITLE_COURSE_COMPONENTS_PAGE}
                 actions={actions}
             />
-            <List
+            <Card
+                style={{
+                    backgroundColor: 'rgb(0,0,0,0)',
+                    boxShadow: '0px 0px',
+                }}
                 bordered={false}
-                dataSource={sortComponents(courseComponents)}
-                data-cy="course-components-list"
-                size="large"
-                renderItem={(item) => <ComponentListItem component={item} />}
-                pagination={{ pageSize: 10 }}
-            />
-            {/* modal */}
-            <ComponentCreateModal
-                isOpen={isCreateModalOpen}
-                onCreate={handleCreateModalOk}
-                onClose={handleCreateModalCancel}
-            />
+                bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
+                tabList={tabList}
+                onTabChange={onTabChange}
+                activeTabKey={activeTabKey}
+            >
+                <List
+                    bordered={false}
+                    dataSource={filteredResource}
+                    data-cy="course-components-list"
+                    size="large"
+                    renderItem={(item) => (
+                        <ComponentListItem component={item} />
+                    )}
+                    pagination={{ pageSize: 10 }}
+                />
+                {/* modal */}
+                <ComponentCreateModal
+                    isOpen={isCreateModalOpen}
+                    onCreate={handleCreateModalOk}
+                    onClose={handleCreateModalCancel}
+                />
+            </Card>
         </Space>
     );
 };

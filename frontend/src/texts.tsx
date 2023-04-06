@@ -46,7 +46,7 @@ export const TXT_FORM_NO_TITLE_WARNING = 'Podaj tytuł nowego kursu!';
 export const TXT_FORM_NO_DESCRIPTION_WARNING = 'Dodaj opis do formularza!';
 export const TXT_FORM_SELECT_COMPONENT_TYPE_PLACEHOLDER =
     'Wybierz typ komponentu';
-export const TXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION = 'Zadanie z plikiem';
+export const TXT_COURSE_COMPONENT_TYPE_FILE_EVALUATION = 'Zadanie sprawdzające';
 export const TXT_COURSE_COMPONENT_TYPE_EXERCISE = 'Ćwiczenie';
 export const TXT_OTHER = 'Inne';
 export const TXT_403_DESCRIPTION = 'Ups, nie powinno Cię tu być!.';

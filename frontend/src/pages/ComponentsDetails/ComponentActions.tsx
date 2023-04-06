@@ -135,6 +135,7 @@ const AddLinkResource = ({ component }) => {
             onClick={() => {
                 setIsModalOpen(true);
             }}
+            key={'add-link-resource'}
         >
             Dodaj materiały zewnętrzne
             <Modal
