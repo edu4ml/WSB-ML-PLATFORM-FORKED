@@ -10,8 +10,6 @@ from infra.event import Event
 
 @dataclass(kw_only=True)
 class CreateCourse(Command):
-    parent_uuid: int = None  # indicates initial command (no parent yet!)
-
     title: str
     description: str
 

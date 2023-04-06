@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 from elearning.entities import CourseStepUserProgress
-from elearning.entities.course_component import CourseComponent
+from elearning.entities.component import Component
 from shared.enums import CourseComponentType, CourseStepEvaluationType
 
 
@@ -9,7 +9,7 @@ from shared.enums import CourseComponentType, CourseStepEvaluationType
 class CourseStep:
     uuid: UUID
     order: int
-    component: CourseComponent
+    component: Component
     evaluation_type: CourseStepEvaluationType
     user_progress: CourseStepUserProgress
 

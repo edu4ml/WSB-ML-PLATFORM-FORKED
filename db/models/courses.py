@@ -32,6 +32,7 @@ class CourseEnrollment(TimestampedModel):
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, related_name="enrollments"
     )
+
     is_completed = models.BooleanField(default=False)
 
     class Meta:
@@ -47,6 +48,15 @@ class CourseComponent(TimestampedModel):
     )
     description = models.TextField()
     resources = models.ManyToManyField(ExternalResource, blank=True)
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
+        blank=True,
+        related_name="created_components",
+    )
 
     type = models.CharField(
         max_length=40,

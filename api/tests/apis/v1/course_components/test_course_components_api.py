@@ -19,7 +19,7 @@ def course_component_data():
 
 @pytest.mark.django_db
 def test_course_component_api_get(admin_client, course_components):
-    response = admin_client.get(reverse("api:v1:course-components"))
+    response = admin_client.get(reverse("api:v1:component"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == len(course_components)
 
@@ -27,7 +27,7 @@ def test_course_component_api_get(admin_client, course_components):
 @pytest.mark.django_db
 def test_course_component_api_post(admin_client, course_component_data):
     response = admin_client.post(
-        reverse("api:v1:course-components"),
+        reverse("api:v1:component"),
         json.dumps(course_component_data),
         content_type="application/json",
     )
@@ -42,7 +42,7 @@ def test_course_component_api_post_missing_data(admin_client, course_component_d
     del course_component_data["title"]
 
     response = admin_client.post(
-        reverse("api:v1:course-components"),
+        reverse("api:v1:component"),
         json.dumps(course_component_data),
         content_type="application/json",
     )
@@ -53,9 +53,7 @@ def test_course_component_api_post_missing_data(admin_client, course_component_d
 def test_course_component_detail_api_get(admin_client, course_components):
     component = course_components[0]
     response = admin_client.get(
-        reverse(
-            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
-        )
+        reverse("api:v1:component-detail", kwargs={"component_uuid": component.uuid})
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["uuid"] == str(component.uuid)
@@ -64,7 +62,7 @@ def test_course_component_detail_api_get(admin_client, course_components):
 @pytest.mark.django_db
 def test_course_component_detail_api_get_not_found(admin_client):
     response = admin_client.get(
-        reverse("api:v1:course-components-detail", kwargs={"component_uuid": uuid4()})
+        reverse("api:v1:component-detail", kwargs={"component_uuid": uuid4()})
     )
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -78,9 +76,7 @@ def test_course_component_detail_api_post(
     updated_data["title"] = "Updated Course Component"
 
     response = admin_client.post(
-        reverse(
-            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
-        ),
+        reverse("api:v1:component-detail", kwargs={"component_uuid": component.uuid}),
         json.dumps(updated_data),
         content_type="application/json",
     )
@@ -94,9 +90,7 @@ def test_course_component_detail_api_post(
 def test_course_component_detail_api_delete(admin_client, course_components):
     component = course_components[0]
     response = admin_client.delete(
-        reverse(
-            "api:v1:course-components-detail", kwargs={"component_uuid": component.uuid}
-        )
+        reverse("api:v1:component-detail", kwargs={"component_uuid": component.uuid})
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert not CourseComponent.objects.filter(uuid=component.uuid).exists()
@@ -109,7 +103,7 @@ def test_course_component_detail_file_upload_api_post(
     component = course_components[0]
     response = admin_client.post(
         reverse(
-            "api:v1:course-components-detail-file-resources",
+            "api:v1:component-detail-file-resources",
             kwargs={"component_uuid": component.uuid},
         ),
         {"file": tmp_uploaded_file},
@@ -124,7 +118,7 @@ def test_course_component_detail_file_upload_api_post_missing_data(
     component = course_components[0]
     response = admin_client.post(
         reverse(
-            "api:v1:course-components-detail-file-resources",
+            "api:v1:component-detail-file-resources",
             kwargs={"component_uuid": component.uuid},
         ),
         {},
@@ -140,7 +134,7 @@ def test_course_component_detail_file_detail_api_delete(
     # Upload a file first
     response = admin_client.post(
         reverse(
-            "api:v1:course-components-detail-file-resources",
+            "api:v1:component-detail-file-resources",
             kwargs={"component_uuid": component.uuid},
         ),
         {"file": tmp_uploaded_file},
@@ -150,7 +144,7 @@ def test_course_component_detail_file_detail_api_delete(
     # Delete the file
     response = admin_client.delete(
         reverse(
-            "api:v1:course-components-detail-file-resources-detail",
+            "api:v1:component-detail-file-resources-detail",
             kwargs={"component_uuid": component.uuid, "resource_uuid": resource_uuid},
         )
     )

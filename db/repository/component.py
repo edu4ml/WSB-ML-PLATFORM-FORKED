@@ -1,10 +1,10 @@
 from db.models import (
-    CourseComponent as CourseComponentDbModel,
+    CourseComponent as ComponentModel,
 )
 from rest_framework import status
 
-from elearning.entities.course_component import (
-    CourseComponent as CourseComponentDomainModel,
+from elearning.entities.component import (
+    Component as ComponentEntity,
 )
 from elearning.entities.external_resource import ExternalResource
 from infra.exceptions import RequestException
@@ -21,17 +21,9 @@ class ExternalResourceForm(forms.ModelForm):
 
 
 @logger
-class CourseComponentRepo(ModelRepository):
-    db_model = CourseComponentDbModel
-    domain_model = CourseComponentDomainModel
-
-    def create(self, **kwargs):
-        if "title" not in kwargs.keys():
-            raise RequestException(
-                "Missing title", status_code=status.HTTP_400_BAD_REQUEST
-            )
-        assert "title" in kwargs.keys()
-        return super().create(**kwargs)
+class ComponentRepo(ModelRepository):
+    db_model = ComponentModel
+    domain_model = ComponentEntity
 
     def from_model(self, obj):
         return self.domain_model(
@@ -40,6 +32,7 @@ class CourseComponentRepo(ModelRepository):
             description=obj.description,
             type=obj.type,
             created_at=obj.created_at,
+            author=obj.author.uuid,
             resources=[
                 ExternalResource(
                     uuid=resource.uuid,

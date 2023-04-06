@@ -1,19 +1,12 @@
 import pytest
-from django.urls import reverse
 from rest_framework import status
-
 from shared.enums import ApiErrors, CommandTypes
 
 
 @pytest.mark.django_db
-def test_admin_create_course(admin_client, admin):
+def test_admin_create_course(admin_client, admin, create_course):
     course_title = "New Course"
-    command_data = dict(type=CommandTypes.CREATE_COURSE, title=course_title)
-    response = admin_client.post(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
+    response = create_course(admin_client, course_title)
     assert response.status_code == status.HTTP_202_ACCEPTED
     course = response.json()
     assert course["title"] == course_title
@@ -22,14 +15,9 @@ def test_admin_create_course(admin_client, admin):
 
 
 @pytest.mark.django_db
-def test_teacher_create_course(teacher_client, teacher):
+def test_teacher_create_course(teacher_client, teacher, create_course):
     course_title = "New Course"
-    command_data = dict(type=CommandTypes.CREATE_COURSE, title=course_title)
-    response = teacher_client.post(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
+    response = create_course(teacher_client, course_title)
     assert response.status_code == status.HTTP_202_ACCEPTED
     course = response.json()
     assert course["title"] == course_title
@@ -38,56 +26,38 @@ def test_teacher_create_course(teacher_client, teacher):
 
 
 @pytest.mark.django_db
-def test_student_cannot_create_course(student_client):
+def test_student_cannot_create_course(student_client, create_course):
     course_title = "New Course"
-    command_data = dict(type=CommandTypes.CREATE_COURSE, title=course_title)
-    response = student_client.post(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
+    response = create_course(student_client, course_title)
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.django_db
-def test_unauthenticated_cannot_create_course(client):
+def test_unauthenticated_cannot_create_course(client, create_course):
     course_title = "New Course"
-    command_data = dict(type=CommandTypes.CREATE_COURSE, title=course_title)
-    response = client.post(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
+    response = create_course(client, course_title)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
-def test_course_created_as_draft_by_default(admin_client, admin):
+def test_course_created_as_draft_by_default(admin_client, create_course):
     course_title = "New Course"
-    command_data = dict(type=CommandTypes.CREATE_COURSE, title=course_title)
-    response = admin_client.post(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
+    response = create_course(admin_client, course_title)
     assert response.status_code == status.HTTP_202_ACCEPTED
     course = response.json()
     assert course["is_draft"] is True
 
 
 @pytest.mark.django_db
-def test_create_course_with_empty_title(admin_client):
+def test_create_course_with_empty_title(admin_client, create_course):
     course_title = ""
-    command_data = dict(type=CommandTypes.CREATE_COURSE, title=course_title)
-    response = admin_client.post(
-        reverse("api:v1:course"),
-        command_data,
-        content_type="application/json",
-    )
+    response = create_course(admin_client, course_title)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     response_data = response.json()
     assert response_data["error"] is True
     assert response_data["success"] is False
-    assert response_data["payload"] == command_data
+    assert response_data["payload"] == dict(
+        title=course_title, type=CommandTypes.CREATE_COURSE
+    )
     assert response_data["message"] == ApiErrors.CANNOT_CREATE_COURSE_WITHOUT_TITLE

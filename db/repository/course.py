@@ -6,7 +6,7 @@ from db.models import (
 )
 from elearning.entities.course import Course as CourseDomainModel
 from elearning.entities import CourseStepUserProgress, CourseStep
-from elearning.entities.course_component import CourseComponent
+from elearning.entities.component import Component
 from elearning.entities.submission import Submission
 from elearning.entities.external_resource import ExternalResource
 from infra.logging import logger
@@ -58,6 +58,12 @@ class CourseRepository(ModelRepository[CourseDbModel]):
             steps=self._get_course_steps(course),
         )
 
+    def publish(self, uuid):
+        obj = self.db_model.objects.get(uuid=uuid)
+        obj.is_draft = False
+        obj.save()
+        return self.from_model(obj)
+
     def _get_course_steps(self, course):
         return [
             CourseStep(
@@ -65,7 +71,8 @@ class CourseRepository(ModelRepository[CourseDbModel]):
                 order=step.order,
                 user_progress=self._get_user_progress(step=step),
                 evaluation_type=step.evaluation_type,
-                component=CourseComponent(
+                component=Component(
+                    author=step.component.author.uuid,
                     uuid=step.component.uuid,
                     title=step.component.title,
                     description=step.component.description,

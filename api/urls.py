@@ -27,30 +27,30 @@ from api.apis.v1.submission.submission import (
 from api.apis.v1.reports.report import DashboardApi
 
 urlpatterns_v1 = [
-    path("course-components/", CourseComponentApi.as_view(), name="course-components"),
+    path("components/", CourseComponentApi.as_view(), name="component-list"),
     path(
-        "course-components/<uuid:component_uuid>",
+        "components/<uuid:component_uuid>",
         CourseComponentDetailApi.as_view(),
-        name="course-components-detail",
+        name="component-detail",
     ),
     path(
-        "course-components/<uuid:component_uuid>/file-resources",
+        "components/<uuid:component_uuid>/file-resources",
         CourseComponentDetailFileUploadApi.as_view(),
-        name="course-components-detail-file-resources",
+        name="component-detail-file-resources",
     ),
     path(
-        "course-components/<uuid:component_uuid>/file-resources/<uuid:resource_uuid>",
+        "components/<uuid:component_uuid>/file-resources/<uuid:resource_uuid>",
         CourseComponentDetailFileDetailApi.as_view(),
-        name="course-components-detail-file-resources-detail",
+        name="component-detail-file-resources-detail",
     ),
-    path("course/", CourseApi.as_view(), name="course"),
+    path("courses/", CourseApi.as_view(), name="course-list"),
     path(
-        "course/<uuid:course_uuid>",
+        "courses/<uuid:course_uuid>",
         CourseDetailApi.as_view(),
         name="course-detail",
     ),
     path(
-        "course/<uuid:course_uuid>/step",
+        "courses/<uuid:course_uuid>/step",
         CourseStepApi.as_view(),
         name="course-detail-steps",
     ),

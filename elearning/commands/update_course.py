@@ -6,7 +6,7 @@ from infra.command import Command
 from infra.exceptions import (
     CommandBusException,
 )
-from shared.enums import ApiErrors, CommandTypes, UserRoles
+from shared.enums import CommandTypes, UserRoles
 from db.repository.configuration import RepositoryRoot
 from infra.command_handler import CommandHandler
 from infra.event import Event
@@ -32,7 +32,6 @@ class UpdateCourse(Command):
             issuer=request.user,
             parent_uuid=kwargs["course_uuid"],
             description=request.data.get("description"),
-            is_draft=request.data.get("is_draft"),
             steps=[
                 NewCourseStep(
                     order=step["order"],
@@ -51,17 +50,11 @@ class UpdateCourse(Command):
     def validate_steps(cls, steps):
         for step in steps:
             if step.get("component") is None:
-                raise CommandBusException(
-                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_COMPONENT, 400
-                )
+                raise CommandBusException("Missing component uuid", 400)
             if step.get("evaluation_type") is None:
-                raise CommandBusException(
-                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_EVALUATION_TYPE, 400
-                )
+                raise CommandBusException("Missing evaluation type", 400)
             if step.get("order") is None:
-                raise CommandBusException(
-                    ApiErrors.CANNOT_UPDATE_COURSE_STEP_WITHOUT_ORDER, 400
-                )
+                raise CommandBusException("Missing order", 400)
 
 
 class OnUpdateCourse(CommandHandler):
@@ -71,7 +64,7 @@ class OnUpdateCourse(CommandHandler):
     def _handle_command(self, command: UpdateCourse):
         course = self.repository.course.get_by_uuid(command.parent_uuid)
         if course is None:
-            raise CommandBusException(ApiErrors.COURSE_DOES_NOT_EXIST, 400)
+            raise CommandBusException("Course does not exists", 404)
 
         self._check_that_user_is_author(course, command.issuer)
         self._check_course_is_not_published(course)
@@ -86,8 +79,8 @@ class OnUpdateCourse(CommandHandler):
 
     def _check_that_user_is_author(self, course, user):
         if course.author != user.uuid and not user.is_admin():
-            raise CommandBusException(ApiErrors.CANNOT_UPDATE_COURSE_NOT_AUTHOR, 403)
+            raise CommandBusException("Only author can update the course", 403)
 
     def _check_course_is_not_published(self, course):
         if not course.is_draft:
-            raise CommandBusException(ApiErrors.CANNOT_UPDATE_PUBLISHED_COURSE, 400)
+            raise CommandBusException("Cannot update already published course", 403)
