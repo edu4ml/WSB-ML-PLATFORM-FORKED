@@ -2,6 +2,7 @@ from db.models import (
     CourseComponent as ComponentModel,
 )
 from rest_framework import status
+from db.models.external_resources import ExternalResourceType
 
 from elearning.entities.component import (
     Component as ComponentEntity,
@@ -45,7 +46,7 @@ class ComponentRepo(ModelRepository):
             ],
         )
 
-    def add_resource(self, component_uuid, title, file):
+    def add_file_resource(self, component_uuid, title, file):
         try:
             form = ExternalResourceForm(
                 dict(
@@ -69,6 +70,14 @@ class ComponentRepo(ModelRepository):
             raise RequestException(
                 f"MultiValueDictError: {e}", status_code=status.HTTP_400_BAD_REQUEST
             )
+
+    def add_link_resource(self, component_uuid, title, url):
+        resource = ExternalResourceDbModel.objects.create(
+            title=title, url=url, type=ExternalResourceType.URL
+        )
+        course_component = self.db_model.objects.get(uuid=component_uuid)
+        course_component.resources.add(resource)
+        return self.from_model(course_component)
 
     def remove_resource(self, component_uuid, resource_uuid):
         course_component = self.db_model.objects.get(uuid=component_uuid)

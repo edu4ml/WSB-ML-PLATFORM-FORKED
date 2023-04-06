@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from django.utils.datastructures import MultiValueDict
 from db.repository.configuration import RepositoryRoot
 
 from infra.command import Command
@@ -9,13 +8,13 @@ from shared.enums import CommandTypes, UserRoles
 
 
 @dataclass(kw_only=True)
-class AddAttachmentToComponent(Command):
+class AddLinkResourceToComponent(Command):
     title: str
-    file: MultiValueDict
+    url: str
     component_uuid: str
 
     class Meta:
-        name = CommandTypes.ADD_ATTACHMENT_TO_COMPONENT
+        name = CommandTypes.ADD_LINK_RESOURCE_TO_COMPONENT
         roles = [UserRoles.TEACHER, UserRoles.ADMIN]
 
     @classmethod
@@ -23,18 +22,18 @@ class AddAttachmentToComponent(Command):
         return cls(
             component_uuid=request.data.get("component_uuid"),
             issuer=request.user,
-            file=request.FILES,
-            title=request.FILES["file"].name.replace(" ", "_"),
+            title=request.data.get("title"),
+            url=request.data.get("url"),
         )
 
 
-class OnAddAttachmentToComponent(CommandHandler):
+class OnAddLinkResourceToComponent(CommandHandler):
     emitting_event: Event | None = None
     repository: RepositoryRoot = None
 
     def _handle_command(self, command: Command):
-        return self.repository.component.add_file_resource(
+        return self.repository.component.add_link_resource(
             component_uuid=command.component_uuid,
-            file=command.file,
+            url=command.url,
             title=command.title,
         )

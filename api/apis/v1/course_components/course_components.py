@@ -59,7 +59,7 @@ class CourseComponentDetailFileUploadApi(AuthMixin):
     @api_has_one_of_the_roles([UserRoles.TEACHER])
     def post(self, request, component_uuid: UUID, **kwargs):
         try:
-            component = ComponentRepo(request.user).add_resource(
+            component = ComponentRepo(request.user).add_file_resource(
                 component_uuid=component_uuid,
                 payload=dict(
                     post_data=request.POST,
