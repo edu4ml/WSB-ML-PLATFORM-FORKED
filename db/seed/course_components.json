@@ -4,6 +4,7 @@
         "pk": 1,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440003",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Linear Regression Exercise",
@@ -20,6 +21,7 @@
         "pk": 2,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440004",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "K-Means Clustering Exercise",
@@ -35,6 +37,7 @@
         "pk": 3,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440008",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Convolutional Neural Networks Exercise",
@@ -51,6 +54,7 @@
         "pk": 4,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440009",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Reinforcement Learning Exercise",
@@ -67,6 +71,7 @@
         "pk": 5,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440010",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Natural Language Processing Exercise",
@@ -83,6 +88,7 @@
         "pk": 6,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440011",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Generative Adversarial Networks Exercise",
@@ -98,6 +104,7 @@
         "pk": 7,
         "fields": {
             "uuid": "550e8400-e29b-41d4-a716-446655440012",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-17T00:00:00Z",
             "updated_at": "2023-03-17T00:00:00Z",
             "title": "Transfer Learning Exercise",
@@ -114,6 +121,7 @@
         "pk": 1,
         "fields": {
             "uuid": "7c67a55f-0ee4-4fc1-a48e-4f335ecf4b87",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",
             "title": "Test Submission",
@@ -130,6 +138,7 @@
         "pk": 2,
         "fields": {
             "uuid": "c3146858-7b89-4689-93e2-0e2746a69a37",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",
             "title": "Project Submission",
@@ -145,6 +154,7 @@
         "model": "db.coursecomponent",
         "pk": 3,
         "fields": {
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "uuid": "b9acfc12-7d0c-4758-b1f6-979b84cf3086",
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",
@@ -162,6 +172,7 @@
         "pk": 4,
         "fields": {
             "uuid": "a1c0a2b8-7dd9-4e34-b7d4-f72a4d7bbf01",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "title": "Code Review Submission",
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",
@@ -178,6 +189,7 @@
         "pk": 5,
         "fields": {
             "uuid": "3e8a3d2a-7a9c-45a6-8c3d-2d7f454201e1",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "title": "CypressCourseComponentEvaluation001",
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",
@@ -194,6 +206,7 @@
         "pk": 5,
         "fields": {
             "uuid": "45fa7dd1-c1a9-4a26-95f7-7a2c45b101e2",
+            "author": "d5f5e5d5-7b53-4b96-bf47-2d84e6d1ce96",
             "title": "CypressCourseComponentExercise002",
             "created_at": "2023-03-19T00:00:00Z",
             "updated_at": "2023-03-19T00:00:00Z",

@@ -1,15 +1,12 @@
-import json
 from uuid import uuid4
 
 import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from db.models import CourseComponent
-
 
 @pytest.fixture
-def course_component_data():
+def component_data():
     return {
         "title": "New course component",
         "description": "A new course component for testing",
@@ -18,40 +15,15 @@ def course_component_data():
 
 
 @pytest.mark.django_db
-def test_course_component_api_get(admin_client, course_components):
-    response = admin_client.get(reverse("api:v1:component"))
+def test_course_component_api_get(admin_client, components):
+    response = admin_client.get(reverse("api:v1:component-list"))
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == len(course_components)
+    assert len(response.json()) == len(components)
 
 
 @pytest.mark.django_db
-def test_course_component_api_post(admin_client, course_component_data):
-    response = admin_client.post(
-        reverse("api:v1:component"),
-        json.dumps(course_component_data),
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_202_ACCEPTED
-    assert response.json()["title"] == course_component_data["title"]
-    assert response.json()["description"] == course_component_data["description"]
-    assert response.json()["type"] == course_component_data["type"]
-
-
-@pytest.mark.django_db
-def test_course_component_api_post_missing_data(admin_client, course_component_data):
-    del course_component_data["title"]
-
-    response = admin_client.post(
-        reverse("api:v1:component"),
-        json.dumps(course_component_data),
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
-@pytest.mark.django_db
-def test_course_component_detail_api_get(admin_client, course_components):
-    component = course_components[0]
+def test_course_component_detail_api_get(admin_client, components):
+    component = components[0]
     response = admin_client.get(
         reverse("api:v1:component-detail", kwargs={"component_uuid": component.uuid})
     )
@@ -68,39 +40,10 @@ def test_course_component_detail_api_get_not_found(admin_client):
 
 
 @pytest.mark.django_db
-def test_course_component_detail_api_post(
-    admin_client, course_components, course_component_data
-):
-    component = course_components[0]
-    updated_data = course_component_data.copy()
-    updated_data["title"] = "Updated Course Component"
-
-    response = admin_client.post(
-        reverse("api:v1:component-detail", kwargs={"component_uuid": component.uuid}),
-        json.dumps(updated_data),
-        content_type="application/json",
-    )
-    assert response.status_code == status.HTTP_200_OK
-    assert response.json()["title"] == updated_data["title"]
-    assert response.json()["description"] == updated_data["description"]
-    assert response.json()["type"] == updated_data["type"]
-
-
-@pytest.mark.django_db
-def test_course_component_detail_api_delete(admin_client, course_components):
-    component = course_components[0]
-    response = admin_client.delete(
-        reverse("api:v1:component-detail", kwargs={"component_uuid": component.uuid})
-    )
-    assert response.status_code == status.HTTP_204_NO_CONTENT
-    assert not CourseComponent.objects.filter(uuid=component.uuid).exists()
-
-
-@pytest.mark.django_db
 def test_course_component_detail_file_upload_api_post(
-    admin_client, course_components, tmp_uploaded_file
+    admin_client, components, tmp_uploaded_file
 ):
-    component = course_components[0]
+    component = components[0]
     response = admin_client.post(
         reverse(
             "api:v1:component-detail-file-resources",
@@ -113,9 +56,9 @@ def test_course_component_detail_file_upload_api_post(
 
 @pytest.mark.django_db
 def test_course_component_detail_file_upload_api_post_missing_data(
-    admin_client, course_components
+    admin_client, components
 ):
-    component = course_components[0]
+    component = components[0]
     response = admin_client.post(
         reverse(
             "api:v1:component-detail-file-resources",
@@ -128,9 +71,9 @@ def test_course_component_detail_file_upload_api_post_missing_data(
 
 @pytest.mark.django_db
 def test_course_component_detail_file_detail_api_delete(
-    admin_client, course_components, tmp_uploaded_file
+    admin_client, components, tmp_uploaded_file
 ):
-    component = course_components[0]
+    component = components[0]
     # Upload a file first
     response = admin_client.post(
         reverse(

@@ -175,21 +175,21 @@ def other_teacher_draft_course():
 
 
 @pytest.fixture
-def course_components():
-    return baker.make(CourseComponent, 4)
+def components(teacher):
+    return baker.make(CourseComponent, 4, author=teacher)
 
 
 @pytest.fixture
-def course_component():
+def component():
     return baker.make(CourseComponent)
 
 
 @pytest.fixture
-def course_with_steps(course_components, teacher):
+def course_with_steps(components, teacher):
     course = baker.make(Course, author=teacher)
     steps = []
     order = 1
-    for component in course_components:
+    for component in components:
         steps.append(
             baker.make(
                 CourseStep,

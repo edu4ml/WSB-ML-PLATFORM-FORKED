@@ -12,16 +12,16 @@ export const courseApi = createApi({
     tagTypes: ['course-list', 'course-component-list'],
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
-            query: () => '/course/',
+            query: () => '/courses/',
             providesTags: ['course-list'],
         }),
         getCourse: builder.query({
-            query: (id) => `/course/${id}`,
+            query: (id) => `/courses/${id}`,
             providesTags: (result, error, id) => [{ type: 'course-list', id }],
         }),
         issueCourseCommand: builder.mutation({
             query: ({ id, command }) => ({
-                url: `/course/${id}`,
+                url: `/courses/${id}`,
                 method: 'POST',
                 body: command,
             }),
@@ -29,19 +29,19 @@ export const courseApi = createApi({
         }),
         createCourse: builder.mutation({
             query: (command) => ({
-                url: '/course/',
+                url: '/courses/',
                 method: 'POST',
                 body: command,
             }),
             invalidatesTags: ['course-list'],
         }),
         getCourseComponents: builder.query({
-            query: () => '/course-components/',
+            query: () => '/components/',
             providesTags: ['course-component-list'],
         }),
         createCourseComponents: builder.mutation({
             query: (command) => ({
-                url: '/course-components/',
+                url: '/components/',
                 method: 'POST',
                 body: command,
             }),
@@ -49,14 +49,14 @@ export const courseApi = createApi({
         }),
         addFileToCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
-                url: `/course-components/${id}/file`,
+                url: `/components/${id}/file`,
                 method: 'PUT',
                 body: payload,
             }),
         }),
         updateCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
-                url: `/course-components/${id}`,
+                url: `/components/${id}`,
                 method: 'PUT',
                 body: payload,
             }),
@@ -64,14 +64,14 @@ export const courseApi = createApi({
         }),
         deleteCourseComponent: builder.mutation({
             query: (id) => ({
-                url: `/course-components/${id}`,
+                url: `/components/${id}`,
                 method: 'DELETE',
             }),
             invalidatesTags: ['course-component-list'],
         }),
         deleteCourseComponentFileResource: builder.mutation({
             query: ({ id, resourceId }) => ({
-                url: `/course-components/${id}/file-resources/${resourceId}`,
+                url: `/components/${id}/file-resources/${resourceId}`,
                 method: 'DELETE',
             }),
             invalidatesTags: ['course-component-list'],

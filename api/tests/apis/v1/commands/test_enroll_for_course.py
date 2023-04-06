@@ -3,38 +3,6 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from shared.enums import ApiErrors, CommandTypes
-
-
-# def get_course(admin_client, course_obj):
-#     return admin_client.get(
-#         reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_obj.uuid))
-#     ).json()
-
-
-# def _test_command(
-#     admin_client, course_obj, command_data, initial_data=dict(), expected_result=dict()
-# ):
-#     # Assert on initial data
-#     response = get_course(admin_client, course_obj)
-
-#     for key, value in initial_data.items():
-#         assert response[key] == value
-
-#     # Send command
-#     response = admin_client.post(
-#         reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_obj.uuid)),
-#         command_data,
-#         content_type="application/json",
-#     )
-#     assert response.status_code == status.HTTP_202_ACCEPTED
-
-#     # Assert on expected result
-#     response = get_course(admin_client, course_obj)
-
-#     for key, value in expected_result.items():
-#         assert response[key] == value
-
 
 def _assert_is_enrolled(client, course_uuid):
     course = client.get(
