@@ -13,6 +13,12 @@ const headerStyle: React.CSSProperties = {
     minHeight: '100px',
     background: backgroundColor,
 };
+
+const footerStyle: React.CSSProperties = {
+    background: backgroundColor,
+    textAlign: 'center',
+};
+
 const leftSiderStyle: React.CSSProperties = {
     backgroundColor: backgroundColor,
     height: '100vh',
@@ -39,7 +45,7 @@ const MainLayout = ({ children }) => {
                     <MyHeader />
                 </Header>
                 {children}
-                <Footer style={{ textAlign: 'center' }} />
+                <Footer style={footerStyle} />
             </Layout>
         </Layout>
     );

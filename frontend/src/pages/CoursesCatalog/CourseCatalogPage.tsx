@@ -7,11 +7,11 @@ import {
 } from '../../features/courses/coursesApi';
 import { useNavigate } from 'react-router-dom';
 import { Enums } from '../../shared';
-import { TEXT_NEW_COURSE, TEXT_COURSE_PAGE_TITLE } from '../../texts';
 import CourseCreateModal from './CourseCreateModal';
 import { isTeacher } from '../../helpers/permissions';
 import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import PageHeader from '../../components/common/PageHeader';
+import { CATEGORY_TITLES } from '../../texts';
 
 const CoursesPage = () => {
     const { data: courses } = useGetCourseCatalogQuery('course-catalog');
@@ -47,17 +47,17 @@ const CoursesPage = () => {
     const actions = isTeacher(user) && (
         <Button
             data-cy="course-catalog-create-new"
-            key={TEXT_NEW_COURSE}
+            key={CATEGORY_TITLES.newCourse}
             onClick={showModal}
             type="primary"
         >
-            {TEXT_NEW_COURSE}
+            {CATEGORY_TITLES.newCourse}
         </Button>
     );
 
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
-            <PageHeader title={TEXT_COURSE_PAGE_TITLE} actions={[actions]} />
+            <PageHeader title={CATEGORY_TITLES.newCourse} actions={[actions]} />
             <CourseList courses={courses} user={user} />
             {/* // modal */}
             <CourseCreateModal

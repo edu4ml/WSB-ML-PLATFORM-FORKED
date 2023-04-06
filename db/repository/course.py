@@ -1,28 +1,22 @@
+from typing import List
 from db.models import (
     Course as CourseDbModel,
     CourseStep as CourseStepDbModel,
     CourseStepUserProgress as CourseStepUserProgressDbModel,
 )
-from elearning.coursing.course import Course as CourseDomainModel
-from elearning.coursing.entities import CourseComponentCompletion, CourseStep
-from elearning.coursing.entities.course_component import CourseComponent
-from elearning.coursing.entities.external_resource import ExternalResource
+from elearning.entities.course import Course as CourseDomainModel
+from elearning.entities import CourseStepUserProgress, CourseStep
+from elearning.entities.component import Component
+from elearning.entities.submission import Submission
+from elearning.entities.external_resource import ExternalResource
 from infra.logging import logger
 from infra.repository import ModelRepository
 
 
 @logger
 class CourseRepository(ModelRepository[CourseDbModel]):
-    """
-    Abstraction layer to retrieve, persist and update
-    the domain entity of course object and related models
-    """
-
-    root_model = CourseDbModel
-    root_entity = CourseDomainModel
-
-    def __init__(self, user=None) -> None:
-        super().__init__(user)
+    db_model = CourseDbModel
+    domain_model = CourseDomainModel
 
     def update_with_entity(self, entity: CourseDomainModel):
         # fix me. Not sure why but I dont like it
@@ -36,40 +30,23 @@ class CourseRepository(ModelRepository[CourseDbModel]):
 
         if entity.is_draft is not None:
             course.is_draft = entity.is_draft
-
-        if entity.steps is not None:
-            course.steps.all().delete()
-
-            for new_step in entity.steps:
-                CourseStepDbModel.objects.create(
-                    course=course,
-                    order=new_step.order,
-                    component_id=new_step.component,
-                    evaluation_type=new_step.evaluation_type,
-                )
-
         course.save()
+        return self.from_model(course)
 
-    # def list_all(self) -> List[CourseDomainModel]:
-    #     user_roles = self.user.roles.values_list("name", flat=True)
-
-    #     # For admins, retrieve all courses
-    #     if UserRoles.ADMIN in user_roles:
-    #         course_models = CourseDbModel.objects.all()
-
-    #     # For teachers, retrieve all published courses and all courses they authored
-    #     elif UserRoles.TEACHER in user_roles:
-    #         authored_courses = CourseDbModel.objects.filter(author=self.user)
-    #         published_courses = CourseDbModel.objects.filter(is_draft=False)
-    #         course_models = authored_courses | published_courses
-
-    #     # For students, retrieve only published courses
-    #     else:
-    #         course_models = CourseDbModel.objects.filter(is_draft=False)
-    #     return [self.from_model(c) for c in course_models]
+    def update_course_steps(self, uuid, steps: List[CourseStep]):
+        course = CourseDbModel.objects.get(uuid=uuid)
+        course.steps.all().delete()
+        for new_step in steps:
+            CourseStepDbModel.objects.create(
+                course=course,
+                order=new_step.order,
+                component_id=new_step.component,
+                evaluation_type=new_step.evaluation_type,
+            )
+        return self.from_model(course)
 
     def from_model(self, course):
-        return self.root_entity(
+        return self.domain_model(
             uuid=course.uuid,
             created_at=course.created_at,
             updated_at=course.updated_at,
@@ -81,15 +58,21 @@ class CourseRepository(ModelRepository[CourseDbModel]):
             steps=self._get_course_steps(course),
         )
 
+    def publish(self, uuid):
+        obj = self.db_model.objects.get(uuid=uuid)
+        obj.is_draft = False
+        obj.save()
+        return self.from_model(obj)
+
     def _get_course_steps(self, course):
         return [
             CourseStep(
+                uuid=step.uuid,
                 order=step.order,
-                user_progress=self._get_user_progress_on_component(
-                    course=course, component=step.component
-                ),
+                user_progress=self._get_user_progress(step=step),
                 evaluation_type=step.evaluation_type,
-                component=CourseComponent(
+                component=Component(
+                    author=step.component.author.uuid,
                     uuid=step.component.uuid,
                     title=step.component.title,
                     description=step.component.description,
@@ -113,23 +96,36 @@ class CourseRepository(ModelRepository[CourseDbModel]):
             for resource in component.resources.all()
         ]
 
-    def _get_user_progress_on_component(self, course, component):
-        # whole key is passed here so it is safe to do get_or_create here
-        if not self.user:
-            return CourseComponentCompletion(
+    def _get_user_progress(self, step):
+        if step_progress_exists := CourseStepUserProgressDbModel.objects.filter(
+            user=self.user, step=step
+        ).exists():
+            step_progress = CourseStepUserProgressDbModel.objects.get(
+                user=self.user, step=step
+            )
+
+        if not self.user or not step_progress_exists:
+            return CourseStepUserProgress(
                 tracking_uuid=None,
                 completed_at=None,
                 is_completed=None,
+                is_blocked=None,
+                submissions=[],
             )
 
-        step_completion, _ = CourseStepUserProgressDbModel.objects.get_or_create(
-            user=self.user,
-            course=course,
-            component=component,
-        )
-
-        return CourseComponentCompletion(
-            tracking_uuid=step_completion.uuid,
-            completed_at=step_completion.completed_at,
-            is_completed=step_completion.is_completed,
+        return CourseStepUserProgress(
+            tracking_uuid=step_progress.uuid,
+            completed_at=step_progress.completed_at,
+            is_completed=step_progress.is_completed,
+            is_blocked=step_progress.is_blocked,
+            submissions=[
+                Submission(
+                    uuid=attempt.uuid,
+                    title=attempt.title,
+                    description=attempt.description,
+                    file_link=attempt.file.url if attempt.file else "",
+                    status=attempt.status,
+                )
+                for attempt in step.submissions.filter(user=step_progress.user)
+            ],
         )

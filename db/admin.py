@@ -9,7 +9,7 @@ from .models import (
     CourseStepUserProgress,
     CourseComponent,
     CustomUser,
-    EvaluationAttempt,
+    Submission,
     ExternalResource,
     Role,
 )
@@ -32,13 +32,13 @@ admin.site.register(CourseEnrollment, CourseEnrollmentAdmin)
 class CourseStepAdmin(admin.ModelAdmin):
     list_display = (
         "course",
+        "component",
         "order",
         "evaluation_type",
     )
-    list_editable = ("order", "evaluation_type")
+    list_editable = ("component", "order", "evaluation_type")
     list_editable_groups = [("order",)]
     list_filter = ("course",)
-    # form = CourseStepForm
 
 
 admin.site.register(CourseStep, CourseStepAdmin)
@@ -66,23 +66,26 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.register(Course, CourseAdmin)
 
 
-class CourseStepUserCompletionAdmin(admin.ModelAdmin):
+class CourseStepUserProgressAdmin(admin.ModelAdmin):
     list_display = (
         "user",
-        "course",
+        "step",
         "is_completed",
         "completed_at",
     )
 
-
-admin.site.register(CourseStepUserProgress, CourseStepUserCompletionAdmin)
-
-
-class EvaluationAttemptAdmin(admin.ModelAdmin):
-    pass
+    list_editable = ("is_completed",)
 
 
-admin.site.register(EvaluationAttempt, EvaluationAttemptAdmin)
+admin.site.register(CourseStepUserProgress, CourseStepUserProgressAdmin)
+
+
+class SubmissionAdmin(admin.ModelAdmin):
+    list_display = ("user", "title", "course_step", "status")
+    list_editable = ("status",)
+
+
+admin.site.register(Submission, SubmissionAdmin)
 
 
 class RoleAdmin(admin.ModelAdmin):

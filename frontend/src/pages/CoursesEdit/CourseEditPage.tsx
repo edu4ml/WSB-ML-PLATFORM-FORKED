@@ -4,24 +4,20 @@ import { useParams } from 'react-router';
 
 import { useNavigate } from 'react-router-dom';
 import {
-    useIssueCourseCommandMutation,
+    useIssueCommandMutation,
     useGetCourseQuery,
 } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import { CourseStepType } from '../../types/course';
-import {
-    TEXT_COURSE_PUBLISHED,
-    TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING,
-    TEXT_COURSE_SAVED,
-    TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING,
-    TEXT_PUBLISH,
-    TEXT_SAVE,
-    TEXT_SOMETHING_WENT_WRONG,
-} from '../../texts';
 
 import PageHeader from '../../components/common/PageHeader';
-import { getCourseTitle, getCourseSubtitle } from '../../helpers/namesFactory';
+import { getCourseSubtitle } from '../../helpers/namesFactory';
 import CourseEditDetails from './CourseEditDetails';
+import {
+    CATEGORY_BUTTON_TEXTS,
+    CATEGORY_NOTIFICATIONS,
+    CATEGORY_OTHER_TEXTS,
+} from '../../texts';
 
 const PublishButton = ({ onClick }) => {
     return (
@@ -30,7 +26,7 @@ const PublishButton = ({ onClick }) => {
             onClick={onClick}
             type="primary"
         >
-            {TEXT_PUBLISH}
+            {CATEGORY_BUTTON_TEXTS.publish}
         </Button>
     );
 };
@@ -42,7 +38,7 @@ const SaveButton = ({ onClick }) => {
             onClick={onClick}
             type="primary"
         >
-            {TEXT_SAVE}
+            {CATEGORY_BUTTON_TEXTS.save}
         </Button>
     );
 };
@@ -52,21 +48,20 @@ const CourseEditPage = () => {
     const { courseId } = useParams();
     const { data: course } = useGetCourseQuery(courseId);
 
-    const [issueCommand, {}] = useIssueCourseCommandMutation();
+    const [issueCommand, {}] = useIssueCommandMutation();
     const [courseSteps, setCourseSteps] = useState([]);
     const [courseDescription, setCourseDescription] = useState('');
-    const [notSaved, setNotSaved] = useState(false);
 
     useEffect(() => {
         if (course) {
             setCourseDescription(course.description);
             setCourseSteps(course.steps);
+
+            if (!course.is_draft) {
+                navigate(`/app/courses/`);
+            }
         }
     }, [course]);
-
-    useEffect(() => {
-        setNotSaved(true);
-    }, [courseSteps, courseDescription]);
 
     const mapToCourseSteps = (data) => {
         return data.map((item: CourseStepType, index: number) => ({
@@ -78,15 +73,14 @@ const CourseEditPage = () => {
 
     const publish = () => {
         const command = {
-            type: Enums.COMMAND_TYPES.UPDATE_COURSE,
-            is_draft: false,
-            description: courseDescription,
-            steps: mapToCourseSteps(courseSteps),
+            type: Enums.COMMAND_TYPES.PUBLISH_COURSE,
+            course_uuid: courseId,
         };
 
-        if (!validateBeforePublish(command.steps, command.description)) {
+        if (!validateBeforePublish(courseSteps, courseDescription)) {
             notification.error({
-                message: TEXT_COURSE_PUBLISH_NO_STEP_OR_DESCRIPTION_WARNING,
+                message:
+                    CATEGORY_OTHER_TEXTS.coursePublishNoStepOrDescriptionWarning,
             });
             return;
         }
@@ -95,14 +89,14 @@ const CourseEditPage = () => {
             .unwrap()
             .then((res) => {
                 notification.info({
-                    message: TEXT_COURSE_PUBLISHED,
+                    message: CATEGORY_NOTIFICATIONS.coursePublished,
                     duration: 2,
                 });
                 navigate('/app/courses/');
             })
             .catch((err) => {
                 notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
+                    message: CATEGORY_NOTIFICATIONS.somethingWentWrong,
                 });
             });
     };
@@ -112,28 +106,28 @@ const CourseEditPage = () => {
             type: Enums.COMMAND_TYPES.UPDATE_COURSE,
             description: courseDescription,
             steps: mapToCourseSteps(courseSteps),
+            course_uuid: courseId,
         };
 
-        console.log(command);
         if (!validateBeforeSave(command.steps, command.description)) {
             notification.error({
-                message: TEXT_COURSE_SAVE_NO_STEP_OR_DESCRIPTION_WARNING,
+                message:
+                    CATEGORY_OTHER_TEXTS.courseSaveNoStepOrDescriptionWarning,
             });
             return;
         }
 
-        issueCommand({ id: courseId, command })
+        issueCommand({ command })
             .unwrap()
             .then((res) => {
                 notification.info({
-                    message: TEXT_COURSE_SAVED,
+                    message: CATEGORY_NOTIFICATIONS.courseSaved,
                     duration: 2,
                 });
-                setNotSaved(false);
             })
             .catch((err) => {
                 notification.error({
-                    message: TEXT_SOMETHING_WENT_WRONG,
+                    message: CATEGORY_NOTIFICATIONS.somethingWentWrong,
                 });
             });
     };
@@ -154,7 +148,7 @@ const CourseEditPage = () => {
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
             <PageHeader
-                title={getCourseTitle(course)}
+                title={course?.title}
                 actions={actions}
                 subtitle={getCourseSubtitle(course)}
             />

@@ -1,5 +1,5 @@
 from db.models import CustomUser as UserDbModel, Role
-from elearning.coursing.entities.user import User
+from elearning.entities.user import User
 from infra.logging import logger
 from infra.repository import ModelRepository
 from shared.enums import UserRoles
@@ -7,8 +7,8 @@ from shared.enums import UserRoles
 
 @logger
 class UserRepository(ModelRepository):
-    root_model = UserDbModel
-    root_entity = User
+    db_model = UserDbModel
+    domain_model = User
 
     def get_or_create(self, email, **kwargs):
         user, created = UserDbModel.objects.get_or_create(email=email, **kwargs)
@@ -21,7 +21,7 @@ class UserRepository(ModelRepository):
         return user
 
     def from_model(self, obj):
-        return self.root_entity(
+        return self.domain_model(
             uuid=obj.uuid,
             email=obj.email,
         )

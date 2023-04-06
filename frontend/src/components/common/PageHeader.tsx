@@ -3,7 +3,7 @@ import React from 'react';
 
 const { Title, Text } = Typography;
 
-const PageHeader = ({ title, actions, subtitle = '' }) => {
+const PageHeader = ({ title, actions = [], subtitle = '' }) => {
     return (
         <Row>
             <Col span={12}>

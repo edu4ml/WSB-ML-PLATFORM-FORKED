@@ -1,62 +1,90 @@
 from django.urls import path, include
 
 from api.apis.v1.auth.auth import GoogleLoginApi
-from api.apis.v1.course.command import CourseCommandApi
+from api.apis.v1.commands.commands import CommandsApi
 from api.apis.v1.course.course import (
     CourseApi,
     CourseDetailApi,
 )
 from dj_rest_auth.urls import urlpatterns as auth_urlpatterns
+from api.apis.v1.course.course_step import (
+    CourseStepApi,
+    CourseStepDetailApi,
+    CourseStepDetailSubmissionsApi,
+    CourseStepUserProgressDetailsApi,
+    CourseStepUserProgressSubmissionUploadApi,
+)
 from api.apis.v1.course_components.course_components import (
     CourseComponentApi,
     CourseComponentDetailApi,
     CourseComponentDetailFileUploadApi,
     CourseComponentDetailFileDetailApi,
 )
-
-from api.apis.v1.reports.teacher import TeacherReport
-from api.apis.v1.resources.resource import (
-    ExternalResourceApi,
-    ExternalResourceDetailApi,
+from api.apis.v1.submission.submission import (
+    SubmissionApi,
+    SubmissionDetailApi,
 )
 
+from api.apis.v1.reports.report import DashboardApi
+
 urlpatterns_v1 = [
-    path("course/", CourseApi.as_view(), name="course"),
-    path("course-components/", CourseComponentApi.as_view(), name="course-components"),
-    path("resource/", ExternalResourceApi.as_view(), name="external-resource"),
+    path("components/", CourseComponentApi.as_view(), name="component-list"),
     path(
-        "resource/<uuid:resource_uuid>",
-        ExternalResourceDetailApi.as_view(),
-        name="external-resource-detail",
-    ),
-    path(
-        "course-components/<uuid:component_uuid>",
+        "components/<uuid:component_uuid>",
         CourseComponentDetailApi.as_view(),
-        name="course-components-detail",
+        name="component-detail",
     ),
     path(
-        "course-components/<uuid:component_uuid>/file-resources",
+        "components/<uuid:component_uuid>/file-resources",
         CourseComponentDetailFileUploadApi.as_view(),
-        name="course-components-detail-file-resources",
+        name="component-detail-file-resources",
     ),
     path(
-        "course-components/<uuid:component_uuid>/file-resources/<uuid:resource_uuid>",
+        "components/<uuid:component_uuid>/file-resources/<uuid:resource_uuid>",
         CourseComponentDetailFileDetailApi.as_view(),
-        name="course-components-detail-file-resources-detail",
+        name="component-detail-file-resources-detail",
     ),
+    path("courses/", CourseApi.as_view(), name="course-list"),
     path(
-        "course/<uuid:course_uuid>",
+        "courses/<uuid:course_uuid>",
         CourseDetailApi.as_view(),
         name="course-detail",
     ),
     path(
-        "course/<uuid:course_uuid>/command",
-        CourseCommandApi.as_view(),
-        name="course-command",
+        "courses/<uuid:course_uuid>/step",
+        CourseStepApi.as_view(),
+        name="course-detail-steps",
     ),
-    path("report/teacher/", TeacherReport.as_view(), name="teacher-report"),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>",
+        CourseStepDetailApi.as_view(),
+        name="course-detail-steps-detail",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/submissions",
+        CourseStepDetailSubmissionsApi.as_view(),
+        name="course-detail-steps-detail-submissions",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user-progress/<uuid:user_progress_uuid>",
+        CourseStepUserProgressDetailsApi.as_view(),
+        name="course-detail-steps-detail-user-progress",
+    ),
+    path(
+        "course/<uuid:course_uuid>/step/<uuid:step_uuid>/user/<uuid:user_uuid>",
+        CourseStepUserProgressSubmissionUploadApi.as_view(),
+        name="course-steps-user-progress",
+    ),
+    path("report/teacher/", DashboardApi.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
     path("auth/", include((auth_urlpatterns, "auth"))),
+    path("submission", SubmissionApi.as_view(), name="submission"),
+    path(
+        "submission/<uuid:submission_uuid>",
+        SubmissionDetailApi.as_view(),
+        name="submission-detail",
+    ),
+    path("commands", CommandsApi.as_view(), name="command-list"),
 ]
 
 urlpatterns = [path("v1/", include((urlpatterns_v1, "v1")))]

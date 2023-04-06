@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { useGetCourseComponentsQuery } from '../../features/courses/coursesApi';
+import { useGetComponentListQuery } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import type { MenuProps } from 'antd';
-import { CourseComponentType, CourseStepType } from '../../types/course';
-import { TEXT_ADD_STEP } from '../../texts';
+import { ComponentType, CourseStepType } from '../../types/course';
 import {
     getContentTypeIcon,
     getContentTypeName,
 } from '../../helpers/namesFactory';
+import { CATEGORY_BUTTON_TEXTS } from '../../texts';
 
 const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
     const [count, setCount] = useState(steps.length);
 
-    const { data: availableSteps } = useGetCourseComponentsQuery(
+    const { data: availableSteps } = useGetComponentListQuery(
         'course-components-catalog'
     );
 
     const handleAdd = (clickEvent) => {
-        console.log(clickEvent);
-
-        const chosenElement: CourseComponentType = availableSteps.find(
+        const chosenElement: ComponentType = availableSteps.find(
             (availableSteps) => availableSteps.uuid == clickEvent.key
         );
 
@@ -36,13 +34,13 @@ const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
         setCount(count + 1);
     };
 
-    const isAvailable = (item: CourseComponentType) => {
+    const isAvailable = (item: ComponentType) => {
         return steps.find(
             (element: CourseStepType) => element.component.uuid === item.uuid
         );
     };
 
-    const mapToDropdown = (items: Array<CourseComponentType>) => {
+    const mapToDropdown = (items: Array<ComponentType>) => {
         if (items) {
             const groupedItems = items?.reduce((acc, item) => {
                 if (!acc[item.type]) {
@@ -80,7 +78,7 @@ const CourseEditStepsListDropdownAdd = ({ steps, onUpdateSteps }) => {
                 type="primary"
             >
                 <Space>
-                    {TEXT_ADD_STEP}
+                    {CATEGORY_BUTTON_TEXTS.addStep}
                     <DownOutlined />
                 </Space>
             </Button>

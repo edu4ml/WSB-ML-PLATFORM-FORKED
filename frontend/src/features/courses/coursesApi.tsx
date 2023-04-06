@@ -9,82 +9,125 @@ export const courseApi = createApi({
             headers.set('X-CSRFToken', Cookies.get('csrftoken'));
         },
     }),
-    tagTypes: ['course-list', 'course-component-list'],
+    tagTypes: ['course-list', 'component-list'],
     endpoints: (builder) => ({
         getCourseCatalog: builder.query({
-            query: () => '/course/',
+            query: () => '/courses/',
             providesTags: ['course-list'],
         }),
         getCourse: builder.query({
-            query: (id) => `/course/${id}`,
+            query: (id) => `/courses/${id}`,
             providesTags: (result, error, id) => [{ type: 'course-list', id }],
         }),
-        getCourseComponents: builder.query({
-            query: () => '/course-components/',
-            providesTags: ['course-component-list'],
-        }),
-        createCourse: builder.mutation({
-            query: (command) => ({
-                url: '/course/',
-                method: 'PUT',
+        issueCourseCommand: builder.mutation({
+            query: ({ id, command }) => ({
+                url: `/courses/${id}`,
+                method: 'POST',
                 body: command,
             }),
             invalidatesTags: ['course-list'],
         }),
-        createCourseComponents: builder.mutation({
-            query: (payload) => ({
-                url: '/course-components/',
+        createCourse: builder.mutation({
+            query: (command) => ({
+                url: '/courses/',
                 method: 'POST',
-                body: payload,
+                body: command,
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['course-list'],
+        }),
+        getComponentList: builder.query({
+            query: () => '/components/',
+            providesTags: ['component-list'],
+        }),
+        getComponentDetails: builder.query({
+            query: (id) => `/components/${id}`,
+            providesTags: (result, error, id) => [
+                { type: 'component-list', id },
+            ],
+        }),
+        createCourseComponents: builder.mutation({
+            query: (command) => ({
+                url: '/components/',
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['component-list'],
         }),
         addFileToCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
-                url: `/course-components/${id}/file`,
+                url: `/components/${id}/file`,
                 method: 'PUT',
                 body: payload,
             }),
         }),
         updateCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
-                url: `/course-components/${id}`,
+                url: `/components/${id}`,
                 method: 'PUT',
                 body: payload,
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
         deleteCourseComponent: builder.mutation({
             query: (id) => ({
-                url: `/course-components/${id}`,
+                url: `/components/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
         deleteCourseComponentFileResource: builder.mutation({
             query: ({ id, resourceId }) => ({
-                url: `/course-components/${id}/file-resources/${resourceId}`,
+                url: `/components/${id}/file-resources/${resourceId}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['course-component-list'],
+            invalidatesTags: ['component-list'],
         }),
-        issueCourseCommand: builder.mutation({
-            query: ({ id, command }) => ({
-                url: `/course/${id}/command`,
-                method: 'PUT',
+        uploadSubmission: builder.mutation({
+            query: ({ command }) => ({
+                url: `/submission`,
+                method: 'POST',
                 body: command,
             }),
             invalidatesTags: ['course-list'],
+        }),
+        issueSubmissionCommand: builder.mutation({
+            query: ({ id, command }) => ({
+                url: `/submission/${id}`,
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list'],
+        }),
+        issueCourseStepProgressTrackingCommand: builder.mutation({
+            query: ({ courseId, stepId, userId, command }) => ({
+                url: `/course/${courseId}/step/${stepId}/user/${userId}`,
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list'],
+        }),
+        issueCommand: builder.mutation({
+            query: ({ command }) => ({
+                url: '/commands',
+                method: 'POST',
+                body: command,
+            }),
+            invalidatesTags: ['course-list', 'component-list'],
         }),
     }),
 });
 
 export const {
+    useIssueCommandMutation,
+    useIssueCourseStepProgressTrackingCommandMutation,
+    useIssueSubmissionCommandMutation,
+    useUploadSubmissionMutation,
     useDeleteCourseComponentFileResourceMutation,
     useAddFileToCourseComponentMutation,
     useGetCourseCatalogQuery,
     useGetCourseQuery,
-    useGetCourseComponentsQuery,
+    useGetComponentListQuery,
+    useGetComponentDetailsQuery,
     useCreateCourseMutation,
     useIssueCourseCommandMutation,
     useCreateCourseComponentsMutation,

@@ -9,12 +9,11 @@ import LoginLayout from './pages/Layout/LoginLayout';
 import MainLayout from './pages/Layout/MainLayout';
 import SimpleLayout from './pages/Layout/SimpleLayout';
 import CoursesPage from './pages/CoursesCatalog/CourseCatalogPage';
-import CourseDetailPage from './pages/CoursesCatalog/CourseDetailPage';
+import CourseDetailPage from './pages/CourseDetails/CourseDetailPage';
 import CourseEditPage from './pages/CoursesEdit/CourseEditPage';
-import TeacherDashboardPage from './pages/Dashboards/TeacherDashboardPage';
-import CourseComponentsPage from './pages/CourseComponents/CourseComponentsPage';
-import DashboardLayout from './pages/Layout/DashboardLayout';
-import ExternalResourcesPage from './pages/ExternalResources/ExternalResourcesPage';
+import DashboardPage from './pages/Dashboards/DashboardPage';
+import ComponentsPage from './pages/Components/ComponentsPage';
+import ComponentDetailPage from './pages/ComponentsDetails/ComponentsDetailPage';
 
 const App = () => {
     return (
@@ -91,7 +90,19 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <SimpleLayout>
-                                        <CourseComponentsPage />
+                                        <ComponentsPage />
+                                    </SimpleLayout>
+                                </MainLayout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/app/course-components/:componentId"
+                        element={
+                            <PrivateRoute>
+                                <MainLayout>
+                                    <SimpleLayout>
+                                        <ComponentDetailPage />
                                     </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
@@ -102,20 +113,8 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <DashboardLayout>
-                                        <TeacherDashboardPage />
-                                    </DashboardLayout>
-                                </MainLayout>
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/app/resources"
-                        element={
-                            <PrivateRoute>
-                                <MainLayout>
                                     <SimpleLayout>
-                                        <ExternalResourcesPage />
+                                        <DashboardPage />
                                     </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>

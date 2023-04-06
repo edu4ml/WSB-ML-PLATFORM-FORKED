@@ -19,3 +19,16 @@ section {
 .course-list-item:hover { 
     background-color: #fafafa;
 }
+
+.ant-upload-select{
+    width: 100%;
+}
+
+.ant-timeline-item-head {
+    background-color: #f4f7fc !important;
+}
+
+.ant-list-item:hover {
+    background-color: #fafafa;
+    box-shadow: 0 0 4px #eee;
+}

@@ -1,88 +1,112 @@
-from db.models.courses import CourseStepUserProgress
-from elearning.reporting.entities.student import (
-    StudentInCourseStepEvaluationAttempt,
-    StudentWithProgress,
-    StudentInCourseProgress,
-    StudentInCourseStepProgress,
+from db.models.courses import (
+    CourseEnrollment,
+    CourseStep as CourseStepModel,
+    CourseStepUserProgress,
+    Submission as SubmissionDbModel,
+)
+from elearning.entities.report import (
+    CourseStudents,
+    CourseInfo,
+    CourseStep,
+    Report,
+    StudentCourseProgress,
+    StudentInfo,
+    Submission,
 )
 from infra.repository import ModelRepository
-from elearning.reporting.teacher import Teacher
-from elearning.reporting.entities.course import Course
 
 
 class ReportRepository(ModelRepository):
+    def get_course_report(self):
+        if self.user.is_teacher():
+            return self.get_for_teacher()
+        elif self.user.is_student():
+            return self.get_for_student()
+
+    def get_for_student(self):
+        return []
+
     def get_for_teacher(self):
-        assert (
-            self.user and self.user.is_teacher()
-        ), "User needs to be a teacher to generate Teacher Report"
-        return Teacher(
-            courses=[
-                Course(
-                    uuid=course.uuid,
-                    title=course.title,
-                    students=[
-                        StudentWithProgress(
-                            uuid=enrolment.user.uuid,
-                            email=enrolment.user.email,
-                            progress=StudentInCourseProgress(
-                                has_completed_course=enrolment.is_completed,
-                                steps=self.get_course_steps_progress_for_user(
-                                    course, enrolment.user
-                                ),
-                            ),
-                        )
-                        for enrolment in course.enrollments.all()
-                    ],
-                )
-                for course in self.user.created_courses.all()
-            ],
+        return Report(
+            courses=self._get_students_progress_for_courses(),
+            submissions=self._get_submission_inbox(),
         )
 
-    def get_course_steps_progress_for_user(self, course, student):
-        steps_progress = []
+    def _get_submission_inbox(self):
+        author_courses = self.user.created_courses.all()
+        submissions = SubmissionDbModel.objects.filter(
+            course_step__course__in=author_courses
+        )
 
-        for step in course.steps.all():
-            try:
-                step_completion = CourseStepUserProgress.objects.get(
-                    course=course, user=student, object_uuid=step.object.uuid
+        return [
+            Submission(
+                uuid=submission.uuid,
+                user=StudentInfo(
+                    uuid=submission.user.uuid,
+                    email=submission.user.email,
+                ),
+                title=submission.title,
+                description=submission.description,
+                status=submission.status,
+                file_link=submission.file.url,
+                course=CourseInfo(
+                    uuid=submission.course_step.course.uuid,
+                    title=submission.course_step.course.title,
+                ),
+                course_component=CourseStep(
+                    uuid=submission.course_step.uuid,
+                    title=submission.course_step.component.title,
+                ),
+            )
+            for submission in submissions
+        ]
+
+    def _get_students_progress_for_courses(self):
+        author_courses = self.user.created_courses.all()
+        course_enrollments = CourseEnrollment.objects.filter(course__in=author_courses)
+
+        courses_students_progress = []
+
+        for course in author_courses:
+            course_students = []
+
+            for enrollment in course_enrollments.filter(course=course):
+                student = enrollment.user
+                completed_steps = CourseStepUserProgress.objects.filter(
+                    user=student, step__course=enrollment.course, is_completed=True
+                )
+                completed_steps_count = completed_steps.count()
+
+                current_step = (
+                    CourseStepModel.objects.filter(course=enrollment.course)
+                    .exclude(uuid__in=completed_steps.values_list("step", flat=True))
+                    .order_by("order")
+                    .first()
                 )
 
-                steps_progress.append(
-                    StudentInCourseStepProgress(
-                        title=step.object.title,
-                        order=step.order,
-                        is_completed=step_completion.is_completed,
-                        completed_at=step_completion.completed_at,
-                        evaluation_status=[
-                            StudentInCourseStepEvaluationAttempt(
-                                title=evaluation_attempt.title,
-                                description=evaluation_attempt.description,
-                                status=evaluation_attempt.status,
-                            )
-                            for evaluation_attempt in step.evaluation_attempts.filter(
-                                user=student
-                            )
-                        ],
-                    )
-                )
-            except Exception:
-                steps_progress.append(
-                    StudentInCourseStepProgress(
-                        title=step.object.title,
-                        order=step.order,
-                        is_completed=False,
-                        completed_at=None,
-                        evaluation_status=[
-                            StudentInCourseStepEvaluationAttempt(
-                                title=evaluation_attempt.title,
-                                description=evaluation_attempt.description,
-                                status=evaluation_attempt.status,
-                            )
-                            for evaluation_attempt in step.evaluation_attempts.filter(
-                                user=student
-                            )
-                        ],
-                    )
+                student_progress = StudentCourseProgress(
+                    student=StudentInfo(
+                        uuid=student.uuid,
+                        email=student.email,
+                    ),
+                    steps_completed=completed_steps_count,
+                    current_step=CourseStep(
+                        uuid=current_step.uuid,
+                        title=current_step.component.title,
+                    ),
+                    is_completed=enrollment.is_completed,
+                    progress=int(completed_steps_count / course.steps.count() * 100),
                 )
 
-        return steps_progress
+                course_students.append(student_progress)
+
+            course_info = CourseStudents(
+                uuid=course.uuid,
+                title=course.title,
+                description=course.description,
+                students=course_students,
+            )
+
+            courses_students_progress.append(course_info)
+
+        return courses_students_progress

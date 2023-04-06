@@ -8,7 +8,7 @@ UserModel = get_user_model()
 
 
 class DummyUserRepo(ModelRepository):
-    root_model = UserModel
+    db_model = UserModel
 
 
 @pytest.mark.django_db
