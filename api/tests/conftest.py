@@ -15,7 +15,7 @@ from db.models import (
 )
 from db.models.external_resources import ExternalResource
 from elearning.auth.user import User
-from shared.enums import CommandTypes, UserRoles
+from shared.enums import CommandTypes, CourseStepEvaluationType, UserRoles
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -281,3 +281,29 @@ def create_component() -> Callable[[Client, str], Response]:
         return client.post(reverse("api:v1:component-list"), data=command)
 
     return issue_command
+
+
+@pytest.fixture
+def published_course(
+    teacher_client,
+    create_course,
+    update_course,
+    create_component,
+    publish_course,
+) -> Course:
+    course = create_course(teacher_client).json()
+    component_1 = create_component(
+        teacher_client, title="Test component", description="Test description"
+    ).json()
+    course = update_course(
+        teacher_client,
+        course["uuid"],
+        steps=[
+            dict(
+                component=component_1["uuid"],
+                order=1,
+                evaluation_type=CourseStepEvaluationType.SELF_EVALUATED.value,
+            )
+        ],
+    ).json()
+    return publish_course(teacher_client, course["uuid"]).json()

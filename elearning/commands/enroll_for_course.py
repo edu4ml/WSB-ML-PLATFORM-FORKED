@@ -7,7 +7,6 @@ from db.repository.configuration import RepositoryRoot
 from infra.command_handler import CommandHandler
 from infra.event import Event
 from infra.exceptions import CommandBusException
-from shared.enums import ApiErrors
 
 
 @dataclass(kw_only=True)
@@ -55,18 +54,16 @@ class OnEnrollForCourse(CommandHandler):
 
     def _check_user_exists(self, user):
         if user is None:
-            raise CommandBusException(ApiErrors.USER_DOES_NOT_EXIST, 400)
+            raise CommandBusException("User not found", 400)
 
     def _check_is_already_enrolled(self, enrollment):
         if enrollment is not None:
-            raise CommandBusException(
-                ApiErrors.CANNOT_ENROLL_FOR_COURSE_ALREADY_ENROLLED, 400
-            )
+            raise CommandBusException("User is already enrolled in course", 400)
 
     def _check_course_is_not_draft(self, course):
         if course.is_draft:
-            raise CommandBusException(ApiErrors.CANNOT_ENROLL_FOR_COURSE_IN_DRAFT, 400)
+            raise CommandBusException("Cannot enroll in unpublished course", 400)
 
     def _check_parent_exists(self, course):
         if course is None:
-            raise CommandBusException(ApiErrors.COMMAND_TYPE_HAS_NO_PARENT, 400)
+            raise CommandBusException("Course not found", 404)
