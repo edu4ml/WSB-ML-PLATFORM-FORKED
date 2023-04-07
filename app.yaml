@@ -8,6 +8,9 @@ handlers:
   - url: /static
     static_dir: staticfiles-cdn/
 
+  - url: /media
+    static_dir: media/
+
   - url: /.*
     script: auto
 

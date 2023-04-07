@@ -13,7 +13,10 @@ import { useGetUserProfileQuery } from '../../features/auth/authApi';
 import PageHeader from '../../components/common/PageHeader';
 import { CATEGORY_TITLES } from '../../texts';
 
+import { useTranslation } from 'react-i18next';
+
 const CoursesPage = () => {
+    const { t, i18n } = useTranslation();
     const { data: courses } = useGetCourseCatalogQuery('course-catalog');
     const { data: user } = useGetUserProfileQuery('userDetails');
     const [isModalOpen, setIsModalOpen] = useState(false);

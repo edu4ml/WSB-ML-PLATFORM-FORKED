@@ -4,6 +4,7 @@ import App from './App';
 import { store } from './store';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
+import './i18n';
 
 const root = createRoot(document.getElementById('root'));
 root.render(
