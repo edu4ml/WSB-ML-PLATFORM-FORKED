@@ -1,12 +1,11 @@
 import { Result, Spin } from 'antd';
 import React from 'react';
-import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import { useUserProfileQuery } from '../../features/auth/authApi';
 import LogoutButton from '../../pages/Login/LogoutButton';
 import { CATEGORY_OTHER_TEXTS } from '../../texts';
 
 const PrivateRoute = ({ children }) => {
-    const { data, isSuccess, isFetching } =
-        useGetUserProfileQuery('userDetails');
+    const { data, isSuccess, isFetching } = useUserProfileQuery('userDetails');
 
     if (data && Object.keys(data).length !== 0 && isSuccess) {
         return children;

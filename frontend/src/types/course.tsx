@@ -1,6 +1,6 @@
 import type { ButtonType } from 'antd/es/button/buttonHelpers';
 
-export interface CourseType {
+export type CourseType = {
     uuid: string;
     updated_at: string;
     created_at: string;
@@ -11,15 +11,15 @@ export interface CourseType {
     progress: number;
     is_draft: boolean;
     steps: Array<CourseStepType>;
-}
+};
 
+// --------------------------------------
 export interface CourseStepType {
     order: number;
     evaluation_type: string;
     component: ComponentType;
     user_progress: CourseStepUserProgressType | null;
 }
-
 export interface ComponentType {
     uuid: string;
     title: string;

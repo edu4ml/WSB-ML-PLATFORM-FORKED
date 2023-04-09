@@ -3,7 +3,15 @@ import React from 'react';
 
 const { Title, Text } = Typography;
 
-const PageTitle = ({ title, actions = [], subtitle = '' }) => {
+const PageTitle = ({
+    title,
+    subtitle = '',
+    actions = [],
+}: {
+    title: String;
+    subtitle?: String;
+    actions?: Array<React.ReactNode>;
+}) => {
     return (
         <Row>
             <Col span={12}>

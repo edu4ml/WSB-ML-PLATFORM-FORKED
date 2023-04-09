@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import {
     useIssueCommandMutation,
-    useGetCourseQuery,
+    useGetCourseDetailsQuery,
 } from '../../features/courses/coursesApi';
 import { Enums } from '../../shared';
 import { CourseStepType } from '../../types/course';
@@ -46,7 +46,7 @@ const SaveButton = ({ onClick }) => {
 const CourseEditPage = () => {
     const navigate = useNavigate();
     const { courseId } = useParams();
-    const { data: course } = useGetCourseQuery(courseId);
+    const { data: course } = useGetCourseDetailsQuery(courseId);
 
     const [issueCommand, {}] = useIssueCommandMutation();
     const [courseSteps, setCourseSteps] = useState([]);

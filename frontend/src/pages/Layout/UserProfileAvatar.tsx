@@ -2,7 +2,7 @@ import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, MenuProps, Skeleton, Space, Typography } from 'antd';
 import {
-    useGetUserProfileQuery,
+    useUserProfileQuery,
     useLogoutMutation,
 } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ const menuItems: MenuProps['items'] = [
 ];
 
 const UserProfileAvatar = () => {
-    const { data, isSuccess } = useGetUserProfileQuery('userDetails');
+    const { data, isSuccess } = useUserProfileQuery('userDetails');
     const [logout, {}] = useLogoutMutation();
     const navigate = useNavigate();
 

@@ -8,12 +8,14 @@ import PrivateRoute from './components/router/PrivateRoute';
 import LoginLayout from './pages/Layout/LoginLayout';
 import MainLayout from './pages/Layout/MainLayout';
 import SimpleLayout from './pages/Layout/SimpleLayout';
-import CoursesPage from './pages/CoursesCatalog/CourseCatalogPage';
 import CourseDetailPage from './pages/CourseDetails/CourseDetailPage';
 import CourseEditPage from './pages/CoursesEdit/CourseEditPage';
 import DashboardPage from './pages/Dashboards/DashboardPage';
 import ComponentsPage from './pages/Components/ComponentsPage';
 import ComponentDetailPage from './pages/ComponentsDetails/ComponentsDetailPage';
+import CoursesDashboard from './pages/courses/containers/coursesDashboard';
+import CourseEdit from './pages/courses/containers/courseEdit';
+import CourseDetail from './pages/courses/containers/courseDetail';
 
 const App = () => {
     return (
@@ -54,7 +56,7 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <SimpleLayout>
-                                        <CoursesPage />
+                                        <CoursesDashboard />
                                     </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
@@ -66,7 +68,7 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <SimpleLayout>
-                                        <CourseDetailPage />
+                                        <CourseDetail />
                                     </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>
@@ -78,7 +80,7 @@ const App = () => {
                             <PrivateRoute>
                                 <MainLayout>
                                     <SimpleLayout>
-                                        <CourseEditPage />
+                                        <CourseEdit />
                                     </SimpleLayout>
                                 </MainLayout>
                             </PrivateRoute>

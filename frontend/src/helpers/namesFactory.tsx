@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
-const getCourseTitleComponent = (course, size) => {
+const getCourseTitleComponent = (course: CourseType, size) => {
     if (!course) {
         return '';
     }

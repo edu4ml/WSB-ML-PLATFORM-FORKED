@@ -11,11 +11,11 @@ export const courseApi = createApi({
     }),
     tagTypes: ['course-list', 'component-list'],
     endpoints: (builder) => ({
-        getCourseCatalog: builder.query({
+        getCourseList: builder.query({
             query: () => '/courses/',
             providesTags: ['course-list'],
         }),
-        getCourse: builder.query({
+        getCourseDetail: builder.query({
             query: (id) => `/courses/${id}`,
             providesTags: (result, error, id) => [{ type: 'course-list', id }],
         }),
@@ -124,8 +124,8 @@ export const {
     useUploadSubmissionMutation,
     useDeleteCourseComponentFileResourceMutation,
     useAddFileToCourseComponentMutation,
-    useGetCourseCatalogQuery,
-    useGetCourseQuery,
+    useGetCourseListQuery,
+    useGetCourseDetailQuery,
     useGetComponentListQuery,
     useGetComponentDetailsQuery,
     useCreateCourseMutation,

@@ -29,12 +29,12 @@ export const authApi = createApi({
                 method: 'POST',
             }),
         }),
-        userProgile: builder.query({
+        userProfile: builder.query({
             query: () => '/user/',
         }),
     }),
 });
 
-export const { useLoginMutation, useUserProgileQuery, useLogoutMutation } =
+export const { useLoginMutation, useUserProfileQuery, useLogoutMutation } =
     authApi;
 export default authApi;
