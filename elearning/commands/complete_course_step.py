@@ -22,9 +22,9 @@ class CompleteCourseStep(Command):
     def build_from_request(cls, request, **kwargs):
         return CompleteCourseStep(
             issuer=request.user,
-            course_uuid=kwargs["course_uuid"],
-            step_uuid=kwargs["step_uuid"],
-            user_uuid=kwargs["user_uuid"],
+            course_uuid=request.data["courseUUID"],
+            step_uuid=request.data["stepUUID"],
+            user_uuid=request.data["userUUID"],
             parent_uuid=None,
         )
 

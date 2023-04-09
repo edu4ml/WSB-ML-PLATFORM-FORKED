@@ -1,23 +1,22 @@
 import React from 'react';
 import './App.css';
-import { LoginPage, ProfileCard } from './pages';
+import { LoginPage, ProfileCard } from './modules';
 import { Button, Result } from 'antd';
 import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom';
 
-import PrivateRoute from './components/router/PrivateRoute';
-import LoginLayout from './pages/Layout/LoginLayout';
-import MainLayout from './pages/Layout/MainLayout';
-import SimpleLayout from './pages/Layout/SimpleLayout';
-import CourseDetailPage from './pages/CourseDetails/CourseDetailPage';
-import CourseEditPage from './pages/CoursesEdit/CourseEditPage';
-import DashboardPage from './pages/Dashboards/DashboardPage';
-import ComponentsPage from './pages/Components/ComponentsPage';
-import ComponentDetailPage from './pages/ComponentsDetails/ComponentsDetailPage';
-import CoursesDashboard from './pages/courses/containers/coursesDashboard';
-import CourseEdit from './pages/courses/containers/courseEdit';
-import CourseDetail from './pages/courses/containers/courseDetail';
+import PrivateRoute from './modules/common/PrivateRoute';
+import LoginLayout from './modules/Layout/LoginLayout';
+import MainLayout from './modules/Layout/MainLayout';
+import DashboardPage from './modules/dashboards/DashboardPage';
+import CoursesDashboard from './modules/courses/containers/coursesDashboard';
+import CourseEdit from './modules/courses/containers/courseEdit';
+import CourseDetail from './modules/courses/containers/courseDetail';
+import ComponentsDashboard from './modules/components/containers/componentsDashboard';
+import ComponentDetailPage from './modules/components/containers/componentDetail';
+import { useTranslation } from 'react-i18next';
 
 const App = () => {
+    const { t } = useTranslation();
     return (
         <Router>
             <div className="App">
@@ -43,9 +42,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <ProfileCard />
-                                    </SimpleLayout>
+                                    <ProfileCard />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -55,9 +52,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <CoursesDashboard />
-                                    </SimpleLayout>
+                                    <CoursesDashboard />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -67,9 +62,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <CourseDetail />
-                                    </SimpleLayout>
+                                    <CourseDetail />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -79,9 +72,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <CourseEdit />
-                                    </SimpleLayout>
+                                    <CourseEdit />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -91,9 +82,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <ComponentsPage />
-                                    </SimpleLayout>
+                                    <ComponentsDashboard />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -103,9 +92,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <ComponentDetailPage />
-                                    </SimpleLayout>
+                                    <ComponentDetailPage />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -115,9 +102,7 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <MainLayout>
-                                    <SimpleLayout>
-                                        <DashboardPage />
-                                    </SimpleLayout>
+                                    <DashboardPage />
                                 </MainLayout>
                             </PrivateRoute>
                         }
@@ -128,10 +113,10 @@ const App = () => {
                             <Result
                                 status="404"
                                 title="404"
-                                subTitle="Przepraszam, ta strona nie istnieje!"
+                                subTitle={t('page not found')}
                                 extra={
                                     <Button type="primary">
-                                        <Link to={'/'}>Wracam</Link>
+                                        <Link to={'/'}>{t('going back')}</Link>
                                     </Button>
                                 }
                             />

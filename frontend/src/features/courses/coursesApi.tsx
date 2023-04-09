@@ -19,22 +19,6 @@ export const courseApi = createApi({
             query: (id) => `/courses/${id}`,
             providesTags: (result, error, id) => [{ type: 'course-list', id }],
         }),
-        issueCourseCommand: builder.mutation({
-            query: ({ id, command }) => ({
-                url: `/courses/${id}`,
-                method: 'POST',
-                body: command,
-            }),
-            invalidatesTags: ['course-list'],
-        }),
-        createCourse: builder.mutation({
-            query: (command) => ({
-                url: '/courses/',
-                method: 'POST',
-                body: command,
-            }),
-            invalidatesTags: ['course-list'],
-        }),
         getComponentList: builder.query({
             query: () => '/components/',
             providesTags: ['component-list'],
@@ -53,13 +37,6 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['component-list'],
         }),
-        addFileToCourseComponent: builder.mutation({
-            query: ({ id, payload }) => ({
-                url: `/components/${id}/file`,
-                method: 'PUT',
-                body: payload,
-            }),
-        }),
         updateCourseComponent: builder.mutation({
             query: ({ id, payload }) => ({
                 url: `/components/${id}`,
@@ -75,37 +52,6 @@ export const courseApi = createApi({
             }),
             invalidatesTags: ['component-list'],
         }),
-        deleteCourseComponentFileResource: builder.mutation({
-            query: ({ id, resourceId }) => ({
-                url: `/components/${id}/file-resources/${resourceId}`,
-                method: 'DELETE',
-            }),
-            invalidatesTags: ['component-list'],
-        }),
-        uploadSubmission: builder.mutation({
-            query: ({ command }) => ({
-                url: `/submission`,
-                method: 'POST',
-                body: command,
-            }),
-            invalidatesTags: ['course-list'],
-        }),
-        issueSubmissionCommand: builder.mutation({
-            query: ({ id, command }) => ({
-                url: `/submission/${id}`,
-                method: 'POST',
-                body: command,
-            }),
-            invalidatesTags: ['course-list'],
-        }),
-        issueCourseStepProgressTrackingCommand: builder.mutation({
-            query: ({ courseId, stepId, userId, command }) => ({
-                url: `/course/${courseId}/step/${stepId}/user/${userId}`,
-                method: 'POST',
-                body: command,
-            }),
-            invalidatesTags: ['course-list'],
-        }),
         issueCommand: builder.mutation({
             query: ({ command }) => ({
                 url: '/commands',
@@ -119,17 +65,10 @@ export const courseApi = createApi({
 
 export const {
     useIssueCommandMutation,
-    useIssueCourseStepProgressTrackingCommandMutation,
-    useIssueSubmissionCommandMutation,
-    useUploadSubmissionMutation,
-    useDeleteCourseComponentFileResourceMutation,
-    useAddFileToCourseComponentMutation,
     useGetCourseListQuery,
     useGetCourseDetailQuery,
     useGetComponentListQuery,
     useGetComponentDetailsQuery,
-    useCreateCourseMutation,
-    useIssueCourseCommandMutation,
     useCreateCourseComponentsMutation,
     useUpdateCourseComponentMutation,
     useDeleteCourseComponentMutation,
