@@ -17,7 +17,7 @@ class ApproveSubmission(Command):
     def build_from_request(cls, request, **kwargs):
         return cls(
             issuer=request.user,
-            parent_uuid=kwargs["submission_uuid"],
+            parent_uuid=request.data["submission_uuid"],
         )
 
 

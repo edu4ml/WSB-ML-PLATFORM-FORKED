@@ -143,11 +143,9 @@ def test_student_cannot_update_draft_course(
     response = create_course(teacher_client).json()
     response = update_course(
         student_client,
-        response["uuid"],
-        **dict(
-            description="New description",
-            steps=[],
-        )
+        course_uuid=response["uuid"],
+        description="New description",
+        steps=[],
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -160,11 +158,9 @@ def test_admin_cannot_update_published_course(
     response = publish_course(admin_client, course_uuid=response["uuid"]).json()
     response = update_course(
         admin_client,
-        response["uuid"],
-        **dict(
-            description="New description",
-            steps=[],
-        )
+        course_uuid=response["uuid"],
+        description="New description",
+        steps=[],
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -175,11 +171,9 @@ def test_admin_cannot_update_published_course(
 def test_update_non_existent_course(teacher_client, update_course):
     response = update_course(
         teacher_client,
-        str(uuid4()),
-        **dict(
-            description="New description",
-            steps=[],
-        )
+        course_uuid=str(uuid4()),
+        description="New description",
+        steps=[],
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -198,16 +192,14 @@ def test_update_course_with_invalid_data_missing_evaluation_type(
     response = create_course(teacher_client).json()
     response = update_course(
         teacher_client,
-        str(uuid4()),
-        **dict(
-            description="New description",
-            steps=[
-                dict(
-                    order=1,
-                    component=component_1["uuid"],
-                ),
-            ],
-        )
+        course_uuid=str(uuid4()),
+        description="New description",
+        steps=[
+            dict(
+                order=1,
+                component=component_1["uuid"],
+            ),
+        ],
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["message"] == "Missing evaluation type"
@@ -225,16 +217,14 @@ def test_update_course_with_invalid_data_missing_order(
     response = create_course(teacher_client).json()
     response = update_course(
         teacher_client,
-        str(uuid4()),
-        **dict(
-            description="New description",
-            steps=[
-                dict(
-                    component=component_1["uuid"],
-                    evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
-                ),
-            ],
-        )
+        course_uuid=str(uuid4()),
+        description="New description",
+        steps=[
+            dict(
+                component=component_1["uuid"],
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
+            ),
+        ],
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["message"] == "Missing order"
@@ -248,16 +238,14 @@ def test_update_course_with_invalid_data_missing_component(
     response = create_course(teacher_client).json()
     response = update_course(
         teacher_client,
-        str(uuid4()),
-        **dict(
-            description="New description",
-            steps=[
-                dict(
-                    order=1,
-                    evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
-                ),
-            ],
-        )
+        course_uuid=str(uuid4()),
+        description="New description",
+        steps=[
+            dict(
+                order=1,
+                evaluation_type=CourseStepEvaluationType.FILE_EVALUATED,
+            ),
+        ],
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["message"] == "Missing component uuid"
@@ -271,10 +259,8 @@ def test_update_course_without_authentication(
     response = create_course(teacher_client).json()
     response = update_course(
         client,
-        response["uuid"],
-        **dict(
-            description="New description",
-            steps=[],
-        )
+        course_uuid=response["uuid"],
+        description="New description",
+        steps=[],
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

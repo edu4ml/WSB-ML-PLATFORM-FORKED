@@ -13,6 +13,7 @@ from db.models import (
     CourseComponent,
     Submission,
 )
+from db.models.courses import CourseStepUserProgress
 from db.models.external_resources import ExternalResource
 from elearning.auth.user import User
 from shared.enums import CommandTypes, CourseStepEvaluationType, UserRoles
@@ -214,6 +215,15 @@ def submissions():
 
 
 @pytest.fixture
+def submission(published_course, student):
+    step_id = published_course["steps"][0]["uuid"]
+    CourseStepUserProgress.objects.create(user=student, step_id=step_id)
+    return baker.make(
+        Submission, course_step_id=published_course["steps"][0]["uuid"], user=student
+    )
+
+
+@pytest.fixture
 def tmp_uploaded_file():
     file_content = b"Dummy file content"
     uploaded_file = SimpleUploadedFile(
@@ -226,19 +236,17 @@ def tmp_uploaded_file():
 def create_course() -> Callable[[Client, str], Response]:
     def issue_command(client: Client, title: str = "Test course") -> Response:
         command = dict(type=CommandTypes.CREATE_COURSE, title=title)
-        return client.post(reverse("api:v1:course-list"), data=command)
+        return client.post(reverse("api:v1:command-list"), data=command)
 
     return issue_command
 
 
 @pytest.fixture
 def update_course() -> Callable[[Client, UUID], Response]:
-    def issue_command(
-        client: Client, course_uuid: UUID, **kwargs: Dict[str, Any]
-    ) -> Response:
+    def issue_command(client: Client, **kwargs: Dict[str, Any]) -> Response:
         command = dict(type=CommandTypes.UPDATE_COURSE, **kwargs)
         return client.post(
-            reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_uuid)),
+            reverse("api:v1:command-list"),
             content_type="application/json",
             data=command,
         )
@@ -248,10 +256,10 @@ def update_course() -> Callable[[Client, UUID], Response]:
 
 @pytest.fixture
 def publish_course() -> Callable[[Client, UUID], Response]:
-    def issue_command(client, course_uuid: UUID) -> Response:
-        command = dict(type=CommandTypes.PUBLISH_COURSE)
+    def issue_command(client, **kwargs: Dict[str, Any]) -> Response:
+        command = dict(type=CommandTypes.PUBLISH_COURSE, **kwargs)
         return client.post(
-            reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_uuid)),
+            reverse("api:v1:command-list"),
             content_type="application/json",
             data=command,
         )
@@ -261,12 +269,10 @@ def publish_course() -> Callable[[Client, UUID], Response]:
 
 @pytest.fixture
 def enroll_for_course() -> Callable[[Client, UUID, Dict[str, Any]], Response]:
-    def issue_command(
-        client: Client, course_uuid: UUID, **kwargs: Dict[str, Any]
-    ) -> Response:
+    def issue_command(client: Client, **kwargs: Dict[str, Any]) -> Response:
         command = dict(type=CommandTypes.ENROLL_FOR_COURSE, **kwargs)
         return client.post(
-            reverse("api:v1:course-detail", kwargs=dict(course_uuid=course_uuid)),
+            reverse("api:v1:command-list"),
             content_type="application/json",
             data=command,
         )
@@ -278,7 +284,7 @@ def enroll_for_course() -> Callable[[Client, UUID, Dict[str, Any]], Response]:
 def create_component() -> Callable[[Client, str], Response]:
     def issue_command(client: Client, **kwargs) -> Response:
         command = dict(type=CommandTypes.CREATE_COMPONENT, **kwargs)
-        return client.post(reverse("api:v1:component-list"), data=command)
+        return client.post(reverse("api:v1:command-list"), data=command)
 
     return issue_command
 
@@ -297,7 +303,7 @@ def published_course(
     ).json()
     course = update_course(
         teacher_client,
-        course["uuid"],
+        course_uuid=course["uuid"],
         steps=[
             dict(
                 component=component_1["uuid"],
@@ -306,4 +312,4 @@ def published_course(
             )
         ],
     ).json()
-    return publish_course(teacher_client, course["uuid"]).json()
+    return publish_course(teacher_client, course_uuid=course["uuid"]).json()

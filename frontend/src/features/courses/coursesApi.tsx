@@ -54,7 +54,7 @@ export const courseApi = createApi({
         }),
         issueCommand: builder.mutation({
             query: ({ command }) => ({
-                url: '/commands',
+                url: '/commands/',
                 method: 'POST',
                 body: command,
             }),

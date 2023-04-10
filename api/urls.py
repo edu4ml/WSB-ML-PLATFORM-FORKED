@@ -78,13 +78,13 @@ urlpatterns_v1 = [
     path("report/teacher/", DashboardApi.as_view(), name="teacher-report"),
     path("auth/login/google/", GoogleLoginApi.as_view(), name="login-with-google"),
     path("auth/", include((auth_urlpatterns, "auth"))),
-    path("submission", SubmissionApi.as_view(), name="submission"),
+    path("submission/", SubmissionApi.as_view(), name="submission"),
     path(
         "submission/<uuid:submission_uuid>",
         SubmissionDetailApi.as_view(),
         name="submission-detail",
     ),
-    path("commands", CommandsApi.as_view(), name="command-list"),
+    path("commands/", CommandsApi.as_view(), name="command-list"),
 ]
 
 urlpatterns = [path("v1/", include((urlpatterns_v1, "v1")))]
