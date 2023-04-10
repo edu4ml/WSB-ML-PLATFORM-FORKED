@@ -1,13 +1,16 @@
 name: Platform CI/CD
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+      - closed
 
 
 jobs:
   tests:
+    if: github.event.pull_request.merged == true
     env:
       DJANGO_SETTINGS_MODULE: 'server.settings'
       DEBUG: 1
@@ -57,6 +60,7 @@ jobs:
         run: pytest .
 
   deploy:
+    if: github.event.pull_request.merged == true
     needs: ['tests']
     name: Build and Deploy to Google Cloud Engine
     environment: production

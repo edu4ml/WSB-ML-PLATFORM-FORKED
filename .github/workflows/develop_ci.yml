@@ -56,21 +56,24 @@ jobs:
       - name: Run Unit Tests
         run: pytest .
 
-  notify:
+  create_pr:
     needs: [tests]
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          MSG_MINIMAL: true
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_TITLE: ':robot: CI results for ${{ github.repository }}'
-          SLACK_COLOR: ${{ needs.tests.result }}
-          SLACK_LINK_NAMES: true
-          SLACK_MESSAGE: |
-            *Tests results:*
-            - unit-tests : ${{ needs.tests.result }}
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+          fetch-depth: 0
 
-            *commit*: ${{ github.sha }}
-            *branch*: ${{ github.ref }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Automated PR: Merge develop into main'
+          branch: 'automated-pr-branch'
+          title: 'Automated PR: Merge develop into main'
+          body: 'This is an automated pull request to merge the develop branch into the main branch.'
+          base: 'main'
+          delete-branch: true
+          labels: 'automated-pr'
