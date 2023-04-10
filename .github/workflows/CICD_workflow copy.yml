@@ -1,0 +1,193 @@
+# name: Platform CI/CD
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+
+# jobs:
+#   tests:
+#     env:
+#       DJANGO_SETTINGS_MODULE: 'server.settings'
+#       DEBUG: 1
+#       DATABASE_PASSWORD: password
+#       DATABASE_NAME: elearning
+#       DATABASE_HOST: 0.0.0.0
+#       DATABASE_USER: postgres
+
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         type: ['unit-test', 'e2e-test']
+#     services:
+#       postgres: 
+#         image: postgres:latest
+#         env:
+#           POSTGRES_DB: elearning
+#           POSTGRES_USER: postgres
+#           POSTGRES_PASSWORD: password
+#         ports:
+#           - 5432:5432
+#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+#     steps:
+#       - name: Check out code
+#         uses: actions/checkout@v2
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: 3.11
+
+#       - name: Cache Python Dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: ~/.cache/pip
+#           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+#           restore-keys: |
+#             ${{ runner.os }}-pip-
+
+#       - name: Install Python Dependencies
+#         run: |
+#           make sync-all-deps
+
+#       - name: Run Migrations (locally - workflow)
+#         run: |
+#           python manage.py migrate
+
+#       - name: Run Unit Tests
+#         if: matrix.type == 'unit-test'
+#         run: pytest .
+
+#       - name: Set Up Node.js
+#         if: matrix.type == 'e2e-test'
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 14
+
+#       - name: Cache Node.js dependencies
+#         if: matrix.type == 'e2e-test'
+#         uses: actions/cache@v2
+#         with:
+#           path: ~/.npm
+#           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-node-
+
+#       - name: Install Node.js dependencies
+#         if: matrix.type == 'e2e-test'
+#         run: npm install
+
+#       - name: Cypress Tests Run
+#         if: matrix.type == 'e2e-test'
+#         uses: cypress-io/github-action@v5.5.1
+#         with:
+#           browser: chrome
+#           build: npm run build
+#           start: make run-for-cypress
+#           wait-on: http://0.0.0.0:8000
+#           wait-on-timeout: 10
+
+#   deploy:
+#     needs: ['tests']
+#     name: Build and Deploy to Google Cloud Engine
+#     environment: production
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working-directory: .
+
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v3
+
+#     - name: Set up Node.js
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: 14
+
+#     - name: Cache Node.js dependencies
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.npm
+#         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#         restore-keys: |
+#           ${{ runner.os }}-node-
+
+#     - name: Install Node.js dependencies
+#       run: npm install
+
+#     - name: Build React App
+#       run: npm run build 
+
+#     - name: Set Up Python
+#       uses: actions/setup-python@v2
+#       with:
+#         python-version: 3.11
+
+#     - name: Cache Python Dependencies
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.cache/pip
+#         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+#         restore-keys: |
+#           ${{ runner.os }}-pip-
+
+#     - name: Install Python Dependencies
+#       run: |
+#         make sync-all-deps
+
+#     - name: Collect Staticfiles
+#       run: python3 manage.py collectstatic --no-input
+
+#     - id: 'auth'
+#       name: 'Authenticate to Google Cloud'
+#       uses: 'google-github-actions/auth@v1'
+#       with:
+#         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+#     - name: Deploy to App Engine
+#       # version 1.2.2 was broken cause app.yaml file was not found 
+#       uses: google-github-actions/deploy-appengine@v1.2.1 
+#       id: deploy
+#       with:
+#         version: v1
+#         project_id: wsb-mlproject
+
+#         env_vars: |-
+#           SECRET_KEY=${{ secrets.SECRET_KEY }}
+#           DEBUG=${{ vars.DEBUG }}
+          
+#           DJANGO_SETTINGS_MODULE=${{ vars.DJANGO_SETTINGS_MODULE }}
+#           PLATFORM_URL=${{ vars.PLATFORM_URL }}
+
+#           DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+#           DATABASE_HOST=${{ vars.DATABASE_HOST }}
+#           DATABASE_NAME=${{ vars.DATABASE_NAME }}
+#           DATABASE_USER=${{ vars.DATABASE_USER }}
+#           DATABASE_PORT=${{ vars.DATABASE_PORT }}
+
+#     - name: Test if app is running
+#       # FIX ME - add health endpoint. This always pass right now
+#       run: curl "${{ steps.deploy.outputs.url }}"
+  
+#   notify:
+#     needs: [tests, deploy]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Slack Notification
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           MSG_MINIMAL: true
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+#           SLACK_TITLE: ':robot: CI results for ${{ github.repository }}'
+#           SLACK_COLOR: ${{ needs.tests.result }}
+#           SLACK_LINK_NAMES: true
+#           SLACK_MESSAGE: |
+#             *Tests results:*
+#             - unit-tests : ${{ needs.tests.result }}
+#             - e2e-tests*: ${{ needs.tests.result }}  
+
+#             *commit*: ${{ github.sha }}
+#             *branch*: ${{ github.ref }}

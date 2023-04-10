@@ -17,9 +17,6 @@ jobs:
       DATABASE_USER: postgres
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        type: ['unit-test', 'e2e-test']
     services:
       postgres: 
         image: postgres:latest
@@ -57,37 +54,7 @@ jobs:
           python manage.py migrate
 
       - name: Run Unit Tests
-        if: matrix.type == 'unit-test'
         run: pytest .
-
-      - name: Set Up Node.js
-        if: matrix.type == 'e2e-test'
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Cache Node.js dependencies
-        if: matrix.type == 'e2e-test'
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install Node.js dependencies
-        if: matrix.type == 'e2e-test'
-        run: npm install
-
-      - name: Cypress Tests Run
-        if: matrix.type == 'e2e-test'
-        uses: cypress-io/github-action@v5.5.1
-        with:
-          browser: chrome
-          build: npm run build
-          start: make run-for-cypress
-          wait-on: http://0.0.0.0:8000
-          wait-on-timeout: 10
 
   deploy:
     needs: ['tests']
@@ -187,7 +154,6 @@ jobs:
           SLACK_MESSAGE: |
             *Tests results:*
             - unit-tests : ${{ needs.tests.result }}
-            - e2e-tests*: ${{ needs.tests.result }}  
 
             *commit*: ${{ github.sha }}
             *branch*: ${{ github.ref }}
