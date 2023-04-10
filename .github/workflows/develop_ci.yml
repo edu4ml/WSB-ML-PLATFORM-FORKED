@@ -69,7 +69,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.JSZ_GITHUB_ACTIONS_TOKEN }}
           commit-message: 'Automated PR: Merge develop into main'
           branch: 'automated-pr-branch'
           title: 'Automated PR: Merge develop into main'
