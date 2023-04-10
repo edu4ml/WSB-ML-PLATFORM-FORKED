@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom';
 import PrivateRoute from './modules/common/PrivateRoute';
 import LoginLayout from './modules/Layout/LoginLayout';
 import MainLayout from './modules/Layout/MainLayout';
-import DashboardPage from './modules/dashboards/DashboardPage';
+import { DashboardPage } from './screens';
 import CoursesDashboard from './modules/courses/containers/coursesDashboard';
 import CourseEdit from './modules/courses/containers/courseEdit';
 import CourseDetail from './modules/courses/containers/courseDetail';

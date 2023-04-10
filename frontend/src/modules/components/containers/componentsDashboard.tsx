@@ -51,7 +51,7 @@ const ComponentsDashboard = () => {
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
             <PageTitle
-                title={t('Course Dashboard') as String}
+                title={t('Components Dashboard') as String}
                 actions={getActions()}
             />
             <Card

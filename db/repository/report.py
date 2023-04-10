@@ -76,7 +76,6 @@ class ReportRepository(ModelRepository):
                     user=student, step__course=enrollment.course, is_completed=True
                 )
                 completed_steps_count = completed_steps.count()
-
                 current_step = (
                     CourseStepModel.objects.filter(course=enrollment.course)
                     .exclude(uuid__in=completed_steps.values_list("step", flat=True))

@@ -3,7 +3,7 @@ import { Card, List } from 'antd';
 import { UserType } from '../../../types/user';
 import { CourseType } from '../../../types/course';
 import getActions from '../actions/courseItemActions';
-import { getCourseTitleComponent } from '../../../helpers/namesFactory';
+import CourseTitle from './courseTitle';
 
 function sortCourses(courses: Array<CourseType>) {
     // 1. If Course A is enrolled and Course B is not, Course A comes first.
@@ -44,6 +44,10 @@ const CourseList = ({
 }) => {
     const sortedCourses = sortCourses(courses);
 
+    const getCourseTitleComponent = (course: CourseType, user: UserType) => {
+        return <CourseTitle course={course} size={4} />;
+    };
+
     return (
         <List
             bordered={false}
@@ -55,7 +59,7 @@ const CourseList = ({
                 <Card
                     data-cy={'course-list-item'}
                     style={{ marginTop: '20px' }}
-                    title={getCourseTitleComponent(course, 4)}
+                    title={getCourseTitleComponent(course, user)}
                     extra={getActions(course, user)}
                 >
                     {course.description}

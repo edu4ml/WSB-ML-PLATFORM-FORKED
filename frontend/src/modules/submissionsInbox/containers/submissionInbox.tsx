@@ -1,10 +1,11 @@
 import { Card, Table, Dropdown, Typography, Tag, Space } from 'antd';
 import React from 'react';
-import { Enums } from '../../shared';
-import UserCardAvatar from '../common/UserCardAvatar';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useIssueCommandMutation } from '../../features/courses/coursesApi';
 import { useTranslation } from 'react-i18next';
+import { useIssueCommandMutation } from '../../../features/courses/coursesApi';
+import { Enums } from '../../../shared';
+import UserCardAvatar from '../../common/UserCardAvatar';
+import getMenuActions from '../actions/submissionActions';
+import SubmissionDropdown from '../components/submissionActionsDropdown';
 
 const { Text } = Typography;
 
@@ -17,7 +18,6 @@ const submissionStatusTagColor = {
 
 const SubmissionsInbox = ({ submissions }) => {
     const { t } = useTranslation();
-    const [issueCommand, {}] = useIssueCommandMutation();
 
     const submissionStatusTagText = {
         [Enums.COURSE_STEP_EVALUATION_STATUS.WAITING]: t('Waiting'),
@@ -25,54 +25,6 @@ const SubmissionsInbox = ({ submissions }) => {
         [Enums.COURSE_STEP_EVALUATION_STATUS.FAILED]: t('Failed'),
         [Enums.COURSE_STEP_EVALUATION_STATUS.SUBMITTED]: t('Submitted'),
     };
-
-    const menu = (submission) => [
-        {
-            key: 'download',
-            label: t('Download'),
-            onClick: (record) => {
-                console.log('Download', record);
-            },
-        },
-        {
-            key: 'approve',
-            label: t('Approve'),
-            onClick: () => {
-                issueCommand({
-                    id: submission.uuid,
-                    command: {
-                        type: Enums.COMMAND_TYPES.APPROVE_SUBMISSION,
-                    },
-                })
-                    .unwrap()
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            },
-        },
-        {
-            key: 'reject',
-            label: t('Reject'),
-            onClick: () => {
-                issueCommand({
-                    id: submission.uuid,
-                    command: {
-                        type: Enums.COMMAND_TYPES.REJECT_SUBMISSION,
-                    },
-                })
-                    .unwrap()
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            },
-        },
-    ];
 
     const columns = [
         {
@@ -119,23 +71,11 @@ const SubmissionsInbox = ({ submissions }) => {
         },
         {
             title: '',
-            dataIndex: '',
             key: 'action',
             width: '50',
-            render: (_, record) => (
-                <Dropdown
-                    menu={{ items: menu(record) }}
-                    trigger={['click', 'hover']}
-                    placement="bottomRight"
-                >
-                    <a
-                        className="ant-dropdown-link"
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <MoreVertIcon />
-                    </a>
-                </Dropdown>
-            ),
+            render: (submission) => {
+                return <SubmissionDropdown submission={submission} />;
+            },
         },
     ];
 

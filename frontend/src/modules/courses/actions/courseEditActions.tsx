@@ -10,10 +10,10 @@ import {
 } from '../../../features/courses/coursesApi';
 import { useNavigate } from 'react-router-dom';
 import {
-    getContentTypeIcon,
-    getContentTypeName,
-} from '../../../helpers/namesFactory';
-import { DownOutlined } from '@ant-design/icons';
+    FileDoneOutlined,
+    ReadOutlined,
+    DownOutlined,
+} from '@ant-design/icons';
 
 type CourseActionButtonDataType = {
     uuid: string;
@@ -34,6 +34,10 @@ const validateBeforeSave = (steps, description) => {
 
 const validateBeforePublish = (steps, description) => {
     return steps.length > 0 && description.length > 0;
+};
+const contentTypeToIconMap = {
+    [Enums.COURSE_COMPONENT_TYPE.EXERCISE]: <ReadOutlined />,
+    [Enums.COURSE_COMPONENT_TYPE.EVALUATION]: <FileDoneOutlined />,
 };
 
 const PublishButton = ({ course }: { course: CourseActionButtonDataType }) => {
@@ -173,13 +177,13 @@ const AddComponentButton = ({ steps, onStepsUpdate }) => {
                 if (!acc[item.type]) {
                     acc[item.type] = {
                         type: 'group',
-                        label: getContentTypeName(item.type),
+                        label: t(item.type),
                         children: [],
                     };
                 }
                 acc[item.type].children.push({
                     label: item.title,
-                    icon: getContentTypeIcon(item.type),
+                    icon: contentTypeToIconMap[item.type],
                     key: item.uuid,
                     disabled: isAvailable(item),
                 });

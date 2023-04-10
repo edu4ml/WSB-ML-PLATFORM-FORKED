@@ -7,11 +7,10 @@ import {
     Typography,
     theme,
 } from 'antd';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 import React from 'react';
-import UserCardAvatar from '../common/UserCardAvatar';
+import UserCardAvatar from '../../common/UserCardAvatar';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const { Panel } = Collapse;
 const { Text } = Typography;
@@ -51,7 +50,8 @@ const StudentTable = ({ students }) => {
     );
 };
 
-const CoursesProgress = ({ courses }) => {
+const StudentsProgress = ({ courses }) => {
+    const { t } = useTranslation();
     const { token } = theme.useToken();
 
     const getPanelTitle = (course) => {
@@ -78,7 +78,7 @@ const CoursesProgress = ({ courses }) => {
                                 target="_blank"
                                 to={`/app/courses/${course.uuid}`}
                             >
-                                Przejdź do kursu
+                                {t('course details')}
                             </Link>
                         }
                     >
@@ -90,4 +90,4 @@ const CoursesProgress = ({ courses }) => {
     );
 };
 
-export default CoursesProgress;
+export default StudentsProgress;

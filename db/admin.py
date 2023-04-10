@@ -75,6 +75,7 @@ class CourseStepUserProgressAdmin(admin.ModelAdmin):
     )
 
     list_editable = ("is_completed",)
+    list_filter = ("user",)
 
 
 admin.site.register(CourseStepUserProgress, CourseStepUserProgressAdmin)

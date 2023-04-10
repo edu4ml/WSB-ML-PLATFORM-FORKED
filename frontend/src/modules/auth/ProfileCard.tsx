@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Card, Skeleton, Space, Typography } from 'antd';
-import { useGetUserProfileQuery } from '../../features/auth/authApi';
+import { useUserProfileQuery } from '../../features/auth/authApi';
 
 const { Title, Paragraph } = Typography;
 
-const ProfileForm = () => {
-    const { data } = useGetUserProfileQuery('userDetails');
+const ProfileCard = () => {
+    const { data } = useUserProfileQuery('userDetails');
 
     return (
         <Card title={'👋 Hello!'} bordered={false}>
@@ -17,4 +17,4 @@ const ProfileForm = () => {
     );
 };
 
-export default ProfileForm;
+export default ProfileCard;

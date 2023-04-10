@@ -20,7 +20,6 @@ const CreateNewCourseButton = () => {
         <>
             <Button
                 data-cy="course-catalog-create-new"
-                key="New Course"
                 onClick={onClick}
                 type="primary"
             >
@@ -34,7 +33,7 @@ const CreateNewCourseButton = () => {
 
 const getActions = (user: UserType): Array<React.ReactNode> => {
     if (isTeacher(user)) {
-        return [<CreateNewCourseButton />];
+        return [<CreateNewCourseButton key="New Course" />];
     }
     return [];
 };

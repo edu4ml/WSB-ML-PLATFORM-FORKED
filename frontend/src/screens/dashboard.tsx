@@ -1,10 +1,9 @@
 import { Space } from 'antd';
 import React from 'react';
-import { useGetTeacherReportQuery } from '../../features/reports/reportsApi';
-import SubmissionsInbox from './SubmissionsInbox';
-import CoursesProgress from './CoursesProgress';
-import { useUserProfileQuery } from '../../features/auth/authApi';
-import PageTitle from '../common/PageTitle';
+import { useGetTeacherReportQuery } from '../features/reports/reportsApi';
+import { useUserProfileQuery } from '../features/auth/authApi';
+import PageTitle from '../modules/common/PageTitle';
+import { SubmissionInbox, StudentsProgress } from '../modules';
 
 const DashboardPage = () => {
     const { data: userData } = useUserProfileQuery('userDetails');
@@ -18,8 +17,8 @@ const DashboardPage = () => {
                 }`}
                 actions={[]}
             />
-            <SubmissionsInbox submissions={report?.submissions} />
-            <CoursesProgress courses={report?.courses} />
+            <SubmissionInbox submissions={report?.submissions} />
+            <StudentsProgress courses={report?.courses} />
         </Space>
     );
 };

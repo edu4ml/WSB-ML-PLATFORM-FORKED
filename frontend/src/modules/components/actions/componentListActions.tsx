@@ -31,7 +31,7 @@ const CreateNewComponent = () => {
 };
 
 const getActions = (): Array<React.ReactNode> => {
-    return [<CreateNewComponent />];
+    return [<CreateNewComponent key={'create-new-component'} />];
 };
 
 export default getActions;
